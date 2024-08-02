@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+    font-family: 'fredoka_oneregular';
+    src: url('/themes/NDISmate/font/fredokaone-regular-webfont.woff2') format('woff2'),
+         url('/themes/NDISmate/font/fredokaone-regular-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+
+/* html, body {
+    font-family: Roboto,sans-serif;
+    font-weight: normal;
+    font-style: normal;
+    
+
+} */

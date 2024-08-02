@@ -1,0 +1,46 @@
+{
+    "require": {
+        "google/apiclient": "^2.12.1",
+        "slim/slim": "^4.11",
+        "vlucas/phpdotenv": "^5.5",
+        "gabordemooij/redbean": "^5.7",
+        "firebase/php-jwt": "^6.3",
+        "hashids/hashids": "^4.1",
+        "slim/psr7": "^1.6",
+        "respect/validation": "^2.2",
+        "phpmailer/phpmailer": "^6.6",
+        "twig/twig": "^3.4",
+        "xeroapi/xero-php-oauth2": "^2.19",
+        "davidgorges/human-name-parser": "^1.0",
+        "aws/aws-sdk-php": "^3.308",
+        "mongodb/mongodb": "^1.15",
+        "quickbooks/v3-php-sdk": "^6.1",
+        "cboden/ratchet": "^0.4.4",
+        "react/http": "^1.10",
+        "hidehalo/nanoid-php": "^1.1",
+        "twilio/sdk": "^7.7",
+        "php-amqplib/php-amqplib": "^3.6",
+        "sentry/sentry": "^4.6",
+        "react/mysql": "^0.6.0",
+        "react/event-loop": "^1.5",
+        "react/promise": "^3.2",
+        "react/socket": "^1.15",
+        "php-di/php-di": "^7.0"
+    },
+    "scripts": {
+        "pre-autoload-dump": "Google\\Task\\Composer::cleanup"
+    },
+    "extra": {
+        "google/apiclient-services": [
+            "Drive"
+        ]
+    },
+    "autoload": {
+        "psr-4": {
+            "NDISmate\\": "src/"
+        },
+        "files": [
+            "autoload.php"
+        ]
+    }
+}

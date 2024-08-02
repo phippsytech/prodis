@@ -1,0 +1,28 @@
+<script>
+
+    import ReportPanel from '../../routes/Reports/../Reports/ReportPanel.sveltek from '@shared/appsec/Roadblock.svelte';
+    import {checkXeroRoadblock} from '@shared/roadblocks/Xero.svelte'
+    import { BreadcrumbStore } from '@shared/stores.js';
+    import {push} from 'svelte-spa-router'
+
+    let roadblockChecks=[ checkXeroRoadblock ];
+
+    BreadcrumbStore.set({
+        path: [
+            {url: null, name: 'Invoicing'},
+        ]
+    });
+
+</script>
+
+<Roadblock roadblockChecks={roadblockChecks} >
+
+        <ReportPanel on:click={()=>push('/invoicing/ndia/unbilled')} label="NDIA">
+            Generate and process NDIA invoices
+        </ReportPanel>
+        
+        <ReportPanel on:click={()=>push('/invoicing/managed/unbilled')} label="Managed Client">
+            Generate invoices for self managed or plan managed clients.
+        </ReportPanel>
+
+</Roadblock>

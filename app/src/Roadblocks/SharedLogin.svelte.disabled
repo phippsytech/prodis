@@ -1,0 +1,90 @@
+<script context="module">
+    import StaffList from "../routes/StaffList.svelte.disabled";
+    import Unauthorised from "../routes/Unauthorised.svelte";
+
+    import { jspa } from "@shared/jspa.js";
+    import { StafferStore, AppData, RolesStore } from "@shared/stores.js";
+    import { haveCommonElements } from "@shared/utilities.js";
+
+    let stafferStore = {};
+
+    let rolesStore = {};
+
+    export function checkSharedLoginRoadblock() {
+        return new Promise(function (resolve, reject) {
+            StafferStore.subscribe((value) => {
+                stafferStore = value;
+            });
+            RolesStore.subscribe((value) => {
+                rolesStore = value;
+            });
+
+            if (
+                stafferStore.id ||
+                haveCommonElements(rolesStore, ["stakeholder", "admin"])
+            )
+                resolve(true);
+
+            if (haveCommonElements(rolesStore, ["house"])) {
+                // are ANY of the elements "house"?
+
+                (async () => {
+                    try {
+                        let result = await getUserType();
+                        switch (result.type) {
+                            case "client":
+                                reject(StaffList);
+                                // setHouse(result.house);
+                                break;
+                            case "staff":
+                                resolve(true);
+                                // setStaff(result.staff);
+                                break;
+                            default:
+                                reject(Unauthorised);
+                        }
+                    } catch (error) {
+                        if (error.message === "Expired token") {
+                            reject();
+                        } else {
+                            reject(Unauthorised);
+                        }
+                    }
+
+                    if (!stafferStore.id) {
+                        // if this is the admin user, present the house list
+                        if (
+                            haveCommonElements(rolesStore, ["house", "admin"])
+                        ) {
+                            // reject(HouseList)
+                            reject(StaffList);
+                        }
+                    }
+
+                    // if(houseStore.id)  reject(StaffList);
+                    // if(stafferStore.id) reject(HouseList);
+
+                    reject(Unauthorised);
+                })();
+            } else {
+                reject(Unauthorised);
+            }
+        });
+    }
+
+    async function getUserType() {
+        return new Promise(function (resolve, reject) {
+            jspa("/Utilities", "getUserType", {})
+                .then((result) => resolve(result.result))
+                .catch((error) => reject(error));
+        });
+    }
+
+    function setStaff(new_staff) {
+        StafferStore.update((currentData) => {
+            let newData = currentData;
+            newData = new_staff;
+            return newData;
+        });
+    }
+</script>

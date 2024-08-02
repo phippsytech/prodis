@@ -1,0 +1,169 @@
+<script>
+    import { onMount } from "svelte";
+    import { replace, push, pop } from "svelte-spa-router";
+    import { slide } from "svelte/transition";
+    import { jspa } from "@shared/jspa.js";
+    import { ChevronRightIcon } from "heroicons-svelte/24/outline";
+    import { StafferStore } from "@shared/stores.js";
+
+    $: stafferStore = $StafferStore;
+
+    let selected_staff_id = null;
+
+    let house_staff = [];
+
+    let pin = null;
+
+    function select(staff_id) {
+        selected_staff_id = staff_id;
+        pin = null;
+        house_staff.forEach((staff, idx) => {
+            house_staff[idx].selected =
+                staff.staff_id == staff_id ? true : false;
+        });
+    }
+
+    function handleEnter(event) {
+        if (event.key === "Enter") {
+            checkPin();
+        }
+    }
+
+    function setStaffer() {
+        let selectedStaffer = house_staff.find(
+            (staffer) => staffer.id == selected_staff_id,
+        );
+        if (selectedStaffer) {
+            StafferStore.update((currentData) => {
+                let newData = currentData;
+                newData = {
+                    id: selectedStaffer.id,
+                    // email: selectedStaffer.email,
+                    name: selectedStaffer.name,
+                };
+                return newData;
+            });
+        }
+    }
+
+    function checkPin() {
+        jspa("/Staff", "checkPin", { staff_id: selected_staff_id, pin: pin })
+            .then((result) => {
+                setStaffer();
+            })
+            .catch((error) => {
+                alert("pin failed");
+            });
+    }
+
+    onMount(async () => {
+        let client_id = null;
+        await jspa("/Utilities", "getUserType", {})
+            .then((result) => {
+                client_id = result.result.client_id;
+            })
+            .catch((error) => {});
+
+        await jspa("/Staff", "listStaffByClientId", {
+            client_id: client_id,
+        }).then((result) => {
+            house_staff = result.result;
+            house_staff.sort(function (a, b) {
+                const nameA = a.name.toUpperCase(); // ignore upper and lowercase
+                const nameB = b.name.toUpperCase(); // ignore upper and lowercase
+                if (nameA < nameB) return -1;
+                if (nameA > nameB) return 1;
+                return 0; // names must be equal
+            });
+        });
+    });
+</script>
+
+<div class="flex justify-center p-4">
+    <div class="w-full" style="max-width:400px;">
+        <p class="text-gray-700 uppercase mb-0">Crystel Care</p>
+        <div class="text-3xl mb-4">Shared Login</div>
+
+        <div class="rounded-md bg-blue-50 p-4">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <svg
+                        class="h-5 w-5 text-blue-400"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                        aria-hidden="true"
+                    >
+                        <path
+                            fill-rule="evenodd"
+                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z"
+                            clip-rule="evenodd"
+                        />
+                    </svg>
+                </div>
+                <div class="ml-3 flex-1 md:flex md:justify-between">
+                    <p class="text-sm text-blue-700">
+                        This is a shared login with limited access.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <hr class="mb-4" />
+
+        <ul
+            class="bg-white rounded-lg border border-gray-200 w-full text-gray-900 mb-4"
+        >
+            {#each house_staff as staff, index}
+                <li
+                    in:slide={{ duration: 200 }}
+                    out:slide={{ duration: 200 }}
+                    on:click={() => select(staff.id)}
+                    class="px-4 py-4 hover:bg-blue-700 hover:text-white focus:outline-none focus:ring-0 focus:bg-gray-200 focus:text-gray-600 transition duration-500 cursor-pointer {house_staff.length -
+                        1 ==
+                    index
+                        ? 'rounded-b-lg'
+                        : ''}border-b border-gray-200 w-full"
+                >
+                    <div class="font-bold">{staff.name}</div>
+
+                    {#if staff.id == selected_staff_id}
+                        <div
+                            class="relative flex w-full flex-wrap items-stretch"
+                        >
+                            <input
+                                bind:value={pin}
+                                type="password"
+                                autocomplete="off"
+                                on:keydown={handleEnter}
+                                class="relative m-0 -mr-0.5 block w-[1px] min-w-0 flex-auto rounded-l border border-solid border-neutral-300 bg-white bg-clip-padding px-3 py-[0.25rem] text-base font-normal leading-[1.6] text-neutral-700 outline-none transition duration-200 ease-in-out focus:z-[3] focus:border-primary focus:text-neutral-700 focus:shadow-[inset_0_0_0_1px_rgb(59,113,202)] focus:outline-none"
+                                placeholder="Pin#"
+                                inputmode="numeric"
+                                aria-label="Pin#"
+                                aria-describedby="button-addon2"
+                                autofocus
+                            />
+                            <button
+                                class="z-[2] inline-block rounded-r bg-blue-500 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-primary-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:z-[3] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]"
+                                on:click={() => checkPin()}
+                                data-te-ripple-init
+                                type="button"
+                                id="button-addon2"
+                            >
+                                <ChevronRightIcon class="w-5 h-5 inline" />
+                            </button>
+                        </div>
+                    {/if}
+                </li>
+            {:else}
+                <li
+                    class="px-6 py-2 border-b border-gray-200 w-full rounded-t-lg rounded-b-lg text-gray-400 cursor-default"
+                >
+                    Staff list not found. <a
+                        class="text-blue-400 underline"
+                        href="/#/logout">Logout</a
+                    >
+                </li>
+            {/each}
+        </ul>
+    </div>
+</div>

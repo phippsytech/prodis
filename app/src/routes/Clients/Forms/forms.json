@@ -1,0 +1,136 @@
+[
+    {
+      "component": "MorningRoutine",
+      "label": "Morning Routine Prompt",
+      "contents": ""
+    },
+    {
+      "component": "InternetMonitoring",
+      "label": "Internet Monitoring",
+      "contents": ""
+    },
+    {
+      "component": "AbsenceMonitoring",
+      "label": "Absence Monitoring",
+      "contents": ""
+    },
+    {
+      "component": "FoodIntake",
+      "label": "Food & Fluid Intake",
+      "contents": ""
+    },
+    {
+      "component": "ParentalContact",
+      "label": "Parental Contact",
+      "contents": ""
+    },
+    {
+      "component": "Injury",
+      "label": "Injury",
+      "contents": ""
+    },
+    {
+      "component": "Note",
+      "label": "Make a Note",
+      "contents": "Record a timestamped note that will be included in the shift report."
+    },
+    {
+      "component": "Compose",
+      "label": "Compose a Note",
+      "contents": "Record a timestamped note that will be included in the shift report."
+    },
+    {
+      "component": "Incident",
+      "label": "ABC / Incident",
+      "contents": ""
+    },
+    {
+      "component": "Expense",
+      "label": "Expense",
+      "contents": ""
+    },
+    {
+      "component": "Toilet",
+      "label": "Toilet Log",
+      "contents": "Recording when the participant visits the toilet, or a toileting event occurs."
+    },
+    
+    {
+      "component": "SleepTime",
+      "label": "Sleep Time",
+      "contents": "Simple time to when participant went to bed and then when he was asleep "
+    },
+    {
+      "component": "SleepDisturbance",
+      "label": "Sleep Disturbance",
+      "contents": "To be completed if the passive shift is broken."
+    },
+    {
+      "component": "WakeUp",
+      "label": "Wake Up",
+      "contents": "Fill out to know what time the participant woke up to start their day "
+    },
+
+    {
+      "component": "EndOfShift",
+      "label": "End Of Shift",
+      "contents": "Required for each shift."
+    },
+    {
+      "component": "EndOfShiftAlex",
+      "label": "End Of Shift (Alex)",
+      "contents": "Required for each shift."
+    },
+    {
+      "component": "EndOfShiftCJ",
+      "label": "End Of Shift (CJ)",
+      "contents": "Required for each shift."
+    },
+    {
+      "component": "EndOfShiftRhys",
+      "label": "End Of Shift (Rhys)",
+      "contents": "Required for each shift."
+    },
+    {
+      "component": "EndOfShiftLogan",
+      "label": "End Of Shift (Logan)",
+      "contents": "Required for each shift."
+    },
+    {
+      "component": "Maintenance",
+      "label": "Maintenance Required",
+      "contents": "Report anything in the house that is broken or needs to be fixed or changed"
+    },
+    {
+      "component": "AdhocRiskAssessment",
+      "label": "Adhoc Risk Assessment",
+      "contents": "This is the form you fill out when doing any non risk assessed activity, unless you know there is an existing risk assessment this form should be filled out."
+    },
+
+    {
+      "component": "PreActivityChecklist",
+      "label": "Pre-activity Checklist",
+      "contents": "This should be done prior to any events that may pose risk.  Car drives, certain new house events, and outings in the community."
+    },
+    {
+      "component": "RiskAssessment",
+      "label": "Pre-activity Checklist",
+      "contents": "This should be done prior to any events that may pose risk.  Car drives, certain new house events, and outings in the community."
+    },
+
+    {
+        "component": "NewRiskAssessment",
+        "label": "Risk Assessment  / Pre-activity Checklist",
+        "contents": "This should be done prior to any events that may pose risk.  Car drives, certain new house events, and outings in the community."
+      },
+
+    {
+      "component": "ShortTermResourceIncrease",
+      "label": "ADHOC - Short Term Resource Increase",
+      "contents": "This needs to be filled out if a participant doesn't attend school."
+    }
+
+    
+
+  ]
+  

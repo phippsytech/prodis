@@ -1,0 +1,121 @@
+version: '3.8'
+
+services:
+  app:
+    container_name: app-prodis-${DEVELOPER_NAME}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.app-${DEVELOPER_NAME}-prodis.rule=Host(`app.prodis.${DEVELOPER_NAME}.phippsy.tech`)"
+      - "traefik.http.routers.app-${DEVELOPER_NAME}-prodis.entrypoints=websecure"
+      - "traefik.http.routers.app-${DEVELOPER_NAME}-prodis.tls.certresolver=myresolver"
+      - "traefik.http.services.app-${DEVELOPER_NAME}-prodis.loadbalancer.server.port=5173"
+
+    build:
+      context: .
+      dockerfile: Dockerfile.app
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./app:/app
+      - ./shared:/app/shared
+      - /app/node_modules
+
+    restart: unless-stopped
+    networks:
+      - my_network
+
+  api:
+    container_name: api-prodis-${DEVELOPER_NAME}
+    labels:
+      - "traefik.enable=true" # Existing HTTP configurations for API
+      - "traefik.http.routers.api-prodis-${DEVELOPER_NAME}.service=api-prodis-${DEVELOPER_NAME}"
+      - "traefik.http.routers.api-prodis-${DEVELOPER_NAME}.rule=Host(`api.prodis.${DEVELOPER_NAME}.phippsy.tech`)"
+      - "traefik.http.services.api-prodis-${DEVELOPER_NAME}.loadbalancer.server.port=8080"
+      - "traefik.http.routers.api-prodis-${DEVELOPER_NAME}.entrypoints=websecure"
+      - "traefik.http.routers.api-prodis-${DEVELOPER_NAME}.tls.certresolver=myresolver"
+
+      # Existing HTTP configurations for Webhooks
+      - "traefik.http.routers.webhooks-${DEVELOPER_NAME}-prodis.service=webhooks-${DEVELOPER_NAME}-prodis"
+      - "traefik.http.routers.webhooks-${DEVELOPER_NAME}-prodis.rule=Host(`webhooks.prodis.${DEVELOPER_NAME}.phippsy.tech`)"
+      - "traefik.http.services.webhooks-${DEVELOPER_NAME}-prodis.loadbalancer.server.port=80"
+      - "traefik.http.routers.webhooks-${DEVELOPER_NAME}-prodis.entrypoints=websecure"
+      - "traefik.http.routers.webhooks-${DEVELOPER_NAME}-prodis.tls.certresolver=myresolver"
+
+      # New WSS configuration
+      - "traefik.http.routers.wss-${DEVELOPER_NAME}-prodis.service=wss-${DEVELOPER_NAME}-prodis"
+      - "traefik.http.routers.wss-${DEVELOPER_NAME}-prodis.rule=Host(`prodis.${DEVELOPER_NAME}.phippsy.tech`)"
+      - "traefik.http.services.wss-${DEVELOPER_NAME}-prodis.loadbalancer.server.port=443"
+      - "traefik.http.routers.wss-${DEVELOPER_NAME}-prodis.entrypoints=websecure"
+      - "traefik.http.routers.wss-${DEVELOPER_NAME}-prodis.tls.certresolver=myresolver"
+      # Add other necessary configurations here
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    ports:
+      - "8090:8080" # Expose port 8080 in the container by mapping it to port 8083 on the host
+      # - "8091:80" # Expose port 80 in the container by mapping it to to port 8084 on the host
+
+    volumes:
+      - ./api:/var/www/prodis/api
+      - ./src:/var/www/prodis/src
+      - ./servers:/var/www/prodis/servers
+      - ./env.php:/var/www/prodis/env.php
+      - composer_cache:/tmp/cache # Use named volume for Composer cache
+    restart: unless-stopped
+    depends_on:
+      - rabbitmq
+      - redis
+      - mongodb
+    networks:
+      - my_network
+
+  mongodb:
+    image: mongo
+    container_name: mongo-prodis
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=crystelcare
+      - MONGO_INITDB_ROOT_PASSWORD=zcd9YKC0fty_nmb6zun
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+      - ./crystelcare.mongodb:/data/dump # Mount local directory for the dump file
+    networks:
+      - my_network
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq-prodis
+    ports:
+      - "5672:5672" # RabbitMQ default port
+      - "15672:15672" # RabbitMQ management plugin port
+    environment:
+      - RABBITMQ_DEFAULT_USER=phippsy
+      - RABBITMQ_DEFAULT_PASS=213cn5us
+    restart: unless-stopped
+    networks:
+      - my_network
+
+  redis:
+    image: redis:latest
+    container_name: redis-prodis  
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - my_network
+    restart: unless-stopped
+
+networks:
+  my_network:
+    external: true # Assumes my_network is already created outside of this compose file
+
+volumes:
+  redis_data:
+  mongo-data:
+  composer_cache:
+    # Define the volume used for caching Composer dependencies
+
+

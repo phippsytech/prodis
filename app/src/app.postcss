@@ -1,0 +1,87 @@
+/* Write your global styles here, in PostCSS syntax */
+
+@tailwind base;
+
+@tailwind components;
+
+@tailwind utilities;
+
+@font-face {
+    font-family: 'fredoka_oneregular';
+    src: url('/fonts/fredokaone-regular-webfont.woff2') format('woff2'),
+         url('/fonts/fredokaone-regular-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@keyframes slideIn {
+  0% {
+    
+    opacity:0;
+    transform: translateY(-100%);
+  }
+  100% {
+    
+    opacity:1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideOut {
+  
+  0% {
+    
+    opacity:1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity:0;
+    transform: translateY(-100%);
+  }
+}
+
+@variants group-hover {
+  .slide-in {
+    display:block;
+  animation: slideIn 0.3s forwards;
+  }
+
+  .slide-out {
+    
+  animation: slideOut 0.3s forwards;
+  display:none;
+}
+  
+}
+
+
+
+/* Change the background color and text color of selected text */
+::selection {
+    background: rgb(99, 102, 241); /* Background color */
+    color: #ffffff; /* Text color */
+}
+
+/* Change the background color and text color of selected text for Mozilla Firefox */
+::-moz-selection {
+    background: rgb(99, 102, 241); /* Background color */
+    color: #ffffff; /* Text color */
+}
+
+
+:root {
+  --body_bg_color: #f8fafc;
+}
+
+* { text-rendering:geometricPrecision; }
+
+html.touch * { text-rendering: optimizeSpeed; }
+
+html {
+    overflow-y: scroll;
+}
+
+
+body {
+    background: #f8fafc;  /* slate */    
+}

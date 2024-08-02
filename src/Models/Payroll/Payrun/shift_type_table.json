@@ -1,0 +1,52 @@
+{
+    "Monday": [
+      {"start":"06:00","end":"14:00","shift_type":"DAY"},
+      {"start":"14:00","end":"20:00","shift_type":"DAY"},
+      {"start":"20:00","end":"00:00","shift_type":"EVE"},
+      {"start":"00:00","end":"06:00","shift_type":"NIGHT"}
+    ],
+    "Tuesday": [
+      {"start":"06:00","end":"14:00","shift_type":"DAY"},
+      {"start":"14:00","end":"20:00","shift_type":"DAY"},
+      {"start":"20:00","end":"00:00","shift_type":"EVE"},
+      {"start":"00:00","end":"06:00","shift_type":"NIGHT"}
+    ],
+    "Wednesday": [
+      {"start":"06:00","end":"14:00","shift_type":"DAY"},
+      {"start":"14:00","end":"20:00","shift_type":"DAY"},
+      {"start":"20:00","end":"00:00","shift_type":"EVE"},
+      {"start":"00:00","end":"06:00","shift_type":"NIGHT"}
+    ],
+    "Thursday": [
+      {"start":"06:00","end":"14:00","shift_type":"DAY"},
+      {"start":"14:00","end":"20:00","shift_type":"DAY"},
+      {"start":"20:00","end":"00:00","shift_type":"EVE"},
+      {"start":"00:00","end":"06:00","shift_type":"NIGHT"}
+    ],
+    "Friday": [
+      {"start":"06:00","end":"14:00","shift_type":"DAY"},
+      {"start":"14:00","end":"20:00","shift_type":"DAY"},
+      {"start":"20:00","end":"00:00","shift_type":"EVE"},
+      {"start":"00:00","end":"06:00","shift_type":"NIGHT"}
+    ],
+    "Saturday": [
+      {"start":"06:00","end":"00:00","shift_type":"SAT"},
+      {"start":"00:00","end":"06:00","shift_type":"SAT"}
+    ],
+    "Sunday": [
+      {"start":"06:00","end":"00:00","shift_type":"SUN"},
+      {"start":"00:00","end":"06:00","shift_type":"SUN"}
+    ],
+    "Public Holiday": [
+      {"start":"06:00","end":"00:00","shift_type":"PUB"},
+      {"start":"00:00","end":"06:00","shift_type":"PUB"}
+    ],
+    "Christmas Eve": [
+        {"start":"19:00","end":"00:00","shift_type":"PUB"}
+    ],
+    "New Years Eve": [
+        {"start":"19:00","end":"00:00","shift_type":"PUB"}
+    ]
+
+  }
+  

@@ -1,0 +1,59 @@
+
+<nav class="-mx-2">
+
+    {% include 'items.twig' with {
+        'indent':0,
+        'items':[
+            {"name":"Managing Users", "url":"/users"},
+            {"name":"Dashboard", "url":"/dashboard"},
+            {"name":"Participants", "url":"/participants"},
+            {"name":"Notifications"},
+            {
+                "name":"Human Resources",
+                "items":[
+                    {
+                        "name":"Staff",
+                        "items":[
+                            {"name":"Time Log"},
+                        ]
+                    },
+                    {
+                        "name":"Payroll",
+                        "items":[
+                            {"name":"Leave"},
+                            {"name":"Pay Runs"},
+                            {"name":"Pay Grades"},
+                            {"name":"Staff Pay Rates"},
+                            {"name":"Salary Packaging"},
+                        ]
+                    },
+                    {"name":"Directory"},
+                ]
+            },
+            {"name":"Trip Tracking"},
+            {"name":"Services"},
+            {"name":"Billables"},
+            {
+                "name":"Payers",
+                "items":[
+                    {"name":"Self/Plan Managed"},
+                    {"name":"NDIA"},
+                    {"name":"NDIA (PACE)"},
+                ]
+            },
+            {"name":"Incident Management System"},
+            {"name":"Meeting Notes"},
+            {"name":"Remittance"},
+            {"name":"Invoicing"},
+            {"name":"Payroll"},
+            {"name":"Credentials"},
+            {"name":"Reports"},
+            {"name":"Registers"},
+            {"name":"SIL"},
+            {"name":"Therapy"},
+            {"name":"Settings"}
+        ]
+            
+    } only %}
+
+</nav>

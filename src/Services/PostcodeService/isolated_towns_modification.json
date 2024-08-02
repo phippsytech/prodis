@@ -1,0 +1,326 @@
+[
+    {
+        "postcode": "2715",
+        "location": "Balranald",
+        "state": "NSW",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "2880",
+        "location": "Broken Hill",
+        "state": "NSW",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "2711",
+        "location": "Hay",
+        "state": "NSW",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "2711",
+        "location": "Hay South",
+        "state": "NSW",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "2824",
+        "location": "Ravenswood",
+        "state": "NSW",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "2824",
+        "location": "Warren",
+        "state": "NSW",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "4849",
+        "location": "Cardwell",
+        "state": "QLD",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "4820",
+        "location": "Queenton",
+        "state": "QLD",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "4820",
+        "location": "Charters Towers",
+        "state": "QLD",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "4820",
+        "location": "Alabama Hill",
+        "state": "QLD",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "4820",
+        "location": "Breddan",
+        "state": "QLD",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "4820",
+        "location": "Broughton",
+        "state": "QLD",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "4820",
+        "location": "Grand Secret",
+        "state": "QLD",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "4820",
+        "location": "Millchester",
+        "state": "QLD",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "4820",
+        "location": "Mosman Park",
+        "state": "QLD",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "4820",
+        "location": "Richmond Hill",
+        "state": "QLD",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "4820",
+        "location": "Southern Cross",
+        "state": "QLD",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "4820",
+        "location": "Toll",
+        "state": "QLD",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "4820",
+        "location": "Towers Hill",
+        "state": "QLD",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "4745",
+        "location": "Dysart",
+        "state": "QLD",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "4702",
+        "location": "Bluff",
+        "state": "QLD",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "4702",
+        "location": "Comet",
+        "state": "QLD",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "4702",
+        "location": "Jellinbah",
+        "state": "QLD",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "4717",
+        "location": "Blackwater",
+        "state": "QLD",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "4720",
+        "location": "Emerald",
+        "state": "QLD",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "4741",
+        "location": "Coppabella",
+        "state": "QLD",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "4744",
+        "location": "Moranbah",
+        "state": "QLD",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "4455",
+        "location": "Roma",
+        "state": "QLD",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "4455",
+        "location": "Blythdale",
+        "state": "QLD",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "4455",
+        "location": "Euthulla",
+        "state": "QLD",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "4455",
+        "location": "Orange Hill",
+        "state": "QLD",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "6514",
+        "location": "Greenhead",
+        "state": "WA",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "6514",
+        "location": "Leeman",
+        "state": "WA",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "6530",
+        "location": "Geraldton",
+        "state": "WA",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "6535",
+        "location": "Horrocks",
+        "state": "WA",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "6442",
+        "location": "Kambalda West",
+        "state": "WA",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "6442",
+        "location": "Kambalda East",
+        "state": "WA",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "6430",
+        "location": "Kalgoorlie",
+        "state": "WA",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "6430",
+        "location": "Broadwood",
+        "state": "WA",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "6430",
+        "location": "Hannans",
+        "state": "WA",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "6430",
+        "location": "Karlkurla",
+        "state": "WA",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "6430",
+        "location": "Lamington",
+        "state": "WA",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "6430",
+        "location": "Mullingar",
+        "state": "WA",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "6430",
+        "location": "Piccadilly",
+        "state": "WA",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "6430",
+        "location": "Somerville",
+        "state": "WA",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "6430",
+        "location": "South Kalgoorlie",
+        "state": "WA",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "6430",
+        "location": "West Kalgoorlie",
+        "state": "WA",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "6430",
+        "location": "West Lamington",
+        "state": "WA",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "6430",
+        "location": "Williamstown",
+        "state": "WA",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "6432",
+        "location": "Boulder",
+        "state": "WA",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "6432",
+        "location": "South Boulder",
+        "state": "WA",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "6432",
+        "location": "Victory Heights",
+        "state": "WA",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "6415",
+        "location": "Merredin",
+        "state": "WA",
+        "ndis_zone": 6
+    },
+    {
+        "postcode": "0822",
+        "location": "Gunbalanya",
+        "state": "NT",
+        "ndis_zone": 7
+    }
+]

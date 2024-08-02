@@ -1,0 +1,236 @@
+<script>
+    import { slide } from "svelte/transition";
+    import { jspa } from "@shared/jspa";
+    import JSON2CSV from "@shared/JSON2CSV.svelte";
+    import CheckboxButtonGroup from "@shared/PhippsyTech/svelte-ui/forms/CheckboxButtonGroup.svelte";
+    import { getDaysUntilDate, formatDate } from "@shared/utilities.js";
+    import { debounce } from "lodash-es";
+    import CredentialGrid from "./CredentialGrid.svelte";
+
+    let staff = [];
+    let staffList = [];
+    let selectedStaff = [];
+
+    jspa("/Staff", "listStaffByGroup", { group: "sil" }).then((result) => {
+        staff = result.result;
+
+        staff.forEach((staffer) => {
+            if (staffer.archived != 1)
+                staffList.push({ option: staffer.name, value: staffer.id });
+        });
+
+        staffList.sort((a, b) => a.option.localeCompare(b.option));
+
+        staffList = staffList;
+    });
+
+    let credentials = [];
+    let requestCounter = 0;
+
+    function loadCredentials(selectedStaff) {
+        const currentRequest = ++requestCounter; // Increment counter on each call
+        if (selectedStaff.length === 0) {
+            credentials = []; // Immediately clear credentials if no staff selected
+            return;
+        }
+
+        jspa("/Credential", "listCredentialsByStaffIds", {
+            staff_ids: selectedStaff,
+        }).then((result) => {
+            if (currentRequest === requestCounter) {
+                // Check if this is the latest request
+                credentials = result.result;
+            }
+        });
+    }
+
+    function hasDatePassed(dateString) {
+        const today = new Date();
+        const expiryDate = new Date(dateString);
+        return expiryDate < today;
+    }
+
+    function isDateWithinSixWeeks(dateString) {
+        const SIX_WEEKS_IN_MS = 6 * 7 * 24 * 60 * 60 * 1000;
+        const today = new Date();
+        const sixWeeksLater = new Date(today.getTime() + SIX_WEEKS_IN_MS); // 6 weeks in milliseconds
+        const targetDate = new Date(dateString);
+
+        return targetDate < sixWeeksLater && targetDate >= today;
+    }
+
+    // Define the debounced function
+    const debouncedLoadCredentials = debounce(loadCredentials, 50);
+
+    // Reactive statement to call the debounced function
+    $: selectedStaff, debouncedLoadCredentials(selectedStaff);
+
+    const currentDate = new Date();
+    const options = {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+        timeZone: "Australia/Sydney",
+    };
+    const formattedDate = currentDate.toLocaleDateString("en-AU", options);
+    // console.log(formattedDate);
+</script>
+
+<div class="no-print">
+    <div class="mb-8">
+        <div class="mb-2">
+            <div
+                class="text-2xl sm:truncate tracking-tight font-fredoka-one-regular text-indigo-950"
+            >
+                Required Credentials Report
+            </div>
+            <p class=" text-sm text-gray-700">
+                Select the staff you want to view required credentials for.
+            </p>
+        </div>
+
+        <CheckboxButtonGroup options={staffList} bind:values={selectedStaff} />
+    </div>
+</div>
+{#if credentials.length > 0}
+    <div class="mb-2">
+        <div class="flex justify-between items-center">
+            <div>
+                <div
+                    class="text-2xl sm:truncate tracking-tight font-fredoka-one-regular text-indigo-950"
+                >
+                    Staff Credentials
+                </div>
+                <p class=" text-sm text-gray-700">
+                    Here are the required credentials for the selected staff as
+                    of {formattedDate}.
+                </p>
+            </div>
+
+            <div class="no-print">
+                <JSON2CSV
+                    filename="credentials.csv"
+                    bind:json_data={credentials}
+                    label="Export results to CSV"
+                />
+            </div>
+        </div>
+    </div>
+
+    <CredentialGrid bind:jsonData={credentials} />
+
+    <!-- <div class="no-print"> -->
+    <table class="min-w-full divide-y divide-gray-300">
+        <thead class=" text-xs">
+            <tr>
+                <th class="p-2 text-left font-medium">Name</th>
+                <th class="p-2 text-left font-medium">Credential</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200 bg-white">
+            {#each credentials as credential, index (index)}
+                <tr
+                    in:slide={{ duration: 200 }}
+                    out:slide={{ duration: 200 }}
+                    class={credential.credential_status === "Missing"
+                        ? "text-gray-400"
+                        : ""}
+                >
+                    <td class="p-2 text-left font-medium"
+                        >{credential.staff_name}</td
+                    >
+                    <td class="p-2 text-left font-medium">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <div class="font-semibold">
+                                    {credential.credential_name}
+                                </div>
+                                {#if credential.credential_details}
+                                    <div class="text-xs">
+                                        {credential.credential_details}
+                                    </div>
+                                {/if}
+
+                                {#if credential.expiry_date && !isDateWithinSixWeeks(credential.expiry_date) && !hasDatePassed(credential.expiry_date)}
+                                    <div class="text-xs">
+                                        Expires {formatDate(
+                                            credential.expiry_date,
+                                        )}
+                                    </div>
+                                {/if}
+
+                                {#if credential.issue_date && !credential.expiry_date}
+                                    <div class="text-xs">
+                                        Issued {formatDate(
+                                            credential.issue_date,
+                                        )}
+                                    </div>
+                                {/if}
+                                {#if credential.expiry_date && isDateWithinSixWeeks(credential.expiry_date)}
+                                    <div class="text-xs">
+                                        Renew by {formatDate(
+                                            credential.expiry_date,
+                                        )} ({getDaysUntilDate(
+                                            credential.expiry_date,
+                                        )})
+                                    </div>
+                                {/if}
+
+                                {#if credential.expiry_date && hasDatePassed(credential.expiry_date)}
+                                    <div class="text-xs">
+                                        Expired {formatDate(
+                                            credential.expiry_date,
+                                        )}
+                                        ({getDaysUntilDate(
+                                            credential.expiry_date,
+                                        )})
+                                    </div>
+                                {/if}
+                            </div>
+
+                            {#if credential.expiry_date && hasDatePassed(credential.expiry_date)}
+                                <span
+                                    class="inline-flex items-center rounded-full bg-red-100 px-2 py-1 text-xs font-medium text-red-700"
+                                    >Expired</span
+                                >
+                            {:else if credential.credential_status === "Missing"}
+                                <span
+                                    class="inline-flex items-center rounded-full bg-gray-100 px-2 py-1 text-xs font-medium text-gray-600"
+                                    >Missing</span
+                                >
+                            {:else if credential.expiry_date && isDateWithinSixWeeks(credential.expiry_date)}
+                                <span
+                                    class="inline-flex items-center rounded-full bg-yellow-100 px-2 py-1 text-xs font-medium text-yellow-800"
+                                    >Renewal Due</span
+                                >
+                            {:else}
+                                <span
+                                    class="inline-flex items-center rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-700"
+                                    >Current</span
+                                >
+                            {/if}
+                        </div>
+                    </td>
+                </tr>
+            {/each}
+        </tbody>
+    </table>
+    <!-- </div> -->
+{/if}
+
+<style>
+    .vertical {
+        writing-mode: vertical-rl;
+        transform: rotate(180deg);
+    }
+
+    @media print {
+        tr {
+            -webkit-print-color-adjust: exact; /* For WebKit browsers */
+            background-color: inherit !important; /* Use the row's background color */
+        }
+        .no-print {
+            display: none !important;
+        }
+    }
+</style>

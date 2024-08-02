@@ -1,0 +1,11 @@
+[Unit]
+Description=Payslip Generation Worker
+
+[Service]
+ExecStart=/usr/bin/php /var/www/staging.phippsy.tech/ndismate/servers/xero/payslip_generation_worker.php
+StandardOutput=null
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

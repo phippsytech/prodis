@@ -1,0 +1,51 @@
+{
+    "Monday": [
+      {"start":"06:00","end":"14:00","service_code":"SIL HI DAY"},
+      {"start":"14:00","end":"20:00","service_code":"SIL HI DAY"},
+      {"start":"20:00","end":"22:00","service_code":"SIL HI EVE"},
+      {"start":"22:00","end":"06:00","service_code":"SIL SLEEP"}
+    ],
+    "Tuesday": [
+      {"start":"06:00","end":"14:00","service_code":"SIL HI DAY"},
+      {"start":"14:00","end":"20:00","service_code":"SIL HI DAY"},
+      {"start":"20:00","end":"22:00","service_code":"SIL HI EVE"},
+      {"start":"22:00","end":"06:00","service_code":"SIL SLEEP"}
+    ],
+    "Wednesday": [
+      {"start":"06:00","end":"14:00","service_code":"SIL HI DAY"},
+      {"start":"14:00","end":"20:00","service_code":"SIL HI DAY"},
+      {"start":"20:00","end":"22:00","service_code":"SIL HI EVE"},
+      {"start":"22:00","end":"06:00","service_code":"SIL SLEEP"}
+    ],
+    "Thursday": [
+      {"start":"06:00","end":"14:00","service_code":"SIL HI DAY"},
+      {"start":"14:00","end":"20:00","service_code":"SIL HI DAY"},
+      {"start":"20:00","end":"22:00","service_code":"SIL HI EVE"},
+      {"start":"22:00","end":"06:00","service_code":"SIL SLEEP"}
+    ],
+    "Friday": [
+      {"start":"06:00","end":"14:00","service_code":"SIL HI DAY"},
+      {"start":"14:00","end":"20:00","service_code":"SIL HI DAY"},
+      {"start":"20:00","end":"22:00","service_code":"SIL HI EVE"},
+      {"start":"22:00","end":"06:00","service_code":"SIL SLEEP"}
+    ],
+    "Saturday": [
+      {"start":"06:00","end":"14:00","service_code":"SIL HI SAT"},
+      {"start":"14:00","end":"20:00","service_code":"SIL HI SAT"},
+      {"start":"20:00","end":"22:00","service_code":"SIL HI SAT"},
+      {"start":"22:00","end":"06:00","service_code":"SIL SLEEP"}
+    ],
+    "Sunday": [
+      {"start":"06:00","end":"14:00","service_code":"SIL HI SUN"},
+      {"start":"14:00","end":"20:00","service_code":"SIL HI SUN"},
+      {"start":"20:00","end":"22:00","service_code":"SIL HI SUN"},
+      {"start":"22:00","end":"06:00","service_code":"SIL SLEEP"}
+    ],
+    "Public Holiday": [
+      {"start":"06:00","end":"14:00","service_code":"SIL HI PUB"},
+      {"start":"14:00","end":"20:00","service_code":"SIL HI PUB"},
+      {"start":"20:00","end":"22:00","service_code":"SIL HI PUB"},
+      {"start":"22:00","end":"06:00","service_code":"SIL SLEEP"}
+    ]
+  }
+  

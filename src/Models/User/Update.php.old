@@ -1,0 +1,49 @@
+<?php
+namespace NDISmate\Models\User;
+
+use Respect\Validation\Validator as v;
+use \NDISmate\CORE\TransactionalDatabase;
+use \NDISmate\CORE\Validation;
+use \RedBeanPHP\R as R;
+
+class Update
+{
+    public function __invoke($data)
+    {
+        $user_id = $data['id'];
+        $user = R::load('users', $user_id);
+
+        if (!$user->id)
+            return ['http_code' => 404, 'error_message' => 'Cannot update. User not found.'];
+
+        $fields = [
+            'id' => [v::numericVal()],
+            'email' => [v::email()],
+            'name' => [v::stringType()],
+            'first_name' => [v::stringType()],
+            'last_name' => [v::stringType()],
+            'phone' => [v::stringType()],
+            'roles' => [v::arrayType()],
+            'access_all_participants' => [v::boolVal()],
+        ];
+
+        // true / false data is stored as 1 / 0 in the database
+        if (isset($data['acccess_all_participants'])) {
+            $data['access_all_participants'] = ($data['access_all_participants'] == true) ? 1 : 0;
+        }
+
+        if (isset($data['roles'])) {
+            $data['roles'] = json_encode($data['roles']);
+        }
+
+        $db_result = TransactionalDatabase::storeFields($user, $fields, $data);
+
+        if ($db_result['http_code'] == 400) {
+            return $db_result;
+        } else {
+            $id = $db_result['id'];
+        }
+
+        return ['http_code' => 200, 'user_id' => $id];
+    }
+}

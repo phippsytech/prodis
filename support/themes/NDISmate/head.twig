@@ -1,0 +1,15 @@
+<head>
+	<meta charset="utf-8">
+	<meta content="width=device-width, initial-scale=1" name="viewport">
+	   <title>{% if meta.title %}{{ meta.title }} | {% endif %}{{ site_title }}</title>
+    {% if meta.description %}
+        <meta name="description" content="{{ meta.description|striptags }}" />
+    {% endif %}
+	<meta charset="utf-8">
+	<meta content="ie=edge" http-equiv="x-ua-compatible">
+	<link href="/apple-touch-icon.png" rel="apple-touch-icon">
+	<link href="/mask-icon.svg" rel="mask-icon">
+	<link href="/favicon.ico" rel="shortcut icon">
+	
+	<link rel="stylesheet" href="{{ theme_url }}/css/styles.css" type="text/css" />
+</head>

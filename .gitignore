@@ -1,0 +1,12 @@
+
+env.php
+oauth-credentials.json
+node_modules/
+dist/
+.vscode
+vendor/
+log/
+monolog/
+sandbox/
+/src/CRM/Invoice/NDIA/PaymentRemittance/data/
+env/

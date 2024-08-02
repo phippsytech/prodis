@@ -1,0 +1,12 @@
+[Unit]
+Description=Prodis API Server
+
+[Service]
+ExecStart=/usr/bin/php /var/www/staging.phippsy.tech/ndismate/api/index.php
+StandardOutput=null
+Restart=always
+RestartSec=10
+ExecStop=/bin/sh -c 'sudo rm -f /tmp/prodis.sock'
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,51 @@
+{
+    "Monday": [
+      {"start":"06:00","end":"14:00","service_code":"SCA DAY"},
+      {"start":"14:00","end":"20:00","service_code":"SCA DAY"},
+      {"start":"20:00","end":"22:00","service_code":"SCA EVE"},
+      {"start":"22:00","end":"06:00","service_code":"SCA SLEEP"}
+    ],
+    "Tuesday": [
+      {"start":"06:00","end":"14:00","service_code":"SCA DAY"},
+      {"start":"14:00","end":"20:00","service_code":"SCA DAY"},
+      {"start":"20:00","end":"22:00","service_code":"SCA EVE"},
+      {"start":"22:00","end":"06:00","service_code":"SCA SLEEP"}
+    ],
+    "Wednesday": [
+      {"start":"06:00","end":"14:00","service_code":"SCA DAY"},
+      {"start":"14:00","end":"20:00","service_code":"SCA DAY"},
+      {"start":"20:00","end":"22:00","service_code":"SCA EVE"},
+      {"start":"22:00","end":"06:00","service_code":"SCA SLEEP"}
+    ],
+    "Thursday": [
+      {"start":"06:00","end":"14:00","service_code":"SCA DAY"},
+      {"start":"14:00","end":"20:00","service_code":"SCA DAY"},
+      {"start":"20:00","end":"22:00","service_code":"SCA EVE"},
+      {"start":"22:00","end":"06:00","service_code":"SCA SLEEP"}
+    ],
+    "Friday": [
+      {"start":"06:00","end":"14:00","service_code":"SCA DAY"},
+      {"start":"14:00","end":"20:00","service_code":"SCA DAY"},
+      {"start":"20:00","end":"22:00","service_code":"SCA EVE"},
+      {"start":"22:00","end":"06:00","service_code":"SCA SLEEP"}
+    ],
+    "Saturday": [
+      {"start":"06:00","end":"14:00","service_code":"SCA SAT"},
+      {"start":"14:00","end":"20:00","service_code":"SCA SAT"},
+      {"start":"20:00","end":"22:00","service_code":"SCA SAT"},
+      {"start":"22:00","end":"06:00","service_code":"SCA SLEEP"}
+    ],
+    "Sunday": [
+      {"start":"06:00","end":"14:00","service_code":"SCA SUN"},
+      {"start":"14:00","end":"20:00","service_code":"SCA SUN"},
+      {"start":"20:00","end":"22:00","service_code":"SCA SUN"},
+      {"start":"22:00","end":"06:00","service_code":"SCA SLEEP"}
+    ],
+    "Public Holiday": [
+      {"start":"06:00","end":"14:00","service_code":"SCA PUB"},
+      {"start":"14:00","end":"20:00","service_code":"SCA PUB"},
+      {"start":"20:00","end":"22:00","service_code":"SCA PUB"},
+      {"start":"22:00","end":"06:00","service_code":"SCA SLEEP"}
+    ]
+  }
+  

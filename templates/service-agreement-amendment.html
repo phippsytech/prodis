@@ -1,0 +1,103 @@
+<style>
+    body,
+    table,
+    tr,
+    td,
+    th,
+    input[type="text"],
+    textarea {
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+    }
+</style>
+
+<img src="https://app.ndismate.staging.phippsy.tech/docuseal/crystel-care-logo-colour.svg" alt="Crystel Care Logo"
+    style="width: 200px; height: auto; margin-bottom: 20px;" />
+<h1>Amendment to Service Agreement<br />for {{PARTICIPANT_NAME}}</h1>
+<table style="width: 100%;">
+    <tr>
+        <td>
+            <p>
+                <b>Participant Details</b><br />
+                Name: {{PARTICIPANT_NAME}}<br />
+                NDIS Number: {{NDIS_NUMBER}}
+            </p>
+        </td>
+        <td>
+            <b>Service Provider Details</b><br />
+            Crystel Care Pty Ltd<br />
+            ABN: 36 662 942 403<br />
+            Contact: Tracey Jordan<br />
+            Phone: 0403 765 238<br />
+            Email: tracey@crystelcare.com.au<br />
+        </td>
+    </tr>
+</table>
+
+<p>
+    <b>Amendment Details</b><br />
+    This amendment is issued to revise the service rates for Service Agreement {{SERVICE_AGREEMENT_START_DATE}} to
+    {{SERVICE_AGREEMENT_END_DATE}}.
+</p>
+
+<b>Revised Service Rates</b>
+<table style="border: 1px solid black;padding:2px; border-collapse: collapse; width: 100%;">
+    <tr>
+        <th style="border: 1px solid black;padding:2px;text-align: left; width: auto;">Service</th>
+        <th style="border: 1px solid black;padding:2px;text-align: left;">Original Rate</th>
+        <th style="border: 1px solid black;padding:2px;text-align: left;">New Rate</th>
+    </tr>
+    {% for SERVICE in SERVICES %}
+    <tr>
+        <td style="border: 1px solid black;padding:2px;">{{SERVICE.name}}</td>
+        <td style="border: 1px solid black;padding:2px;text-align:right;">${{SERVICE.original_rate}} / hr</td>
+        <td style="border: 1px solid black;padding:2px;text-align:right;">${{SERVICE.new_rate}} / hr</td>
+    </tr>
+    {% endfor %}
+</table>
+
+
+<p>
+    <b>Effective Date of Amendment</b><br />
+    This amendment will take effect on {{AMENDMENT_START_DATE}}.
+</p>
+
+<p>
+    <b>Agreement and Acceptance</b><br />
+    By signing below, the parties hereby agree to the revised rates stated above, thereby amending the original
+    Service
+    Agreement. The increase in price will not affect the originally contracted hours of service. The NDIS will
+    adjust
+    the funding accordingly.
+</p>
+
+<table style="width: 100%;">
+    <tr>
+        <td>
+            <b>Participant/Participant's Representative</b><br />
+            Signature: <br />
+            <signature-field style="width: 300px; height: 80px; display: inline-block;">
+            </signature-field><br />
+            Name: <text-field style="width: 300px; height: 25px; margin-bottom: -8px; display: inline-block;"
+                name="Name">
+            </text-field><br /><br />
+            Date: <date-field name="Date" format="D MMM YYYY"
+                style=" width: 300px; height: 25px; margin-bottom: -8px; display: inline-block;">
+            </date-field>
+        </td>
+        <td>
+            <b>Service Provider (Crystel Care)</b><br />
+            Signature: <br />
+            <img src="https://app.ndismate.staging.phippsy.tech/docuseal/crystel-murphy-signature.png"
+                alt="Crystel Murphy Signature" style="width: auto; height: 70px; margin-bottom: 10px;" /><br />
+            Name: Crystel Murphy (Director)<br /><br />
+            Date: {{CURRENT_DATE}}
+        </td>
+    </tr>
+</table>
+<p>
+    This amendment is to be attached to the original Service Agreement and becomes part of the contractual agreement
+    between Crystel Care and the Participant. All other terms and conditions of the original Service Agreement
+    remain in
+    effect unless otherwise stated in this amendment.
+</p>

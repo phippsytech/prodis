@@ -1,0 +1,56 @@
+# Use the official PHP image as a base
+FROM php:8.3-cli
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    libssl-dev \
+    pkg-config \
+    supervisor \
+    git \
+    unzip \
+    libgmp-dev \
+    inotify-tools \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install PHP extensions
+RUN pecl install mongodb redis \
+    && docker-php-ext-enable mongodb redis \
+    && docker-php-ext-install mysqli pdo pdo_mysql sockets bcmath gmp \
+    && docker-php-ext-enable mysqli
+
+# Enable pcntl extension
+RUN docker-php-ext-install pcntl
+
+# Set the working directory
+WORKDIR /var/www/prodis
+
+# Copy the necessary directories and files into the container
+COPY ./api/ /var/www/prodis/api/
+COPY ./src/ /var/www/prodis/src/
+COPY ./servers/ /var/www/prodis/servers/
+COPY ./templates/ /var/www/prodis/templates/
+COPY ./webhooks/ /var/www/prodis/webhooks/
+COPY ./init.php /var/www/prodis/init.php
+COPY ./composer.json /var/www/prodis/composer.json
+COPY ./composer.lock /var/www/prodis/composer.lock
+COPY ./autoload.php /var/www/prodis/autoload.php
+COPY ./env.php /var/www/prodis/env.php
+COPY ./watch_and_restart.sh /var/www/prodis/watch_and_restart.sh
+
+
+# Install Composer and project dependencies
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+ENV COMPOSER_ALLOW_SUPERUSER=1
+RUN composer install --no-dev --optimize-autoloader
+
+# Copy supervisord configuration file
+COPY supervisord.conf /etc/supervisor/conf.d/prodis.conf
+
+
+# Expose ports
+EXPOSE 80
+EXPOSE 8080
+EXPOSE 443
+
+# Command to run supervisord
+CMD ["supervisord"]

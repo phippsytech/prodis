@@ -1,0 +1,99 @@
+<script>
+
+// The Participant Budget report replaces this report. This report is no longer used.
+
+    import { onMount } from "svelte";
+    import Container from "@shared/Container.svelte";
+    import { jspa } from "@shared/jspa.js";
+    import { BreadcrumbStore } from "@shared/stores.js";
+    import {
+        formatCurrency,
+        getDaysUntilDate,
+        formatDate,
+        convertMinutesToHoursAndMinutes,
+    } from "@shared/utilities.js";
+
+    BreadcrumbStore.set({
+        path: [
+            { url: "/reports", name: "Reports" },
+            { url: null, name: "Expiring This Month" },
+        ],
+    });
+
+    let clients = [];
+    $: token = localStorage.getItem("JWT");
+
+    onMount(async () => {
+        jspa("/Report", "getExpiringThisMonth", {}, token).then((result) => {
+            clients = result.result;
+        });
+    });
+</script>
+
+<table class="min-w-full divide-y divide-gray-300">
+    <thead>
+        <tr>
+            <th
+                scope="col"
+                class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
+                >Participant</th
+            >
+            <th
+                scope="col"
+                class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                >Plan Expires</th
+            >
+            <th
+                scope="col"
+                class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                >Service</th
+            >
+            <th
+                scope="col"
+                class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                >Rate</th
+            >
+            <th
+                scope="col"
+                class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                >Remaining</th
+            >
+            <th
+                scope="col"
+                class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                >Time</th
+            >
+        </tr>
+    </thead>
+    <tbody class="divide-y divide-gray-200">
+        {#each clients as client, index (index)}
+            <tr class="hover:bg-indigo-50">
+                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
+                    ><a class="text-indigo-600" href="/#/clients/{client.id}"
+                        >{client.name}</a
+                    ></td
+                >
+                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
+                    >{formatDate(client.ndis_plan_end_date)}
+                    <span class="text-xs"
+                        >({getDaysUntilDate(client.ndis_plan_end_date)})</span
+                    ></td
+                >
+                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
+                    >{client.code}</td
+                >
+                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
+                    >{formatCurrency(client.rate)}</td
+                >
+                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
+                    >{formatCurrency(client.remaining)}</td
+                >
+                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"
+                    >{@html convertMinutesToHoursAndMinutes(
+                        Math.round((client.remaining / client.rate) * 60),
+                    )}</td
+                >
+            </tr>
+        {/each}
+    </tbody>
+</table>

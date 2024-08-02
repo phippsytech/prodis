@@ -1,0 +1,11 @@
+<ul role="list" class="gap-y-7">
+    {% for item in items %}
+        <li>
+            <a href="{{ (item.url) ? item.url : '/#'}}" class="text-gray-700 hover:text-indigo-600 hover:bg-gray-50 group flex  rounded-md p-2 text-sm {{ (indent==0) ? 'font-semibold' : ''}}"
+            style="padding-left: {{ 0.75 * indent }}rem;">
+                {{ item.name }}
+            </a>
+            {% include 'items.twig' with {'items':item.items, 'indent':indent+1} %}
+        </li>
+    {% endfor %}
+</ul>
