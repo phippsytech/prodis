@@ -1,5 +1,8 @@
 <script>
-    export let api_url = "https://api.ndismate.app/";
+
+// FOR PRODUCTION USE
+
+    export let api_url = "https://api.prodis.app/";  
 
     let feedback = {};
     let status = "ready"; //ready, sending, sent, error

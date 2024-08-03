@@ -16,11 +16,10 @@ function createWebSocketStore() {
 
     function connect() {
         // Determine the appropriate WebSocket server URL
+        const websocketUrl = import.meta.env.VITE_WEBSOCKET_URL;
         let hostname = window.location.hostname;
-        let websocket_server = "wss://ndismate.app:443";
-        if (hostname.includes("phippsy.tech")) {
-            websocket_server = "wss://prodis.phippsy.phippsy.tech:443";
-        }
+        let websocket_server = "wss://"+websocketUrl+":443";
+        
 
         // Create a new RobustWebSocket instance
         const ws = new RobustWebSocket(websocket_server, null, {

@@ -1,5 +1,6 @@
 
 env.php
+.env
 oauth-credentials.json
 node_modules/
 dist/
@@ -8,5 +9,6 @@ vendor/
 log/
 monolog/
 sandbox/
-/src/CRM/Invoice/NDIA/PaymentRemittance/data/
 env/
+data/
+cyrstelcare.mongodb.tar.gz

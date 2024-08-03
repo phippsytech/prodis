@@ -14,7 +14,7 @@ ENV NODE_ENV=development
 WORKDIR /app
 
 # Copy package.json and package-lock.json
-
+COPY ./app/.env ./.env
 COPY ./app/package*.json ./
 COPY ../shared /app/shared
 
