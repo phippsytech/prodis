@@ -1,10 +1,7 @@
 import { writable, readable } from 'svelte/store'
 
-let hostname= window.location.hostname;
-let _api_url = "https://api.ndismate.app"
-if (hostname.includes("phippsy.tech")) {
-    _api_url = "https://api.prodis.phippsy.phippsy.tech"
-}
+
+const _api_url = import.meta.env.VITE_API_URL;
 
 export const API_URL = readable(_api_url);
 

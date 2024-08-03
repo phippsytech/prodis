@@ -57,16 +57,19 @@ class CorsMiddleware
         if (in_array($http_origin, [
             'https://self.prodis.app',
             'https://prodis.app',
-            'https://my.ndismate.com.au',
-            'https://my.ndismate.com.au',
-            'https://demo.ndismate.app',
-            'https://crystelcare.ndismate.app',
-            'https://app.prodis.phippsy.phippsy.tech',
-            'https://app.ndismate.staging.phippsy.tech',
-            'https://my.ndismate.staging.phippsy.tech',
-            'https://ndismate.staging.phippsy.tech',
+            'https://my.prodis.app',
+            'https://demo.prodis.app',
+            'https://crystelcare.prodis.app',
+            'https://app.prodis.staging.phippsy.tech',
             'https://crm.crystelcare.com.au',
-            'https://crystelcare.com.au'
+            'https://crystelcare.com.au',
+            
+            'https://app.prodis.phippsy.phippsy.tech',
+            'https://app.prodis.santos.phippsy.tech',
+            'https://app.prodis.babasa.phippsy.tech',
+            'https://app.prodis.pabustan.phippsy.tech',
+
+            
         ]) || $this->anon) {
             $origin = $http_origin;
         }

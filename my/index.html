@@ -10,12 +10,9 @@
 
     <title>NDISmate</title>
 
-    <script>
-        let hostname= window.location.hostname;
-        let _api_url = "https://api.ndismate.app"
-        if (hostname.includes("phippsy.tech")) {
-            _api_url = "https://api.prodis.phippsy.phippsy.tech"
-        }
+    <script type="module">
+      const _api_url = import.meta.env.VITE_API_URL;
+        
         fetch(_api_url+"/My", {
             method: 'GET',
             mode: 'cors'

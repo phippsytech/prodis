@@ -22,7 +22,7 @@
     "baseUrl": ".",
 
     "paths": {
-      "@shared/*": ["/var/www/staging.phippsy.tech/ndismate/shared/*"],
+      "@shared/*": ["shared/*"],
       "@app/*": ["src/*"],
     },
     

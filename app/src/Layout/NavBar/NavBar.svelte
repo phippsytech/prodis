@@ -20,7 +20,7 @@
 
     let hostname = window.location.hostname;
     let is_development = false;
-    if (hostname.includes("staging.phippsy.tech")) {
+    if (hostname.includes("phippsy.tech")) {
         is_development = true;
     }
 
@@ -193,8 +193,27 @@
         top: -8px; /* Adjusted to sit on top of the box */
         left: 0;
         right: 0;
-        height: 8px; /* Height of the top border */
+        height: 16px; /* Height of the top border */
         background-image: linear-gradient(
+            to right,
+            #ff0000 0%,
+            #ff4500 10%,
+            #ff6347 20%,
+            #ff7f50 30%,
+            #ff8c00 40%,
+            #ffa500 50%,
+            #ff8c00 60%,
+            #ff7f50 70%,
+            #ff6347 80%,
+            #ff4500 90%,
+            #ff0000 100%
+        );
+        background-size: 200% 100%; /* Enlarge background to allow smooth transition */
+        animation: slide-gradient 60s linear infinite; /* Apply the animation */
+    }
+
+    /* Original Purple-Blue Gradient Cycle */
+    /* background-image: linear-gradient(
             to right,
             #9333ea 0%,
             #8b5cf6 10%,
@@ -207,10 +226,7 @@
             #4f46e5 80%,
             #8b5cf6 90%,
             #9333ea 100%
-        );
-        background-size: 200% 100%; /* Enlarge background to allow smooth transition */
-        animation: slide-gradient 60s linear infinite; /* Apply the animation */
-    }
+        ); */
 
     @keyframes slide-gradient {
         from {
