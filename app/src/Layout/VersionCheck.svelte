@@ -1,6 +1,7 @@
 <script>
   import { get } from "svelte/store";
-  import { API_URL } from "@shared/stores.js";
+
+  import configStore from "@app/configStore";
   import { slide } from "svelte/transition";
   import { VersionStore } from "@shared/stores.js";
 
@@ -14,7 +15,9 @@ Actually - I was going to use a websocket, but code pilot suggested service work
 
  */
 
-  const api_url = get(API_URL);
+  const config = get(configStore);
+
+  const api_url = config.API_URL;
   const versionMetaTag = document.querySelector('meta[name="version"]');
 
   let new_version_available = false;

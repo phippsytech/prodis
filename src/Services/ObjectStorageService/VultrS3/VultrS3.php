@@ -27,7 +27,7 @@ class VultrS3
         try {
             $fileContent = file_get_contents(__DIR__ . '/crystals.png');
             $result = (new PutS3Object)([
-                'bucket' => 'asset-storage-m9j3tbsgs8zift7l',
+                'bucket' => VULTR_BUCKET,
                 'key' => 'crystals.png',
                 'fileContent' => $fileContent
             ],
@@ -43,7 +43,7 @@ class VultrS3
     {
         try {
             $result = $this->getS3Object(
-                bucket: 'asset-storage-m9j3tbsgs8zift7l',
+                bucket: VULTR_BUCKET,
                 key: 'crystals.png'
             );
             return $result;

@@ -21,12 +21,7 @@
     import { jspa } from "@shared/jspa.js";
 
     import { onMount } from "svelte";
-    import {
-        API_URL,
-        UserStore,
-        RolesStore,
-        StafferStore,
-    } from "@shared/stores.js";
+    import { UserStore, RolesStore, StafferStore } from "@shared/stores.js";
 
     let ready = false;
 
@@ -70,7 +65,7 @@
 
 <!-- <Console /> -->
 <Offline />
-<VersionCheck />
+<!-- <VersionCheck /> -->
 
 <Guard on:authenticated|once={() => getUser()}>
     {#if ready === true}

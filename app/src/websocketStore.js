@@ -3,9 +3,13 @@ import { writable, derived } from 'svelte/store';
 import { NotificationStore } from '@app/Overlays/stores.js';
 import { VersionStore } from '@shared/stores.js';
 import RobustWebSocket from 'robust-websocket';
+import { get } from "svelte/store";
+import configStore from '@app/configStore';
+
 
 function createWebSocketStore() {
     const { subscribe, set, update } = writable(null);
+
     let isConnected = writable(false);
 
     // Create a new writable store for WebSocket messages
@@ -16,10 +20,11 @@ function createWebSocketStore() {
 
     function connect() {
         // Determine the appropriate WebSocket server URL
-        const websocketUrl = import.meta.env.VITE_WEBSOCKET_URL;
+        const config = get(configStore);
+        const websocketUrl = config.WEBSOCKET_URL;
         let hostname = window.location.hostname;
-        let websocket_server = "wss://"+websocketUrl+":443";
-        
+        let websocket_server = "wss://" + websocketUrl + ":443";
+
 
         // Create a new RobustWebSocket instance
         const ws = new RobustWebSocket(websocket_server, null, {
