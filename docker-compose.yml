@@ -1,76 +1,37 @@
 version: '3.8'
 
 secrets:
-  env_file:
+  api_env_file:
     file: ./env.php
+  app_env_file:
+    file: ./app.conf
 
 services:
   app:
-    container_name: app-prodis-${DEVELOPER_NAME}
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.app-${DEVELOPER_NAME}-prodis.rule=Host(`app.prodis.${DEVELOPER_NAME}.phippsy.tech`)"
-      - "traefik.http.routers.app-${DEVELOPER_NAME}-prodis.entrypoints=websecure"
-      - "traefik.http.routers.app-${DEVELOPER_NAME}-prodis.tls.certresolver=myresolver"
-      - "traefik.http.services.app-${DEVELOPER_NAME}-prodis.loadbalancer.server.port=5173"
-      # Apply the error middleware
-      - "traefik.http.routers.app-${DEVELOPER_NAME}-prodis.middlewares=error-pages@docker"
-
-    build:
-      context: .
-      dockerfile: Dockerfile.app
-    ports:
-      - "5173:5173"
+    # ports:
+    #   - "5173:5173"
+    secrets:
+      - source: app_env_file
+        target: /app/app.conf
     volumes:
       - ./app:/app
       - ./shared:/app/shared
       - /app/node_modules
-      - ./.env:/app/.env
     restart: unless-stopped
     networks:
       - my_network
 
   api:
     secrets:
-      - source: env_file
+      - source: api_env_file
         target: /var/www/prodis/env.php
-
-    container_name: api-prodis-${DEVELOPER_NAME}
-    labels:
-      - "traefik.enable=true" # Existing HTTP configurations for API
-      - "traefik.http.routers.api-prodis-${DEVELOPER_NAME}.service=api-prodis-${DEVELOPER_NAME}"
-      - "traefik.http.routers.api-prodis-${DEVELOPER_NAME}.rule=Host(`api.prodis.${DEVELOPER_NAME}.phippsy.tech`)"
-      - "traefik.http.services.api-prodis-${DEVELOPER_NAME}.loadbalancer.server.port=8080"
-      - "traefik.http.routers.api-prodis-${DEVELOPER_NAME}.entrypoints=websecure"
-      - "traefik.http.routers.api-prodis-${DEVELOPER_NAME}.tls.certresolver=myresolver"
-
-      # Existing HTTP configurations for Webhooks
-      - "traefik.http.routers.webhooks-${DEVELOPER_NAME}-prodis.service=webhooks-${DEVELOPER_NAME}-prodis"
-      - "traefik.http.routers.webhooks-${DEVELOPER_NAME}-prodis.rule=Host(`webhooks.prodis.${DEVELOPER_NAME}.phippsy.tech`)"
-      - "traefik.http.services.webhooks-${DEVELOPER_NAME}-prodis.loadbalancer.server.port=80"
-      - "traefik.http.routers.webhooks-${DEVELOPER_NAME}-prodis.entrypoints=websecure"
-      - "traefik.http.routers.webhooks-${DEVELOPER_NAME}-prodis.tls.certresolver=myresolver"
-
-      # New WSS configuration
-      - "traefik.http.routers.wss-${DEVELOPER_NAME}-prodis.service=wss-${DEVELOPER_NAME}-prodis"
-      - "traefik.http.routers.wss-${DEVELOPER_NAME}-prodis.rule=Host(`prodis.${DEVELOPER_NAME}.phippsy.tech`)"
-      - "traefik.http.services.wss-${DEVELOPER_NAME}-prodis.loadbalancer.server.port=443"
-      - "traefik.http.routers.wss-${DEVELOPER_NAME}-prodis.entrypoints=websecure"
-      - "traefik.http.routers.wss-${DEVELOPER_NAME}-prodis.tls.certresolver=myresolver"
-      # Add other necessary configurations here
-    build:
-      context: .
-      dockerfile: Dockerfile.api
-    ports:
-      - "8090:8080" # Expose port 8080 in the container by mapping it to port 8083 on the host
-      # - "8091:80" # Expose port 80 in the container by mapping it to to port 8084 on the host
-
+    # ports:
+    #   - "8090:8080"
     volumes:
       - ./api:/var/www/prodis/api
       - ./src:/var/www/prodis/src
       - ./servers:/var/www/prodis/servers
-      # - ./env.php:/var/www/prodis/env.php
-      - composer_cache:/tmp/cache # Use named volume for Composer cache
+      - composer_cache:/tmp/cache
     restart: unless-stopped
     depends_on:
       - rabbitmq
@@ -90,7 +51,7 @@ services:
       - "27017:27017"
     volumes:
       - mongo-data:/data/db
-      - ./data/mongodb/crystelcare.mongodb:/data/dump # Mount local directory for the dump file
+      - ./data/mongodb/crystelcare.mongodb:/data/dump
     networks:
       - my_network
 
@@ -98,8 +59,8 @@ services:
     image: rabbitmq:3-management
     container_name: rabbitmq-prodis
     ports:
-      - "5672:5672" # RabbitMQ default port
-      - "15672:15672" # RabbitMQ management plugin port
+      - "5672:5672"
+      - "15672:15672"
     environment:
       - RABBITMQ_DEFAULT_USER=phippsy
       - RABBITMQ_DEFAULT_PASS=213cn5us
@@ -114,18 +75,15 @@ services:
       - "6379:6379"
     volumes:
       - redis_data:/data
+    restart: unless-stopped
     networks:
       - my_network
-    restart: unless-stopped
 
 networks:
   my_network:
-    external: true # Assumes my_network is already created outside of this compose file
+    external: true
 
 volumes:
   redis_data:
   mongo-data:
   composer_cache:
-    # Define the volume used for caching Composer dependencies
-
-
