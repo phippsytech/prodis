@@ -33,49 +33,6 @@ services:
       - ./servers:/var/www/prodis/servers
       - composer_cache:/tmp/cache
     restart: unless-stopped
-    depends_on:
-      - rabbitmq
-      - redis
-      - mongodb
-    networks:
-      - my_network
-
-  mongodb:
-    image: mongo
-    container_name: mongo-prodis
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=crystelcare
-      - MONGO_INITDB_ROOT_PASSWORD=zcd9YKC0fty_nmb6zun
-    restart: unless-stopped
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo-data:/data/db
-      - ./data/mongodb/crystelcare.mongodb:/data/dump
-    networks:
-      - my_network
-
-  rabbitmq:
-    image: rabbitmq:3-management
-    container_name: rabbitmq-prodis
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    environment:
-      - RABBITMQ_DEFAULT_USER=phippsy
-      - RABBITMQ_DEFAULT_PASS=213cn5us
-    restart: unless-stopped
-    networks:
-      - my_network
-
-  redis:
-    image: redis:latest
-    container_name: redis-prodis
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis_data:/data
-    restart: unless-stopped
     networks:
       - my_network
 
@@ -84,6 +41,4 @@ networks:
     external: true
 
 volumes:
-  redis_data:
-  mongo-data:
   composer_cache:

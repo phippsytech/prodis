@@ -46,6 +46,12 @@ class GenerateInvoicesInXero
 
         foreach ($result as $client) {
             foreach ($client as $plan_manager) {
+                // TODO: Stop using hard coded numbers for NDIA Plan Manager IDs
+                // skip generating NDIA invoices in Xero
+                if ($plan_manager[0]['PlanManagerId'] == 45) {
+                    continue;
+                }
+
                 $xero_contact_id = $xeroHelpers->findOrCreateXeroContactByPlanManagerId([
                     'plan_manager_id' => $plan_manager[0]['PlanManagerId'],
                     'email' => $plan_manager[0]['ClientBillingEmail'],
