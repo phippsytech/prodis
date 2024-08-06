@@ -24,19 +24,9 @@
     //     props.expires = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`
     // }
 
-    //function openFile(file_id) {
-    //    SpinnerStore.set({ show: true, message: "Getting File" });
-    //    jspa("/Google", "getFile", { file_id: file_id })
-    //        .then((result) => {
-    //            let url = result.result;
-    //            window.open(url, "_blank");
-    //       })
-    //        .finally(() => {
-    //            SpinnerStore.set({ show: false });
-    //        });
-    //}
+    
 
-    function openFile(vultr_storage_ref) {
+        function openFile(vultr_storage_ref) {
         SpinnerStore.set({ show: true, message: "Getting File" });
 
         jspa("/Storage", "getS3ObjectFile", { key: vultr_storage_ref })
@@ -45,26 +35,42 @@
                 let fileContent = result.result;
                 let fileName = vultr_storage_ref.substring(33);
 
+                // Decode base64 content
+                let decodedContent = atob(fileContent);
+                let byteNumbers = new Array(decodedContent.length);
+                for (let i = 0; i < decodedContent.length; i++) {
+                    byteNumbers[i] = decodedContent.charCodeAt(i);
+                }
+                let byteArray = new Uint8Array(byteNumbers);
 
-   // Decode base64 content
-        let decodedContent = atob(fileContent);
-        let byteNumbers = new Array(decodedContent.length);
-        for (let i = 0; i < decodedContent.length; i++) {
-            byteNumbers[i] = decodedContent.charCodeAt(i);
-        }
-        let byteArray = new Uint8Array(byteNumbers);
+                // Determine the MIME type based on the file extension or content
+                let mimeType;
+                if (fileName.endsWith(".pdf")) {
+                    mimeType = "application/pdf";
+                } else if (fileName.endsWith(".txt")) {
+                    mimeType = "text/plain";
+                } else if (
+                    fileName.endsWith(".jpg") ||
+                    fileName.endsWith(".jpeg")
+                ) {
+                    mimeType = "image/jpeg";
+                } else if (fileName.endsWith(".png")) {
+                    mimeType = "image/png";
+                } else {
+                    mimeType = "application/octet-stream";
+                }
 
-                const blob = new Blob([byteArray], {
-                    type: "application/octet-stream",
-                });
+                const blob = new Blob([byteArray], { type: mimeType });
+
                 const url = URL.createObjectURL(blob);
-                const a = document.createElement("a");
-                a.href = url;
-                a.download = fileName;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
+
+                // Open the URL in a new tab
+                window.open(url, "_blank");
+
+                // Optionally revoke the URL after a short delay
+                setTimeout(() => {
+                    URL.revokeObjectURL(url);
+                }, 10000); // adjust the timeout as needed
             })
             .finally(() => {
                 SpinnerStore.set({ show: false });
