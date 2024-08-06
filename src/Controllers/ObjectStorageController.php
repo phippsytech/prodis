@@ -8,6 +8,7 @@ use NDISmate\Services\ObjectStorageService\GetS3Object;
 use NDISmate\Services\ObjectStorageService\ListBuckets;
 use NDISmate\Services\ObjectStorageService\ListObjects;
 use NDISmate\Services\ObjectStorageService\PutS3Object;
+use NDISmate\Services\ObjectStorageService\MigrateFromGoogleDrive;
 
 final class ObjectStorageController extends BaseController
 {
@@ -34,6 +35,7 @@ final class ObjectStorageController extends BaseController
             'listBuckets' => [new ListBuckets, null, false, [], [$this->s3]],
             'listObjects' => [new ListObjects, null, false, [], [$this->s3]],
             'putS3Object' => [new PutS3Object, null, false, [], [$this->s3]],
+            'migrateFromGoogleDrive' => [new MigrateFromGoogleDrive, null, false, [], [$this->s3]],
         ];
     }
 }

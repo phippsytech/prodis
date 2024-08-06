@@ -11,6 +11,7 @@ class PutS3Object
     public function __invoke($data, $fields, $guard, S3Client $s3)
     {
         try {
+
             $bucket = $data['bucket'];
             $key = $data['key'];
             $fileContent = $data['fileContent'];
@@ -22,12 +23,14 @@ class PutS3Object
             $encryptionManager = new EncryptionManager(VULTR_S3_ENCRYPTION_KEY);
             $fileContent = $encryptionManager->encryptData($fileContent);
 
-            $result = $this->s3->putObject([
+            $result = $s3->putObject([
                 'Bucket' => $bucket,
                 'Key' => $key,
                 'Body' => $fileContent,  // this is the raw data.  You do not need to convert it.
                 'ACL' => 'private'
             ]);
+            echo "Object URL: " . $result['ObjectURL'] . "\n";
+            return $result['ObjectURL'];
         } catch (S3Exception $e) {
             echo $e->getAwsErrorMessage() . ' ' . __FILE__ . ' ' . __LINE__;
             echo 'HTTP/1.1 500 Internal Server Error';

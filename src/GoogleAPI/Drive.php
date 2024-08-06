@@ -419,5 +419,47 @@ class Drive{
         
     }
 
+    public function getFileContents($data)
+    {
+        try {
+            $refreshToken = KeyValue::get('google_drive_refresh_token');
+            $token = $this->client->fetchAccessTokenWithRefreshToken($refreshToken);
+            $this->client->setAccessToken($token);
+
+            $service = new \Google_Service_Drive($this->client);
+            $fileId = $data['file_id'];
+
+            $response = $service->files->get($fileId, [
+                'alt' => 'media',
+                'supportsAllDrives' => true,
+            ]);
+
+            return $response->getBody();
+        } catch (\Google_Service_Exception $e) {
+            // Handle errors from Google Drive API
+            return 'Google Drive API error: ' . $e->getMessage();
+        } catch (\Exception $e) {
+            // Handle general errors
+            return 'Error: ' . $e->getMessage();
+        }
+    }
+
+    public function getMetaData($fileId)
+    {
+        $refreshToken = KeyValue::get('google_drive_refresh_token');
+        $token = $this->client->fetchAccessTokenWithRefreshToken($refreshToken);
+        $this->client->setAccessToken($token);
+
+        $service = new \Google_Service_Drive($this->client);
+   
+        $fileMetadata = $service->files->get($fileId, [
+            'supportsAllDrives' => true,
+            'fields' => 'name'
+        ]);
+
+        $fileName = $fileMetadata->getName();
+
+        return $fileName;
+    }
 
 }
