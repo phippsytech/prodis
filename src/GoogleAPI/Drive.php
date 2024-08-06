@@ -339,7 +339,7 @@ class Drive{
         $file  = $service->files->get($file_id, [
             'fields' => 'webViewLink',
             'supportsAllDrives' => true
-        ]);
+        ]); 
         
         return $file->getWebViewLink();
 

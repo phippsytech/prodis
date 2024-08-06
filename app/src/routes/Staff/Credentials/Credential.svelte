@@ -24,12 +24,47 @@
     //     props.expires = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`
     // }
 
-    function openFile(file_id) {
+    //function openFile(file_id) {
+    //    SpinnerStore.set({ show: true, message: "Getting File" });
+    //    jspa("/Google", "getFile", { file_id: file_id })
+    //        .then((result) => {
+    //            let url = result.result;
+    //            window.open(url, "_blank");
+    //       })
+    //        .finally(() => {
+    //            SpinnerStore.set({ show: false });
+    //        });
+    //}
+
+    function openFile(vultr_storage_ref) {
         SpinnerStore.set({ show: true, message: "Getting File" });
-        jspa("/Google", "getFile", { file_id: file_id })
+
+        jspa("/Storage", "getS3ObjectFile", { key: vultr_storage_ref })
             .then((result) => {
-                let url = result.result;
-                window.open(url, "_blank");
+                //console.log(result)
+                let fileContent = result.result;
+                let fileName = vultr_storage_ref.substring(33);
+
+
+   // Decode base64 content
+        let decodedContent = atob(fileContent);
+        let byteNumbers = new Array(decodedContent.length);
+        for (let i = 0; i < decodedContent.length; i++) {
+            byteNumbers[i] = decodedContent.charCodeAt(i);
+        }
+        let byteArray = new Uint8Array(byteNumbers);
+
+                const blob = new Blob([byteArray], {
+                    type: "application/octet-stream",
+                });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = fileName;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
             })
             .finally(() => {
                 SpinnerStore.set({ show: false });
@@ -44,9 +79,9 @@
 />
 
 <div class="mb-2">
-    {#if props.google_drive_file_ref}
+    {#if props.vultr_storage_ref}
         <div
-            on:click={() => openFile(props.google_drive_file_ref)}
+            on:click={() => openFile(props.vultr_storage_ref)}
             class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 cursor-pointer"
         >
             <svg

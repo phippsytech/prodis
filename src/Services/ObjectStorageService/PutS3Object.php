@@ -29,6 +29,7 @@ class PutS3Object
                 'Body' => $fileContent,  // this is the raw data.  You do not need to convert it.
                 'ACL' => 'private'
             ]);
+            
             echo "Object URL: " . $result['ObjectURL'] . "\n";
             return $result['ObjectURL'];
         } catch (S3Exception $e) {

@@ -22,14 +22,14 @@ class MigrateFromGoogleDrive
 
                 foreach ($colValues as $value ) {
 
-                    // $googleFile = (new Drive())->getFile(['file_id' => $value]);
-
                     $drive = new Drive;
                     $fileContent = $drive->getFileContents(['file_id' => $value]);
 
                     // Extract the file name from the file path
                     $fileName = $drive->getMetaData($value);
+                    $md5Hash = md5($fileContent);
 
+                    $fileName = $md5Hash .  '-' . $fileName;
                     // upload to vultr
                     $result = (new PutS3Object)([
                         'bucket' => VULTR_BUCKET,
@@ -37,19 +37,22 @@ class MigrateFromGoogleDrive
                         'fileContent' => $fileContent
                     ],
                         null, null, $s3);
-                    // save the id to the table
 
-                    // R::exec('SELECT * FROM staffcredentials WHERE ')
+                    // save the id to the table
+                    $staffCredential = R::findOne('staffcredentials', ' google_drive_file_ref = ? ', [$value]);
+                    
+                    if (!empty($staffCredential)) {
+                    
+                        $staffCredential->vultr_storage_ref = $fileName;
+                        $id = R::store($staffCredential);
+
+                        // return  R::load( 'staffcredentials', $id );
+                    }
 
                     return $result;
                 }
             }
-            
-            // $buckets = $s3->listBuckets();
-            // foreach ($buckets['Buckets'] as $bucket) {
-            //     $bucketArray[] = $bucket;
-            // }
-            // return $bucketArray;
+ 
         } catch (S3Exception $e) {
             throw new Exception($e->getAwsErrorMessage() . ' ' . __FILE__ . ' ' . __LINE__);
         } catch (Exception $e) {
