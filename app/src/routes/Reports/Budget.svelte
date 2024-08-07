@@ -61,8 +61,11 @@
                         "listParticipantServicesByParticipantId",
                         { participant_id: client.client_id },
                     ).then((result) => {
-                        clients[index].services = result.result;
-                        client.services = result.result;
+
+                        // filter out inactive services
+                        const filteredResult = result.result.filter(service => service.is_active === "1");
+                        clients[index].services = filteredResult;
+                        client.services = filteredResult;
                         clientList = [...clientList, client];
                     });
                 }
