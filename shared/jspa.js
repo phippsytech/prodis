@@ -1,13 +1,15 @@
 
 import { get } from "svelte/store";
-import { API_URL, jwt } from "./stores.js";
+import { jwt } from "./stores.js";
+import configStore from '@app/configStore';
 import AuthyClass from "./appsec/Authy.class.js";
 
 
 export function jspa(endpoint, action, json_data = {}, retry = false) {
 
-    const api_url = get(API_URL);
+    const config = get(configStore);
     const token = get(jwt);
+    const api_url = config.API_URL;
 
     const versionMetaTag = document.querySelector('meta[name="version"]');
     let version = "Development"

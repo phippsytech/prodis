@@ -14,9 +14,8 @@ ENV NODE_ENV=development
 WORKDIR /app
 
 # Copy package.json and package-lock.json
-COPY ./app/.env ./.env
 COPY ./app/package*.json ./
-COPY ../shared /app/shared
+COPY shared /app/shared
 
 
 
@@ -25,6 +24,9 @@ RUN npm install --include=dev
 
 # Copy the rest of the application code
 COPY ./app /app
+
+# Copy the app.conf file
+# COPY app.conf /app/app.conf
 
 # Expose the default port for Vite
 EXPOSE 5173

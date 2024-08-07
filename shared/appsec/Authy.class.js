@@ -1,18 +1,22 @@
+
 // import { push } from '@app/../node_modules/svelte-spa-router';
 import { jwtDecode } from '@shared/utilities/jwtDecode';
 
 // import { get } from "@app/../node_modules/svelte/store";
 import { jwt } from "@shared/stores.js";
 
-
+import { get } from "svelte/store";
+import configStore from '@app/configStore';
 
 
 export default class Authy {
 
-    
+
 
     constructor() {
-        let endpoint = import.meta.env.VITE_API_URL
+
+        const config = get(configStore);
+        let endpoint = config.API_URL
         this.auth_endpoint = endpoint + "/Auth"
         jwt.subscribe((value) => { this.JWT = value });
     }

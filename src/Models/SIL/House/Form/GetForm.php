@@ -9,10 +9,10 @@ class GetForm{
     function __invoke($data){
         // this try catch prevents the controller from sending a 401 error if an error happens in search
         try{
-            $mongo_db = new \MongoDB\Client("mongodb://localhost:27017",[
-                "username" => MONGODB_USER,
-                "password" => MONGODB_PASSWORD,
-                "authSource"  => MONGODB_DATABASE
+            $mongo_db = new \MongoDB\Client('mongodb://'.MONGODB_HOST.':'.MONGODB_PORT, [
+                'username' => MONGODB_USER,
+                'password' => MONGODB_PASSWORD,
+                'authSource' => MONGODB_AUTHSOURCE
             ]);
 
             $forms = $mongo_db->crystelcare->forms;

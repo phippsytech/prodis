@@ -3,7 +3,7 @@
     import Container from "@shared/Container.svelte";
     import Footer from "@shared/Footer.svelte";
     import { jspa } from "@shared/jspa.js";
-    import { formatDate } from "../../../../shared/utilities";
+    import { formatDate } from "@shared/utilities";
 
     export let house_id;
     export let start_date;

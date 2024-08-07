@@ -75,7 +75,7 @@ class CorsMiddleware
         }
 
         // if you want to allow all domains, use this line instead:
-        $origin = $http_origin;
+        // $origin = $http_origin;
 
         if ($origin == null) {
             $response = new Response();

@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  app:
+    container_name: app-prodis-staging
+    image: sjc.vultrcr.com/phippsytech/prodis-app:release-candidate
+    environment:
+      - NODE_ENV=staging
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.prodis-staging-app.service=prodis-staging-app"
+      - "traefik.http.routers.prodis-staging-app.rule=Host(`app.prodis.staging.phippsy.tech`)"
+      - "traefik.http.routers.prodis-staging-app.entrypoints=websecure"
+      - "traefik.http.routers.prodis-staging-app.tls.certresolver=myresolver"
+      - "traefik.http.services.prodis-staging-app.loadbalancer.server.port=5173"
+      - "traefik.http.routers.prodis-staging-app.middlewares=error-pages@docker"
+
+  api:
+    container_name: api-prodis-staging
+    image: sjc.vultrcr.com/phippsytech/prodis-api:release-candidate
+    labels:
+      - "traefik.enable=true"
+
+      # API
+      - "traefik.http.routers.prodis-staging-api.service=prodis-staging-api"
+      - "traefik.http.routers.prodis-staging-api.rule=Host(`api.prodis.staging.phippsy.tech`)"
+      - "traefik.http.services.prodis-staging-api.loadbalancer.server.port=8080"
+      - "traefik.http.routers.prodis-staging-api.entrypoints=websecure"
+      - "traefik.http.routers.prodis-staging-api.tls.certresolver=myresolver"
+
+      # Webhooks
+      - "traefik.http.routers.prodis-staging-webhooks.service=prodis-staging-webhooks"
+      - "traefik.http.routers.prodis-staging-webhooks.rule=Host(`webhooks.prodis.staging.phippsy.tech`)"
+      - "traefik.http.services.prodis-staging-webhooks.loadbalancer.server.port=80"
+      - "traefik.http.routers.prodis-staging-webhooks.entrypoints=websecure"
+      - "traefik.http.routers.prodis-staging-webhooks.tls.certresolver=myresolver"
+
+      # Websocket
+      - "traefik.http.routers.prodis-staging-wss.service=prodis-staging-wss"
+      - "traefik.http.routers.prodis-staging-wss.rule=Host(`prodis.staging.phippsy.tech`)"
+      - "traefik.http.services.prodis-staging-wss.loadbalancer.server.port=443"
+      - "traefik.http.routers.prodis-staging-wss.entrypoints=websecure"
+      - "traefik.http.routers.prodis-staging-wss.tls.certresolver=myresolver"

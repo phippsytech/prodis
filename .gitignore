@@ -12,3 +12,5 @@ sandbox/
 env/
 data/
 cyrstelcare.mongodb.tar.gz
+app.conf
+backups/

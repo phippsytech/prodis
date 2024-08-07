@@ -19,11 +19,11 @@ if ($start_date < "2023-10-03"){ $start_date = "2023-10-03"; }
 if ($end_date < "2023-10-03"){ $end_date = "2023-10-03"; }
 
 
-        $mongo_db = new \MongoDB\Client("mongodb://localhost:27017",[
-            "username" => MONGODB_USER,
-            "password" => MONGODB_PASSWORD,
-            "authSource"  => MONGODB_DATABASE
-        ]);
+$mongo_db = new \MongoDB\Client('mongodb://'.MONGODB_HOST.':'.MONGODB_PORT, [
+    'username' => MONGODB_USER,
+    'password' => MONGODB_PASSWORD,
+    'authSource' => MONGODB_AUTHSOURCE
+]);
         
         $forms = $mongo_db->crystelcare->forms;
 

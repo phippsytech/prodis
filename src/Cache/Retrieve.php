@@ -7,10 +7,10 @@ class Retrieve {
 
     function __invoke($cache_type, \DateTime $expiry = null){
 
-        $client = new \MongoDB\Client("mongodb://localhost:27017", [
-            "username" => MONGODB_USER,
-            "password" => MONGODB_PASSWORD,
-            "authSource"  => MONGODB_DATABASE
+        $client = new \MongoDB\Client('mongodb://'.MONGODB_HOST.':'.MONGODB_PORT, [
+            'username' => MONGODB_USER,
+            'password' => MONGODB_PASSWORD,
+            'authSource' => MONGODB_AUTHSOURCE
         ]);
 
         $db = $client->selectDatabase(MONGODB_DATABASE);
