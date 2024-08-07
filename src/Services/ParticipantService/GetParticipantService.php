@@ -43,6 +43,7 @@ class GetParticipantService
                     ANY_VALUE(services.code) AS code,
                     ANY_VALUE(clientplanservices.include_travel) AS include_travel,
                     ANY_VALUE(clientplanservices.budget) AS budget,
+                    ANY_VALUE(clientplanservices.budget_start_date) AS budget_start_date,
                     ANY_VALUE(services.budget_display) AS budget_display,
                     ANY_VALUE(services.billing_code) AS billing_code,
                     ANY_VALUE(services.billing_unit) AS billing_unit,

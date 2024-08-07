@@ -1,6 +1,7 @@
 <script>
     // import { onMount } from 'svelte';
     import FloatingInput from "@shared/PhippsyTech/svelte-ui/forms/FloatingInput.svelte";
+    import FloatingDate from "@shared/PhippsyTech/svelte-ui/forms/FloatingDate.svelte";
     import FloatingSelect from "@shared/PhippsyTech/svelte-ui/forms/FloatingSelect.svelte";
     import PayerWidget from "@app/routes/Accounts/PlanManagers/PayerWidget.svelte";
     import { jspa } from "@shared/jspa.js";
@@ -76,11 +77,23 @@
     </div>
 {/if}
 
+<div class="flex justify-between gap-x-2 ">
+
+    <div class="flex-grow">  
+
 <FloatingInput
     bind:value={props.budget}
     label="Service Budget"
     placeholder="eg: 12000"
+/></div>
+<div class="flex-grow">
+<FloatingDate
+    bind:value={props.budget_start_date}
+    label="As of Date"
+    placeholder="eg: 2021-01-01"
 />
+</div>
+</div>
 
 <FloatingInput
     bind:value={props.xero_account_code}
