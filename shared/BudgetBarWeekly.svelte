@@ -6,6 +6,7 @@
     export let hourlyRate = 0;
     export let spentBudget = 0;
 
+    // TODO: what do I replace these hardcoded dates with?
     export let startDate = "2024-06-19";
     export let endDate = "2024-06-21";
 
