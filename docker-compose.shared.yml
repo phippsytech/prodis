@@ -13,8 +13,20 @@ services:
     volumes:
       - mongo-data:/data/db
       - ./data/mongodb/crystelcare.mongodb:/data/dump
+      - ./backups/mongodb:/backup
+      - ./backup-scripts/mongodb/mongodb-backup.sh:/backup.sh
+      - ./backup-scripts/mongodb/cron/mongodb-backup:/etc/cron.d/mongodb-backup
     networks:
       - my_network
+    entrypoint: |
+      /bin/bash -c "
+        apt-get update && 
+        apt-get install -y cron awscli && 
+        chmod +x /backup.sh && 
+        crontab /etc/cron.d/mongodb-backup && 
+        cron && 
+        docker-entrypoint.sh mongod
+      "
 
   rabbitmq:
     image: rabbitmq:3-management
