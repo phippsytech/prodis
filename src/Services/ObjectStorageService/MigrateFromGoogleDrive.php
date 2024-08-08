@@ -12,15 +12,15 @@ class MigrateFromGoogleDrive
 {
     public function __invoke($data, $fields, $guard, S3Client $s3)
     {
-
+        // clean this 
         try {
             
             // get google drive id
-            $colValues = R::getCol('SELECT google_drive_file_ref FROM staffcredentials where google_drive_file_ref is not null');
+            $staffCredentialGoogleDriveFileRefs = R::getCol('SELECT google_drive_file_ref FROM staffcredentials where google_drive_file_ref is not null');
 
-            if (count($colValues) > 0) {
+            if (count($staffCredentialGoogleDriveFileRefs) > 0) {
 
-                foreach ($colValues as $value ) {
+                foreach ($staffCredentialGoogleDriveFileRefs as $value ) {
 
                     $drive = new Drive;
                     $fileContent = $drive->getFileContents(['file_id' => $value]);
@@ -48,9 +48,45 @@ class MigrateFromGoogleDrive
 
                         // return  R::load( 'staffcredentials', $id );
                     }
-
+                
                     return $result;
                 }
+
+               
+                $clientCredentialGoogleDrriveFileRefs = R::getCol('SELECT google_drive_file_ref FROM clientcredentials where google_drive_file_ref is not null');
+
+                if (count($clientCredentialGoogleDrriveFileRefs) > 0) {
+
+                    foreach ($staffCredentialGoogleDriveFileRefs as $value ) {
+    
+                        $drive = new Drive;
+                        $fileContent = $drive->getFileContents(['file_id' => $value]);
+    
+                        // Extract the file name from the file path
+                        $fileName = $drive->getMetaData($value);
+                        $md5Hash = md5($fileContent);
+    
+                        $fileName = $md5Hash .  '-' . $fileName;
+                        // upload to vultr
+                        $result = (new PutS3Object)([
+                            'bucket' => VULTR_BUCKET,
+                            'key' => $fileName,
+                            'fileContent' => $fileContent
+                        ],
+                            null, null, $s3);
+    
+                        // save the id to the table
+                        $clientCredential = R::findOne('clientcredentials', ' google_drive_file_ref = ? ', [$value]);
+                        
+                        if (!empty($clientCredential)) {
+                        
+                            $clientCredential->vultr_storage_ref = $fileName;
+                            $id = R::store($clientCredential);
+    
+                        }
+                    
+                        return $result;
+                    }
             }
  
         } catch (S3Exception $e) {
