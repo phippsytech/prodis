@@ -24,12 +24,53 @@
     //     props.expires = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`
     // }
 
-    function openFile(file_id) {
+    
+
+        function openFile(vultr_storage_ref) {
         SpinnerStore.set({ show: true, message: "Getting File" });
-        jspa("/Google", "getFile", { file_id: file_id })
+
+        jspa("/Storage", "getS3ObjectFile", { key: vultr_storage_ref })
             .then((result) => {
-                let url = result.result;
+                //console.log(result)
+                let fileContent = result.result;
+                let fileName = vultr_storage_ref.substring(33);
+
+                // Decode base64 content
+                let decodedContent = atob(fileContent);
+                let byteNumbers = new Array(decodedContent.length);
+                for (let i = 0; i < decodedContent.length; i++) {
+                    byteNumbers[i] = decodedContent.charCodeAt(i);
+                }
+                let byteArray = new Uint8Array(byteNumbers);
+
+                // Determine the MIME type based on the file extension or content
+                let mimeType;
+                if (fileName.endsWith(".pdf")) {
+                    mimeType = "application/pdf";
+                } else if (fileName.endsWith(".txt")) {
+                    mimeType = "text/plain";
+                } else if (
+                    fileName.endsWith(".jpg") ||
+                    fileName.endsWith(".jpeg")
+                ) {
+                    mimeType = "image/jpeg";
+                } else if (fileName.endsWith(".png")) {
+                    mimeType = "image/png";
+                } else {
+                    mimeType = "application/octet-stream";
+                }
+
+                const blob = new Blob([byteArray], { type: mimeType });
+
+                const url = URL.createObjectURL(blob);
+
+                // Open the URL in a new tab
                 window.open(url, "_blank");
+
+                // Optionally revoke the URL after a short delay
+                setTimeout(() => {
+                    URL.revokeObjectURL(url);
+                }, 10000); // adjust the timeout as needed
             })
             .finally(() => {
                 SpinnerStore.set({ show: false });
@@ -44,9 +85,9 @@
 />
 
 <div class="mb-2">
-    {#if props.google_drive_file_ref}
+    {#if props.vultr_storage_ref}
         <div
-            on:click={() => openFile(props.google_drive_file_ref)}
+            on:click={() => openFile(props.vultr_storage_ref)}
             class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 cursor-pointer"
         >
             <svg
