@@ -17,6 +17,7 @@ class ListParticipantServicesByParticipantId
                     services.name as services_name,
                     clientplanservices.rate as service_rate,
                     clientplanservices.budget as budget,
+                    clientplanservices.budget_start_date,
                     clientplanservices.kilometer_budget as kilometer_budget,
                     clientplanservices.is_active AS is_active
                 FROM clientplanservices 

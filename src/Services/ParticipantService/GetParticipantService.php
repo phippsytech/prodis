@@ -43,6 +43,7 @@ class GetParticipantService
                     ANY_VALUE(services.code) AS code,
                     ANY_VALUE(clientplanservices.include_travel) AS include_travel,
                     ANY_VALUE(clientplanservices.budget) AS budget,
+                    ANY_VALUE(clientplanservices.budget_start_date) AS budget_start_date,
                     ANY_VALUE(services.budget_display) AS budget_display,
                     ANY_VALUE(services.billing_code) AS billing_code,
                     ANY_VALUE(services.billing_unit) AS billing_unit,
@@ -64,6 +65,7 @@ class GetParticipantService
                     ANY_VALUE(clientplanservices.is_active) AS is_active
                 FROM clientplanservices
                 LEFT JOIN timetrackings ON timetrackings.participant_service_id = clientplanservices.id
+                    AND timetrackings.session_date >= clientplanservices.budget_start_date
                 JOIN services ON services.id = clientplanservices.service_id
                 JOIN planmanagers ON planmanagers.id = clientplanservices.plan_manager_id 
                 WHERE "

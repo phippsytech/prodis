@@ -35,15 +35,17 @@
                         - NOT ACTIVE{/if}
                 </div>
                 <span
-                    class="text-xs text-indigo-200 uppercase hidden sm:inline-block"
+                    class="text-xs text-indigo-300 uppercase hidden sm:inline-block"
                     >{service.plan_manager_name}
                 </span>
             </div>
+            <!-- startDate={service_agreement.service_agreement_signed_date} -->
+            <!-- startDate={service.budget_start_date} -->
             <BudgetBarWeekly
                 totalBudget={service.budget}
                 hourlyRate={service.rate}
                 spentBudget={service.spent}
-                startDate={service_agreement.service_agreement_signed_date}
+                startDate={service.budget_start_date}
                 endDate={service_agreement.service_agreement_end_date}
                 bind:spendStatus={service.spend_status}
                 bind:remainingBudget={service.remainingBudget}
@@ -51,6 +53,7 @@
                 bind:totalServiceDuration={service.totalServiceDuration}
             />
             {#if service.budget && service.budget > 0}
+            {#if service.spend_status != 0}
                 <span class="text-xs text-slate-400 ml-1"
                     >{@html convertMinutesToHoursAndMinutes(
                         Math.abs(service.spend_status),
@@ -59,6 +62,7 @@
                         ? "of overflow"
                         : "over budget"}</span
                 >
+                {/if}
             {/if}
         </div>
     {:else}
@@ -79,7 +83,7 @@
                         - NOT ACTIVE{/if}
                 </div>
                 <span
-                    class="text-xs text-indigo-200 uppercase hidden sm:inline-block"
+                    class="text-xs text-indigo-300 uppercase hidden sm:inline-block"
                 >
                     {service.plan_manager_name}
                 </span>

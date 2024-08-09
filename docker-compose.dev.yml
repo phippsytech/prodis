@@ -18,7 +18,7 @@ services:
       - "traefik.http.routers.prodis-${DEVELOPER_NAME}-app.entrypoints=websecure"
       - "traefik.http.routers.prodis-${DEVELOPER_NAME}-app.tls.certresolver=myresolver"
       - "traefik.http.services.prodis-${DEVELOPER_NAME}-app.loadbalancer.server.port=5173"
-     # - "traefik.http.routers.prodis-${DEVELOPER_NAME}-app.middlewares=error-pages@docker"
+      # - "traefik.http.routers.prodis-${DEVELOPER_NAME}-app.middlewares=error-pages@docker"
 
   api:
     container_name: prodis-${DEVELOPER_NAME}-api

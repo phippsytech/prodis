@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# log into the vultr container registry
+docker login sjc.vultrcr.com/phippsytech
+
 # Get the current date and time in the format YYYY-MM-DD-HH-MM
 CURRENT_DATE=$(date +'%Y-%m-%d-%H-%M')
 

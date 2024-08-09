@@ -1,0 +1,2 @@
+# /etc/cron.d/mongodb-backup
+0 2 * * * root /mongodb-backup.sh

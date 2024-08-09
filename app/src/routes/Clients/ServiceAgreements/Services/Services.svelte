@@ -45,6 +45,7 @@
                 return result;
             },
             update: async (result) => {
+                result = await getParticipantService(result.id);
                 result.plan_manager_name = await getPlanManagerName(
                     result.plan_manager_id,
                 );
@@ -157,12 +158,10 @@
         if (validateParticipantService() == false) {
             return;
         }
-        ParticipantServiceStore.updateItem(participant_service);
-        // .then(() => {
-        //     ParticipantServiceStore.plan
-        //     getPlanManagerName(participant_service.plan_manager_id);
-        //     // toastSuccess("Service updated successfully.");
-        // });
+        ParticipantServiceStore.updateItem(participant_service)
+        .then(()=>{
+            toastSuccess("Service updated successfully.");
+        });
     }
 
     function deleteService(participant_service) {

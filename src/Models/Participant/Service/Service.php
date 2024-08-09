@@ -17,6 +17,7 @@ class Service extends NewCustomModel
             'service_id' => [v::numericVal()],
             'plan_manager_id' => [v::numericVal()],
             'budget' => [v::monetaryAmount()],
+            'budget_start_date' => [v::date('Y-m-d')],
             'rate' => [v::optional(v::monetaryAmount())],
             'include_travel' => [v::boolVal()],
             'kilometer_budget' => [v::optional(v::monetaryAmount())],
