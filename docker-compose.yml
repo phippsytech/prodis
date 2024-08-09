@@ -31,6 +31,7 @@ services:
       - ./api:/var/www/prodis/api
       - ./src:/var/www/prodis/src
       - ./servers:/var/www/prodis/servers
+      - ./oauth-credentials.json:/var/www/prodis/oauth-credentials.json
       - composer_cache:/tmp/cache
     restart: unless-stopped
     networks:

@@ -1,99 +1,41 @@
 <?php
+
 namespace NDISmate\Services\ObjectStorageService;
 
-use Aws\S3\Exception\S3Exception;
-use Aws\S3\S3Client;
 use Exception;
-use \RedBeanPHP\R as R;
-use NDISmate\GoogleAPI\Drive;
-use NDISmate\Services\ObjectStorageService\PutS3Object;
+use RedBeanPHP\R as R;
+use NDISmate\Services\MessageQueueService;
 
 class MigrateFromGoogleDrive
 {
-    public function __invoke($data, $fields, $guard, S3Client $s3)
+    public function __invoke($data)
     {
-        // clean this 
+        $results = [];
         try {
-            
-            // get google drive id
-            $staffCredentialGoogleDriveFileRefs = R::getCol('SELECT google_drive_file_ref FROM staffcredentials where google_drive_file_ref is not null');
-
-            if (count($staffCredentialGoogleDriveFileRefs) > 0) {
-
-                foreach ($staffCredentialGoogleDriveFileRefs as $value ) {
-
-                    $drive = new Drive;
-                    $fileContent = $drive->getFileContents(['file_id' => $value]);
-
-                    // Extract the file name from the file path
-                    $fileName = $drive->getMetaData($value);
-                    $md5Hash = md5($fileContent);
-
-                    $fileName = $md5Hash .  '-' . $fileName;
-                    // upload to vultr
-                    $result = (new PutS3Object)([
-                        'bucket' => VULTR_BUCKET,
-                        'key' => $fileName,
-                        'fileContent' => $fileContent
-                    ],
-                        null, null, $s3);
-
-                    // save the id to the table
-                    $staffCredential = R::findOne('staffcredentials', ' google_drive_file_ref = ? ', [$value]);
-                    
-                    if (!empty($staffCredential)) {
-                    
-                        $staffCredential->vultr_storage_ref = $fileName;
-                        $id = R::store($staffCredential);
-
-                        // return  R::load( 'staffcredentials', $id );
-                    }
-                
-                    return $result;
-                }
-
-               
-                $clientCredentialGoogleDrriveFileRefs = R::getCol('SELECT google_drive_file_ref FROM clientcredentials where google_drive_file_ref is not null');
-
-                if (count($clientCredentialGoogleDrriveFileRefs) > 0) {
-
-                    foreach ($staffCredentialGoogleDriveFileRefs as $value ) {
-    
-                        $drive = new Drive;
-                        $fileContent = $drive->getFileContents(['file_id' => $value]);
-    
-                        // Extract the file name from the file path
-                        $fileName = $drive->getMetaData($value);
-                        $md5Hash = md5($fileContent);
-    
-                        $fileName = $md5Hash .  '-' . $fileName;
-                        // upload to vultr
-                        $result = (new PutS3Object)([
-                            'bucket' => VULTR_BUCKET,
-                            'key' => $fileName,
-                            'fileContent' => $fileContent
-                        ],
-                            null, null, $s3);
-    
-                        // save the id to the table
-                        $clientCredential = R::findOne('clientcredentials', ' google_drive_file_ref = ? ', [$value]);
-                        
-                        if (!empty($clientCredential)) {
-                        
-                            $clientCredential->vultr_storage_ref = $fileName;
-                            $id = R::store($clientCredential);
-    
-                        }
-                    
-                        return $result;
-                    }
-            }
- 
-        } catch (S3Exception $e) {
-            throw new Exception($e->getAwsErrorMessage() . ' ' . __FILE__ . ' ' . __LINE__);
+            $results = $this->migrateCredentials('staffcredentials');
+            return $results;
         } catch (Exception $e) {
-            // Handle other exceptions
             throw $e;
         }
+    }
+
+    private function migrateCredentials(string $table): array
+    {
+        $googleDriveFileRefs = R::getCol("SELECT google_drive_file_ref FROM {$table} WHERE google_drive_file_ref IS NOT NULL LIMIT 10");
+
+        $results = [];
+
+        if (count($googleDriveFileRefs) > 0) {
+            foreach ($googleDriveFileRefs as $value) {
+                $message = [
+                    'google_drive_file_ref' => $value,
+                    'table' => $table
+                ];
+                MessageQueueService::sendToQueue('google_drive_migration', $message);
+                $results[] = $message;
+            }
+        }
+
+        return $results;
     }
 }
