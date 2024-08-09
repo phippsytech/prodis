@@ -18,6 +18,7 @@ class GetCredential{
                 id,
                 details,
                 google_drive_file_ref,
+                vultr_storage_ref,
                 credential_date
             FROM staffcredentials 
             WHERE staff_id=:staff_id

@@ -22,6 +22,22 @@ class VultrS3
         ]);
     }
 
+    function upload($file, $key)
+    {
+        try {
+            $result = (new PutS3Object)([
+                'bucket' => VULTR_BUCKET,
+                'key' => $key,
+                'fileContent' => $file
+            ],
+                null, null, $this->s3);
+            return $result;
+        } catch (\Exception $e) {
+            echo $e->getMessage() . ' ' . __FILE__ . ' ' . __LINE__;
+            echo 'Error: ' . $e->getMessage() . "\n";
+        }
+    }
+
     function testUpload()
     {
         try {
