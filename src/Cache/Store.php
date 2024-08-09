@@ -7,30 +7,37 @@ class Store {
 
     function __invoke($cache_type, $data){
 
-        $client = new \MongoDB\Client('mongodb://'.MONGODB_HOST.':'.MONGODB_PORT, [
-            'username' => MONGODB_USER,
-            'password' => MONGODB_PASSWORD,
-            'authSource' => MONGODB_AUTHSOURCE
+        $redis = new \Predis\Client([
+            'scheme' => 'tcp',
+            'host' => REDIS_HOST,
+            'port' => REDIS_PORT
         ]);
 
-        $db = $client->selectDatabase(MONGODB_DATABASE);
-        
-        $cacheCollection = $db->cache;
-        
+
+        // Prepare cache entry
         $cacheEntry = [
             "cacheType" => $cache_type, // or other types of cache data
             "data" => $data,
-            "createdAt" => new \MongoDB\BSON\UTCDateTime(),
-            // "expiry" => new MongoDB\BSON\UTCDateTime((new DateTime())->add(new DateInterval('PT1H'))->getTimestamp() * 1000) // 1 hour from now
+            "createdAt" => time(),
         ];
+
+
+        $cacheEntrySerialized = json_encode($cacheEntry);
+        $cacheKey = $cache_type; 
+
+        $existingCache = $redis->get($cacheKey);
         
-        // Insert or update cache in MongoDB
-        $filter = ['cacheType' => $cache_type];
-        $options = ['upsert' => true];
-        $update = ['$set' => $cacheEntry];
-        $cacheCollection->updateOne($filter, $update, $options);
+        if (!is_null($existingCache)) {
+            $existingCacheData = json_decode($existingCache, true);
+            // Update the data as needed
+            $existingCacheData['data'] = $data;
+            $existingCacheData['createdAt'] = time();
             
+            $redis->set($cacheKey, json_encode($existingCacheData));
+            $redis->expire($cacheKey, 3600); // Reset the expiration time
+        } else {
+            $redis->set($cacheKey, $cacheEntrySerialized);
+            $redis->expire($cacheKey, 3600); 
+        }       
     }
-
-
 }
