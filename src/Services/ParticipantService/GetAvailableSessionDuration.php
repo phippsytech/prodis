@@ -23,6 +23,7 @@ class GetAvailableSessionDuration
                 clientplans.service_agreement_end_date,
                 clientplanservices.id as id,
                 clientplanservices.participant_id as client_id, 
+                clientplanservices.budget_start_date as budget_start_date, 
                 clientplanservices.service_id as service_id,
                 services.code as service_code,
                 services.name as services_name,
@@ -46,20 +47,24 @@ class GetAvailableSessionDuration
 
         // now get the amount spent on the service
         $query =
-            'SELECT 
-            ROUND(
-            SUM( 
-                ((timetrackings.session_duration) +
-                IFNULL((CASE WHEN timetrackings.actual_travel_time > 30 THEN 30 ELSE timetrackings.actual_travel_time END),0))/60 
-                 * timetrackings.rate
-            ),2) AS Spent
+            "SELECT 
+                ROUND(
+                    SUM(
+                        CASE
+                            WHEN services.billing_unit = 'hour' THEN COALESCE(timetrackings.session_duration, 0) / 60 * timetrackings.rate
+                            WHEN services.billing_unit = 'day' THEN COALESCE(timetrackings.session_duration, 0) / 24 * timetrackings.rate
+                            ELSE COALESCE(timetrackings.session_duration, 0) * timetrackings.rate
+                        END
+                    ), 2
+                ) AS spent
             FROM timetrackings 
+            JOIN services ON services.id = timetrackings.service_id
             WHERE participant_service_id = :participant_service_id
-            AND session_date >= :service_agreement_signed_date';
+            AND session_date >= :budget_start_date";
 
         $params = [
             ':participant_service_id' => $data['participant_service_id'],
-            ':service_agreement_signed_date' => $clientplanservices_bean['service_agreement_signed_date']
+            ':budget_start_date' => $clientplanservices_bean['budget_start_date'],
         ];
 
         if ($exclude_unbilled) {
