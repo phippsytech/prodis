@@ -115,6 +115,7 @@ class NewCustomModel extends SimpleModel
 
     public function update($data)
     {
+        
         try {
             $errors = $this->validateFields($this->fields, $data, false);
             $this->load($data['id']);
@@ -126,6 +127,9 @@ class NewCustomModel extends SimpleModel
             }
             $this->bean->updated = date('Y-m-d H:i:s');
             R::store($this->bean);
+
+            return $this->bean;
+
         } catch (Exception $e) {
             throw $e;
         }

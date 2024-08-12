@@ -9,7 +9,6 @@ use NDISmate\Services\ParticipantService\GetAvailableSessionDuration;
 use NDISmate\Services\ParticipantService\GetParticipantService;
 use NDISmate\Services\ParticipantService\ListParticipantServicesByParticipantId;
 use NDISmate\Services\ParticipantService\ListProviderTravelByClientId;
-use NDISmate\Services\ParticipantService\UpdateParticipantService;
 use NDISmate\Services\ServiceAgreementService\ListServicesByServiceAgreementId;
 
 final class ParticipantServiceController extends BaseController  // Final prevents inheritance
@@ -18,7 +17,7 @@ final class ParticipantServiceController extends BaseController  // Final preven
     {
         $this->controller = [
             'addService' => [new AddParticipantService, null, true, ['admin']],
-            'updateService' => [new UpdateParticipantService, null, true, ['admin']],
+            'updateService' => [new Service, 'update', true, ['admin']],
             'deleteService' => [new Service, 'delete', true, ['admin']],
             'getService' => [new GetService, null, true, []],
             'getParticipantService' => [new GetParticipantService, null, true, []],
