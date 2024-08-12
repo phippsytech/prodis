@@ -73,25 +73,7 @@ class GetAvailableSessionDuration
 
         $timetrackings_bean = R::getRow($query, $params);
 
-        // $timetrackings_bean = R::getRow(
-        //     'SELECT
-        //         ROUND(
-        //         SUM(
-
-        //         ((timetrackings.session_duration) +
-        //         IFNULL((CASE WHEN timetrackings.actual_travel_time > 30 THEN 30 ELSE timetrackings.actual_travel_time END),0))/60
-        //          * timetrackings.rate
-        //     ),2) AS Spent
-        //     FROM timetrackings
-        //     WHERE participant_service_id=:participant_service_id
-        //     AND session_date>=:service_agreement_signed_date',
-        //     [
-        //         ':participant_service_id' => $data['participant_service_id'],
-        //         ':service_agreement_signed_date' => $clientplanservices_bean['service_agreement_signed_date']
-        //     ]
-        // );
-
-        $spent = $timetrackings_bean['Spent'];  // * $clientplanservices_bean['service_rate'];
+        $spent = $timetrackings_bean['spent'] ?? 0;
 
         if ($clientplanservices_bean['budget'] > 0) {
             $remaining_budget = $clientplanservices_bean['budget'] - $spent;
