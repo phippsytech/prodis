@@ -25,8 +25,8 @@ class UpdateParticipantService
     public function __invoke($data)
     {
         try {
-            $service = (new GetService)(['id' => $data['service_id']]);
-            $data['rate'] = $service['rate'];
+            // $service = (new GetService)(['id' => $data['service_id']]);
+            // $data['rate'] = $service['rate'];
             $participant_service = (new ParticipantService)->update($data);
             return $participant_service;
         } catch (RedException $e) {

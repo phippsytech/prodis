@@ -25,7 +25,8 @@ class ListServicesByServiceAgreementId
                     ANY_VALUE(services.billing_code) AS billing_code,
                     ANY_VALUE(services.billing_unit) AS billing_unit,
                     SUM(timetrackings.session_duration) AS session_duration,
-                    ANY_VALUE(services.rate) AS rate,
+                    MAX(timetrackings.session_date) AS last_session_date,
+                    ANY_VALUE(clientplanservices.rate) AS rate,
                     SUM(
                         CASE
                             WHEN services.billing_unit = 'hour' 
@@ -39,10 +40,13 @@ class ListServicesByServiceAgreementId
                             ELSE COALESCE(timetrackings.session_duration, 0) * timetrackings.rate
                         END
                     ) AS spent,
-                    clientplanservices.is_active AS is_active
+                    clientplanservices.is_active AS is_active,
+                    clientplanservices.adjust_weekly_time AS adjust_weekly_time,
+                    clientplanservices.allocated_funding as allocated_funding
                 FROM clientplanservices
                 LEFT JOIN timetrackings ON timetrackings.participant_service_id = clientplanservices.id
                     AND timetrackings.session_date >= clientplanservices.budget_start_date
+                    AND (timetrackings.session_duration > 0 AND timetrackings.session_duration is not null)
                 JOIN services ON services.id = clientplanservices.service_id
                 JOIN planmanagers ON planmanagers.id = clientplanservices.plan_manager_id 
                 WHERE clientplanservices.plan_id = :service_agreement_id
@@ -65,7 +69,7 @@ class ListServicesByServiceAgreementId
 
             // THERE IS AN ERROR HERE
             $converter = new ConvertFieldsToBoolean();
-            $beans = $converter($beans, ['include_travel', 'is_active']);
+            $beans = $converter($beans, ['include_travel', 'is_active', 'adjust_weekly_time']);
 
             // $beans = (new ConvertFieldsToBoolean)($beans, ['include_travel']);
 
