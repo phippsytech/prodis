@@ -81,13 +81,13 @@
 
             <Role roles={["serviceagreement.modify"]}>
                 <div>
-                    <button
+                    <!-- <button
                         on:click={() =>
                             amendServiceAgreement(service_agreement)}
                         class="px-1 hover:rounded-md hover:bg-white text-slate-400 hover:text-indigo-600 cursor-pointer"
                     >
                         Amend
-                    </button>
+                    </button> -->
                     <button
                         on:click={() => editServiceAgreement(service_agreement)}
                         class="px-1 hover:rounded-md hover:bg-white text-slate-400 hover:text-indigo-600 cursor-pointer"

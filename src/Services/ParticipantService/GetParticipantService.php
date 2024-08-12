@@ -32,6 +32,11 @@ class GetParticipantService
             $params = [':clientplanservice_id' => $data['id']];
         }
 
+
+        // $where = ($where ? $where . ' AND ' : '') . 'timetrackings.session_duration > 0 and timetrackings.session_duration is not null';
+
+
+
         try {
             $query =
                 "SELECT
@@ -47,8 +52,9 @@ class GetParticipantService
                     ANY_VALUE(services.budget_display) AS budget_display,
                     ANY_VALUE(services.billing_code) AS billing_code,
                     ANY_VALUE(services.billing_unit) AS billing_unit,
+                    MAX(timetrackings.session_date) AS last_session_date,
                     COALESCE(SUM(timetrackings.session_duration), 0 ) AS session_duration,
-                    ANY_VALUE(services.rate) AS rate,
+                    ANY_VALUE(clientplanservices.rate) AS rate,
                     SUM(
                          CASE
                             WHEN services.billing_unit = 'hour' 
@@ -66,11 +72,12 @@ class GetParticipantService
                 FROM clientplanservices
                 LEFT JOIN timetrackings ON timetrackings.participant_service_id = clientplanservices.id
                     AND timetrackings.session_date >= clientplanservices.budget_start_date
+                    AND (timetrackings.session_duration > 0 AND timetrackings.session_duration is not null)
                 JOIN services ON services.id = clientplanservices.service_id
                 JOIN planmanagers ON planmanagers.id = clientplanservices.plan_manager_id 
                 WHERE "
                 . $where
-                . ' 
+                . '
                 GROUP BY
                     clientplanservices.plan_id,
                     clientplanservices.id

@@ -16,6 +16,7 @@ class Service extends NewCustomModel
             'plan_id' => [v::numericVal()],  // TODO: migrate to service_agreement_id
             'service_id' => [v::numericVal()],
             'plan_manager_id' => [v::numericVal()],
+            'allocated_funding' => [v::monetaryAmount()],
             'budget' => [v::monetaryAmount()],
             'budget_start_date' => [v::date('Y-m-d')],
             'rate' => [v::optional(v::monetaryAmount())],
@@ -24,6 +25,7 @@ class Service extends NewCustomModel
             'max_claimable_travel_duration' => [v::optional(v::numericVal())],
             'xero_account_code' => [v::optional(v::stringType())],
             'is_active' => [v::boolVal()],
+            'adjust_weekly_time' => [v::boolVal()],
         ];
     }
 }
