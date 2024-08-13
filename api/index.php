@@ -109,6 +109,7 @@ $app->post('/SignatureRequest', new ControllerFactory(\NDISmate\Controllers\Sign
 $app->post('/Staff/Credential', new ControllerFactory(\NDISmate\Controllers\StaffCredentialController::class));
 
 $app->post('/SupportItem', new ControllerFactory(\NDISmate\Controllers\SupportItemController::class));
+$app->post('/Task', new ControllerFactory(\NDISmate\Controllers\TaskController::class));
 $app->post('/TimeTracking', new ControllerFactory(\NDISmate\Controllers\TimeTrackingController::class));
 $app->post('/Trip', new ControllerFactory(\NDISmate\Controllers\TripController::class));
 $app->post('/Utilities', new ControllerFactory(\NDISmate\Controllers\UtilityController::class));
