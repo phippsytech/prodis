@@ -3,60 +3,43 @@
     import Container from "@shared/Container.svelte";
     import { jspa } from "@shared/jspa.js";
     import { formatDate } from "@shared/utilities.js";
+    import { BreadcrumbStore } from "@shared/stores.js";
+    import { push } from "svelte-spa-router";
+    import createStore from "@shared/createStore";
+    import { convertFieldsToBoolean } from "@shared/utilities/convertFieldsToBoolean";
 
-    export let staff_id;
-
-    let tasks = [];
-
-    let display = "pending";
-
-    onMount(() => {
-        listTrips();
+    document.title = "Tasks";
+    BreadcrumbStore.set({
+        path: [{ url: "/tasks", name: "Tasks" }]
     });
 
-    export function listTrips() {
-        if (staff_id == null) return;
-        jspa("/Trip", "listTrips", { staff_id: staff_id }).then((result) => {
-            tasks = result.result;
-        });
-    }
+    onMount(async () => {
+        tasks.load();
+    });
 
-    function deleteTrip(task_id) {
-        jspa("/Trip", "deleteTrip", { id: task_id }).then((result) => {
-            tasks = tasks.filter((task) => task.id !== task_id);
-            // tasks = result.result
-        });
-    }
-
-    tasks = [
+    // Create ClientReports store
+    let tasks = createStore(
+        "/Task",
         {
-            task: "Special Task",
-            description: "This is a special task just for Phippsy to complete",
-            created_by: "Phippsy",
-            assigned_to: "Phippsy",
-            due_date: "2021-09-30",
-            due_time: "12:00",
+            add: "addTask",
+            update: "updateTask",
+            list: "listTasks"
         },
         {
-            task: "Special Task",
-            description: "This is a special task just for Phippsy to complete",
-            created_by: "Phippsy",
-            assigned_to: "Phippsy",
-            due_date: "2021-09-30",
-            due_time: "12:00",
+            load: (results) => {
+                return convertFieldsToBoolean(results, ["is_done"]);
+            },
+            add: (result) => {
+                let resultReport = convertFieldsToBoolean(result, ["is_done"]);
+                delete resultReport.update;
+                delete resultReport.created;
+                delete resultReport.archived;
+                return resultReport;
+            },
         },
-        {
-            task: "Special Task",
-            description: "This is a special task just for Phippsy to complete",
-            created_by: "Phippsy",
-            assigned_to: "Phippsy",
-            due_date: "2021-09-30",
-            due_time: "12:00",
-        },
-    ];
+    );
 </script>
 
-{#if tasks.length > 0}
     <Container>
         <div class="sm:flex sm:items-center mb-4">
             <div class="sm:flex-auto">
@@ -71,6 +54,7 @@
                 <button
                     type="button"
                     class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                    on:click={() => push("/tasks/add")}
                     >Add Task</button
                 >
             </div>
@@ -80,16 +64,17 @@
             <tr class="border-b-2">
                 <th class="text-left">Task</th>
                 <th class="text-left">Assigned to</th>
-                <th class="text-right">Due</th>
+                <th class="text-right">Due Date</th>
             </tr>
 
-            {#each tasks as task}
-                <tr class="border-b">
-                    <td class="font-semibold p-2">{task.task}</td>
-                    <td>{task.assigned_to}</td>
-                    <td class="text-right">{formatDate(task.due_date)}</td>
+            {#each $tasks as task, index (index)}
+                <tr 
+                    class="border-b hover:bg-blue-700 hover:text-white focus:outline-none focus:ring-0 focus:bg-gray-200 focus:text-gray-600 transition duration-500 cursor-pointer"
+                    on:click={() => push("/tasks/" + task.id)}>
+                    <td class="font-semibold p-2">{task.title}</td>
+                    <td>{task.assigned_to ?? ''}</td>
+                    <td class="text-right">{formatDate(task.due_date) ?? ''}</td>
                 </tr>
             {/each}
         </table>
     </Container>
-{/if}
