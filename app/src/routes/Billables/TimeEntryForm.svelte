@@ -22,6 +22,7 @@
     export let available_session_duration = null;
     export let mode = "add";
 
+    let service_agreement = {};
     let readOnly = false;
     let plan_manager_id = null;
     let stored_service_id;
@@ -34,6 +35,11 @@
     onMount(() => {
         getAvailableSessionDuration();
     });
+
+
+    $: {
+        console.log(service_agreement);
+    }
 
     $: if (timetracking.participant_service_id != stored_service_id) {
         getAvailableSessionDuration();
@@ -199,6 +205,9 @@
     </div>
 </div>
 
+
+
+
 {#if client_on_hold}
     <div class="rounded-md bg-red-50 p-4">
         <div class="flex">
@@ -230,6 +239,38 @@
         {readOnly}
     />
 
+
+
+    {#if timetracking.session_date > service_agreement.service_agreement_end_date 
+        || timetracking.session_date < service_agreement.service_agreement_signed_date}
+        
+        <div class="rounded-md bg-red-50 p-4">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <svg
+                        class="h-5 w-5 text-red-400"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                        aria-hidden="true"
+                    >
+                        <path
+                            fill-rule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z"
+                            clip-rule="evenodd"
+                        />
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <h3 class="text-sm font-medium text-red-800">
+                        The date is outside of the service agreement period.
+                    </h3>
+                </div>
+            </div>
+        </div>
+        {:else}
+        
+
+
     <!-- <ServiceSelector
         bind:participant_service_id={timetracking.participant_service_id}
         bind:client_id={timetracking.client_id}
@@ -240,6 +281,7 @@
         <Container>
             <ClientPlanServicesService
                 bind:participant_service_id={timetracking.participant_service_id}
+                bind:service_agreement={service_agreement}
             />
         </Container>
 
@@ -315,4 +357,5 @@
             </div>
         </Container>
     {/if}
+{/if}
 {/if}

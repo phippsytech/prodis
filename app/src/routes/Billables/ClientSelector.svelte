@@ -91,7 +91,7 @@
     function checkClientOnHold(client_id) {
         const client = clients.find((client) => client.client_id == client_id);
         if (client) {
-            on_hold = client.on_hold == "1";
+            on_hold = client.on_hold;
         }
     }
 </script>

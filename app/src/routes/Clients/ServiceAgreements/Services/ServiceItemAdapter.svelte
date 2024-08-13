@@ -5,10 +5,10 @@
 
     // export let service_id = null;
     export let participant_service_id = null;
+    export let service_agreement;
 
     let participant_service;
-    let service_agreement;
-
+    
     onMount(async () => {
         participant_service = await getParticipantService({
             id: participant_service_id,
