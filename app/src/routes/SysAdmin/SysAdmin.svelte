@@ -17,6 +17,9 @@
     } from "@shared/stores.js";
     import { haveCommonElements } from "@shared/utilities.js";
 
+        //import StaffCapacityGraph.svelte
+        import StaffCapacityGraph from "./StaffCapacityGraph.svelte";
+
     export let roles;
     export let conditional = false;
 
@@ -57,6 +60,8 @@
         path: [{ url: null, name: "Crystel Care" }],
     });
 </script>
+
+<StaffCapacityGraph />
 
 {#if haveCommonElements($RolesStore, ["sysadmin"])}
     <!-- <NavBar hideMenu={true} /> -->

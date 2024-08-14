@@ -29,9 +29,6 @@
 
     import StaffKPIReport from "../StaffKPIReport.svelte";
 
-    //import StaffCapacityGraph.svelte
-    import StaffCapacityGraph from "@shared/StaffCapacityGraph";
-
     // You need to define the component prop "params"
     export let params = {};
 
