@@ -61,13 +61,32 @@
     });
 
     //test data, inquire where to get the actual max capacity data from.
+    let labels = ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5'];
 
-    //try to check on how to pass the labels to chart js
-    let xAxisData = [50, 50, 50, 50, 50]; 
-    let yAxisData = [60, 50, 40, 30, 20]
+    let datasets = [
+    {
+      label: 'Hours Worked',
+      data: [60, 50, 40, 30, 20], // Your custom data for Hours Worked
+      fill: true,
+      borderColor: 'rgba(75, 192, 192, 1)',
+      backgroundColor: 'rgba(75, 192, 192, 0.2)',
+      tension: 0.1, // Makes the line curved
+      order: 2 // Draw this line below the max capacity line
+    },
+    {
+      label: 'Max Capacity',
+      data: [30, 30, 30, 30, 30], // Your custom data for Max Capacity
+      borderColor: 'rgba(255, 99, 132, 1)', // Red color for the max capacity line
+      borderWidth: 2,
+      pointRadius: 0, // No points at the data points
+      fill: false, // Do not fill the area under this line
+      tension: 0, // Straight line
+      order: 1 // Draw this line above the actual data line
+    }
+  ];
 </script>
 
-<StaffCapacityGraph xAxisData={xAxisData} yAxisData={yAxisData}/>
+<StaffCapacityGraph {labels} {datasets}/>
 
 {#if haveCommonElements($RolesStore, ["sysadmin"])}
     <!-- <NavBar hideMenu={true} /> -->

@@ -5,9 +5,8 @@
   // Register the necessary components
   Chart.register(LineElement, LineController, CategoryScale, LinearScale, PointElement, Filler);
 
-  export let xAxisData = []; // Default value if not provided
-  export let yAxisData = [];
-
+  export let labels = ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5']; // Default labels
+  export let datasets = []; 
   let chart;
 
   onMount(() => {
@@ -16,26 +15,8 @@
     chart = new Chart(ctx, {
       type: 'line',
       data: {
-        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5'], // Replace with your weeks
-        datasets: [{
-          label: 'Hours Worked',
-          data: yAxisData, // Replace with your actual data
-          fill: true, // This fills the area under the curve
-          borderColor: 'rgba(75, 192, 192, 1)',
-          backgroundColor: 'rgba(75, 192, 192, 0.2)',
-          tension: 0.1, // Makes the line curved
-          order: 2 // Draw this line below the max capacity line
-        },
-        {
-          label: 'Max Capacity',
-          data: xAxisData, 
-          borderColor: 'rgba(255, 99, 132, 1)', // Red color for the max capacity line
-          borderWidth: 2,
-          pointRadius: 0, // No points at the data points
-          fill: false, // Do not fill the area under this line
-          tension: 0, // Straight line
-          order: 1 // Draw this line above the actual data line
-        }]
+        labels: labels, 
+        datasets: datasets 
       },
       options: {
         scales: {
