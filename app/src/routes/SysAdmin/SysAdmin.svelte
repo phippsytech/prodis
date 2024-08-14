@@ -17,8 +17,8 @@
     } from "@shared/stores.js";
     import { haveCommonElements } from "@shared/utilities.js";
 
-        //import StaffCapacityGraph.svelte
-        import StaffCapacityGraph from "./StaffCapacityGraph.svelte";
+    //import StaffCapacityGraph.svelte
+    import StaffCapacityGraph from "./StaffCapacityGraph.svelte";
 
     export let roles;
     export let conditional = false;
@@ -59,9 +59,15 @@
     BreadcrumbStore.set({
         path: [{ url: null, name: "Crystel Care" }],
     });
+
+    //test data, inquire where to get the actual max capacity data from.
+
+    //try to check on how to pass the labels to chart js
+    let xAxisData = [50, 50, 50, 50, 50]; 
+    let yAxisData = [60, 50, 40, 30, 20]
 </script>
 
-<StaffCapacityGraph />
+<StaffCapacityGraph xAxisData={xAxisData} yAxisData={yAxisData}/>
 
 {#if haveCommonElements($RolesStore, ["sysadmin"])}
     <!-- <NavBar hideMenu={true} /> -->
