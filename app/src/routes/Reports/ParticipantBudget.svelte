@@ -112,14 +112,16 @@
 
 <div class="hidden xs:block">
     <div
-        class="grid grid-cols-6 items-center py-1 text-xs font-medium text-gray-500"
-        style="grid-template-columns: 2fr 2fr 1fr 1fr 1fr 1fr;"
+        class="grid grid-cols-7 items-center py-1 text-xs font-medium text-gray-500"
+        style="grid-template-columns: 2fr 2fr 1fr 1fr 1fr 1fr 1fr;"
     >
         <div>Participant</div>
         <div>Plan Expires</div>
         <div>Service</div>
         <div>Rate</div>
-        <div>Available Budget</div>
+        <div>Budget</div>
+        <div>Remaining Budget</div>
+
         <div>Available Time</div>
     </div>
 </div>
@@ -129,7 +131,7 @@
         <div
             in:slide|global={{ duration: 150 }}
             class="grid grid-cols-4 gap-4 items-center hover:text-indigo-600 hover:bg-indigo-50 border-t border-gray-200 py-2 px-2"
-            style="grid-template-columns: 2fr 2fr 1fr 1fr 1fr 1fr;"
+            style="grid-template-columns: 2fr 2fr 1fr 1fr 1fr 1fr 1fr;"
         >
             <div class="font-semibold">
                 <a class="text-indigo-600" href="/#/clients/{client.id}"
@@ -146,6 +148,7 @@
                 {client.code}
             </div>
             <div>{formatCurrency(client.rate)}</div>
+            <div>{formatCurrency(client.budget)}</div>
             <div>{formatCurrency(client.remaining)}</div>
             <div>
                 {@html convertMinutesToHoursAndMinutes(
