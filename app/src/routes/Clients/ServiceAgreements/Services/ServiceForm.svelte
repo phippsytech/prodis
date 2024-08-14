@@ -129,7 +129,7 @@
 /> -->
 
 
-
+{#if props.budget_display == "weekly"}
 <div class="flex items-center mb-2">
     <input
         type="checkbox"
@@ -141,6 +141,7 @@
         >Calculate weekly time using remaining funds.</label
     >
 </div>
+{/if}
 
 
 <div class="flex items-center mb-2">
