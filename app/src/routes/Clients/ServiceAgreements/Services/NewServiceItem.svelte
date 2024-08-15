@@ -7,25 +7,49 @@
     export let service_agreement = {};
     export let service = {};
 
-    function weeksLeft(serviceAgreementEndDate) {
-        
-        // Get the current date        
-        const startDate= new Date();
-        const endDate = new Date(serviceAgreementEndDate);
+    // function weeksLeft(serviceAgreementEndDate) {
+    function weeksLeft(startDate, endDate) {
+        // Get the current date
+        // const startDate = new Date();
+        // const endDate = new Date(serviceAgreementEndDate);
 
         // Get the difference in time (in milliseconds)
         const timeDifference = endDate.getTime() - startDate.getTime();
-        
+
         // Convert time difference from milliseconds to days
         const daysDifference = timeDifference / (1000 * 3600 * 24);
-        
+
         // Convert days to weeks
         const weeksDifference = daysDifference / 7;
-        
-        return weeksDifference;
 
+        return weeksDifference;
     }
 
+    function hoursPerWeek(allocatedHours, startDate, endDate) {
+        console.log(service);
+        console.log("service budget start date " + service.budget_start_date);
+        console.log(
+            "service agreement end date " +
+                service_agreement.service_agreement_end_date,
+        );
+
+        startDate = new Date(service.budget_start_date);
+        endDate = new Date(service_agreement.service_agreement_end_date);
+
+        const timeInterval = endDate.getTime() - startDate.getTime();
+
+        // Convert time difference from milliseconds to days
+        const daysDifference = timeInterval / (1000 * 3600 * 24);
+        console.log("days difference " + daysDifference);
+
+        console.log("allocated hours " + allocatedHours);
+
+        const dailyHours = allocatedHours / daysDifference;
+        console.log("daily hours " + dailyHours);
+        const result = dailyHours * 7;
+        console.log(result);
+        return result;
+    }
 </script>
 
 <div class={service.is_active ? "" : "opacity-50"}>
@@ -43,28 +67,35 @@
                                 (service.budget / service.rate) * 60,
                             )}</span
                         >
+
                         {#if service.adjust_weekly_time}
-                            
-                        {#if service.remainingMinutes / weeksLeft(service_agreement.service_agreement_end_date) > 1}
-                        
-                       
-                        <span class="text-xs text-slate-400 ml-1">
-                            ({@html convertMinutesToHoursAndMinutes(
-                service.remainingMinutes /weeksLeft(service_agreement.service_agreement_end_date) )} / wk
-                            )
-                        </span>
-                        {/if}
-            {:else}
-                {#if service.remainingMinutes / (service.totalServiceDuration / (60 * 24 * 7)) > 1}
+                            {#if hoursPerWeek(service.remainingMinutes / 60, new Date(), new Date(service_agreement.service_agreement_end_date)) > 1}
+                                <span class="text-xs text-slate-400 ml-1">
+                                    ({@html convertMinutesToHoursAndMinutes(
+                                        hoursPerWeek(
+                                            service.remainingMinutes / 60,
+                                            new Date(),
+                                            new Date(
+                                                service_agreement.service_agreement_end_date,
+                                            ),
+                                        ),
+                                    )} / wk )
+                                </span>
+                            {/if}
+                        {:else if hoursPerWeek(service.totalServiceDuration / 60, new Date(service_agreement.service_agreement_signed_date), new Date(service_agreement.service_agreement_end_date)) > 1}
                             <span class="italic text-xs text-slate-400"
                                 >({@html convertMinutesToHoursAndMinutes(
-                                    service.remainingMinutes /
-                                        (service.totalServiceDuration /
-                                            (60 * 24 * 7)),
+                                    hoursPerWeek(
+                                        service.totalServiceDuration / 60,
+                                        new Date(
+                                            service_agreement.service_agreement_signed_date,
+                                        ),
+                                        new Date(
+                                            service_agreement.service_agreement_end_date,
+                                        ),
+                                    ),
                                 )} / wk)
                             </span>{/if}
-
-                        {/if}
                     {/if}
                     {#if !service.is_active}
                         - NOT ACTIVE{/if}
@@ -77,7 +108,6 @@
             <!-- startDate={service_agreement.service_agreement_signed_date} -->
             <!-- startDate={service.budget_start_date} -->
             <BudgetBarWeekly
-                
                 totalBudget={service.budget}
                 hourlyRate={service.rate}
                 spentBudget={service.spent}
@@ -89,18 +119,17 @@
                 bind:totalServiceDuration={service.totalServiceDuration}
             />
             {#if service.budget && service.budget > 0}
-            {#if !service.adjust_weekly_time && service.spend_status != 0}
-                <span class="text-xs text-slate-400 ml-1"
-                    >{@html convertMinutesToHoursAndMinutes(
-                        Math.abs(service.spend_status),
-                    )}
-                    {service.spend_status > 0
-                        ? "of overflow"
-                        : "over budget"}</span
-                >
+                {#if !service.adjust_weekly_time && service.spend_status != 0}
+                    <span class="text-xs text-slate-400 ml-1"
+                        >{@html convertMinutesToHoursAndMinutes(
+                            Math.abs(service.spend_status),
+                        )}
+                        {service.spend_status > 0
+                            ? "of overflow"
+                            : "over budget"}</span
+                    >
                 {/if}
             {/if}
-
         </div>
     {:else}
         <!--20528.84-->
@@ -140,14 +169,14 @@
         </div>
     {/if}
 
-        {#if service.last_session_date}
+    {#if service.last_session_date}
         <div class=" px-1 text-xs text-slate-400">
-        Last billed {timeAgo(service.last_session_date)} {formatDate(service.last_session_date)}
+            Last billed {timeAgo(service.last_session_date)}
+            {formatDate(service.last_session_date)}
         </div>
         <!-- {:else}
         <div class=" px-1 text-xs text-slate-400">
         No sessions billed yet
     </div> -->
-        {/if}
-
+    {/if}
 </div>
