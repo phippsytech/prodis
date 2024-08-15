@@ -2,6 +2,7 @@
 namespace NDISmate\Models\SIL\House\Form;
 
 use \NDISmate\CORE\JsonResponse;
+use \RedBeanPHP\R as R;
 
 
 class SaveForm {
@@ -14,7 +15,9 @@ class SaveForm {
             'authSource' => MONGODB_AUTHSOURCE
         ]);
 
-        $forms = $mongo_db->crystelcare->forms;
+       
+
+        $forms = $mongo_db->crystelcare->forms; 
 
         // Check if the _id field is set in the data
         if (isset($data['_id'])) {
@@ -26,6 +29,16 @@ class SaveForm {
         $id = implode('', $id);
     }
     $result = $forms->updateOne(['_id' => new \MongoDB\BSON\ObjectID($id)], $updateQuery);
+
+     // use client table to store the forms as json data type
+
+    $client = R::findOne('clients', ' id =  ?', [$id]);
+    
+    if (!is_null($form)) {
+        $client->form_data = $data;
+    }
+
+
     return JsonResponse::ok(["result" => $result]);
         } else {
             // Insert a new record if the _id field is not set
