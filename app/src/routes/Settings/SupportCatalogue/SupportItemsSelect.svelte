@@ -45,7 +45,7 @@
           mounted = true;
       })
       .catch((error) => {
-          console.error("Error fetching support items:", error);
+          //console.error("Error fetching support items:", error);
       });
 
   function setSupportItem(support_item_number) {
