@@ -9,7 +9,7 @@ class ListClients
     public function __invoke($data)
     {
         $beans = R::getAll(
-            'SELECT clients.id as client_id, name as client_name , archived, on_hold
+            'SELECT clients.id as client_id, name as client_name , archived, on_hold, ndis_number
             FROM clients 
             '
         );
