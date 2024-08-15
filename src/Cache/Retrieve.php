@@ -5,7 +5,7 @@ use \RedBeanPHP\R as R;
 
 class Retrieve {
 
-    function __invoke($cache_type, \DateTime $expiry = null){
+    function __invoke($cache_type){
 
         $redis = new \Predis\Client([
             'scheme' => 'tcp',
@@ -17,17 +17,8 @@ class Retrieve {
          
         if (!empty($cacheEntry)) {
             $cacheEntry = json_decode($cacheEntry, true);
-
-            if ($expiry) {
-
-                $cacheEntryDate = new \DateTime($cacheEntry['created_at']);
-
-                if ($cacheEntryDate > $expiry) {
-                    return $cacheEntry["data"];
-                } else {
-                    return false;
-                }
-            }
+            return $cacheEntry["data"];
+            
         } else {
             return false;
         }

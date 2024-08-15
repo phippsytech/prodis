@@ -18,9 +18,7 @@ class GetPayrun
         $cache_name = 'xeroPayrun' . $payrun_id;
 
         if ($force == false) {
-            $expiryDateTime = new \DateTime();
-            $expiryDateTime->setTime(0, 0, 0);
-            $jsonData = (new \NDISmate\Cache\Retrieve)($cache_name, $expiryDateTime);
+            $jsonData = (new \NDISmate\Cache\Retrieve)($cache_name);
         }
 
         if (empty($jsonData)) {  // Cache doesn't exist, fetch data
@@ -29,7 +27,8 @@ class GetPayrun
                 $payrun = $apiResponse[0];
                 $payrun = \XeroAPI\XeroPHP\PayrollAuObjectSerializer::sanitizeForSerialization($payrun);
                 $jsonData = json_encode($payrun);
-                $cache = (new \NDISmate\Cache\Store)($cache_name, $jsonData);
+                $expiryInSeconds = 86400 ;
+                $cache = (new \NDISmate\Cache\Store)($cache_name, $jsonData, $expiryInSeconds);
             } catch (\XeroAPI\XeroPHP\ApiException $e) {
                 $error = json_decode($e->getResponseBody(), true);
                 return ['http_code' => 400, 'error' => $error, 'staff_id' => $staff_id];

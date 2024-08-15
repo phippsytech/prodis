@@ -5,7 +5,7 @@ namespace NDISmate\Cache;
 class Store {
 
 
-    function __invoke($cache_type, $data){
+    function __invoke($cache_type, $data, $expirySeconds = 2592000){ //default 30 days
 
         $redis = new \Predis\Client([
             'scheme' => 'tcp',
@@ -13,12 +13,10 @@ class Store {
             'port' => REDIS_PORT
         ]);
 
-
         // Prepare cache entry
         $cacheEntry = [
             "cacheType" => $cache_type, // or other types of cache data
-            "data" => $data,
-            "createdAt" => time(),
+            "data" => $data
         ];
 
 
@@ -31,13 +29,11 @@ class Store {
             $existingCacheData = json_decode($existingCache, true);
             // Update the data as needed
             $existingCacheData['data'] = $data;
-            $existingCacheData['createdAt'] = time();
+
+            $redis->setex($cacheKey, $expirySeconds, json_encode($existingCacheData));
             
-            $redis->set($cacheKey, json_encode($existingCacheData));
-            $redis->expire($cacheKey, 3600); // Reset the expiration time
         } else {
-            $redis->set($cacheKey, $cacheEntrySerialized);
-            $redis->expire($cacheKey, 3600); 
+            $redis->setex($cacheKey, $expirySeconds, $cacheEntrySerialized);
         }       
     }
 }
