@@ -1,119 +1,119 @@
 <script>
-    import FloatingSelect from "@shared/PhippsyTech/svelte-ui/forms/FloatingSelect.svelte";
-    import { jspa } from "@shared/jspa.js";
+  import { jspa } from "@shared/jspa.js";
+  import Select from "svelte-select";
 
-    export let value;
-    export let location;
-    export let unit;
-    export let max_rate;
-    export let name;
+  export let value;
+  export let location;
+  export let unit;
+  export let max_rate;
+  export let name;
 
-    let mounted = false;
-    let support_items = [];
-    let option_list = [];
+  let mounted = false;
+  let support_items = [];
+  let option_list = [];
 
-    jspa("/SupportItem", "listSupportItems", {})
-        .then((result) => {
-            support_items = result.result;
+  let internalValue = null;
+  let filterText = "";
+  let select; // reference to the select component
 
-            let selected = false;
+  // fetch support items and populate the option list
+  jspa("/SupportItem", "listSupportItems", {})
+      .then((result) => {
+          support_items = result.result;
 
-            support_items.forEach((item) => {
-                let options = {
-                    option:
-                        item.support_item_number +
-                        " : " +
-                        item.support_item_name +
-                        " (" +
-                        item.registration_group_name +
-                        ")",
-                    value: item.support_item_number,
-                    selected: false,
-                };
+          let selected = false;
 
-                if (value && item.support_item_number == value) {
-                    options.selected = true;
-                    selected = true;
-                }
-                option_list.push(options);
-            });
+          option_list = support_items.map(item => {
+              let option = {
+                  label: `${item.support_item_number} : ${item.support_item_name} (${item.registration_group_name})`,
+                  value: item.support_item_number
+              };
 
-            if (!selected) {
-                value = "Select NDIS Support Item"; // unset the selected client_id
-            } else {
-                setSupportItem(value);
-            }
+              if (value && item.support_item_number === value) {
+                  internalValue = option; // set the selected option
+                  selected = true;
+              }
+              return option;
+          });
 
-            option_list.sort(function (a, b) {
-                const nameA = a.option.toUpperCase(); // ignore upper and lowercase
-                const nameB = b.option.toUpperCase(); // ignore upper and lowercase
-                if (nameA < nameB) return -1;
-                if (nameA > nameB) return 1;
-                return 0; // names must be equal
-            });
+          if (!selected) {
+              internalValue = null; // reset if no item is selected
+          }
 
-            option_list = option_list;
-            mounted = true;
-        })
-        .catch((error) => {
-            // error_message = error.error_message;
-        })
-        .finally(() => {
-            // uploading = false;
-        });
+          option_list.sort((a, b) => a.label.localeCompare(b.label));
 
-    function setSupportItem(support_item_number) {
-        let item = support_items.find(
-            (item) => item.support_item_number == support_item_number,
-        );
+          mounted = true;
+      })
+      .catch((error) => {
+          console.error("Error fetching support items:", error);
+      });
 
-        name = item.support_item_name;
-        /*
-                units:
-                H = hourly
-                E = each
-                D = day
-                YR = yearly <- but doesn't make sense really.
-                MON = monthly
-            */
+  function setSupportItem(support_item_number) {
+      let item = support_items.find(
+          (item) => item.support_item_number === support_item_number,
+      );
 
-        switch (item.unit) {
-            case "H":
-                unit = "hour";
-                break;
-            case "E":
-                unit = "each";
-                break;
-            case "D":
-                unit = "day";
-                break;
-            case "YR":
-                unit = "year";
-                break;
-            case "MON":
-                unit = "month";
-                break;
-        }
+      if (item) {
+          name = item.support_item_name;
 
-        max_rate = item[location];
-    }
+          switch (item.unit) {
+              case "H":
+                  unit = "hour";
+                  break;
+              case "E":
+                  unit = "each";
+                  break;
+              case "D":
+                  unit = "day";
+                  break;
+              case "YR":
+                  unit = "year";
+                  break;
+              case "MON":
+                  unit = "month";
+                  break;
+              default:
+                  unit = "unknown";
+          }
 
-    $: {
-        if (
-            value != null &&
-            value != "Select NDIS Support Item" &&
-            location &&
-            mounted
-        ) {
-            setSupportItem(value);
-        }
-    }
+          max_rate = item[location];
+      }
+  }
+
+  // watch for changes to internalValue and update the selected support item
+  $: {
+      if (internalValue && mounted) {
+          setSupportItem(internalValue.value);
+      }
+  }
+
+  function handleBlur() {
+      if (!internalValue && filterText !== "") {
+          internalValue = { value: filterText, label: filterText };
+      }
+  }
 </script>
 
-<FloatingSelect
-    on:change={(e) => setSupportItem(e.target.value)}
-    bind:value
-    label="NDIS Support Item"
-    instruction="Select NDIS Support Item"
-    options={option_list}
-/>
+<div class="rounded-t-md shadow-sm ring-1 ring-inset ring-indigo-100 bg-white mb-0 pb-1.5">
+<h3 class="px-2.5 pt-2 text-xs text-gray-500">NDIS Support Item</h3>
+
+<Select
+    bind:this={select}
+    containerStyles="border:none; margin:0 0.75rem; padding:0 0; min-height:34px;width:auto;"
+    --list-position="fixed"
+    bind:value={internalValue}
+    bind:filterText
+    on:blur={handleBlur}
+    items={option_list}
+    placeholder="Select or type NDIS Support Item ..."
+    hideEmptyState
+>
+    <div slot="item" let:item>
+        {item.label}
+    </div>
+</Select>
+</div>
+
+<div class="text-xs bg-indigo-50 text-gray-500 px-3 py-1 rounded-b-md mb-2">
+Tip: Start typing to search for NDIS Support Item
+</div>
