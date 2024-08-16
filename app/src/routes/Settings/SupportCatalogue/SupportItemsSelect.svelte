@@ -77,6 +77,7 @@
           }
 
           max_rate = item.very_remote; // assumed max rate for the service per location, needs clarification on what value to use
+          console.log(item);
       }
   }
 
@@ -88,11 +89,11 @@
   }
 
   function handleBlur() {
-      if (internalValue && filterText === internalValue.label) {
-          return; // the selected value matches the filter text, so do nothing
+      if (internalValue && mounted && internalValue.value !== value) {
+          value = internalValue.value; 
+          setSupportItem(internalValue.value);
       }
       
-      internalValue = null;
       filterText = "";
   }
 </script>
