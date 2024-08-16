@@ -1,4 +1,5 @@
 <?php
+
 namespace NDISmate\Models\Credential;
 
 use Respect\Validation\Validator as v;
@@ -47,7 +48,7 @@ class ListCredentialsByStaffIds
             ELSE NULL
         END AS expiry_date,
         sc.details AS credential_details,
-        sc.google_drive_file_ref AS file_reference,
+        sc.vultr_storage_ref AS file_reference,
         IF(sc.id IS NULL AND c.collect_from_sil = 'required', 'Missing', 'Provided') AS credential_status
     FROM 
         (SELECT id as staff_id, name as staff_name FROM staffs WHERE id IN ($placeholders)) s
