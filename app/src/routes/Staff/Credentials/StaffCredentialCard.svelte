@@ -195,7 +195,7 @@
                 >
                     {credential.name}
 
-                    {#if staff_credential.google_drive_file_ref}
+                    {#if staff_credential.vultr_storage_ref}
                         <svg
                             class="h-4 w-4 inline"
                             fill="none"
