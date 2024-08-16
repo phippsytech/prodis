@@ -88,9 +88,12 @@
   }
 
   function handleBlur() {
-      if (!internalValue && filterText !== "") {
-          internalValue = { value: filterText, label: filterText };
+      if (internalValue && filterText === internalValue.label) {
+          return; // the selected value matches the filter text, so do nothing
       }
+      
+      internalValue = null;
+      filterText = "";
   }
 </script>
 
