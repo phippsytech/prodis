@@ -5,7 +5,7 @@
   export let value;
   export let location;
   export let unit;
-  export let max_rate;
+  export let max_rate = 0;
   export let name;
 
   let mounted = false;
@@ -16,7 +16,7 @@
   let filterText = "";
   let select; // reference to the select component
 
-  // fetch support items and populate the option list
+  // Fetch support items and populate the option list
   jspa("/SupportItem", "listSupportItems", {})
       .then((result) => {
           support_items = result.result;
@@ -76,13 +76,13 @@
                   unit = "unknown";
           }
 
-          max_rate = item[location];
+          max_rate = item.very_remote; // assumed max rate for the service per location, needs clarification on what value to use
       }
   }
 
   // watch for changes to internalValue and update the selected support item
   $: {
-      if (internalValue && mounted) {
+      if (internalValue && mounted && internalValue.value !== value) {
           setSupportItem(internalValue.value);
       }
   }
@@ -95,25 +95,25 @@
 </script>
 
 <div class="rounded-t-md shadow-sm ring-1 ring-inset ring-indigo-100 bg-white mb-0 pb-1.5">
-<h3 class="px-2.5 pt-2 text-xs text-gray-500">NDIS Support Item</h3>
+  <h3 class="px-2.5 pt-2 text-xs text-gray-500">NDIS Support Item</h3>
 
-<Select
-    bind:this={select}
-    containerStyles="border:none; margin:0 0.75rem; padding:0 0; min-height:34px;width:auto;"
-    --list-position="fixed"
-    bind:value={internalValue}
-    bind:filterText
-    on:blur={handleBlur}
-    items={option_list}
-    placeholder="Select or type NDIS Support Item ..."
-    hideEmptyState
->
-    <div slot="item" let:item>
-        {item.label}
-    </div>
-</Select>
+  <Select
+      bind:this={select}
+      containerStyles="border:none; margin:0 0.75rem; padding:0 0; min-height:34px;width:auto;"
+      --list-position="fixed"
+      bind:value={internalValue}
+      bind:filterText
+      on:blur={handleBlur}
+      items={option_list}
+      placeholder="Select or type NDIS Support Item ..."
+      hideEmptyState
+  >
+      <div slot="item" let:item>
+          {item.label}
+      </div>
+  </Select>
 </div>
 
 <div class="text-xs bg-indigo-50 text-gray-500 px-3 py-1 rounded-b-md mb-2">
-Tip: Start typing to search for NDIS Support Item
+  Tip: Start typing to search for NDIS Support Item
 </div>
