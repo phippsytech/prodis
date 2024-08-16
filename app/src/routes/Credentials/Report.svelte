@@ -6,17 +6,21 @@
     import { getDaysUntilDate, formatDate } from "@shared/utilities.js";
     import { debounce } from "lodash-es";
     import CredentialGrid from "./CredentialGrid.svelte";
+    import { SpinnerStore } from "@app/Overlays/stores.js";
 
     let staff = [];
     let staffList = [];
     let selectedStaff = [];
 
-    jspa("/Staff", "listStaffByGroup", { group: "sil" }).then((result) => {
+    jspa("/Staff", "listStaff", {}).then((result) => {
         staff = result.result;
 
         staff.forEach((staffer) => {
             if (staffer.archived != 1)
-                staffList.push({ option: staffer.name, value: staffer.id });
+                staffList.push({
+                    option: staffer.first_name + " " + staffer.last_name,
+                    value: staffer.id,
+                });
         });
 
         staffList.sort((a, b) => a.option.localeCompare(b.option));
@@ -39,7 +43,16 @@
         }).then((result) => {
             if (currentRequest === requestCounter) {
                 // Check if this is the latest request
-                credentials = result.result;
+                //credentials = result.result;
+
+                // this will sort the credentials by expiry date
+                credentials = result.result.sort((a, b) => {
+                    if (!a.expiry_date) return 1; // Place credentials without expiry date at the end
+                    if (!b.expiry_date) return -1; // Place credentials without expiry date at the end
+                    const dateA = new Date(a.expiry_date);
+                    const dateB = new Date(b.expiry_date);
+                    return dateA - dateB;
+                });
             }
         });
     }
@@ -74,6 +87,58 @@
     };
     const formattedDate = currentDate.toLocaleDateString("en-AU", options);
     // console.log(formattedDate);
+
+    // TODO: This is a duplicate of code found in Credential.svelte.  This should be refactored into a shared utility function.
+    function openFile(vultr_storage_ref) {
+        SpinnerStore.set({ show: true, message: "Getting File" });
+
+        jspa("/Storage", "getS3ObjectFile", { key: vultr_storage_ref })
+            .then((result) => {
+                //console.log(result)
+                let fileContent = result.result;
+                let fileName = vultr_storage_ref.substring(33);
+
+                // Decode base64 content
+                let decodedContent = atob(fileContent);
+                let byteNumbers = new Array(decodedContent.length);
+                for (let i = 0; i < decodedContent.length; i++) {
+                    byteNumbers[i] = decodedContent.charCodeAt(i);
+                }
+                let byteArray = new Uint8Array(byteNumbers);
+
+                // Determine the MIME type based on the file extension or content
+                let mimeType;
+                if (fileName.endsWith(".pdf")) {
+                    mimeType = "application/pdf";
+                } else if (fileName.endsWith(".txt")) {
+                    mimeType = "text/plain";
+                } else if (
+                    fileName.endsWith(".jpg") ||
+                    fileName.endsWith(".jpeg")
+                ) {
+                    mimeType = "image/jpeg";
+                } else if (fileName.endsWith(".png")) {
+                    mimeType = "image/png";
+                } else {
+                    mimeType = "application/octet-stream";
+                }
+
+                const blob = new Blob([byteArray], { type: mimeType });
+
+                const url = URL.createObjectURL(blob);
+
+                // Open the URL in a new tab
+                window.open(url, "_blank");
+
+                // Optionally revoke the URL after a short delay
+                setTimeout(() => {
+                    URL.revokeObjectURL(url);
+                }, 10000); // adjust the timeout as needed
+            })
+            .finally(() => {
+                SpinnerStore.set({ show: false });
+            });
+    }
 </script>
 
 <div class="no-print">
@@ -143,7 +208,34 @@
                         <div class="flex justify-between items-center">
                             <div>
                                 <div class="font-semibold">
-                                    {credential.credential_name}
+                                    {#if credential.file_reference}
+                                        <button
+                                            on:click={() => {
+                                                openFile(
+                                                    credential.file_reference,
+                                                );
+                                            }}
+                                        >
+                                            {credential.credential_name}
+                                            <svg
+                                                class="h-4 w-4 inline"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                stroke-width="1.5"
+                                                viewBox="0 0 24 24"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                aria-hidden="true"
+                                            >
+                                                <path
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    d="M18.375 12.739l-7.693 7.693a4.5 4.5 0 01-6.364-6.364l10.94-10.94A3 3 0 1119.5 7.372L8.552 18.32m.009-.01l-.01.01m5.699-9.941l-7.81 7.81a1.5 1.5 0 002.112 2.13"
+                                                ></path>
+                                            </svg>
+                                        </button>
+                                    {:else}
+                                        {credential.credential_name}
+                                    {/if}
                                 </div>
                                 {#if credential.credential_details}
                                     <div class="text-xs">

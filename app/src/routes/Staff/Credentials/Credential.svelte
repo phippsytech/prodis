@@ -20,13 +20,13 @@
         credential_date: null,
     };
 
+    let isReplacing = false;
+
     // if(props.expires == null && props.collect_expiry){
     //     props.expires = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`
     // }
 
-    
-
-        function openFile(vultr_storage_ref) {
+    function openFile(vultr_storage_ref) {
         SpinnerStore.set({ show: true, message: "Getting File" });
 
         jspa("/Storage", "getS3ObjectFile", { key: vultr_storage_ref })
@@ -76,6 +76,10 @@
                 SpinnerStore.set({ show: false });
             });
     }
+
+    function replaceFile() {
+        isReplacing = true;
+    }
 </script>
 
 <FloatingInput
@@ -85,7 +89,7 @@
 />
 
 <div class="mb-2">
-    {#if props.vultr_storage_ref}
+    {#if props.vultr_storage_ref && !isReplacing}
         <div
             on:click={() => openFile(props.vultr_storage_ref)}
             class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 cursor-pointer"
@@ -107,6 +111,12 @@
             </svg>
             View Credential
         </div>
+        <button
+            on:click={replaceFile}
+            class="ml-2 text-sm text-gray-600 underline"
+        >
+            Replace File
+        </button>
     {:else}
         <FileUploader
             bind:value={props.base64_file}

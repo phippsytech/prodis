@@ -96,6 +96,9 @@ $app->post('/Report', new ControllerFactory(\NDISmate\Controllers\ReportControll
 $app->post('/Roster', new ControllerFactory(\NDISmate\Controllers\RosterController::class));
 $app->post('/Service', new ControllerFactory(\NDISmate\Controllers\ServiceController::class));
 $app->post('/SignatureRequest', new ControllerFactory(\NDISmate\Controllers\SignatureRequestController::class));
+
+$app->post('/Staff/Credential', new ControllerFactory(\NDISmate\Controllers\StaffCredentialController::class));
+
 $app->post('/SupportItem', new ControllerFactory(\NDISmate\Controllers\SupportItemController::class));
 $app->post('/TimeTracking', new ControllerFactory(\NDISmate\Controllers\TimeTrackingController::class));
 $app->post('/Trip', new ControllerFactory(\NDISmate\Controllers\TripController::class));
@@ -144,7 +147,7 @@ $app->post('/SIL/House/Staff', new ControllerFactory(\NDISmate\Models\SIL\House\
 $app->post('/SIL/Payrun', new ControllerFactory(\NDISmate\Models\SIL\Payrun\Controller::class));  // TODO: improve response speed
 $app->post('/Staff', new ControllerFactory(\NDISmate\Models\Staff::class));
 $app->post('/Staff/Schedule', new ControllerFactory(\NDISmate\Models\Staff\Schedule\Controller::class));
-$app->post('/Staff/Credential', new ControllerFactory(\NDISmate\Models\Staff\Credential::class));
+
 $app->post('/Staff/Document', new ControllerFactory(\NDISmate\Models\Staff\Document::class));
 $app->post('/Staff/Team', new ControllerFactory(\NDISmate\Models\Staff\Team::class));
 $app->post('/Tickets', new ControllerFactory(\NDISmate\Models\Tickets\Controller::class));
