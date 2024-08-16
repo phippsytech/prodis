@@ -234,7 +234,7 @@
                                             </svg>
                                         </button>
                                     {:else}
-                                        {credential.credential_name} fddd
+                                        {credential.credential_name}
                                     {/if}
                                 </div>
                                 {#if credential.credential_details}
