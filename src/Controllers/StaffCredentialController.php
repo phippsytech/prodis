@@ -3,11 +3,11 @@
 namespace NDISmate\Controllers;
 
 use NDISmate\CORE\BaseController;
-use NDISmate\Models\Staff\Credential\GetCredential as GetStaffCredential;
+
 use NDISmate\Services\StaffCredentialService\AddStaffCredential;
 use NDISmate\Services\StaffCredentialService\UpdateStaffCredential;
 use NDISmate\Services\StaffCredentialService\DeleteStaffCredential;
-
+use NDISmate\Models\Staff\Credential\GetCredential as GetStaffCredential;
 use \NDISmate\Models\Staff\Credential\ListCredentials;
 use \NDISmate\Models\Staff\Credential\ListMissingCredentials;
 use \NDISmate\Models\Staff\Credential\ListExpiredCredentials;
