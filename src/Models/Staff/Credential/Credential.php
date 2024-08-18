@@ -14,9 +14,9 @@ class Credential extends NewCustomModel
         $this->fields = [
             'staff_id' => [v::numericVal()],
             'credential_id' => [v::numericVal()],
-            'details' => [v::stringType()],
-            'vultr_storage_ref' => [v::stringType()],
-            'credential_date' => [v::stringType()]
+            'details' => [v::optional(v::stringType())],
+            'vultr_storage_ref' => [v::optional(v::stringType())],
+            'credential_date' => [v::optional(v::stringType())]
         ];
     }
 }
