@@ -8,9 +8,10 @@
   export let max_rate = 0;
   export let name;
 
+
   let mounted = false;
   let support_items = [];
-  let option_list = [];
+  let items = [];
 
   let internalValue = null;
   let filterText = "";
@@ -23,7 +24,7 @@
 
           let selected = false;
 
-          option_list = support_items.map(item => {
+          items = support_items.map(item => {
               let option = {
                   label: `${item.support_item_number} : ${item.support_item_name} (${item.registration_group_name})`,
                   value: item.support_item_number
@@ -40,7 +41,7 @@
               internalValue = null; // reset if no item is selected
           }
 
-          option_list.sort((a, b) => a.label.localeCompare(b.label));
+          items.sort((a, b) => a.label.localeCompare(b.label));
 
           mounted = true;
       })
@@ -76,15 +77,18 @@
                   unit = "unknown";
           }
 
-          max_rate = item.very_remote; // assumed max rate for the service per location, needs clarification on what value to use
-          console.log(item);
+        if (location && item[location] !== undefined) {
+            max_rate = item[location];
+        } 
       }
   }
 
   // watch for changes to internalValue and update the selected support item
   $: {
-      if (internalValue && mounted && internalValue.value !== value) {
-          setSupportItem(internalValue.value);
+      if (mounted && internalValue) {
+          if (internalValue.value !== value || location) {
+              setSupportItem(internalValue.value);
+          }
       }
   }
 
@@ -108,7 +112,7 @@
       bind:value={internalValue}
       bind:filterText
       on:blur={handleBlur}
-      items={option_list}
+      {items}
       placeholder="Select or type NDIS Support Item ..."
       hideEmptyState
   >
