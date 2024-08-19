@@ -1,4 +1,5 @@
 <script>
+  import { onMount, afterUpdate } from "svelte";
   import { jspa } from "@shared/jspa.js";
   import Select from "svelte-select";
 
@@ -7,7 +8,6 @@
   export let unit = "hour/day/year";
   export let max_rate = 0;
   export let name;
-
 
   let mounted = false;
   let support_items = [];
@@ -18,39 +18,43 @@
   let select; // reference to the select component
 
   // Fetch support items and populate the option list
-  jspa("/SupportItem", "listSupportItems", {})
-      .then((result) => {
-          support_items = result.result;
+  onMount(() => {
+      jspa("/SupportItem", "listSupportItems", {})
+          .then((result) => {
+              support_items = result.result;
 
-          let selected = false;
+              items = support_items.map(item => {
+                  return {
+                      label: `${item.support_item_number} : ${item.support_item_name} (${item.registration_group_name})`,
+                      value: item.support_item_number
+                  };
+              });
 
-          items = support_items.map(item => {
-              let option = {
-                  label: `${item.support_item_number} : ${item.support_item_name} (${item.registration_group_name})`,
-                  value: item.support_item_number
-              };
+              items.sort((a, b) => a.label.localeCompare(b.label));
+              mounted = true;
 
-              if (value && item.support_item_number === value) {
-                  internalValue = option; // set the selected option
-                  selected = true;
-              }
-              return option;
+              // set internalValue after items are loaded
+              updateInternalValue();
+          })
+          .catch((error) => {
+              console.error("Error fetching support items:", error);
           });
+  });
 
-          if (!selected) {
-              internalValue = null; // reset if no item is selected
+  function updateInternalValue() {
+      if (mounted && value) {
+          const matchedItem = items.find(item => item.value === value);
+          if (matchedItem) {
+              internalValue = matchedItem;
+              setSupportItem(matchedItem.value);
+          } else {
+              internalValue = null; // reset internalValue
           }
-
-          items.sort((a, b) => a.label.localeCompare(b.label));
-
-          mounted = true;
-      })
-      .catch((error) => {
-          //console.error("Error fetching support items:", error);
-      });
+      }
+  }
 
   function setSupportItem(support_item_number) {
-      let item = support_items.find(
+      const item = support_items.find(
           (item) => item.support_item_number === support_item_number,
       );
 
@@ -77,29 +81,30 @@
                   unit = "unknown";
           }
 
-        if (location && item[location] !== undefined) {
-            max_rate = item[location];
-        } 
-      }
-  }
-
-  // watch for changes to internalValue and update the selected support item
-  $: {
-      if (mounted && internalValue) {
-          if (internalValue.value !== value || location) {
-              setSupportItem(internalValue.value);
+          if (location && item[location] !== undefined) {
+              max_rate = item[location];
           }
       }
   }
 
+  // watch for changes to value or location after the component is mounted
+  $: if (mounted) {
+      updateInternalValue();
+  }
+
+  // wandle when the user blurs the select dropdown
   function handleBlur() {
-      if (internalValue && mounted && internalValue.value !== value) {
-          value = internalValue.value; 
+      if (internalValue && internalValue.value !== value) {
+          value = internalValue.value;
           setSupportItem(internalValue.value);
       }
-      
       filterText = "";
   }
+
+  // ensure internalValue is updated after value changes
+  afterUpdate(() => {
+      updateInternalValue();
+  });
 </script>
 
 <div class="rounded-t-md shadow-sm ring-1 ring-inset ring-indigo-100 bg-white mb-0 pb-1.5">
