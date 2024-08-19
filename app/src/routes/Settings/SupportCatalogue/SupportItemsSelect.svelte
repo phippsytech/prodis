@@ -4,7 +4,7 @@
 
   export let value;
   export let location;
-  export let unit;
+  export let unit = "hour/day/year";
   export let max_rate = 0;
   export let name;
 
