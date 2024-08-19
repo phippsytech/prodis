@@ -11,7 +11,6 @@ class UpdateStaffCredential
     function __invoke($data)
     {
 
-
         try {
 
             if (empty($data['staff_id'])) throw new \Exception('A staff id must be provided');

@@ -12,7 +12,7 @@ class PulseMiddleware
     public function __invoke(Request $request, RequestHandler $handler): Response
     {
         $data = json_decode($request->getBody(), true);
-
+        
         $data['method'] = $request->getMethod();
         if ($data['method'] == 'OPTIONS')
             return $handler->handle($request);
@@ -78,6 +78,8 @@ class PulseMiddleware
     function ignoreAction($action)
     {
         $ignore_list = [
+            'addCredential', // contains large data I don't want to store
+            'updateCredential', // contains large data I don't want to store
             'listPlanManagers',
             'getClientPlanService',
             'listClientPlanServicesByParticipantId',
