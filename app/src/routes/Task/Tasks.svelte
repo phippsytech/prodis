@@ -1,9 +1,10 @@
 <script>
+	import { getStaffer } from '@shared/api.js';
     import { onMount } from "svelte";
     import Container from "@shared/Container.svelte";
     import { jspa } from "@shared/jspa.js";
     import { formatDate } from "@shared/utilities.js";
-    import { BreadcrumbStore } from "@shared/stores.js";
+    import { BreadcrumbStore, StafferStore } from "@shared/stores.js";
     import { push } from "svelte-spa-router";
     import createStore from "@shared/createStore";
     import { convertFieldsToBoolean } from "@shared/utilities/convertFieldsToBoolean";
@@ -38,6 +39,10 @@
             },
         },
     );
+
+    function formatPrettyName(str) {
+        return str?.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+    }
 </script>
 
     <Container>
@@ -64,6 +69,9 @@
             <tr class="border-b-2">
                 <th class="text-left">Task</th>
                 <th class="text-left">Assigned to</th>
+                <th class="text-left">Priority</th>
+                <th class="text-left">Status</th>
+                <th class="text-left">Created By</th>
                 <th class="text-right">Due Date</th>
             </tr>
 
@@ -72,7 +80,10 @@
                     class="border-b hover:bg-blue-700 hover:text-white focus:outline-none focus:ring-0 focus:bg-gray-200 focus:text-gray-600 transition duration-500 cursor-pointer"
                     on:click={() => push("/tasks/" + task.id)}>
                     <td class="font-semibold p-2">{task.title}</td>
-                    <td>{task.assigned_to ?? ''}</td>
+                    <td>{task.assigned_staff_name ?? ''}</td>
+                    <td>{task.priority ? formatPrettyName(task.priority) : ''}</td>
+                    <td>{task.status ? formatPrettyName(task.status) : ''}</td>
+                    <td>{task.creator_name}</td>
                     <td class="text-right">{formatDate(task.due_date) ?? ''}</td>
                 </tr>
             {/each}

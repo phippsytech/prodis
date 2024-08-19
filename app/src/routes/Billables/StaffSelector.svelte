@@ -5,6 +5,7 @@
 
     export let staff_id = null;
     export let readOnly = false;
+    export let label = "Staff";
 
     let staff = [];
     let staffList = [];
@@ -54,7 +55,7 @@
 <FloatingSelect
     on:change
     bind:value={staff_id}
-    label="Staff"
+    label={label}
     instruction="Choose staffer"
     options={staffList}
     {readOnly}

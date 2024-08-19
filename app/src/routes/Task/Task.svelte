@@ -1,12 +1,11 @@
 <script>
 	import Container from "@shared/Container.svelte";
 	import FloatingDate from "@shared/PhippsyTech/svelte-ui/forms/FloatingDate.svelte";
-	import FloatingTime from "@shared/PhippsyTech/svelte-ui/forms/FloatingTime.svelte";
 	import FloatingInput from "@shared/PhippsyTech/svelte-ui/forms/FloatingInput.svelte";
-	import FloatingTextArea from "@shared/PhippsyTech/svelte-ui/forms/FloatingTextArea.svelte";
+	import StaffSelector from "@app/routes/Billables/StaffSelector.svelte";
 	import FloatingSelect from "@shared/PhippsyTech/svelte-ui/forms/FloatingSelect.svelte";
 	import RTE from "@shared/RTE/RTE.svelte";
-	import { BreadcrumbStore, StafferStore } from "@shared/stores.js";
+	import { BreadcrumbStore, UserStore } from "@shared/stores.js";
 	import { jspa } from "@shared/jspa.js";
 	import { toastSuccess, toastError } from "@shared/toastHelper.js";
 	import { formatDate } from "@shared/utilities.js";
@@ -18,16 +17,19 @@
 	import Comment from "../Tickets/Activity/Assignment.svelte";
 	import Time from "../Tickets/Activity/Assignment.svelte";
 
+	// props
+	export let params;
+
 	// Page metadata
 	document.title = "View Task";
 	BreadcrumbStore.set({
 		path: [{ url: "/tasks", name: "Tasks" }, { name: "View Task" }],
 	});
-
-
-	export let params;
+	
+	$: userStore = $UserStore;
 
 	let task_id = params.task_id;
+	
 
 	let isEditingDescription = false;
 	let isEditingTitle = false;
@@ -73,10 +75,24 @@
 	}
 
 	function updateTask(task) {
+		
 		if (task) {
+			// update in_progress_at and in_progress_by if status is changed to in_progress
+			if (task.status === 'in_progress' && stored_task.status != task.status) {
+				const now = new Date();
+				const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+
+				task.in_progress_at = formattedDate;
+				task.in_progress_by = userStore.id;
+			}
+
+			if (stored_task.assigned_to != task.assigned_to) {
+				task.assigned_by = userStore.id;
+			}
+
 			jspa("/Task", "updateTask", task)
 				.then((result) => {
-					task = result.result;
+					//task = result.result;
 
 					// toast messages
 					if (isEditingTitle) {
@@ -89,7 +105,6 @@
 
 					isEditingDescription = false;
 					isEditingTitle = false;
-					console.log(task);
 					
 				})
 				.catch((error) => {
@@ -105,7 +120,7 @@
 
 	let show = false;
     $: {
-        if (task?.title != stored_task?.title || task?.description != stored_task?.description || task?.status != stored_task?.status) {
+        if (task?.title != stored_task?.title || task?.description != stored_task?.description || task?.status != stored_task?.status || task?.due_date != stored_task?.due_date || task?.assigned_to != stored_task?.assigned_to || task?.priority != stored_task?.priority) {
 			show = true;
 		} else {
 			show = false;
@@ -157,30 +172,30 @@
 				{/if}
 				<p class="mt-2 text-sm text-gray-500">
 					#{task.id} Created by
-					<a href="/#/" class="font-medium text-gray-900">{task.created_by}</a>
-					on {formatDate(task.created_date)} at {task.created_time}
+					<a href="/#/" class="font-medium text-gray-900">{task.creator}</a>
+					on {task.created}
 				</p>
 			</div>
 		</div>
 		<aside class="my-4">
 		<h2 class="sr-only">Details</h2>
-		<div class="flex flex-col space-y-1 sm:flex-row sm:justify-between">
+		<div class="flex flex-col space-y-1 sm:flex-row sm:justify-between border-b border-gray-200 py-2">
 			<div class="flex items-center space-x-2">
-			<svg
-				class="h-5 w-5 text-green-500"
-				viewBox="0 0 20 20"
-				fill="currentColor"
-				aria-hidden="true"
-			>
-				<path
-				fill-rule="evenodd"
-				d="M14.5 1A4.5 4.5 0 0010 5.5V9H3a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-1.5V5.5a3 3 0 116 0v2.75a.75.75 0 001.5 0V5.5A4.5 4.5 0 0014.5 1z"
-				clip-rule="evenodd"
-				/>
-			</svg>
-			<FloatingSelect label="Status" bind:value={task.status} options={status_options} />
+				<svg
+					class="h-5 w-5 text-green-500"
+					viewBox="0 0 20 20"
+					fill="currentColor"
+					aria-hidden="true"
+				>
+					<path
+					fill-rule="evenodd"
+					d="M14.5 1A4.5 4.5 0 0010 5.5V9H3a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-1.5V5.5a3 3 0 116 0v2.75a.75.75 0 001.5 0V5.5A4.5 4.5 0 0014.5 1z"
+					clip-rule="evenodd"
+					/>
+				</svg>
+				<FloatingSelect label="Status" bind:value={task.status} options={status_options} />
 			</div>
-			<div class="flex items-center space-x-2">
+			<div class="flex items-center space-x-2 ">
 				<svg
 					class="h-5 w-5 text-gray-400"
 					viewBox="0 0 20 20"
@@ -196,36 +211,9 @@
 				<span class="text-sm font-medium text-gray-900">4 comments</span>
 			</div>
 			<div class="flex items-center space-x-2">
-				<svg
-					class="h-5 w-5 text-gray-400"
-					viewBox="0 0 20 20"
-					fill="currentColor"
-					aria-hidden="true"
-				>
-					<path
-					fill-rule="evenodd"
-					d="M5.75 2a.75.75 0 01.75.75V4h7V2.75a.75.75 0 011.5 0V4h.25A2.75 2.75 0 0118 6.75v8.5A2.75 2.75 0 0115.25 18H4.75A2.75 2.75 0 012 15.25v-8.5A2.75 2.75 0 014.75 4H5V2.75A.75.75 0 015.75 2zm-1 5.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h10.5c.69 0 1.25-.56 1.25-1.25v-6.5c0-.69-.56-1.25-1.25-1.25H4.75z"
-					clip-rule="evenodd"
-					/>
-				</svg>
-				<span class="text-sm font-medium text-gray-900"
-					>Due {formatDate(task.due_date)} at {task.due_time}</span
-				>
-			</div>
-		</div>
-		<div class="mt-4 border-b border-t border-gray-200 py-2">
-			<div>
-				<!-- should be 1 person -->
-				<h2 class="text-sm font-medium text-gray-500">Assignee</h2>
-				<ul role="list" class="mt-1 space-y-1">
-					<li class="flex justify-start">
-						<a href="/#/" class="flex items-center space-x-3">
-							<div class="text-sm font-medium text-gray-900">
-							{task.assigned_to}
-							</div>
-						</a>
-					</li>
-				</ul>
+				<FloatingSelect label="Status" bind:value={task.priority} options={priority_options} />
+				<StaffSelector label="Assignee" bind:staff_id={task.assigned_to} />
+				<FloatingDate label="Due Date" bind:value={task.due_date} />
 			</div>
 		</div>
 		</aside>

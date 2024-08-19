@@ -21,15 +21,11 @@
         path: [{ url: "/tasks", name: "Tasks" }, { name: "Add Task" }]
     });
 
-    let task = {        
-        title:"",
-        description:""
-    };
-
     const INITIAL_TASK_STATE = {
         id: null,
         title:"",
         description:"",
+        user_id: null,
         status: "pending",
         priority: "normal",
         assigned_to: null,
