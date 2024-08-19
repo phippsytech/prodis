@@ -15,8 +15,8 @@ class TaskController extends BaseController
         $this->controller = [
             'addTask' => [new Task, 'create', true, []],
             'updateTask' => [new Task, 'update', true, []],
-            'listTasks' => [new ListTasks, null, true, []],
             'getTask' => [new GetTask, null, true, []],
+            'listTasks' => [new ListTasks, null, true, []],
             // 'archiveTask' => [new Task, 'archive', true, []],
             // 'restoreTask' => [new Task, 'restore', true, []],
         ];
