@@ -21,6 +21,11 @@ RUN pecl install mongodb redis \
 # Enable pcntl extension
 RUN docker-php-ext-install pcntl
 
+# Set PHP configuration
+# RUN echo "memory_limit=512M" >> /usr/local/etc/php/conf.d/custom.ini && \
+#     echo "post_max_size=50M" >> /usr/local/etc/php/conf.d/custom.ini && \
+#     echo "upload_max_filesize=50M" >> /usr/local/etc/php/conf.d/custom.ini
+
 # Set the working directory
 WORKDIR /var/www/prodis
 

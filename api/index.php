@@ -14,6 +14,12 @@ use React\Socket\Server as SocketServer;
 use RedBeanPHP\R;
 use Respect\Validation\Factory;
 use Slim\Factory\AppFactory;
+use Slim\Psr7\Factory\StreamFactory;
+
+use React\Http\Middleware\StreamingRequestMiddleware;
+use React\Http\Middleware\LimitConcurrentRequestsMiddleware;
+use React\Http\Middleware\RequestBodyBufferMiddleware;
+use React\Http\Middleware\RequestBodyParserMiddleware;
 
 require '/var/www/prodis/init.php';
 
@@ -168,11 +174,15 @@ $app->post('/Xero/Payroll/Migrate', new ControllerFactory(\NDISmate\Xero\Payroll
 $DOMAIN = API_DOMAIN;
 $PORT = 8080;
 
-
-// $CERT_PATH = '/etc/letsencrypt/live/' . $DOMAIN;
+// // Middleware components
+$streamingMiddleware = new StreamingRequestMiddleware();
+$limitMiddleware = new LimitConcurrentRequestsMiddleware(100); // 100 concurrent requests
+$bufferMiddleware = new RequestBodyBufferMiddleware(16 * 1024 * 1024); // Max 16 MiB per request
+$parserMiddleware = new RequestBodyParserMiddleware();
 
 // Create ReactPHP HTTP server
-$server = new ReactServer(function (Request $request) use ($app) {
+$server = new ReactServer($streamingMiddleware,$limitMiddleware,$bufferMiddleware,$parserMiddleware,function (Request $request) use ($app) {
+
     try {
         $slimResponse = $app->handle($request);
         return new ReactResponse(
@@ -190,27 +200,11 @@ $server = new ReactServer(function (Request $request) use ($app) {
     }
 });
 
-
-// Create socket server without SSL
+// Create socket server
 $socket = new SocketServer('0.0.0.0:' . $PORT);
 
 // Start the ReactPHP server
 $server->listen($socket);
-
-
-// // Create socket server
-// $socket = new SocketServer('0.0.0.0:' . $HTTPS_PORT);
-
-// // Secure the socket server
-// $secureSocket = new SecureServer($socket, null, [
-//     'local_cert' => $CERT_PATH . '/fullchain.pem',
-//     'local_pk' => $CERT_PATH . '/privkey.pem',
-//     'allow_self_signed' => false,
-//     'verify_peer' => false,
-// ]);
-
-// // Start the ReactPHP server
-// $server->listen($secureSocket);
 
 // Set up a periodic timer to keep the database connection alive
 $interval = 300;  // Interval in seconds (e.g., every 5 minutes)
