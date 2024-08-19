@@ -26,6 +26,8 @@
     }
 
     function hoursPerWeek(allocatedHours, startDate, endDate) {
+        // is the allocated hours saved in minutes in the database?
+
         console.log(service);
         console.log("service budget start date " + service.budget_start_date);
         console.log(
@@ -44,8 +46,11 @@
 
         console.log("allocated hours " + allocatedHours);
 
+        // get the daily hours
         const dailyHours = allocatedHours / daysDifference;
         console.log("daily hours " + dailyHours);
+
+        // total hours per week
         const result = dailyHours * 7;
         console.log(result);
         return result;
