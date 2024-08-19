@@ -7,6 +7,18 @@ secrets:
     file: ./app.conf
 
 services:
+  admin:
+    secrets:
+      - source: app_env_file
+        target: /app/app.conf
+    volumes:
+      - ./admin:/app
+      - ./shared:/app/shared
+      - /admin/node_modules
+    restart: unless-stopped
+    networks:
+      - my_network
+
   app:
     # ports:
     #   - "5173:5173"

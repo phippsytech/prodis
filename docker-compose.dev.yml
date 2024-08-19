@@ -1,6 +1,27 @@
 version: '3.8'
 
 services:
+  admin:
+    container_name: prodis-${DEVELOPER_NAME}-admin
+    build:
+      context: .
+      dockerfile: Dockerfile.admin
+      labels:
+        - "maintainer=${DEVELOPER_NAME}"
+    image: prodis-${DEVELOPER_NAME}-admin:latest
+    environment:
+      - NODE_ENV=development
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.prodis-${DEVELOPER_NAME}-admin.service=prodis-${DEVELOPER_NAME}-admin"
+      - "traefik.http.routers.prodis-${DEVELOPER_NAME}-admin.rule=Host(`admin.prodis.${DEVELOPER_NAME}.phippsy.tech`)"
+      - "traefik.http.routers.prodis-${DEVELOPER_NAME}-admin.entrypoints=websecure"
+      - "traefik.http.routers.prodis-${DEVELOPER_NAME}-admin.tls.certresolver=myresolver"
+      - "traefik.http.services.prodis-${DEVELOPER_NAME}-admin.loadbalancer.server.port=5173"
+      # - "traefik.http.routers.prodis-${DEVELOPER_NAME}-admin.middlewares=error-pages@docker"
+
+
+
   app:
     container_name: prodis-${DEVELOPER_NAME}-app
     build:

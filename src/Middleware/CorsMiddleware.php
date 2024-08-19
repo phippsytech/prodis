@@ -60,15 +60,23 @@ class CorsMiddleware
             'https://my.prodis.app',
             'https://demo.prodis.app',
             'https://crystelcare.prodis.app',
-            'https://app.prodis.staging.phippsy.tech',
+            
             'https://crm.crystelcare.com.au',
             'https://crystelcare.com.au',
             
+            // Developers
             'https://app.prodis.phippsy.phippsy.tech',
             'https://app.prodis.santos.phippsy.tech',
             'https://app.prodis.babasa.phippsy.tech',
             'https://app.prodis.pabustan.phippsy.tech',
+            'https://admin.prodis.phippsy.phippsy.tech',
+            'https://admin.prodis.santos.phippsy.tech',
+            'https://admin.prodis.babasa.phippsy.tech',
+            'https://admin.prodis.pabustan.phippsy.tech',
 
+            // Staging
+            'https://app.prodis.staging.phippsy.tech',
+            'https://admin.prodis.staging.phippsy.tech',
             
         ]) || $this->anon) {
             $origin = $http_origin;

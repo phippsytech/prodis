@@ -1,0 +1,17 @@
+{
+  "name": "Prodis Admin",
+  "short_name": "Admin",
+  "description": "",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "fullscreen": "true",
+  "icons": [
+    {
+      "src": "NDISmate-icon.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml"
+    }
+  ]
+}
