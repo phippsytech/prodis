@@ -8,13 +8,13 @@ class ListKMsByStaffId
 {
     function __invoke($data)
     {
-        $sql = 'SELECT 
+        $sql = "SELECT 
             SUM(kms) AS kms
         FROM trips
         WHERE trip_date BETWEEN :start_date AND :end_date
         AND staff_id = :staff_id
-        AND (vehicle_type="private" or vehicle_type is null)
-        GROUP BY staff_id';
+        AND (vehicle_type='private' or vehicle_type is null)
+        GROUP BY staff_id";
 
         $params = [':start_date' => $data['start_date'], ':end_date' => $data['end_date'], ':staff_id' => $data['staff_id']];
 
