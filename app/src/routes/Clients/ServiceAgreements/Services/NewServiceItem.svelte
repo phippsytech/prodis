@@ -55,10 +55,56 @@
         const dailyHours = allocatedHours / totalDaysInTheServiceDateRange;
         console.log("daily hours " + dailyHours);
 
+        getRemainingWeeks(startDate, endDate);
+
         // Calculate total hours per week
         const result = dailyHours * 7;
         console.log(result);
         return result;
+    }
+
+    function getRemainingWeeks(startDate, endDate) {
+        // Parse the dates
+        const start = new Date(startDate).getTime();
+        const end = new Date(endDate).getTime();
+        const current = new Date("2024-08-16").getTime();
+
+        //Ensure the current date is within the interval
+        if (current < start || current > end) {
+            console.log("Current date is outside the service interval.");
+            return 0;
+        }
+
+        // Calculate the total duration of the interval in milliseconds
+        const totalDurationInMs = end - start;
+        // Calculate the remaining duration in milliseconds
+        const remainingDurationInMs = end - current;
+
+        const remainingDurationInDays = Math.floor(
+            remainingDurationInMs / (1000 * 60 * 60 * 24),
+        );
+
+        // Calculate weeks
+        const remainingWeeks = Math.floor(remainingDurationInDays / 7);
+
+        console.log("remaining weeks: " + remainingWeeks);
+
+        return remainingWeeks;
+    }
+
+    function totalRemainingBudgetInMinutes() {
+        const minutesSpent = (service.spent / service.rate) * 60;
+
+        console.log("minutes Spent: " + minutesSpent);
+
+        const totalBudgetInHours = service.budget / service.rate;
+        let totalBudgetInMinutes = totalBudgetInHours * 60;
+
+        totalBudgetInMinutes -= minutesSpent;
+
+        console.log("total budget in minutes: " + totalBudgetInMinutes);
+
+        return totalBudgetInMinutes;
     }
 </script>
 
@@ -82,14 +128,10 @@
                             {#if hoursPerWeek(service.remainingMinutes / 60, new Date(), new Date(service_agreement.service_agreement_end_date)) > 1}
                                 <span class="text-xs text-slate-400 ml-1">
                                     ({@html convertMinutesToHoursAndMinutes(
-                                        hoursPerWeek(
-                                            (service.budget / service.rate) *
-                                                60,
-                                            new Date(),
-                                            new Date(
-                                                service_agreement.service_agreement_end_date,
-                                            ),
-                                        ),
+                                        getRemainingWeeks(
+                                            service.budget_start_date,
+                                            service_agreement.service_agreement_end_date,
+                                        ) / totalRemainingBudgetInMinutes(),
                                     )} / wk )
                                 </span>
                             {/if}
@@ -97,7 +139,7 @@
                             <span class="italic text-xs text-slate-400">
                                 ({@html convertMinutesToHoursAndMinutes(
                                     hoursPerWeek(
-                                        service.totalServiceDuration / 60,
+                                        (service.budget / service.rate) * 60,
                                         new Date(
                                             service_agreement.service_agreement_signed_date,
                                         ),
