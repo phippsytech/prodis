@@ -26,14 +26,14 @@ class DoPayrun
         // $staff_id = $data['staff_id'];
         // }
 
-        $query = 'SELECT 
+        $query = "SELECT 
             id as staff_id,
             xero_employee_ref        
             FROM staffs
-            WHERE xero_employee_ref IS NOT NULL AND xero_employee_ref <> ""
-            AND xero_employee_ref IN (' . $xero_employee_refs_string . ')
+            WHERE xero_employee_ref IS NOT NULL AND xero_employee_ref <> ''
+            AND xero_employee_ref IN (" . $xero_employee_refs_string . ")
             AND (archived is null or archived!=1)
-            ';
+            ";
 
         $params = [];
 
