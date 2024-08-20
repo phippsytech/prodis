@@ -8,14 +8,14 @@ class ListPPTByStaffId
 {
     function __invoke($data, $employee, $payslip_data = [])
     {
-        $staffer = R::getRow('SELECT 
+        $staffer = R::getRow("SELECT 
             ordinary_hours_rate,
             hours_per_week, 
             employment_basis,
             paygrade_id 
             FROM staffs 
-            WHERE employment_basis in ("SALARY", "FULLTIME", "PARTTIME")
-            AND id=:staff_id', [
+            WHERE employment_basis in ('SALARY', 'FULLTIME', 'PARTTIME')
+            AND id=:staff_id", [
             ':staff_id' => $data['staff_id']
         ]);
 
