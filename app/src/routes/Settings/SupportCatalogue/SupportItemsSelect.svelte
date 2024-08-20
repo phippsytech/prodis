@@ -37,7 +37,7 @@
               updateInternalValue();
           })
           .catch((error) => {
-              console.error("Error fetching support items:", error);
+              //console.error("Error fetching support items:", error);
           });
   });
 
@@ -92,7 +92,7 @@
       updateInternalValue();
   }
 
-  // wandle when the user blurs the select dropdown
+  // handle when the user blurs the select dropdown
   function handleBlur() {
       if (internalValue && internalValue.value !== value) {
           value = internalValue.value;
