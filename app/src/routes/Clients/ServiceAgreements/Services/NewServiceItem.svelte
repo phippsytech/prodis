@@ -85,6 +85,7 @@
         );
 
         // Calculate weeks
+        //TODO: clarify: what if the remaining week is 0 or 0.1 ?
         const remainingWeeks = Math.floor(remainingDurationInDays / 7);
 
         console.log("remaining weeks: " + remainingWeeks);
@@ -128,10 +129,11 @@
                             {#if hoursPerWeek(service.remainingMinutes / 60, new Date(), new Date(service_agreement.service_agreement_end_date)) > 1}
                                 <span class="text-xs text-slate-400 ml-1">
                                     ({@html convertMinutesToHoursAndMinutes(
-                                        getRemainingWeeks(
-                                            service.budget_start_date,
-                                            service_agreement.service_agreement_end_date,
-                                        ) / totalRemainingBudgetInMinutes(),
+                                        totalRemainingBudgetInMinutes() /
+                                            getRemainingWeeks(
+                                                service.budget_start_date,
+                                                service_agreement.service_agreement_end_date,
+                                            ),
                                     )} / wk )
                                 </span>
                             {/if}
