@@ -80,13 +80,12 @@
         // Calculate the remaining duration in milliseconds
         const remainingDurationInMs = end - current;
 
-        const remainingDurationInDays = Math.floor(
-            remainingDurationInMs / (1000 * 60 * 60 * 24),
-        );
+        const remainingDurationInDays =
+            remainingDurationInMs / (1000 * 60 * 60 * 24);
 
         // Calculate weeks
         //TODO: clarify: what if the remaining week is 0 or 0.1 ?
-        const remainingWeeks = Math.floor(remainingDurationInDays / 7);
+        const remainingWeeks = remainingDurationInDays / 7;
 
         console.log("remaining weeks: " + remainingWeeks);
 
