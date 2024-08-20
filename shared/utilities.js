@@ -94,6 +94,35 @@ export function formatDate(str_date, options = {
     return date.toLocaleDateString("en-UK", options);
 }
 
+export function formatDateTime(
+    str_date,
+    options = {
+        day: "numeric",
+        month: "short", // short, numeric
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+    },
+) {
+    if (options.year == null) delete options.year;
+
+    if (!str_date) return null;
+    let [datePart, timePart] = str_date.split("T");
+    let [year, month, day] = datePart.split("-");
+    let date = new Date(
+        parseInt(year, 10),
+        parseInt(month, 10) - 1,
+        parseInt(day, 10),
+    );
+
+    if (timePart) {
+        let [hour, minute] = timePart.split(":");
+        date.setHours(parseInt(hour, 10), parseInt(minute, 10));
+    }
+
+    return date.toLocaleDateString("en-UK", options);
+}
+
 
 export function getDaysUntilDate(dateString) {
     const today = new Date();
