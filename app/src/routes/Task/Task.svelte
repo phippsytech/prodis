@@ -1,14 +1,14 @@
 <script>
 	import Container from "@shared/Container.svelte";
-	import FloatingDate from "@shared/PhippsyTech/svelte-ui/forms/FloatingDate.svelte";
 	import FloatingInput from "@shared/PhippsyTech/svelte-ui/forms/FloatingInput.svelte";
+	import FloatingDateTime from "@shared/PhippsyTech/svelte-ui/forms/FloatingDateTime.svelte";
 	import StaffSelector from "@app/routes/Billables/StaffSelector.svelte";
 	import FloatingSelect from "@shared/PhippsyTech/svelte-ui/forms/FloatingSelect.svelte";
 	import RTE from "@shared/RTE/RTE.svelte";
 	import { BreadcrumbStore, UserStore } from "@shared/stores.js";
 	import { jspa } from "@shared/jspa.js";
 	import { toastSuccess, toastError } from "@shared/toastHelper.js";
-	import { formatDate } from "@shared/utilities.js";
+	import { formatDateTime } from "@shared/utilities.js";
 	import AddComment from "./AddComment.svelte";
 	import { ActionBarStore } from "@app/Layout/BottomNav/stores.js";
 
@@ -42,8 +42,12 @@
 	let status_options = [
         { option: "Pending", value: "pending" },
         { option: "In Progress", value: "in_progress" },
-        { option: "Completed", value: "completed" },
-        { option: "Overdue", value: "overdue" }
+        { option: "Completed", value: "completed" }
+    ];
+
+	let status_options_user = [
+        { option: "Pending", value: "pending" },
+        { option: "In Progress", value: "in_progress" }
     ];
 
     let priority_options = [
@@ -79,15 +83,19 @@
 		if (task) {
 			// update in_progress_at and in_progress_by if status is changed to in_progress
 			if (task.status === 'in_progress' && stored_task.status != task.status) {
-				const now = new Date();
-				const formattedDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')} ${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+				const now = new Date().toISOString().slice(0, 19).replace("T", " ");
 
-				task.in_progress_at = formattedDate;
+				task.in_progress_at = now;
 				task.in_progress_by = userStore.id;
 			}
 
 			if (stored_task.assigned_to != task.assigned_to) {
 				task.assigned_by = userStore.id;
+			}
+			
+			// format due date when updating
+			if (task.due_date) {
+				task.due_date = task.due_date ? new Date(task.due_date).toISOString().slice(0, 19).replace("T", " ") : '';
 			}
 
 			jspa("/Task", "updateTask", task)
@@ -152,6 +160,7 @@
 						<h1 class="text-2xl font-fredoka-one-regular" style="color:#220055;">
 							{task.title}
 						</h1>
+						{#if userStore.id == task.user_id}
 						<button
 								on:click={() => isEditingTitle = true}
 							>
@@ -168,11 +177,12 @@
 								<path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
 							</svg>
 						</button>
+						{/if}
 					</div>
 				{/if}
 				<p class="mt-2 text-sm text-gray-500">
 					#{task.id} Created by
-					<a href="/#/" class="font-medium text-gray-900">{task.creator}</a>
+					<span class="font-medium text-gray-900">{task.creator?.name}</span>
 					on {task.created}
 				</p>
 			</div>
@@ -193,9 +203,9 @@
 					clip-rule="evenodd"
 					/>
 				</svg>
-				<FloatingSelect label="Status" bind:value={task.status} options={status_options} />
+				<FloatingSelect label="Status" bind:value={task.status} options={userStore.id != task.user_id ? status_options_user : status_options} />
 			</div>
-			<div class="flex items-center space-x-2 ">
+			<!-- <div class="flex items-center space-x-2 ">
 				<svg
 					class="h-5 w-5 text-gray-400"
 					viewBox="0 0 20 20"
@@ -209,11 +219,20 @@
 					/>
 				</svg>
 				<span class="text-sm font-medium text-gray-900">4 comments</span>
-			</div>
-			<div class="flex items-center space-x-2">
-				<FloatingSelect label="Status" bind:value={task.priority} options={priority_options} />
-				<StaffSelector label="Assignee" bind:staff_id={task.assigned_to} />
-				<FloatingDate label="Due Date" bind:value={task.due_date} />
+			</div> -->
+			<div class="flex items-center gap-4">
+				<!-- <FloatingSelect label="Status" bind:value={task.priority} options={priority_options} /> -->
+				{#if userStore.id == task.user_id}
+					<StaffSelector label="Assignee" bind:staff_id={task.assigned_to} />
+				{:else}
+					<div class="flex flex-col">
+						<div class="text-sm font-medium text-gray-900">
+							Assignee: 
+					</div>
+						{task.assigned_to ?? 'Unassigned'}
+					</div>
+				{/if}
+				<FloatingDateTime label="Due Date" bind:value={task.due_date}  readOnly="{userStore.id == task.user_id ? false : true}"/>
 			</div>
 		</div>
 		</aside>
@@ -221,9 +240,10 @@
 			<h2 class="sr-only">Description</h2>
 			<div class="max-w-none group">
 				{#if isEditingDescription}
-					<RTE height="250" bind:content={task.description} />
+					<RTE bind:content={task.description} />
 				{:else}
 					{@html task.description}
+					{#if userStore.id == task.user_id}
 					<button
 						class="ml-2"
 						on:click={() => isEditingDescription = true}
@@ -241,6 +261,7 @@
 							<path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
 						</svg>
 					</button>
+					{/if}
 				{/if}
 			</div>
 		</div>

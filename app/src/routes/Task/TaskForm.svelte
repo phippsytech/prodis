@@ -41,8 +41,7 @@
     let status_options = [
         { option: "Pending", value: "pending" },
         { option: "In Progress", value: "in_progress" },
-        { option: "Completed", value: "completed" },
-        { option: "Overdue", value: "overdue" }
+        { option: "Completed", value: "completed" }
     ];
 
     let priority_options = [
@@ -72,7 +71,7 @@
                 .then((result) => {
                     task = result.result;
                     toastSuccess("Task added");
-
+                    push('/tasks');
                 })
                 .catch((error) => {
                     let error_message = error.error_message;
@@ -118,14 +117,11 @@
     type="text"
     bind:value={task.description}
 />
-
 {#if task.id != null}
     <div class="flex gap-2">
         <FloatingDate label="Due Date" bind:value={task.due_date} />
         <FloatingSelect label="Status" bind:value={task.status} options={status_options} />
         <FloatingSelect label="Priority" bind:value={task.priority} options={priority_options} />
-        <div class="w-1/3">
-            <StaffSelector bind:staff_id={task.assigned_to} />
-        </div>
     </div>
 {/if}
+<StaffSelector bind:staff_id={task.assigned_to} />

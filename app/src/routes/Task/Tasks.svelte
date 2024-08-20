@@ -3,7 +3,7 @@
     import { onMount } from "svelte";
     import Container from "@shared/Container.svelte";
     import { jspa } from "@shared/jspa.js";
-    import { formatDate } from "@shared/utilities.js";
+    import { formatDateTime } from "@shared/utilities.js";
     import { BreadcrumbStore, StafferStore } from "@shared/stores.js";
     import { push } from "svelte-spa-router";
     import createStore from "@shared/createStore";
@@ -84,7 +84,7 @@
                     <td>{task.priority ? formatPrettyName(task.priority) : ''}</td>
                     <td>{task.status ? formatPrettyName(task.status) : ''}</td>
                     <td>{task.creator_name}</td>
-                    <td class="text-right">{formatDate(task.due_date) ?? ''}</td>
+                    <td class="text-right">{formatDateTime(task.due_date) ?? ''}</td>
                 </tr>
             {/each}
         </table>
