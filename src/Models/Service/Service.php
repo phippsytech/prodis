@@ -20,6 +20,7 @@ class Service extends NewCustomModel
             // 'travel_allowance' => [v::stringType()],  // Max allowable travel for service (between 0 and 30 minutes)
             // 'record_travelled_kilometers' => [v::boolVal()],
             'budget_display' => [v::optional(v::stringType())],  // total, weekly
+            'status' => [v::optional(v::stringType())] // current, expired
         ];
     }
 }
