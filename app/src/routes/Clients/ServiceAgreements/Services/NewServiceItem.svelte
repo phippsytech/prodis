@@ -69,7 +69,7 @@
         // Parse the dates
         const start = new Date(startDate).getTime();
         const end = new Date(endDate).getTime();
-        const current = new Date("2024-08-16").getTime();
+        const current = new Date().getTime();
 
         //Ensure the current date is within the interval
         if (current < start || current > end) {
@@ -104,9 +104,27 @@
 
         totalBudgetInMinutes -= minutesSpent;
 
+        if (service.spend_status && service.spend_status < 0) {
+            console.log("over budget " + service.spend_status);
+
+            totalBudgetInMinutes -= Math.abs(service.spend_status);
+        }
+
         console.log("total budget in minutes: " + totalBudgetInMinutes);
 
         return totalBudgetInMinutes;
+    }
+
+    function getAdjustedWeeklyTime(startDate, endDate) {
+        const remainingMinutes = totalRemainingBudgetInMinutes();
+
+        const remainingWeeks = getRemainingWeeks(startDate, endDate);
+
+        const adjustedWeeklyTime = remainingMinutes / remainingWeeks;
+
+        console.log("adjusted weekly time: " + adjustedWeeklyTime);
+
+        return adjustedWeeklyTime;
     }
 </script>
 
@@ -130,11 +148,12 @@
                             {#if hoursPerWeek(service.remainingMinutes / 60, new Date(), new Date(service_agreement.service_agreement_end_date)) > 1}
                                 <span class="text-xs text-slate-400 ml-1">
                                     ({@html convertMinutesToHoursAndMinutes(
-                                        totalRemainingBudgetInMinutes() /
-                                            getRemainingWeeks(
-                                                service.budget_start_date,
+                                        getAdjustedWeeklyTime(
+                                            new Date(service.budget_start_date),
+                                            new Date(
                                                 service_agreement.service_agreement_end_date,
                                             ),
+                                        ),
                                     )} / wk )
                                 </span>
                             {/if}
