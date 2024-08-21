@@ -33,8 +33,10 @@
         );
 
         // Initialize start and end dates
-        startDate = new Date(service.budget_start_date);
-        endDate = new Date(service_agreement.service_agreement_end_date);
+        startDate = startDate ? startDate : new Date(service.budget_start_date);
+        endDate = endDate
+            ? endDate
+            : new Date(service_agreement.service_agreement_end_date);
 
         // Get the difference in time (in milliseconds)
         const timeInterval = endDate.getTime() - startDate.getTime();
