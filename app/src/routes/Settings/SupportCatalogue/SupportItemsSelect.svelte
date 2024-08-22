@@ -2,6 +2,7 @@
   import { onMount, afterUpdate } from "svelte";
   import { jspa } from "@shared/jspa.js";
   import Select from "svelte-select";
+  import ErrorMessage from "@shared/PhippsyTech/svelte-ui/ErrorMessage.svelte";
 
   export let value;
   export let location;
@@ -16,6 +17,12 @@
   let internalValue = null;
   let filterText = "";
   let select; // reference to the select component
+
+  let disabled = false;
+  let placeholderText = "Select or type NDIS Support Item ...";
+
+  let showError = false;
+  let errorMessage = "";
 
   // Fetch support items and populate the option list
   onMount(() => {
@@ -47,8 +54,13 @@
           if (matchedItem) {
               internalValue = matchedItem;
               setSupportItem(matchedItem.value);
+              disabled = false;
           } else {
               internalValue = null; // reset internalValue
+              disabled = true;
+              errorMessage = "Support item for this service might be expired or inactive";
+              placeholderText = "";
+              showError = true;
           }
       }
   }
@@ -118,8 +130,9 @@
       bind:filterText
       on:blur={handleBlur}
       {items}
-      placeholder="Select or type NDIS Support Item ..."
+      placeholder={placeholderText}
       hideEmptyState
+      {disabled}
   >
       <div slot="item" let:item>
           {item.label}
@@ -127,6 +140,13 @@
   </Select>
 </div>
 
-<div class="text-xs bg-indigo-50 text-gray-500 px-3 py-1 rounded-b-md mb-2">
-  Tip: Start typing to search for NDIS Support Item
-</div>
+{#if showError}
+  <ErrorMessage
+    message={errorMessage}
+    visible={showError}
+  />
+{:else}
+  <div class="text-xs bg-indigo-50 text-gray-500 px-3 py-1 rounded-b-md mb-2">
+    Tip: Start typing to search for NDIS Support Item
+  </div>
+{/if}
