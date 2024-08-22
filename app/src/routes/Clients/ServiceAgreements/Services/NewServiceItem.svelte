@@ -34,6 +34,7 @@
 
         // Initialize start and end dates
         startDate = startDate ? startDate : new Date(service.budget_start_date);
+
         endDate = endDate
             ? endDate
             : new Date(service_agreement.service_agreement_end_date);
@@ -57,11 +58,11 @@
         const dailyHours = allocatedHours / totalDaysInTheServiceDateRange;
         console.log("daily hours " + dailyHours);
 
-        getRemainingWeeks(startDate, endDate);
-
         // Calculate total hours per week
-        const result = dailyHours * 7;
-        console.log(result);
+        let result = dailyHours * 7;
+
+        console.log("weekly hour " + result);
+        console.log("weekly hour in minutes " + result * 60);
         return result;
     }
 
@@ -77,8 +78,6 @@
             return 0;
         }
 
-        // Calculate the total duration of the interval in milliseconds
-        const totalDurationInMs = end - start;
         // Calculate the remaining duration in milliseconds
         const remainingDurationInMs = end - current;
 
@@ -86,7 +85,6 @@
             remainingDurationInMs / (1000 * 60 * 60 * 24);
 
         // Calculate weeks
-        //TODO: clarify: what if the remaining week is 0 or 0.1 ?
         const remainingWeeks = remainingDurationInDays / 7;
 
         console.log("remaining weeks: " + remainingWeeks);
@@ -115,7 +113,7 @@
         return totalBudgetInMinutes;
     }
 
-    function getAdjustedWeeklyTime(startDate, endDate) {
+    function getAdjustedWeeklyTimeInMinutes(startDate, endDate) {
         const remainingMinutes = totalRemainingBudgetInMinutes();
 
         const remainingWeeks = getRemainingWeeks(startDate, endDate);
@@ -145,10 +143,10 @@
                         </span>
 
                         {#if service.adjust_weekly_time}
-                            {#if hoursPerWeek(service.remainingMinutes / 60, new Date(), new Date(service_agreement.service_agreement_end_date)) > 1}
+                            {#if hoursPerWeek(service.remainingMinutes / 60, new Date(), new Date(service_agreement.service_agreement_end_date)) != 0}
                                 <span class="text-xs text-slate-400 ml-1">
                                     ({@html convertMinutesToHoursAndMinutes(
-                                        getAdjustedWeeklyTime(
+                                        getAdjustedWeeklyTimeInMinutes(
                                             new Date(service.budget_start_date),
                                             new Date(
                                                 service_agreement.service_agreement_end_date,
@@ -161,14 +159,14 @@
                             <span class="italic text-xs text-slate-400">
                                 ({@html convertMinutesToHoursAndMinutes(
                                     hoursPerWeek(
-                                        (service.budget / service.rate) * 60,
+                                        service.budget / service.rate,
                                         new Date(
                                             service_agreement.service_agreement_signed_date,
                                         ),
                                         new Date(
                                             service_agreement.service_agreement_end_date,
                                         ),
-                                    ),
+                                    ) * 60,
                                 )} / wk)
                             </span>
                         {/if}
