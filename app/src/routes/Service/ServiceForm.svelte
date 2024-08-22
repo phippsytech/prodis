@@ -119,22 +119,6 @@
     hideValidation={true}
 />
 
-<FloatingSelect
-    bind:value={service.status}    
-    label="Status"
-    instruction="Choose Status"
-    options={[
-        {
-            option: "Current",
-            value: "current",
-        },
-        {
-            option: "Expired",
-            value: "expired",
-        },
-    ]}
-    hideValidation={true}
-/>
 
 <!-- <Toggle
     bind:value={service.record_travelled_kilometers}
