@@ -45,6 +45,8 @@
           })
           .catch((error) => {
               //console.error("Error fetching support items:", error);
+              errorMessage = "No support items found";
+              showError = true;
           });
   });
 
