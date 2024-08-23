@@ -11,6 +11,7 @@
 	import { formatDateTime } from "@shared/utilities.js";
 	import AddComment from "./AddComment.svelte";
 	import { ActionBarStore } from "@app/Layout/BottomNav/stores.js";
+	import { push } from "svelte-spa-router";
 
 	//   temporary static components
 	import Assignment from "../Tickets/Activity/Assignment.svelte";
@@ -78,13 +79,12 @@
 			});
 	}
 
-	function updateTask(task) {
+	function updateTask(task, isArchive = false, action = 'update') {
 		
 		if (task) {
 			// update in_progress_at and in_progress_by if status is changed to in_progress
 			if (task.status === 'in_progress' && stored_task.status != task.status) {
 				const now = new Date().toISOString().slice(0, 19).replace("T", " ");
-
 				task.in_progress_at = now;
 				task.in_progress_by = userStore.id;
 			}
@@ -98,21 +98,26 @@
 				task.due_date = task.due_date ? new Date(task.due_date).toISOString().slice(0, 19).replace("T", " ") : '';
 			}
 
+			if (isArchive && action == 'archive') {
+				task.archived = true;
+			}
+
+			if (isArchive && action == 'restore') {
+				task.archived = false;
+			}
+
 			jspa("/Task", "updateTask", task)
 				.then((result) => {
 					//task = result.result;
 
-					// toast messages
-					if (isEditingTitle) {
-						toastSuccess("Title updated successfully");
-					} else if (isEditingDescription) {
-						toastSuccess("Description updated successfully");
-					} else {
-						toastSuccess("Status updated successfully");
-					}
-
 					isEditingDescription = false;
 					isEditingTitle = false;
+					if (isArchive) {
+						push('/tasks');
+						toastError("Task archived successfully");
+					} else {
+						toastSuccess("Task updated successfully");
+					}
 					
 				})
 				.catch((error) => {
@@ -147,14 +152,14 @@
 {#if task}
 <div class="mb-4">
 	<div>
-		<div class="md:flex md:items-center md:justify-between md:space-x-4 xl:border-b xl:pb-6">
+		<div class="xl:border-b xl:pb-6">
 			<div class="mt-2">
 				{#if isEditingTitle}
 					<FloatingInput
 						bind:value={task.title}
 						label="Title"
 						placeholder="Enter task title"
-						class="mt-2" />
+						class="mt-2 w-full" />
 				{:else}
 					<div class="flex">
 						<h1 class="text-2xl font-fredoka-one-regular" style="color:#220055;">
@@ -188,55 +193,55 @@
 			</div>
 		</div>
 		<aside class="my-4">
-		<h2 class="sr-only">Details</h2>
-		<div class="flex flex-col space-y-1 sm:flex-row sm:justify-between border-b border-gray-200 py-2">
-			<div class="flex items-center space-x-2">
-				<svg
-					class="h-5 w-5 text-green-500"
-					viewBox="0 0 20 20"
-					fill="currentColor"
-					aria-hidden="true"
-				>
-					<path
-					fill-rule="evenodd"
-					d="M14.5 1A4.5 4.5 0 0010 5.5V9H3a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-1.5V5.5a3 3 0 116 0v2.75a.75.75 0 001.5 0V5.5A4.5 4.5 0 0014.5 1z"
-					clip-rule="evenodd"
-					/>
-				</svg>
-				<FloatingSelect label="Status" bind:value={task.status} options={userStore.id != task.user_id ? status_options_user : status_options} />
+			<h2 class="sr-only">Details</h2>
+			<div class="flex flex-col space-y-1 sm:flex-row sm:justify-between border-b border-gray-200 py-2">
+				<div class="flex items-center space-x-2">
+					<svg
+						class="h-5 w-5 text-green-500"
+						viewBox="0 0 20 20"
+						fill="currentColor"
+						aria-hidden="true"
+					>
+						<path
+						fill-rule="evenodd"
+						d="M14.5 1A4.5 4.5 0 0010 5.5V9H3a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-1.5V5.5a3 3 0 116 0v2.75a.75.75 0 001.5 0V5.5A4.5 4.5 0 0014.5 1z"
+						clip-rule="evenodd"
+						/>
+					</svg>
+					<FloatingSelect label="Status" bind:value={task.status} options={userStore.id != task.user_id ? status_options_user : status_options} />
+				</div>
+				<!-- <div class="flex items-center space-x-2 ">
+					<svg
+						class="h-5 w-5 text-gray-400"
+						viewBox="0 0 20 20"
+						fill="currentColor"
+						aria-hidden="true"
+					>
+						<path
+						fill-rule="evenodd"
+						d="M10 2c-2.236 0-4.43.18-6.57.524C1.993 2.755 1 4.014 1 5.426v5.148c0 1.413.993 2.67 2.43 2.902.848.137 1.705.248 2.57.331v3.443a.75.75 0 001.28.53l3.58-3.579a.78.78 0 01.527-.224 41.202 41.202 0 005.183-.5c1.437-.232 2.43-1.49 2.43-2.903V5.426c0-1.413-.993-2.67-2.43-2.902A41.289 41.289 0 0010 2zm0 7a1 1 0 100-2 1 1 0 000 2zM8 8a1 1 0 11-2 0 1 1 0 012 0zm5 1a1 1 0 100-2 1 1 0 000 2z"
+						clip-rule="evenodd"
+						/>
+					</svg>
+					<span class="text-sm font-medium text-gray-900">4 comments</span>
+				</div> -->
+				<div class="flex items-center gap-4">
+					<!-- <FloatingSelect label="Status" bind:value={task.priority} options={priority_options} /> -->
+					{#if userStore.id == task.user_id}
+						<StaffSelector label="Assignee" bind:staff_id={task.assigned_to} />
+					{:else}
+						<div class="flex flex-col">
+							<div class="text-sm font-medium text-gray-900">
+								Assignee: 
+						</div>
+							{task.assignee.name ?? 'Unassigned'}
+						</div>
+					{/if}
+					<FloatingDateTime label="Due Date" bind:value={task.due_date}  readOnly="{userStore.id == task.user_id ? false : true}"/>
+				</div>
 			</div>
-			<!-- <div class="flex items-center space-x-2 ">
-				<svg
-					class="h-5 w-5 text-gray-400"
-					viewBox="0 0 20 20"
-					fill="currentColor"
-					aria-hidden="true"
-				>
-					<path
-					fill-rule="evenodd"
-					d="M10 2c-2.236 0-4.43.18-6.57.524C1.993 2.755 1 4.014 1 5.426v5.148c0 1.413.993 2.67 2.43 2.902.848.137 1.705.248 2.57.331v3.443a.75.75 0 001.28.53l3.58-3.579a.78.78 0 01.527-.224 41.202 41.202 0 005.183-.5c1.437-.232 2.43-1.49 2.43-2.903V5.426c0-1.413-.993-2.67-2.43-2.902A41.289 41.289 0 0010 2zm0 7a1 1 0 100-2 1 1 0 000 2zM8 8a1 1 0 11-2 0 1 1 0 012 0zm5 1a1 1 0 100-2 1 1 0 000 2z"
-					clip-rule="evenodd"
-					/>
-				</svg>
-				<span class="text-sm font-medium text-gray-900">4 comments</span>
-			</div> -->
-			<div class="flex items-center gap-4">
-				<!-- <FloatingSelect label="Status" bind:value={task.priority} options={priority_options} /> -->
-				{#if userStore.id == task.user_id}
-					<StaffSelector label="Assignee" bind:staff_id={task.assigned_to} />
-				{:else}
-					<div class="flex flex-col">
-						<div class="text-sm font-medium text-gray-900">
-							Assignee: 
-					</div>
-						{task.assigned_to ?? 'Unassigned'}
-					</div>
-				{/if}
-				<FloatingDateTime label="Due Date" bind:value={task.due_date}  readOnly="{userStore.id == task.user_id ? false : true}"/>
-			</div>
-		</div>
 		</aside>
-		<div class="py-1">
+		<div class="py-1 xl:border-b xl:pb-6">
 			<h2 class="sr-only">Description</h2>
 			<div class="max-w-none group">
 				{#if isEditingDescription}
@@ -266,7 +271,25 @@
 			</div>
 		</div>
 	</div>
-	<section
+	<!-- random button spot for now -->
+	{#if userStore.id == task.user_id && task.archived == 0}
+		<button
+			type="button"
+			class="block rounded-md mt-4 bg-red-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
+			on:click={() => updateTask(task, true, 'archive')}
+		>
+			Archive
+		</button>
+	{:else}
+		<button
+			type="button"
+			class="block rounded-md mt-4 bg-green-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
+			on:click={() => updateTask(task, true, 'restore')}
+		>
+			Restore
+		</button>
+	{/if}
+	<!-- <section
 		aria-labelledby="activity-title"
 		class="mt-8 xl:mt-10">
 		<div class="divide-y divide-gray-200">
@@ -293,6 +316,6 @@
 				</div>
 			</div>
 		</div>
-	</section>
+	</section> -->
 </div>
 {/if}

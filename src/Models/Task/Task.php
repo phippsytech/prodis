@@ -13,7 +13,7 @@ class Task extends NewCustomModel
         parent::__construct($bean ?: R::dispense('tasks'));
         $this->fields = [
             'title' => [v::stringType()],  // The name of the task.
-            'description' => [v::stringType()],  // A detailed description of the task.
+            'description' => [v::optional(v::stringType())],  // A detailed description of the task.
             'user_id' => [v::numericVal()],  // The ID of the user who created the task.
 
             // match this with however MySQL stores date time.

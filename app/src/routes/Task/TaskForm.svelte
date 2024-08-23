@@ -6,6 +6,7 @@
     import FloatingSelect from "@shared/PhippsyTech/svelte-ui/forms/FloatingSelect.svelte";
     import { push } from "svelte-spa-router";
     import { UserStore, BreadcrumbStore } from "@shared/stores.js";
+    import RTE from "@shared/RTE/RTE.svelte";
 
     import StaffSelector from "@app/routes/Billables/StaffSelector.svelte";
     import { jspa } from "@shared/jspa.js";
@@ -56,10 +57,10 @@
             toastError("Please enter a task title");
             return false;
         }
-        if (task.description === '') {
-            toastError("Please enter a task description");
-            return false;
-        }
+        // if (task.description === '') {
+        //     toastError("Please enter a task description");
+        //     return false;
+        // }
         return true;
     }
 
@@ -95,7 +96,7 @@
 
     let show = false;
     $: {
-        if (task.title != '' && task.description != '') {
+        if (task.title != '') {
             show = true;
         } else {
             show = false;
@@ -111,12 +112,7 @@
 
 
 <FloatingInput label="Task" type="text" bind:value={task.title} />
-<FloatingTextArea
-    label="Description"
-    placeholder="Describe the task"
-    type="text"
-    bind:value={task.description}
-/>
+<RTE bind:content={task.description} />
 {#if task.id != null}
     <div class="flex gap-2">
         <FloatingDate label="Due Date" bind:value={task.due_date} />
@@ -124,4 +120,4 @@
         <FloatingSelect label="Priority" bind:value={task.priority} options={priority_options} />
     </div>
 {/if}
-<StaffSelector bind:staff_id={task.assigned_to} />
+<StaffSelector label="Assignee" bind:staff_id={task.assigned_to} />
