@@ -77,6 +77,8 @@ $app->options('/{routes:.+}', function ($request, $response, $args) {
 $app->get('/App', new ControllerFactory(\NDISmate\Init::class));
 $app->get('/Google', new ControllerFactory(\NDISmate\GoogleAPI\Controller::class));
 $app->get('/My', new ControllerFactory(\NDISmate\MyInit::class));
+$app->get('/PDF', new ControllerFactory(\NDISmate\Services\ServiceAgreementService\PDFTest::class));
+
 $app->get('/Xero', new ControllerFactory(\NDISmate\Xero\Controller::class));  // TODO: improve response speed
 
 // ###############

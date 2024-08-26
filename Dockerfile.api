@@ -29,6 +29,21 @@ RUN docker-php-ext-install pcntl
 # Set the working directory
 WORKDIR /var/www/prodis
 
+
+# Copy Composer from the Composer official image
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# This option is commonly used in docker, but I'm going to see if I can get away without it!
+# ENV COMPOSER_ALLOW_SUPERUSER=1
+
+# Copy the composer files first to leverage Docker cache
+COPY ./composer.json ./composer.lock ./
+
+# Install Composer dependencies (without the --cache-dir option)
+RUN composer install --no-dev --optimize-autoloader --prefer-dist --no-interaction --no-progress --no-scripts --ignore-platform-reqs
+
+
+
 # Copy the necessary directories and files into the container
 COPY ./api/ /var/www/prodis/api/
 COPY ./src/ /var/www/prodis/src/
@@ -36,17 +51,11 @@ COPY ./servers/ /var/www/prodis/servers/
 COPY ./templates/ /var/www/prodis/templates/
 COPY ./webhooks/ /var/www/prodis/webhooks/
 COPY ./init.php /var/www/prodis/init.php
-COPY ./composer.json /var/www/prodis/composer.json
-COPY ./composer.lock /var/www/prodis/composer.lock
+# COPY ./composer.json /var/www/prodis/composer.json
+# COPY ./composer.lock /var/www/prodis/composer.lock
 COPY ./autoload.php /var/www/prodis/autoload.php
 COPY ./env.php /var/www/prodis/env.php
 COPY ./watch_and_restart.sh /var/www/prodis/watch_and_restart.sh
-
-
-# Install Composer and project dependencies
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-ENV COMPOSER_ALLOW_SUPERUSER=1
-RUN composer install --no-dev --optimize-autoloader
 
 # Copy supervisord configuration file
 COPY supervisord.conf /etc/supervisor/conf.d/prodis.conf

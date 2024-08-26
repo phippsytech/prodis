@@ -1,0 +1,357 @@
+<style>
+    body,
+    table,
+    tr,
+    td,
+    th,
+    input[type="text"],
+    textarea {
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+    }
+
+    h1,
+    h2 {
+        margin-top: 32px;
+        margin-bottom: 8px;
+    }
+
+    .top-aligned-list-item {
+        display: flex;
+        align-items: flex-start;
+    }
+
+    .participant-table {
+        width: 100%;
+    }
+
+    .participant-info,
+    .representative-info {
+        vertical-align: top;
+        padding: 0 10px;
+    }
+
+    .list-number-top {
+        align-self: flex-start;
+    }
+
+
+
+    .content {
+        margin-bottom: 50px;
+        /* Ensure this is equal to or greater than the height of your footer */
+    }
+
+    @page {
+        margin-bottom: 50px;
+        /* Match this with the height of the footer */
+    }
+</style>
+<div class="content">
+    <img src="https://app.prodis.app/docuseal/crystel-care-logo-colour.svg" alt="{{PROVIDER_SHORT_NAME}} Logo"
+        style="width: 200px; height: auto; margin-bottom: 20px;" />
+    <h1 style="text-align:center">Service Agreement between<br /> {{PROVIDER_NAME}} and {{PARTICIPANT_NAME}}</h1>
+
+    <h2>Parties involved in Service Agreement</h2>
+    <p>This <b>Service Agreement</b> is for {{PARTICIPANT_NAME}}, a participant in the National Disability Insurance
+        Scheme,
+        and is made between:</p>
+
+    <ol>
+        <li class="top-aligned-list-item">
+            <span class="list-number-top">1.</span>
+            <table class="participant-table">
+                <tr>
+                    <td class="participant-info">
+                        <b>The Participant</b><br />
+                        Name: {{PARTICIPANT_NAME}}<br />
+                        Date of Birth: {{PARTICIPANT_DOB}}<br />
+                        NDIS Number: {{NDIS_NUMBER}}<br />
+                        Contact Number: {{PARTICIPANT_PHONE}}<br />
+                        Email: {{PARTICIPANT_EMAIL}}<br />
+                        Address: {{PARTICIPANT_ADDRESS}}
+                    </td>
+                    <td class="representative-info">
+                        <b>The Participant's Representative</b><br />
+                        Name: {{REPRESENTATIVE_NAME}}<br />
+                        Contact Number: {{REPRESENTATIVE_PHONE}}<br />
+                        Email: {{REPRESENTATIVE_EMAIL}}
+                    </td>
+                </tr>
+            </table>
+        </li>
+    </ol>
+
+    <p style="margin-left:2em;">and</p>
+
+    <ol start="2">
+        <li class="top-aligned-list-item">
+            <span class="list-number-top">2.</span>
+            <table class="participant-table">
+                <tr>
+                    <td class="participant-info">
+                        <b>The Provider</b><br />
+                        {{PROVIDER_NAME}}<br />
+                        ABN: {{PROVIDER_ABN}}<br />
+                        Contact: {{PROVIDER_CONTACT}}<br />
+                        Phone: {{PROVIDER_CONTACT_PHONE}}<br />
+                        Email: {{PROVIDER_CONTACT_EMAIL}}
+                    </td>
+                </tr>
+            </table>
+        </li>
+    </ol>
+
+    <h2>Service Agreement Specification</h2>
+
+    <table style="border: 1px solid black;padding:4px; border-collapse: collapse; width: 100%;">
+        <tr>
+            <th style="border: 1px solid black;padding:4px;text-align: left; width: auto;">Service</th>
+            <th style="border: 1px solid black;padding:4px;text-align: left;">Rate / unit</th>
+            <th style="border: 1px solid black;padding:4px;text-align: left;">Hours</th>
+            <th style="border: 1px solid black;padding:4px;text-align: left;">Total</th>
+            <th style="border: 1px solid black;padding:4px;text-align: left;">Provider Travel</th>
+            <th style="border: 1px solid black;padding:4px;text-align: left;">Funds Managed by</th>
+        </tr>
+        {% for SERVICE in SERVICES %}
+        <tr>
+            <td style="border: 1px solid black;padding:4px;text-align:left;">
+                <b>{{SERVICE.name}}</b><br />{{SERVICE.description}}
+            </td>
+            <td style="border: 1px solid black;padding:4px;text-align:left;white-space: nowrap;">${{SERVICE.rate}} / hr
+            </td>
+            <td style="border: 1px solid black;padding:4px;text-align:left;white-space: nowrap;">{{SERVICE.quantity}}
+                hrs
+            </td>
+            <td style="border: 1px solid black;padding:4px;text-align:left;white-space: nowrap;">${{SERVICE.total}}
+            </td>
+            <td style="border: 1px solid black;padding:4px;text-align:left;">{% if
+                SERVICE.provider_travel %}Yes{% else %}No{% endif %}</td>
+            <td style="border: 1px solid black;padding:4px;text-align:left;">{{SERVICE.plan_manager}} </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <p><b>Provider travel</b> is charged at the rate per hour for the support being delivered, with a maximum of 30
+        minutes
+        of travel per session.</p>
+
+    <h2>Payments</h2>
+    <p>{{PROVIDER_SHORT_NAME}} will seek payment once provision of a service has occurred.</p>
+
+    <p>
+        For Funds Managed by:
+    </p>
+    <ul>
+        <li>
+            <b>Payer{{PLAN_MANAGER}}:</b> After providing supports, {{PROVIDER_SHORT_NAME}} will email an invoice to
+            {{PLAN_MANAGER}}. Payment should be
+            made
+            by {{PAYMENT_METHOD}} within {{PAYMENT_PERIOD}}.<br />
+        </li>
+        <li>
+            <b>NDIA (Agency Managed):</b> After providing supports, {{PROVIDER_SHORT_NAME}} will claim payment directly
+            from
+            the NDIA.
+        </li>
+    </ul>
+
+
+    <h2>Review of Service Agreement:</h2>
+    <p>
+    <ol type="I" style="list-style-type: upper-roman;">
+        <li>Yearly,</li>
+        <li>Or, if circumstances change,</li>
+        <li>Or, when new NDIS plan comes into effect,</li>
+        <li>Or, if a NDIS Plan Rolls Over by agreement this Service Agreement will extend to new Plan dates and details,
+        </li>
+        <li>Or, as required</li>
+    </ol>
+    Participant or their representative will be consulted with written agreement.
+    </p>
+
+    <h2>Service Agreement Period</h2>
+    <p>This Service Agreement will commence for the period: {{SERVICE_AGREEMENT_START_DATE}} to
+        {{SERVICE_AGREEMENT_END_DATE}}.</p>
+
+    <h2>Agreement Signatures</h2>
+    <p>The parties agree to the terms and conditions of this Service Agreement.</p>
+
+    <table style="width: 100%;">
+        <tr>
+            <td>
+                <b>Participant/Participant's Representative</b><br />
+                Signature: <br />
+                <signature-field style="width: 300px; height: 80px; display: inline-block;">
+                </signature-field><br />
+                Name: <text-field style="width: 300px; height: 25px; margin-bottom: -8px; display: inline-block;"
+                    name="Name">
+                </text-field><br /><br />
+                Date: <date-field name="Date" format="D MMM YYYY"
+                    style="width: 300px; height: 25px; margin-bottom: -8px; display: inline-block;">
+                </date-field>
+            </td>
+            <td>
+                <b>Service Provider ({{PROVIDER_SHORT_NAME}})</b><br />
+                Signature: <br />
+                <img src="https://app.prodis.app/docuseal/crystel-murphy-signature.png" alt="Crystel Murphy Signature"
+                    style="width: auto; height: 70px; margin-bottom: 10px;" /><br />
+                Name: Crystel Murphy (Director)<br /><br />
+                Date: {{CURRENT_DATE}}
+            </td>
+        </tr>
+    </table>
+
+
+
+
+    <h2 style="text-align:center">The NDIS and this Service Agreement</h2>
+    <hr />
+    <ul>
+        <li>Support the independence, social, and economic participation of people with disability.</li>
+        <li>Enable people with a disability to exercise choice and control in the pursuit of their goals and the
+            planning and delivery of their supports.</li>
+    </ul>
+
+
+    <h2>Schedule of supports (time and cost)</h2>
+    <p>Exclusions or additional expenses (i.e., things that are not included as part of a participant's NDIS supports)
+        are
+        the
+        responsibility of the [Participant / Participant's representative] and are not included in the cost of the
+        supports.<br />
+        Examples include entrance fees, event tickets, meals, etc.
+    </p>
+
+
+
+
+    <h2>Responsibilities of The Provider:</h2>
+    <ul>
+        <li>{{PROVIDER_SHORT_NAME}} reviews the provision of supports annually or as needed (such as when circumstances
+            change, a new
+            NDIS plan comes into effect, or participants' needs change, etc.) and is completed with the participant.
+        </li>
+        <li>Once agreed, provide supports that meet the participant's needs at the participant's preferred times.
+        </li>
+        <li>{{PROVIDER_SHORT_NAME}} communicates openly, honestly, and in a timely manner.
+        </li>
+        <li>{{PROVIDER_SHORT_NAME}} has a philosophy and moral obligation to treat the participant with courtesy and
+            respect.
+        </li>
+        <li>Consult the participant on decisions about how supports are provided.
+        </li>
+        <li>Open-door policy for feedback or complaints.
+        </li>
+        <li>{{PROVIDER_SHORT_NAME}} gives the participant information about managing any complaints or disagreements and
+            details of
+            the
+            {{PROVIDER_SHORT_NAME}} cancellation policy.
+        </li>
+        <li>Listen to the participant's feedback and resolve any concerns in a timely manner.
+        </li>
+        <li>Give the participant a maximum or a minimum of 24 hours' notice if {{PROVIDER_SHORT_NAME}} must change a
+            scheduled
+            appointment to provide supports.
+        </li>
+        <li>Give the participant the required notice if {{PROVIDER_SHORT_NAME}} is required to end the service agreement
+            (minimum of
+            two
+            weeks' notice).
+        </li>
+        <li>Protect the participant's privacy and confidential information.
+        </li>
+        <li>Provide supports in a manner consistent with all relevant laws, including the National Disability Insurance
+            Scheme Act
+            2013 and rules, and the Australian Consumer Law; keep accurate records of the supports provided to the
+            participant, and
+        </li>
+        <li>Issue regular invoices and statements of the supports delivered to the participant.</li>
+    </ul>
+
+
+
+    <h2>Responsibilities of The Participant / The Participant's Representative:</h2>
+
+    The Participant / The Participant's Representative agrees to:
+    <ul>
+        <li>
+            Inform {{PROVIDER_SHORT_NAME}} about how they wish the supports to be delivered to meet the participant's
+            needs.
+        </li>
+        <li> Treat {{PROVIDER_SHORT_NAME}} staff with courtesy and respect.
+        </li>
+        <li> Talk to {{PROVIDER_SHORT_NAME}} if the participant has any concerns about supports being provided.
+        </li>
+        <li> Where {{PROVIDER_SHORT_NAME}} has a short notice cancellation (or no show), {{PROVIDER_SHORT_NAME}} will be
+            able to recover the full
+            cost of the fee associated with the activity subject to the terms of service with the participant.
+        </li>
+        <li> Less than 2 clear business days' notice for support that is less than 8 hours, continuous duration and
+            worth
+            less than $1000. There is no limit on the number of short notice cancellations (or no shows) that a provider
+            can claim in respect of a participant—as per the NDIS Price Guide at the time of cancellation.
+        </li>
+        <li> If you have any questions in relation to the NDIS Price Guide and cancellation policies, please contact
+            NDIS at
+            feedback@ndis.gov.au or call 1800 800 110.
+        </li>
+        <li> Provide {{PROVIDER_SHORT_NAME}} the required notice if the participant needs to end the service agreement
+            (minimum two
+            weeks' notice), and
+        </li>
+        <li> Let {{PROVIDER_SHORT_NAME}} know immediately if the participant's NDIS plan is suspended or replaced by a
+            new
+            NDIS
+            plan, or if the participant stops being a participant in the NDIS.
+        </li>
+    </ul>
+
+
+
+    <h2>Changes to this Service Agreement</h2>
+    <p>If changes to the supports or their delivery are required, the parties agree to discuss and review this Service
+        Agreement. The parties agree that any changes to this Service Agreement will be in writing, signed, and dated by
+        the parties.</p>
+
+    <h2>Ending this Service Agreement</h2>
+    <p>Should either party wish to end this Service Agreement, they must give a written notice of 14 days' notice.</p>
+    <p>If either party seriously breaches this Service Agreement, the requirement of notice will be waived.</p>
+
+    <h2>Feedback, complaints, and disputes</h2>
+    <p>If the participant wishes to give feedback, the participant can talk to Compliance Officer, Crystel, on 04022 100
+        630
+        or email at crystel@crystelcare.com.au.</p>
+
+    <p>If the participant is not happy with the provision of supports and wishes to make a complaint, the participant
+        can
+        talk
+        to Compliance Officer, Crystel, on 0422 100 630 or email at crystel@crystelcare.com.au.</p>
+
+    <p>If the participant is not satisfied or does not want to talk to this person, the participant can contact the
+        National
+        Disability Insurance Agency by calling 1800 800 110, visiting one of their offices in person, or by visiting
+        ndis.gov.au
+        for further information.</p>
+
+    <p>A complaint can be made to the NDIS Quality and Safeguards Commission by:</p>
+    <p>Calling: 1800 035 544 (free call from a landline) or TTY 133 677. Interpreters can be arranged.</p>
+    <p>For more information on complaints and disputes procedures, please visit our website at crystelcare.com.au.</p>
+
+    <h2>Goods and Services Tax (GST)</h2>
+
+    <p>For the purposes of GST legislation, the parties confirm that:</p>
+    <ul>
+        <li> A supply of support under the service agreement is a supply of one or more of the reasonable and
+            necessary supports specified in the statement included, under subsection 33(2) of the NDIS Act 2013, in the
+            participant's plan currently in effect under section 37 of the NDIS Act.
+        </li>
+        <li> The participant's NDIS plan is expected to remain in effect during the period the supports are provided;
+            and
+        </li>
+        <li> The participant / participant's representative will immediately notify {{PROVIDER_SHORT_NAME}} if the
+            participant's NDIS
+            plan
+            is replaced by a new plan or if the participant stops being a participant in the NDIS.</li>
+    </ul>
+</div>
