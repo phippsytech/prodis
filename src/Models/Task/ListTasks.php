@@ -14,7 +14,6 @@ class ListTasks
              FROM tasks
              LEFT JOIN users ON tasks.user_id = users.id
              LEFT JOIN staffs ON tasks.assigned_to = staffs.id
-             WHERE tasks.archived = 0
              ORDER BY tasks.created DESC'
         );
 
