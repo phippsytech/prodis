@@ -79,7 +79,7 @@
 			});
 	}
 
-	function updateTask(task, isArchive = false, action = 'update') {
+	function updateTask(task) {
 		
 		if (task) {
 			// update in_progress_at and in_progress_by if status is changed to in_progress
@@ -98,26 +98,16 @@
 				task.due_date = task.due_date ? new Date(task.due_date).toISOString().slice(0, 19).replace("T", " ") : '';
 			}
 
-			if (isArchive && action == 'archive') {
-				task.archived = true;
-			}
-
-			if (isArchive && action == 'restore') {
-				task.archived = false;
-			}
-
 			jspa("/Task", "updateTask", task)
 				.then((result) => {
-					//task = result.result;
+					
+					// the update result is returning null given that it was coming from the basecontroller
+					//task = result.result; 
 
 					isEditingDescription = false;
 					isEditingTitle = false;
-					if (isArchive) {
-						push('/tasks');
-						toastError("Task archived successfully");
-					} else {
-						toastSuccess("Task updated successfully");
-					}
+
+					toastSuccess("Task updated successfully");
 					
 				})
 				.catch((error) => {
@@ -131,8 +121,38 @@
 		}
     }
 
+	function archiveTask() {
+        jspa("/Task", "archiveTask", task)
+			.then((result) => {
+                // task = result.result;
+                // Make a copy of the object
+                // stored_task = Object.assign({}, task);
+				push('/tasks');
+				toastError("Task archived successfully");
+            },
+        );
+    }
+
+    function restoreTask() {
+        jspa("/Task", "restoreTask", task)
+			.then((result) => {
+                task = result.result;
+                // Make a copy of the object
+                stored_task = Object.assign({}, task);
+
+				push('/tasks');
+				toastSuccess("Task restored successfully");
+            },
+        );
+    }
+
 	let show = false;
+	let taskCreator = false;
     $: {
+		if (userStore.id == task?.user_id) {
+			taskCreator = true;
+		}
+
         if (task?.title != stored_task?.title || task?.description != stored_task?.description || task?.status != stored_task?.status || task?.due_date != stored_task?.due_date || task?.assigned_to != stored_task?.assigned_to || task?.priority != stored_task?.priority) {
 			show = true;
 		} else {
@@ -153,6 +173,21 @@
 <div class="mb-4">
 	<div>
 		<div class="xl:border-b xl:pb-6">
+			{#if task.archived == 1}
+				<div
+					class="bg-red-100 rounded-lg py-5 px-6 mb-4 text-base text-red-700 mb-3 flex justify-between mt-4"
+					role="alert"
+				>
+					{task.title} has been archived.
+					<button
+						on:click={() => restoreTask()}
+						type="button"
+						class="inline-block px-6 py-2.5 bg-red-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-red-700 hover:shadow-lg focus:bg-red-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-red-800 active:shadow-lg transition duration-150 ease-in-out"
+						>Restore
+					</button>
+				</div>
+			{/if}
+
 			<div class="mt-2">
 				{#if isEditingTitle}
 					<FloatingInput
@@ -165,7 +200,7 @@
 						<h1 class="text-2xl font-fredoka-one-regular" style="color:#220055;">
 							{task.title}
 						</h1>
-						{#if userStore.id == task.user_id}
+						{#if taskCreator}
 						<button
 								on:click={() => isEditingTitle = true}
 							>
@@ -227,7 +262,7 @@
 				</div> -->
 				<div class="flex items-center gap-4">
 					<!-- <FloatingSelect label="Status" bind:value={task.priority} options={priority_options} /> -->
-					{#if userStore.id == task.user_id}
+					{#if taskCreator}
 						<StaffSelector label="Assignee" bind:staff_id={task.assigned_to} />
 					{:else}
 						<div class="flex flex-col">
@@ -237,7 +272,7 @@
 							{task.assignee.name ?? 'Unassigned'}
 						</div>
 					{/if}
-					<FloatingDateTime label="Due Date" bind:value={task.due_date}  readOnly="{userStore.id == task.user_id ? false : true}"/>
+					<FloatingDateTime label="Due Date" bind:value={task.due_date}  readOnly="{taskCreator ? false : true}"/>
 				</div>
 			</div>
 		</aside>
@@ -248,7 +283,7 @@
 					<RTE bind:content={task.description} />
 				{:else}
 					{@html task.description}
-					{#if userStore.id == task.user_id}
+					{#if taskCreator}
 					<button
 						class="ml-2"
 						on:click={() => isEditingDescription = true}
@@ -271,22 +306,13 @@
 			</div>
 		</div>
 	</div>
-	<!-- random button spot for now -->
-	{#if userStore.id == task.user_id && task.archived == 0}
+	{#if taskCreator && task.archived == 0}
 		<button
 			type="button"
 			class="block rounded-md mt-4 bg-red-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
-			on:click={() => updateTask(task, true, 'archive')}
+			on:click={() => archiveTask()}
 		>
 			Archive
-		</button>
-	{:else}
-		<button
-			type="button"
-			class="block rounded-md mt-4 bg-green-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600"
-			on:click={() => updateTask(task, true, 'restore')}
-		>
-			Restore
 		</button>
 	{/if}
 	<!-- <section

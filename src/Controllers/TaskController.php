@@ -17,8 +17,8 @@ class TaskController extends BaseController
             'updateTask' => [new Task, 'update', true, []],
             'getTask' => [new GetTask, null, true, []],
             'listTasks' => [new ListTasks, null, true, []],
-            // 'archiveTask' => [new Task, 'archive', true, []],
-            // 'restoreTask' => [new Task, 'restore', true, []],
+            'archiveTask' => [new Task, 'archive', true, []],
+            'restoreTask' => [new Task, 'restore', true, []],
         ];
     }
 }
