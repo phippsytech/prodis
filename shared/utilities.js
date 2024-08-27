@@ -314,5 +314,5 @@ export function convertToLocalDate(utcDate) {
 
 
 export function decimalRounder(value) {
-    return Math.round(value * 100) / 100;
+    return Math.round((value + Number.EPSILON) * 100) / 100;
 }
