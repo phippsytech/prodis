@@ -10,6 +10,8 @@ use NDISmate\Services\MessageQueueService;
 function produce() {
 
     try {
+        echo 'service running at ' . date('Y-m-d H:i:s') . "\n";
+        
        // get the service agreements that is active and the end date is greater than today (expired)
         $serviceAgreements = R::getAll(
             'SELECT *
@@ -20,6 +22,8 @@ function produce() {
         );
 
         print_r(count($serviceAgreements));
+
+        
 
         
         if (is_null($serviceAgreements)) {
