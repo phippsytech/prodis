@@ -141,6 +141,31 @@
             },
         );
     }
+
+    function getTotalByClientName(clientName) {
+        return line_items
+            .filter(item => item.ClientName === clientName)
+            .reduce((total, item) => {
+                return total + (parseFloat(item.Quantity) * parseFloat(item.UnitPrice));
+            }, 0)
+            .toFixed(2);
+    }
+    
+    // Group line items by ClientName
+    function groupByClientName(items) {
+        return Object.values(
+            items.reduce((result, item) => {
+                let key = item.ClientName;
+                if (!result[key]) {
+                    result[key] = [];
+                }
+                result[key].push(item);
+                return result;
+            }, {})
+        );
+    }
+
+    $: groupedByClient = groupByClientName(line_items);
 </script>
 
 <nav
@@ -194,7 +219,7 @@
 
 <!-- {#each Object.values(groupedItems) as group, index} -->
 {#key groupedItems}
-    {#each groupedItems as group, index (index)}
+    <!-- {#each groupedItems as group, index (index)}
         <div
             class=".content-container {index == 0 ||
             group[0].ClientName != groupedItems[index - 1][0].ClientName
@@ -242,6 +267,25 @@
                     <LineItem {item} bind:selectedLineItems grouped={false} />
                 {/each}
             {/if}
+        </div>
+    {/each} -->
+    {#each groupedByClient as group, index}
+        <div class="client-group">
+            {#if index == 0 || group[0].ClientName != groupedByClient[index - 1][0].ClientName}
+                <div class="flex justify-between py-0">
+                    <span class="text-base font-semibold text-gray-900">
+                        {group[0].ClientName}
+                    </span>
+                    <div class="text-right font-semibold">
+                        ${getTotalByClientName(group[0].ClientName)}
+                    </div>
+                </div>
+            {/if}
+
+            <!-- Render line items for this client -->
+            {#each group as item, index}
+                <LineItem {item} bind:selectedLineItems grouped={false} />
+            {/each}
         </div>
     {/each}
 {/key}
