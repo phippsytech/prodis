@@ -1,8 +1,7 @@
 #!/bin/bash
 
-# while true
-# do
-#     docker exec prodis-babasa-api php /var/www/prodis/src/Models/Participant/ServiceAgreement/WatchServiceAgreements.php consume
-# done
+while true
+do
+    php /var/www/prodis/src/Models/Participant/ServiceAgreement/ExpiredServiceAgreementWorker.php
+done
 
-docker exec prodis-babasa-api php /var/www/prodis/src/Models/Participant/ServiceAgreement/ExpiredServiceAgreementWorker.php

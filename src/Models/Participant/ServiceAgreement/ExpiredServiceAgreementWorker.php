@@ -25,21 +25,17 @@ $channel->basic_consume('service_agreements', '', false, false, false, false, fu
 
         echo($data['service_agreement_end_date']);
 
-        if ($endDate >= $today) {
+        R::begin();
+        // set the service agreement to inactive
+        $clientPlan = R::load('clientplans', $data['id']);
+        $clientPlan->is_active = 0;
+        R::store($clientPlan);
+        echo " [x] Updated client with ID " . $clientPlan['id'] . " to active.\n";
 
-            R::begin();
-            // set the service agreement to inactive
-            $clientPlan = R::load('clientplans', $data['id']);
-            $clientPlan->is_active = 0;
-            R::store($clientPlan);
-            echo " [x] Updated client with ID " . $clientPlan['id'] . " to active.\n";
-
-            R::rollback();
-        }
+        R::rollback();
 
         $channel->basic_ack($message->delivery_info['delivery_tag']);
     
-
     } catch (\Exception $e) {
         print_r($e->getMessage());
     }

@@ -10,13 +10,16 @@ use NDISmate\Services\MessageQueueService;
 function produce() {
 
     try {
-       
+       // get the service agreements that is active and the end date is greater than today (expired)
         $serviceAgreements = R::getAll(
             'SELECT *
             FROM clientplans
-            WHERE is_active = :is_active',
+            WHERE is_active = :is_active 
+            AND service_agreement_end_date > CURDATE()',
             [':is_active' => 1]
         );
+
+        print_r(count($serviceAgreements));
 
         
         if (is_null($serviceAgreements)) {
@@ -24,7 +27,7 @@ function produce() {
         }
 
         // loop through the beans and check the end date
-
+        
         foreach ($serviceAgreements as $serviceAgreement) {
             
             $serializedData = serialize($serviceAgreement);
