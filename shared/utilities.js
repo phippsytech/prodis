@@ -311,3 +311,8 @@ export function convertToLocalDate(utcDate) {
         return new Intl.DateTimeFormat('en-AU', { dateStyle: 'medium' }).format(date);
     }
 }
+
+
+export function decimalRounder(value) {
+    return Math.round(value * 100) / 100;
+}
