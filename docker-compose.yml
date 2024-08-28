@@ -32,6 +32,8 @@ services:
       - ./src:/var/www/prodis/src
       - ./servers:/var/www/prodis/servers
       - ./oauth-credentials.json:/var/www/prodis/oauth-credentials.json
+      - ./cron:/cron
+      - ./cron/cronjobs:/etc/cron.d/cronjobs
       - composer_cache:/tmp/cache
     restart: unless-stopped
     networks:
