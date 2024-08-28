@@ -6,7 +6,7 @@
     import { push } from "svelte-spa-router";
     import { jspa } from "@shared/jspa.js";
     import { BreadcrumbStore } from "@shared/stores.js";
-    import { getMonday, getDatePlus7Days } from "@shared/utilities.js";
+    import { getMonday, getDatePlus7Days, decimalRounder } from "@shared/utilities.js";
     import { InvoiceBarStore } from "@app/Layout/BottomNav/stores.js";
 
     let start_date = getMonday();
@@ -27,7 +27,9 @@
         managed = result.result;
         unbilled_total = 0;
         managed.forEach((item) => {
-            unbilled_total = unbilled_total + item.Quantity * item.UnitPrice;
+            //unbilled_total = unbilled_total + item.Quantity * item.UnitPrice;
+            let itemTotal = decimalRounder(item.Quantity * item.UnitPrice);
+            unbilled_total = decimalRounder(unbilled_total + itemTotal);
         });
         managed.sort((a, b) => {
             if (a.ClientName === b.ClientName) {

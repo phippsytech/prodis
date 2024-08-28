@@ -5,6 +5,7 @@
     import { jspa } from "@shared/jspa.js";
     import { StafferStore, RolesStore } from "@shared/stores.js";
     import { haveCommonElements } from "@shared/utilities.js";
+    import Filter from "@shared/PhippsyTech/svelte-ui/Filter.svelte";
     import { jwt } from "@shared/stores.js";
     import ParticipantCard from "../ParticipantCard.svelte";
     import { slide } from "svelte/transition";
@@ -18,6 +19,11 @@
     let action = "listStaffClientsByStaffId";
     let endpoint = "/Client/Staff";
     let data = { staff_id: StafferStore.id };
+
+    let filters = [
+      {label: "archived", enabled: false},
+      {label: "on hold", enabled: false}
+    ];
 
     let showArchived = false;
 
@@ -59,8 +65,10 @@
             });
 
             clients = clients;
+            clientList = clients; // chuck in clients to this array for filtering
         });
     }
+
 
     $: {
         // identify if search contains a 9 digit number
@@ -99,6 +107,32 @@
         clientList = clientList;
     }
 
+    $: {
+        const showOnHold = filters.find(f => f.label === "on hold").enabled;
+        const showArchived = filters.find(f => f.label === "archived").enabled;
+
+        clientList = clients
+            .filter(client => {
+                const isArchived = client.archived === "1";
+                const isOnHold = client.on_hold;
+                return (
+                    (showOnHold && showArchived && isArchived && isOnHold) ||
+                    (showOnHold && !showArchived && isOnHold && !isArchived) ||
+                    (!showOnHold && showArchived && isArchived && !isOnHold) ||
+                    (!showOnHold && !showArchived && !isArchived)
+                );
+            })
+            .sort((a, b) => a.client_name.toUpperCase().localeCompare(b.client_name.toUpperCase()));
+    }
+
+    $: {
+        if (search) {
+            clientList = clientList.filter(client => 
+                client.client_name.toLowerCase().includes(search.toLowerCase())
+            );
+        }
+    }
+
     function is9DigitNumber(str) {
         // remove spaces
         str = str.replace(/\s+/g, "");
@@ -111,12 +145,16 @@
     }
 </script>
 
-<Role roles={["admin"]}>
+<div class="bg-white px-3 mb-4 rounded-md pb-1">
+    <Filter bind:filters />
+</div>
+
+<!-- <Role roles={["admin"]}>
     <label class="text-xs text-gray-400 px-6 flex justify-end">
         <input type="checkbox" bind:checked={showArchived} class="mr-2" />
         Include archived
     </label>
-</Role>
+</Role> -->
 
 <div
     class="grid grid-cols-1 gap-2 sm:gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4"
