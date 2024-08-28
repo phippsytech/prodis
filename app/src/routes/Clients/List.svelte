@@ -21,8 +21,8 @@
     let data = { staff_id: StafferStore.id };
 
     let filters = [
-      {label: "archived", enabled: "true"},
-      {label: "on hold", enabled: "true"}
+      {label: "archived", enabled: false},
+      {label: "on hold", enabled: false}
     ];
 
     let showArchived = false;
@@ -65,6 +65,7 @@
             });
 
             clients = clients;
+            clientList = clients; // chuck in clients to this array for filtering
         });
     }
 
@@ -106,6 +107,41 @@
         clientList = clientList;
     }
 
+    $: {
+        const showOnHold = filters.find(f => f.label === "on hold").enabled;
+        const showArchived = filters.find(f => f.label === "archived").enabled;
+
+        clientList = clients
+            .filter((client) => {
+                const isArchived = client.archived === "1";
+                const isOnHold = client.on_hold; 
+
+                if (showOnHold && showArchived) {
+                    return isArchived && isOnHold;
+                }
+                if (showOnHold) {
+                    return isOnHold && !isArchived;
+                }
+                if (showArchived) {
+                    return isArchived && !isOnHold;
+                }
+                return !isArchived; 
+            })
+            .sort((a, b) => {
+                const nameA = a.client_name.toUpperCase();
+                const nameB = b.client_name.toUpperCase();
+                return nameA.localeCompare(nameB);
+            });
+    }
+
+    $: {
+        if (search) {
+            clientList = clientList.filter(client => 
+                client.client_name.toLowerCase().includes(search.toLowerCase())
+            );
+        }
+    }
+
     function is9DigitNumber(str) {
         // remove spaces
         str = str.replace(/\s+/g, "");
@@ -118,7 +154,9 @@
     }
 </script>
 
-<Filter bind:filters />
+<div class="bg-white px-3 mb-4 rounded-md pb-1">
+    <Filter bind:filters />
+</div>
 
 <!-- <Role roles={["admin"]}>
     <label class="text-xs text-gray-400 px-6 flex justify-end">
