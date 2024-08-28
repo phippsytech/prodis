@@ -112,26 +112,17 @@
         const showArchived = filters.find(f => f.label === "archived").enabled;
 
         clientList = clients
-            .filter((client) => {
+            .filter(client => {
                 const isArchived = client.archived === "1";
-                const isOnHold = client.on_hold; 
-
-                if (showOnHold && showArchived) {
-                    return isArchived && isOnHold;
-                }
-                if (showOnHold) {
-                    return isOnHold && !isArchived;
-                }
-                if (showArchived) {
-                    return isArchived && !isOnHold;
-                }
-                return !isArchived; 
+                const isOnHold = client.on_hold;
+                return (
+                    (showOnHold && showArchived && isArchived && isOnHold) ||
+                    (showOnHold && !showArchived && isOnHold && !isArchived) ||
+                    (!showOnHold && showArchived && isArchived && !isOnHold) ||
+                    (!showOnHold && !showArchived && !isArchived)
+                );
             })
-            .sort((a, b) => {
-                const nameA = a.client_name.toUpperCase();
-                const nameB = b.client_name.toUpperCase();
-                return nameA.localeCompare(nameB);
-            });
+            .sort((a, b) => a.client_name.toUpperCase().localeCompare(b.client_name.toUpperCase()));
     }
 
     $: {
