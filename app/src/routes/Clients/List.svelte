@@ -5,6 +5,7 @@
     import { jspa } from "@shared/jspa.js";
     import { StafferStore, RolesStore } from "@shared/stores.js";
     import { haveCommonElements } from "@shared/utilities.js";
+    import Filter from "@shared/PhippsyTech/svelte-ui/Filter.svelte";
     import { jwt } from "@shared/stores.js";
     import ParticipantCard from "../ParticipantCard.svelte";
     import { slide } from "svelte/transition";
@@ -18,6 +19,11 @@
     let action = "listStaffClientsByStaffId";
     let endpoint = "/Client/Staff";
     let data = { staff_id: StafferStore.id };
+
+    let filters = [
+      {label: "archived", enabled: "true"},
+      {label: "on hold", enabled: "true"}
+    ];
 
     let showArchived = false;
 
@@ -61,6 +67,7 @@
             clients = clients;
         });
     }
+
 
     $: {
         // identify if search contains a 9 digit number
@@ -111,12 +118,14 @@
     }
 </script>
 
-<Role roles={["admin"]}>
+<Filter bind:filters />
+
+<!-- <Role roles={["admin"]}>
     <label class="text-xs text-gray-400 px-6 flex justify-end">
         <input type="checkbox" bind:checked={showArchived} class="mr-2" />
         Include archived
     </label>
-</Role>
+</Role> -->
 
 <div
     class="grid grid-cols-1 gap-2 sm:gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4"
