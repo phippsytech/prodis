@@ -123,9 +123,7 @@
         let remainingWeeks = getRemainingWeeks(startDate, endDate);
 
         if (remainingWeeks < 1 && remainingWeeks != 0) {
-            remainingWeeks = remainingWeeks * 7;
-
-            console.log("adjusted remaining weeks: " + remainingWeeks);
+            return remainingMinutes;
         }
 
         const adjustedWeeklyTime = remainingMinutes / remainingWeeks;
