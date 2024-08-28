@@ -142,30 +142,15 @@
         );
     }
 
-    function getTotalByClientName(clientName) {
+    function getTotalByNDISNumber(ndisNumber) {
         return line_items
-            .filter(item => item.ClientName === clientName)
+            .filter(item => item.NDISNumber === ndisNumber)
             .reduce((total, item) => {
                 return total + (parseFloat(item.Quantity) * parseFloat(item.UnitPrice));
             }, 0)
             .toFixed(2);
     }
     
-    // Group line items by ClientName
-    function groupByClientName(items) {
-        return Object.values(
-            items.reduce((result, item) => {
-                let key = item.ClientName;
-                if (!result[key]) {
-                    result[key] = [];
-                }
-                result[key].push(item);
-                return result;
-            }, {})
-        );
-    }
-
-    $: groupedByClient = groupByClientName(line_items);
 </script>
 
 <nav
@@ -222,11 +207,11 @@
     {#each groupedItems as group, index (index)}
         <div
             class=".content-container {index == 0 ||
-            group[0].ClientName != groupedItems[index - 1][0].ClientName
+            group[0].NDISNumber != groupedItems[index - 1][0].NDISNumber
                 ? 'border-t border-gray-200 pt-2 mt-2'
                 : ''}"
         >
-            {#if index == 0 || group[0].ClientName != groupedItems[index - 1][0].ClientName}
+            {#if index == 0 || group[0].NDISNumber != groupedItems[index - 1][0].NDISNumber}
                 <div class="flex justify-between py-0">
                     <a
                         href="/#/clients/{group[0].ClientId}"
@@ -235,12 +220,12 @@
                         >{group[0].ClientName}</a
                     >
                     <div class="text-right font-semibold">
-                        ${getTotalByClientName(group[0].ClientName)}
+                        ${getTotalByNDISNumber(group[0].NDISNumber)}
                     </div>
                 </div>
             {/if}
 
-            {#if index == 0 || group[0].PlanManagerId != groupedItems[index - 1][0].PlanManagerId || group[0].ClientName != groupedItems[index - 1][0].ClientName}
+            {#if index == 0 || group[0].PlanManagerId != groupedItems[index - 1][0].PlanManagerId || group[0].NDISNumber != groupedItems[index - 1][0].NDISNumber}
                 <div class="py-0">
                     <span class="text-sm">
                         <a
@@ -266,7 +251,6 @@
             {/if}
         </div>
     {/each} 
-
 {/key}
 
 <style>
