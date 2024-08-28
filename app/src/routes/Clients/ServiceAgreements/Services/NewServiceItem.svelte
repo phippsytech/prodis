@@ -26,11 +26,6 @@
     // Function to calculate hours per week based on allocated hours and date range
     function hoursPerWeek(allocatedHours, startDate, endDate) {
         console.log(service);
-        console.log("service budget start date " + service.budget_start_date);
-        console.log(
-            "service agreement end date " +
-                service_agreement.service_agreement_end_date,
-        );
 
         // Initialize start and end dates
         startDate = startDate ? startDate : new Date(service.budget_start_date);
@@ -38,6 +33,10 @@
         endDate = endDate
             ? endDate
             : new Date(service_agreement.service_agreement_end_date);
+
+        console.log("start date: " + startDate);
+
+        console.log("end date: " + endDate);
 
         // Get the difference in time (in milliseconds)
         const timeInterval = endDate.getTime() - startDate.getTime();
@@ -72,6 +71,8 @@
         const end = new Date(endDate).getTime();
         const current = new Date().getTime();
 
+        console.log("r start date: " + start);
+
         //Ensure the current date is within the interval
         if (current < start || current > end) {
             console.log("Current date is outside the service interval.");
@@ -80,10 +81,10 @@
 
         // Calculate the remaining duration in milliseconds
         const remainingDurationInMs = end - current;
-
+        console.log("remainingDurationInMs " + remainingDurationInMs);
         const remainingDurationInDays =
             remainingDurationInMs / (1000 * 60 * 60 * 24);
-
+        console.log("remainingDurationInDays " + remainingDurationInDays);
         // Calculate weeks
         const remainingWeeks = remainingDurationInDays / 7;
 
@@ -98,6 +99,9 @@
         console.log("minutes Spent: " + minutesSpent);
 
         const totalBudgetInHours = service.budget / service.rate;
+
+        console.log("total budget in hours: " + totalBudgetInHours);
+
         let totalBudgetInMinutes = totalBudgetInHours * 60;
 
         totalBudgetInMinutes -= minutesSpent;
@@ -116,7 +120,13 @@
     function getAdjustedWeeklyTimeInMinutes(startDate, endDate) {
         const remainingMinutes = totalRemainingBudgetInMinutes();
 
-        const remainingWeeks = getRemainingWeeks(startDate, endDate);
+        let remainingWeeks = getRemainingWeeks(startDate, endDate);
+
+        if (remainingWeeks < 1 && remainingWeeks != 0) {
+            remainingWeeks = remainingWeeks * 7;
+
+            console.log("adjusted remaining weeks: " + remainingWeeks);
+        }
 
         const adjustedWeeklyTime = remainingMinutes / remainingWeeks;
 
