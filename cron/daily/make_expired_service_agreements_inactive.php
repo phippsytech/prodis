@@ -2,6 +2,5 @@
 <?php
 require '/var/www/prodis/init.php';
 
-use NDISmate\Models\Participant\ServiceAgreement\MakeExpiredServiceAgreementsInactive;
-
-(new MakeExpiredServiceAgreementsInactive)();
+(new \NDISmate\Models\Participant\ServiceAgreement\MakeExpiredServiceAgreementsInactive)();
+(new \NDISmate\Models\Client\HoldClientsWithoutActiveAgreements)();
