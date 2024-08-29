@@ -6,7 +6,7 @@ use NDISmate\Middleware\CorsMiddleware;
 use NDISmate\Middleware\PulseMiddleware;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
+// use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use React\Http\Message\Response as ReactResponse;
 use React\Http\Server as ReactServer;
 use React\Socket\SecureServer;
@@ -14,7 +14,7 @@ use React\Socket\Server as SocketServer;
 use RedBeanPHP\R;
 use Respect\Validation\Factory;
 use Slim\Factory\AppFactory;
-use Slim\Psr7\Factory\StreamFactory;
+// use Slim\Psr7\Factory\StreamFactory;
 
 use React\Http\Middleware\StreamingRequestMiddleware;
 use React\Http\Middleware\LimitConcurrentRequestsMiddleware;
@@ -75,7 +75,7 @@ $app->options('/{routes:.+}', function ($request, $response, $args) {
 // # GET ROUTES #
 // ##############
 $app->get('/App', new ControllerFactory(\NDISmate\Init::class));
-$app->get('/Google', new ControllerFactory(\NDISmate\GoogleAPI\Controller::class));
+
 $app->get('/My', new ControllerFactory(\NDISmate\MyInit::class));
 $app->get('/Xero', new ControllerFactory(\NDISmate\Xero\Controller::class));  // TODO: improve response speed
 
@@ -122,8 +122,7 @@ $app->post('/Client/Document', new ControllerFactory(\NDISmate\Models\Client\Doc
 $app->post('/Client/Plan', new ControllerFactory(\NDISmate\Models\Client\Plan::class));
 
 $app->post('/Credential', new ControllerFactory(\NDISmate\Models\Credential::class));
-$app->post('/Google', new ControllerFactory(\NDISmate\GoogleAPI\Controller::class));
-$app->post('/Google/SharedDrive', new ControllerFactory(\NDISmate\GoogleAPI\SharedDrive\Controller::class));
+
 $app->post('/Invoice', new ControllerFactory(\NDISmate\Models\Invoice::class));
 $app->post('/Invoice/NDIA/PaymentRequestStatus', new ControllerFactory(\NDISmate\Models\Invoice\NDIA\PaymentRequestStatus::class));
 $app->post('/Invoice/NDIA/Remittance', new ControllerFactory(\NDISmate\Models\Invoice\NDIA\Remittance::class));
@@ -163,6 +162,10 @@ $app->post('/Xero/Payroll', new ControllerFactory(\NDISmate\Xero\Payroll\Control
 $app->post('/Xero/Payroll/Migrate', new ControllerFactory(\NDISmate\Xero\Payroll\Migrate\Controller::class));  // TODO: improve response speed
 
 // ## DISABLED ENDPOINTS ##
+// $app->get('/Google', new ControllerFactory(\NDISmate\GoogleAPI\Controller::class));
+// $app->post('/Google', new ControllerFactory(\NDISmate\GoogleAPI\Controller::class));
+// $app->post('/Google/SharedDrive', new ControllerFactory(\NDISmate\GoogleAPI\SharedDrive\Controller::class));
+
 // $app->post('/SIL/RosterOfCare', new ControllerFactory(\NDISmate\Models\SIL\RosterOfCare::class));
 // $app->post('/SIL/RosterOfCare/Shift', new ControllerFactory(\NDISmate\Models\SIL\RosterOfCare\Shift::class));
 // $app->post('/Stakeholder', new ControllerFactory(\NDISmate\Models\Stakeholder::class));

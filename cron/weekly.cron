@@ -1,0 +1,7 @@
+# Run all scripts in the weekly/ directory
+cd /cron/weekly
+
+# Run all executable scripts in the weekly directory - no log
+for script in *.sh; do
+    [ -x "$script" ] && "./$script" > /dev/null 2>&1
+done

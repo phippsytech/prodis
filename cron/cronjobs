@@ -1,0 +1,9 @@
+# This is the crontab file that will be installed into /etc/cron.d/
+# It will run the daily and weekly cron jobs.
+
+# Run the daily cron job at 4:01 PM UTC every day
+# This is equivalent to 1 past midnight in Perth
+1 16 * * * root /bin/bash /cron/daily.cron
+
+# Run the weekly cron job at 10:30 AM (AEST - i.e. UTC+10) every Wednesday
+30 0 * * 3 root /bin/bash /cron/weekly.cron

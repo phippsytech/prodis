@@ -1,27 +1,25 @@
 #!/bin/bash
 
-# This file is managed with supervisor now.
-
-
-# Path to your project directory
 PROJECT_DIR="/var/www/prodis"
-
-# Path to the specific file
 SPECIFIC_FILE="/var/www/prodis/env.php"
-
-
-# Service name
 SERVICE_NAME="api_server"
+RESTART_DELAY=2  # Time in seconds to wait before restarting
 
-#action to restart the service
+last_restart=0
+
 restart_service() {
-    echo "Restarting ${SERVICE_NAME} due to changes in ${SPECIFIC_FILE}..."
+    echo "Restarting ${SERVICE_NAME} due to changes..."
     supervisorctl restart "${SERVICE_NAME}"
+    last_restart=$(date +%s)
 }
 
-# Combined watch on the project directory and specific file
 inotifywait -m -r -e modify,attrib,move,create,delete,close_write --format '%w%f %e' "${PROJECT_DIR}" "${SPECIFIC_FILE}" |
 while read -r file event; do
-    echo "Detected changes in ${file}: ${event}"
-    restart_service
+    now=$(date +%s)
+    if (( now - last_restart >= RESTART_DELAY )); then
+        echo "Detected changes in ${file}: ${event}"
+        restart_service
+    else
+        echo "Change detected, but waiting for debounce delay..."
+    fi
 done
