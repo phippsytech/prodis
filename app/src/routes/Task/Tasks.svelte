@@ -3,7 +3,7 @@
     import { onMount } from "svelte";
     import Container from "@shared/Container.svelte";
     import { jspa } from "@shared/jspa.js";
-    import { formatDateTime } from "@shared/utilities.js";
+    import { getDaysUntilDate, formatDateTime, formatPrettyName } from "@shared/utilities.js";
     import { BreadcrumbStore, StafferStore } from "@shared/stores.js";
     import { push } from "svelte-spa-router";
     import { convertFieldsToBoolean } from "@shared/utilities/convertFieldsToBoolean";
@@ -30,10 +30,6 @@
     onMount(async () => {
         await loadTaskList();
     });
-
-    function formatPrettyName(str) {
-        return str?.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-    }
     
     $: {
         taskList = tasks.filter(
@@ -102,7 +98,7 @@
         <tr class="border-b-2">
             <th class="text-left">Task</th>
             <th class="text-left">Assigned to</th>
-            <th class="text-left">Priority</th>
+            <!-- <th class="text-left">Priority</th> -->
             <th class="text-left">Status</th>
             <th class="text-left">Created By</th>
             <th class="text-right">Due Date</th>
@@ -114,11 +110,17 @@
                 style="opacity: {task.archived == 1 ? 0.5 : 1}"
                 on:click={() => push("/tasks/" + task.id)}>
                 <td class="font-semibold p-2">{task.title}</td>
-                <td>{task.assigned_staff_name ?? ''}</td>
-                <td>{task.priority ? formatPrettyName(task.priority) : ''}</td>
+                <td>
+                    {#if task.assigned_staff_name || task.assigned_staff_user_name}
+                        {task.assigned_staff_name ?? task.assigned_staff_user_name}
+                    {:else}
+                        Unassigned
+                    {/if}
+                </td>
+                <!-- <td>{task.priority ? formatPrettyName(task.priority) : ''}</td> -->
                 <td>{task.status ? formatPrettyName(task.status) : ''}</td>
                 <td>{task.creator_name}</td>
-                <td class="text-right">{formatDateTime(task.due_date) ?? ''}</td>
+                <td class="text-right">{task.due_date ? getDaysUntilDate(task.due_date) : ''}</td>
             </tr>
         {/each}
     </table>

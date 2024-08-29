@@ -5,10 +5,10 @@
 	import StaffSelector from "@app/routes/Billables/StaffSelector.svelte";
 	import FloatingSelect from "@shared/PhippsyTech/svelte-ui/forms/FloatingSelect.svelte";
 	import RTE from "@shared/RTE/RTE.svelte";
-	import { BreadcrumbStore, UserStore } from "@shared/stores.js";
+	import { BreadcrumbStore, UserStore, StafferStore } from "@shared/stores.js";
 	import { jspa } from "@shared/jspa.js";
 	import { toastSuccess, toastError } from "@shared/toastHelper.js";
-	import { formatDateTime } from "@shared/utilities.js";
+	import { formatDateTime, formatPrettyName } from "@shared/utilities.js";
 	import AddComment from "./AddComment.svelte";
 	import { ActionBarStore } from "@app/Layout/BottomNav/stores.js";
 	import { push } from "svelte-spa-router";
@@ -28,6 +28,7 @@
 	});
 	
 	$: userStore = $UserStore;
+	$: stafferStore = $StafferStore;
 
 	let task_id = params.task_id;
 	
@@ -41,16 +42,12 @@
 	let task = null;
 
 	let status_options = [
-        { option: "Pending", value: "pending" },
-        { option: "In Progress", value: "in_progress" },
+		{ option: "Pending", value: "pending" },
+		{ option: "In Progress", value: "in_progress", is_user: true },
+		{ option: "Review", value: "review", is_user: true },
         { option: "Completed", value: "completed" }
     ];
-
-	let status_options_user = [
-        { option: "Pending", value: "pending" },
-        { option: "In Progress", value: "in_progress" }
-    ];
-
+	
     let priority_options = [
         { option: "Low", value: "low" },
         { option: "Normal", value: "normal" },
@@ -148,9 +145,14 @@
 
 	let show = false;
 	let taskCreator = false;
+	let taskAssignee = false;
     $: {
 		if (userStore.id == task?.user_id) {
 			taskCreator = true;
+		}
+
+		if (stafferStore.id == task?.assigned_to) {
+			taskAssignee = true;
 		}
 
         if (task?.title != stored_task?.title || task?.description != stored_task?.description || task?.status != stored_task?.status || task?.due_date != stored_task?.due_date || task?.assigned_to != stored_task?.assigned_to || task?.priority != stored_task?.priority) {
@@ -243,7 +245,16 @@
 						clip-rule="evenodd"
 						/>
 					</svg>
-					<FloatingSelect label="Status" bind:value={task.status} options={userStore.id != task.user_id ? status_options_user : status_options} />
+					{#if taskCreator || taskAssignee}
+						<FloatingSelect label="Status" bind:value={task.status} options={userStore.id != task.user_id ? status_options.filter(option => option.is_user) : status_options} />
+					{:else}
+						<div class="flex flex-col">
+							<div class="text-sm font-medium text-gray-900">
+								Assignee: 
+							</div>
+							{formatPrettyName(task.status)}
+						</div>
+					{/if}
 				</div>
 				<!-- <div class="flex items-center space-x-2 ">
 					<svg
@@ -264,15 +275,21 @@
 					<!-- <FloatingSelect label="Status" bind:value={task.priority} options={priority_options} /> -->
 					{#if taskCreator}
 						<StaffSelector label="Assignee" bind:staff_id={task.assigned_to} />
+						<FloatingDateTime label="Due Date" bind:value={task.due_date}/>
 					{:else}
 						<div class="flex flex-col">
 							<div class="text-sm font-medium text-gray-900">
 								Assignee: 
-						</div>
+							</div>
 							{task.assignee.name ?? 'Unassigned'}
 						</div>
+						<div class="flex flex-col">
+							<div class="text-sm font-medium text-gray-900">
+								Due Date: 
+							</div>
+							{formatDateTime(task.due_date) ?? 'Not set'}
+						</div>
 					{/if}
-					<FloatingDateTime label="Due Date" bind:value={task.due_date}  readOnly="{taskCreator ? false : true}"/>
 				</div>
 			</div>
 		</aside>
