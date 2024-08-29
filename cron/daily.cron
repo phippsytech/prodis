@@ -1,0 +1,7 @@
+# Run all scripts in the daily/ directory
+cd /cron/daily
+
+# Run all executable scripts in the daily directory - no log
+for script in *.sh; do
+    [ -x "$script" ] && "./$script" > /dev/null 2>&1
+done

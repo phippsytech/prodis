@@ -41,6 +41,8 @@ COPY ./composer.lock /var/www/prodis/composer.lock
 COPY ./autoload.php /var/www/prodis/autoload.php
 COPY ./env.php /var/www/prodis/env.php
 COPY ./watch_and_restart.sh /var/www/prodis/watch_and_restart.sh
+COPY ./cron/ /cron/
+COPY ./cron/cronjobs /etc/cron.d/cronjobs
 
 
 # Install Composer and project dependencies
