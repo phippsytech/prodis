@@ -17,6 +17,7 @@ final Class Connect
         ];
         $obj->devices->offsetSet($conn, $data);
         $json = json_encode($message);
+        $conn->token = false;
         $conn->send($json);
     }
 }
