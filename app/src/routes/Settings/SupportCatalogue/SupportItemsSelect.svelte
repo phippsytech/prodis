@@ -112,8 +112,6 @@
           }
 
           billing_code = item.support_item_number;
-          console.log('Support item selected:', item);
-          console.log('Billing code:', item.support_item_number);
       }
   }
 
