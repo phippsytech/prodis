@@ -14,7 +14,8 @@ class GetTask
         $task->creator = $creator;
 
         // assignee
-        $assignee = R::load('users', $task->assignee_to);
+        $staff = R::load('staffs', $task->assigned_to);
+        $assignee = R::load('users', $staff->user_id);
         $task->assignee = $assignee;
         
         if (!$task) {
