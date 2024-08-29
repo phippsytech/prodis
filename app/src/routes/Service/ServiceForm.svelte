@@ -8,6 +8,8 @@
 
     let max_rate;
 
+    let billing_code; 
+
     let over_max_rate;
     $: {
         over_max_rate = service.rate <= max_rate;
@@ -27,7 +29,7 @@
     autocomplete="off"
 />
 <FloatingInput
-    bind:value={service.billing_code}
+    bind:value={billing_code}
     label="Billing code"
     placeholder="eg: 11_023_0110_7_3"
     autocomplete="off"
@@ -38,6 +40,7 @@
     bind:max_rate
     bind:location={service.location}
     bind:name={service.name}
+    bind:billing_code={billing_code}
 />
 
 <FloatingSelect

@@ -9,6 +9,7 @@
   export let unit = "hour/day/year";
   export let max_rate = 0;
   export let name;
+  export let billing_code;
 
   let mounted = false;
   let support_items = [];
@@ -24,34 +25,44 @@
   let showError = false;
   let errorMessage = "";
 
+
+  let previousValue = value;
+
+  let debounceTimeout;
+  function debounce(fn, delay) {
+      return (...args) => {
+          clearTimeout(debounceTimeout);
+          debounceTimeout = setTimeout(() => fn(...args), delay);
+      };
+  }
+
+  const debouncedUpdateInternalValue = debounce(() => updateInternalValue(), 300);
+
   // Fetch support items and populate the option list
   onMount(() => {
       jspa("/SupportItem", "listSupportItems", {})
           .then((result) => {
               support_items = result.result;
-
-              items = support_items.map(item => {
-                  return {
-                      label: `${item.support_item_number} : ${item.support_item_name} (${item.registration_group_name})`,
-                      value: item.support_item_number
-                  };
-              });
+              items = support_items.map(item => ({
+                  label: `${item.support_item_number} : ${item.support_item_name} (${item.registration_group_name})`,
+                  value: item.support_item_number
+              }));
 
               items.sort((a, b) => a.label.localeCompare(b.label));
               mounted = true;
 
-              // set internalValue after items are loaded
-              updateInternalValue();
+              // Update internal value after items are loaded
+              debouncedUpdateInternalValue();
           })
           .catch((error) => {
-              //console.error("Error fetching support items:", error);
+              console.error("Error fetching support items:", error);
               errorMessage = "No support items found";
               showError = true;
           });
   });
 
   function updateInternalValue() {
-      if (mounted && value) {
+      if (mounted && value !== previousValue) {
           const matchedItem = items.find(item => item.value === value);
           if (matchedItem) {
               internalValue = matchedItem;
@@ -64,6 +75,7 @@
               placeholderText = "";
               showError = true;
           }
+          previousValue = value; // Update previousValue to the current value
       }
   }
 
@@ -98,15 +110,19 @@
           if (location && item[location] !== undefined) {
               max_rate = item[location];
           }
+
+          billing_code = item.support_item_number;
+          console.log('Support item selected:', item);
+          console.log('Billing code:', item.support_item_number);
       }
   }
 
-  // watch for changes to value or location after the component is mounted
+  // Watch for changes to value or location after the component is mounted
   $: if (mounted) {
-      updateInternalValue();
+      debouncedUpdateInternalValue();
   }
 
-  // handle when the user blurs the select dropdown
+  // Handle when the user blurs the select dropdown
   function handleBlur() {
       if (internalValue && internalValue.value !== value) {
           value = internalValue.value;
@@ -115,9 +131,9 @@
       filterText = "";
   }
 
-  // ensure internalValue is updated after value changes
+  // Ensure internalValue is updated after value changes
   afterUpdate(() => {
-      updateInternalValue();
+      debouncedUpdateInternalValue();
   });
 </script>
 
