@@ -129,6 +129,14 @@
       filterText = "";
   }
 
+  function handleChange(e) {
+      value = e.detail.value;
+
+      value = internalValue.value;
+      setSupportItem(internalValue.value);
+      filterText = "";
+  }
+
   // Ensure internalValue is updated after value changes
   afterUpdate(() => {
       debouncedUpdateInternalValue();
@@ -145,6 +153,7 @@
       bind:value={internalValue}
       bind:filterText
       on:blur={handleBlur}
+      on:change={handleChange}
       {items}
       placeholder={placeholderText}
       hideEmptyState
