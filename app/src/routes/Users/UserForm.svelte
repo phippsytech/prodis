@@ -47,6 +47,7 @@
             { value: "therapist.lead", option: "therapist.lead" },
             { value: "house", option: "house" },
             { value: "house.lead", option: "house.lead" },
+            { value: "trip", option: "trip" },
             { value: "roster", option: "roster" },
             { value: "forms", option: "forms" },
             { value: "timeline", option: "timeline" },
