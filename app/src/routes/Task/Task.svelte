@@ -174,21 +174,6 @@
 <div class="mb-4">
 	<div>
 		<div class="xl:border-b xl:pb-6">
-			{#if task.archived == 1}
-				<div
-					class="bg-red-100 rounded-lg py-5 px-6 mb-4 text-base text-red-700 mb-3 flex justify-between mt-4"
-					role="alert"
-				>
-					{task.title} has been archived.
-					<button
-						on:click={() => restoreTask()}
-						type="button"
-						class="inline-block px-6 py-2.5 bg-red-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-red-700 hover:shadow-lg focus:bg-red-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-red-800 active:shadow-lg transition duration-150 ease-in-out"
-						>Restore
-					</button>
-				</div>
-			{/if}
-
 			<div class="mt-2">
 				{#if isEditingTitle}
 					<FloatingInput

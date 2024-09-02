@@ -12,9 +12,8 @@
     import { toastError, toastSuccess } from "@shared/toastHelper.js";
     import Role from "@shared/Role.svelte";
     import ParticipantList from "./ParticipantList.svelte";
-
+    import TaskList from "./Task/TaskList.svelte";
     import StaffKPIReport from "./StaffKPIReport.svelte";
-
     import DueReports from "@app/routes/Profile/Reports/Due.svelte";
     import ClientServiceAgreements from "@app/routes/Profile/Reports/ClientServiceAgreements.svelte";
 
@@ -72,11 +71,12 @@
     class="flex flex-col md:flex-row justify-between mb-4 md:cols-1 lg:cols-3 xl:cols-4 gap-x-2"
     style="z-index: -3; position: relative;"
 >
-    <Role roles={["stakeholder", "therapist", "house"]}>
-        <div class="md:w-1/2" style="z-index: -3; position: relative;">
+    <div class="md:w-1/2" style="z-index: -3; position: relative;">
+        <Role roles={["stakeholder", "therapist", "house"]}>
             <ParticipantList />
-        </div>
-    </Role>
+        </Role>
+        <TaskList />
+    </div>
     <div class="md:w-1/2">
         <Role roles={["therapist"]}>
             <StaffKPIReport staff_id={$StafferStore.id} />
