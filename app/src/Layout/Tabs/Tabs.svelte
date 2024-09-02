@@ -39,13 +39,13 @@
                         name: "Add Trip",
                         url: "/trips/add",
                         active: true,
-                        roles: ["house", "therapist", "admin"],
+                        roles: ["house", "therapist", "admin", "trip"],
                     },
                     {
                         name: "Trip History",
                         url: "/trips/history",
                         active: true,
-                        roles: ["house", "therapist", "admin"],
+                        roles: ["house", "therapist", "admin", "trip"],
                     },
                 ];
             },
