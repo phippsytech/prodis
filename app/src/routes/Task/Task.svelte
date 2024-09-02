@@ -1,5 +1,4 @@
 <script>
-	import Container from "@shared/Container.svelte";
 	import FloatingInput from "@shared/PhippsyTech/svelte-ui/forms/FloatingInput.svelte";
 	import FloatingDateTime from "@shared/PhippsyTech/svelte-ui/forms/FloatingDateTime.svelte";
 	import StaffSelector from "@app/routes/Billables/StaffSelector.svelte";
@@ -160,7 +159,7 @@
 		} else {
 			show = false;
 		}
-        
+
         ActionBarStore.set({
             can_delete: false,
 			undo: undo,
@@ -250,9 +249,9 @@
 					{:else}
 						<div class="flex flex-col">
 							<div class="text-sm font-medium text-gray-900">
-								Assignee: 
+								Status: 
 							</div>
-							{formatPrettyName(task.status)}
+							{ task.status ? formatPrettyName(task.status) : 'Pending' }
 						</div>
 					{/if}
 				</div>
@@ -281,7 +280,7 @@
 							<div class="text-sm font-medium text-gray-900">
 								Assignee: 
 							</div>
-							{task.assignee.name ?? 'Unassigned'}
+							{ task.assigned_to ? task.assignee.name : 'Unassigned' }
 						</div>
 						<div class="flex flex-col">
 							<div class="text-sm font-medium text-gray-900">
