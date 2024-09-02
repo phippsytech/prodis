@@ -1,0 +1,119 @@
+<?php
+
+namespace NDISmate\Models\Participant\Document;
+
+use \RedBeanPHP\R as R;
+
+
+class ListDocumentsByParticipantId
+{
+
+    function __invoke($data)
+    {
+
+        // collect_from_therapist,
+        // collect_from_sil,
+
+        // required, optional, do_not_collect
+
+        $participanter = R::load("participants", $data['participant_id']);
+        $participant_groups = json_decode($participanter->groups, true);
+
+        if ($participant_groups == null  || $participant_groups == []) {
+            return ["http_code" => 200, "result" => []];
+        }
+
+        $therapist_query = <<<HEREDOC
+select 
+        documents.id,
+        documents.name,
+        documents.description,
+        documents.date_collection_option,
+        documents.years_until_expiry,
+        IF(
+            documents.collect_from_therapist = 'required',
+            TRUE,
+            FALSE
+        ) AS required
+        from documents
+        left join participantdocuments on (documents.id = participantdocuments.document_id AND participantdocuments.participant_id = :participant_id)
+    where 
+    (documents.collect_from_therapist in ('required', 'optional') and :set_member_therapist = 1)
+    
+    ORDER BY required desc, documents.name
+HEREDOC;
+
+        $sil_query = <<<HEREDOC
+select 
+        documents.id,
+        documents.name,
+        documents.description,
+        documents.date_collection_option,
+        documents.years_until_expiry,
+        IF(
+            documents.collect_from_sil = 'required',
+            TRUE,
+            FALSE
+        ) AS required
+        from documents
+        left join participantdocuments on (documents.id = participantdocuments.document_id AND participantdocuments.participant_id = :participant_id)
+    where 
+    (documents.collect_from_sil in ('required', 'optional') and :set_member_sil = 1)
+    
+    ORDER BY required desc, documents.name
+HEREDOC;
+
+        $both_query = <<<HEREDOC
+select 
+    documents.id,
+    documents.name,
+    documents.description,
+    documents.date_collection_option,
+    documents.years_until_expiry,
+    IF(
+        documents.collect_from_sil = 'required' OR documents.collect_from_therapist = 'required',
+        TRUE,
+        FALSE
+    ) AS required
+from documents
+left join participantdocuments on documents.id = participantdocuments.document_id AND participantdocuments.participant_id = :participant_id
+where 
+    (documents.collect_from_sil in ('required', 'optional') and :set_member_sil = 1)
+    OR (documents.collect_from_therapist in ('required', 'optional') and :set_member_therapist = 1)
+    
+ORDER BY required desc, documents.name
+HEREDOC;
+
+
+        $params = [
+            ":participant_id" => $data['participant_id'],
+
+        ];
+
+        switch (true) {
+            case (in_array("sil", $participant_groups) && !in_array("therapist", $participant_groups)):
+                $params[":set_member_sil"] = in_array("sil", $participant_groups) ? 1 : 0;
+                $query = $sil_query;
+                break;
+            case (!in_array("sil", $participant_groups) && in_array("therapist", $participant_groups)):
+                $params[":set_member_therapist"] = in_array("therapist", $participant_groups) ? 1 : 0;
+                $query = $therapist_query;
+                break;
+            case (in_array("sil", $participant_groups) && in_array("therapist", $participant_groups)):
+                $params[":set_member_sil"] = in_array("sil", $participant_groups) ? 1 : 0;
+                $params[":set_member_therapist"] = in_array("therapist", $participant_groups) ? 1 : 0;
+                $query = $both_query;
+                break;
+        }
+
+
+
+        $bean = R::getAll($query, $params);
+
+        foreach ($bean as &$row) {
+            $row['required'] = ($row['required'] == 1) ? true : false;
+        }
+
+        return $bean;
+    }
+}
