@@ -21,26 +21,7 @@ class GetClientMailingListCSV
             ORDER BY clients.name'
         );
 
-        return ['http_code' => 200, 'result' => $beans];
+        return $beans;
 
-        //     header('Content-Type: text/csv');
-        //     header('Content-Disposition: attachment; filename="anonclientservices.csv"');
-
-        //     $fp = fopen('php://memory', 'w');
-
-        //     // headers
-        //     fputcsv($fp, ['ClientName', 'ClientDOB', 'ClientRepEmail', 'Archived', 'StakeholderName', 'StakeholderEmail', 'StakeholderRelationship']);
-
-        //     foreach ($bean as $fields) {
-        //         fputcsv($fp, $fields);
-        //     }
-
-        //     rewind($fp);
-        //     $csv = stream_get_contents($fp);
-
-        //     fclose($fp);
-        //     readfile($csv);
-        //     print ($csv);
-        //     return ['http_code' => 200];
     }
 }

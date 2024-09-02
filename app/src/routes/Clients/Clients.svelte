@@ -1,10 +1,10 @@
 <script>
     import Role from "@shared/Role.svelte";
     import List from "./List.svelte";
-    // import JSON2CSV from "@shared/JSON2CSV.svelte";
+    import JSON2CSV from "@shared/JSON2CSV.svelte";
     import { push } from "svelte-spa-router";
     import { TabStore, BreadcrumbStore } from "@shared/stores.js";
-    // import { jspa } from "@shared/jspa.js";
+    import { jspa } from "@shared/jspa.js";
 
     export let search = "";
 
@@ -13,20 +13,20 @@
     document.title = "Clients";
     BreadcrumbStore.set({ path: [{ name: "Clients" }] });
 
-    // let participantMailingList = [];
+    let participantMailingList = [];
 
-    // jspa("/Client", "getClientMailingList", {}).then((result) => {
-    //     participantMailingList = result.result;
-    // });
+    jspa("/Client", "getClientMailingList", {}).then((result) => {
+        participantMailingList = result.result;
+    });
 </script>
 
-<!-- <Role roles={["admin"]}>
+<Role roles={["admin"]}>
     <JSON2CSV
         filename="participant-list.csv"
         bind:json_data={participantMailingList}
         label="Participant List CSV"
     />
-</Role> -->
+</Role>
 <div class="bg-white px-4 py-4 mb-4 mt-2">
     <!--   
     <h2 class="mt-2 text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight px-2 mt-0 mb-2">Clients</h2> -->
