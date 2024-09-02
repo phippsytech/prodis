@@ -5,7 +5,7 @@ namespace NDISmate\Models\SIL\House\Timeline;
 use \NDISmate\CORE\JsonResponse;
 use \RedBeanPHP\R as R;
 
-class GetForm {
+class GetTimeline {
 
     function __invoke($data) {
         //TODO: assess what columns are needed for the timeline table
@@ -19,8 +19,17 @@ class GetForm {
             // get the timeline  from the timeline table
             // use readbean for queries
 
-            // use data['id'] to get the timeline - client id
+           $timeline = R::findOne('id', 'id=:id', [':id' => $data['id']] );
 
+           if ($timeline) {
+
+                if ($timeline['report_type'] == "End of Shift") $timeline['report_type'] = "EndOfShift";
+                if ($timeline['report_type'] == "Sleep Disturbance") $timeline['report_type'] = "SleepDisturbance";
+                if ($timeline['report_type'] == "Sleep Time") $timeline['report_type'] = "SleepTime";
+                if ($timeline['report_type'] == "Risk Assessment") $timeline['report_type'] = "RiskAssessment";
+           }
+
+           return JsonResponse::ok($timeline);
 
         } catch(\Exception $e) {
             return JsonResponse::notFound();
