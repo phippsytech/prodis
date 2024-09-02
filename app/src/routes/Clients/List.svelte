@@ -21,11 +21,9 @@
     let data = { staff_id: StafferStore.id };
 
     let filters = [
-      {label: "archived", enabled: false},
-      {label: "on hold", enabled: false}
+        { label: "archived", enabled: false },
+        { label: "on hold", enabled: false },
     ];
-
-    let showArchived = false;
 
     $: stafferStore = $StafferStore;
     $: rolesStore = $RolesStore;
@@ -64,16 +62,13 @@
                 return 0; // names must be equal
             });
 
-            clients = clients;
-            clientList = clients; // chuck in clients to this array for filtering
+            clientList = clients; // Initialize clientList for filtering
         });
     }
 
-
     $: {
-        // identify if search contains a 9 digit number
+        // Filter by NDIS number or client name first
         if (is9DigitNumber(search)) {
-            // filter by NDIS number
             clientList = clients.filter(
                 (client) =>
                     client.ndis_number &&
@@ -81,21 +76,33 @@
                         search.replace(/\s+/g, ""),
             );
         } else {
-            // filter by client name
-            // there is a problem which will mean if client.client_name is removed it will effectively hide the record
             clientList = clients.filter(
                 (client) =>
                     client.client_name &&
                     client.client_name
                         .toLowerCase()
-                        .includes(search.toLowerCase()) == true,
+                        .includes(search.toLowerCase()),
             );
-            if (!showArchived)
-                clientList = clientList.filter(
-                    (client) => client.archived != 1,
-                );
         }
 
+        // Apply the "on hold" and "archived" filters
+        const showOnHold = filters.find((f) => f.label === "on hold").enabled;
+        const showArchived = filters.find(
+            (f) => f.label === "archived",
+        ).enabled;
+
+        clientList = clientList.filter((client) => {
+            const isArchived = client.archived === "1";
+            const isOnHold = client.on_hold;
+            return (
+                (showOnHold && showArchived && isArchived && isOnHold) ||
+                (showOnHold && !showArchived && isOnHold && !isArchived) ||
+                (!showOnHold && showArchived && isArchived && !isOnHold) ||
+                (!showOnHold && !showArchived && !isArchived)
+            );
+        });
+
+        // Sort the final clientList
         clientList.sort(function (a, b) {
             const nameA = a.client_name.toUpperCase(); // ignore upper and lowercase
             const nameB = b.client_name.toUpperCase(); // ignore upper and lowercase
@@ -103,34 +110,6 @@
             if (nameA > nameB) return 1;
             return 0; // names must be equal
         });
-
-        clientList = clientList;
-    }
-
-    $: {
-        const showOnHold = filters.find(f => f.label === "on hold").enabled;
-        const showArchived = filters.find(f => f.label === "archived").enabled;
-
-        clientList = clients
-            .filter(client => {
-                const isArchived = client.archived === "1";
-                const isOnHold = client.on_hold;
-                return (
-                    (showOnHold && showArchived && isArchived && isOnHold) ||
-                    (showOnHold && !showArchived && isOnHold && !isArchived) ||
-                    (!showOnHold && showArchived && isArchived && !isOnHold) ||
-                    (!showOnHold && !showArchived && !isArchived)
-                );
-            })
-            .sort((a, b) => a.client_name.toUpperCase().localeCompare(b.client_name.toUpperCase()));
-    }
-
-    $: {
-        if (search) {
-            clientList = clientList.filter(client => 
-                client.client_name.toLowerCase().includes(search.toLowerCase())
-            );
-        }
     }
 
     function is9DigitNumber(str) {
