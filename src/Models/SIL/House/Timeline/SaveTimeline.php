@@ -28,7 +28,13 @@ class SaveTimeline {
         
                     $id = R::store(json_encode($data));
         
-                    return R::findOne('timelines', 'id = ?', [$id]);
+                    $result = R::findOne('timelines', 'id = ?', [$id]);
+
+                    if (!is_null($result) ) {
+                        $result->form_data = json_decode($result->form_data);
+                    }
+
+                    return $result;
                     
                 } 
             } else {
@@ -47,7 +53,13 @@ class SaveTimeline {
                 var_dump($result);
 
         
-                return R::findOne('timelines', 'id = ?', [$id]);
+               $result = R::findOne('timelines', 'id = ?', [$id]);
+
+                if (!is_null($result) ) {
+                    $result->form_data = json_decode($result->form_data);
+                }
+
+               return $result;
     
             }
             
