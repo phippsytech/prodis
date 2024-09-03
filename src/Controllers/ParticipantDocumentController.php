@@ -2,15 +2,22 @@
 namespace NDISmate\Controllers;
 
 use NDISmate\CORE\BaseController;
-use NDISmate\Models\Document\ListDocumentsByParticipantIds;
+use NDISmate\Models\Participant\Document\ListDocumentsByParticipantId;
 
-final class DocumentController extends BaseController
+use NDISmate\Services\ParticipantDocumentService\AddParticipantDocument;
+use NDISmate\Services\ParticipantDocumentService\UpdateParticipantDocument;
+use NDISmate\Services\ParticipantDocumentService\DeleteParticipantDocument;
+
+
+final class ParticipantDocumentController extends BaseController
 {
     protected function defineController()
     {
         $this->controller = [
-
-            'listDocumentsByParticipantIds' => [new ListDocumentsByParticipantIds, null, true, []],
+            'addParticipantDocument' => [new AddParticipantDocument, null, true, ['admin']],
+            'updateParticipantDocument' => [new UpdateParticipantDocument, null, true, ['admin']],
+            'deleteParticipantDocument' => [new DeleteParticipantDocument, null, true, ["sil.admin", "admin"]],
+            'listDocumentsByParticipantId' => [new ListDocumentsByParticipantId, null, true, []],
 
         ];
     }

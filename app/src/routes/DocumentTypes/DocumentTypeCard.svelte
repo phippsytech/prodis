@@ -10,25 +10,21 @@
     <div class="min-w-0 flex-1">
         <span class="focus:outline-none">
             <span class="absolute inset-0" aria-hidden="true"></span>
-            <p class="text-sm font-medium text-gray-900 group-hover:text-white">
-                {documentType.name}
-            </p>
-            {#if documentType.date_collection_option == "issued"}
-                <div class="text-xs">
-                    Collect Issue Date <span class="font-light"
-                        >(expires in {documentType.years_until_expiry} years)</span
+            <div
+                class="text-sm font-medium text-gray-900 group-hover:text-white flex justify-between"
+            >
+                <span class="font-bold text-gray-800">{documentType.name}</span>
+                {#if documentType.is_required}
+                    <span class="text-xs uppercase text-slate-300"
+                        >REQUIRED</span
                     >
+                {/if}
+            </div>
+            {#if documentType.description}
+                <div class="text-xs text-slate-600">
+                    {documentType.description}
                 </div>
             {/if}
-            {#if documentType.date_collection_option == "expires"}
-                <div class="text-xs">Collect Expiry Date</div>
-            {/if}
-            {#if documentType.collect_from_therapist}<div class="text-xs">
-                    Therapist: {documentType.collect_from_therapist}
-                </div>{/if}
-            {#if documentType.collect_from_sil}<div class="text-xs">
-                    SIL: {documentType.collect_from_sil}
-                </div>{/if}
         </span>
     </div>
 </div>
