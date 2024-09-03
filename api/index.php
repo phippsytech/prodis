@@ -100,6 +100,7 @@ $app->post('/SupportItem', new ControllerFactory(\NDISmate\Controllers\SupportIt
 $app->post('/TimeTracking', new ControllerFactory(\NDISmate\Controllers\TimeTrackingController::class));
 $app->post('/Trip', new ControllerFactory(\NDISmate\Controllers\TripController::class));
 $app->post('/Utilities', new ControllerFactory(\NDISmate\Controllers\UtilityController::class));
+$app->post('/SIL/House/Timeline', new ControllerFactory(\NDISmate\Controllers\TimelineController::class));
 
 // CONVERSION IN PROGRESS
 $app->post('/User', new ControllerFactory(\NDISmate\Controllers\UserController::class));
