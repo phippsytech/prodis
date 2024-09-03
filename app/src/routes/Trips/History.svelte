@@ -5,11 +5,10 @@
     // import Pager from "@shared/PhippsyTech/svelte-ui/Pager.svelte";
     import { jspa } from "@shared/jspa.js";
     import { formatDate } from "@shared/utilities.js";
-    
+
     import { convertFieldsToBoolean } from "@shared/utilities/convertFieldsToBoolean";
     import StaffSelector from "@app/routes/Billables/StaffSelector.svelte";
     import Role from "@shared/Role.svelte";
-    
 
     export let params;
 
@@ -65,7 +64,7 @@
     }
 </script>
 
-<Role roles={["super"]}>
+<Role roles={["trip"]}>
     <div class="flex-1">
         <StaffSelector bind:staff_id />
     </div>
