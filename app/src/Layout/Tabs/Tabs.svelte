@@ -566,6 +566,25 @@
             },
         },
 
+        // {
+        //     "/documenttypes": (params) => {
+        //         tabs = [
+        //             {
+        //                 name: "Types",
+        //                 url: "/documenttypes/list",
+        //                 active: true,
+        //                 roles: ["admin"],
+        //             },
+        //             {
+        //                 name: "Missing",
+        //                 url: "/documenttypes/missing",
+        //                 active: true,
+        //                 roles: ["admin"],
+        //             },
+        //         ];
+        //     },
+        // },
+
         {
             "/profile": (params) => {
                 tabs = [
