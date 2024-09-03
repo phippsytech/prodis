@@ -10,6 +10,7 @@
     export let client_id = null;
     export let staff_id = null;
     export let readOnly = false;
+    export let clearable = false;
 
     let clients = [];
     let clientList = [];
@@ -104,4 +105,5 @@
     options={clientList}
     hideValidation={true}
     {readOnly}
+    {clearable}
 />

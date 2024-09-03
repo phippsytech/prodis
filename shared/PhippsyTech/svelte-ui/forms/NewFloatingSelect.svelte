@@ -10,6 +10,7 @@
     export let instruction = "Select an option";
     export let readOnly = false;
     export let validation_error = "Please select an option";
+    export let clearable = false;
 
     let display_value = "";
 
@@ -62,6 +63,13 @@
     function handleBlur() {
         validate();
     }
+
+    function clear() {
+        value = null;
+        selectValue = "";
+        valid = null;
+        dispatch("change", { value: null });
+    }
 </script>
 
 {#if readOnly}
@@ -75,20 +83,30 @@
     </div>
 {:else}
     <div
-        class="rounded-md shadow-md ring-1 ring-inset mb-2 bg-white
+        class="rounded-md shadow-md ring-1 ring-inset mb-2 bg-white pb-[5px]
  {hideValidation === false && valid === false
             ? 'ring-red-500 shadow-md'
             : 'ring-indigo-100 shadow-sm'}
 "
     >
-        <label
-            for={id}
-            class="block px-2.5 pt-2 text-xs text-gray-900/50
-    {hideValidation === false && valid === false
-                ? 'text-red-600'
-                : 'text-gray-900/50'}
-    ">{label}</label
-        >
+        <div class="flex justify-between items-center px-2.5 pt-2 gap-2">
+            <label
+                    for={id}
+                    class="block text-xs text-gray-900/50
+            {hideValidation === false && valid === false
+                        ? 'text-red-600'
+                        : 'text-gray-900/50'}
+            ">{label}</label
+                >
+            {#if clearable}
+                <span
+                    class="text-xs text-gray-900/50 cursor-pointer"
+                    on:click={() => clear()}
+                >
+                    clear
+                </span>
+            {/if}
+        </div>
         <div class="flex-grow relative mx-2">
             <select
                 {id}
@@ -96,7 +114,7 @@
                 bind:value={selectValue}
                 on:blur={handleBlur}
                 class="
-    px-0 pt-1 pb-2
+    px-0 py-1
     block
     w-full
     text-base

@@ -5,6 +5,7 @@
 
     export let staff_id = null;
     export let readOnly = false;
+    export let clearable = false;
 
     let staff = [];
     let staffList = [];
@@ -58,4 +59,5 @@
     instruction="Choose staffer"
     options={staffList}
     {readOnly}
+    {clearable}
 />
