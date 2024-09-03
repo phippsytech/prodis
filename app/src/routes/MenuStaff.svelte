@@ -17,6 +17,7 @@
         UserGroupIcon,
         ClockIcon,
         ClipboardDocumentListIcon,
+        DocumentIcon,
         DocumentTextIcon,
         CogIcon,
         CubeTransparentIcon,
@@ -134,6 +135,12 @@
             url: "/credentials",
             name: "Credentials",
             icon: ShieldCheckIcon,
+            role: ["manager", "admin"],
+        },
+        {
+            url: "/documenttypes",
+            name: "Document Types",
+            icon: DocumentIcon,
             role: ["manager", "admin"],
         },
 

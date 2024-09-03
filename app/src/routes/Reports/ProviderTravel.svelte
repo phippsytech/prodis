@@ -9,12 +9,16 @@
         formatDate,
     } from "@shared/utilities.js";
     import { ExclamationTriangleIcon } from "heroicons-svelte/24/outline";
+    import StaffSelector from "@shared/StaffSelector.svelte";
+    import ClientSelector from "@shared/ClientSelector.svelte";
 
     const date = new Date();
 
     let trips = [];
     let start_date = getMonday();
     let end_date = getDatePlus7Days(start_date);
+    let staff_id = null;
+    let client_id = null;
 
     BreadcrumbStore.set({
         path: [
@@ -23,7 +27,7 @@
         ],
     });
 
-    function getTripsByDate(start_date, end_date) {
+    function getTripsByDate(start_date, end_date, staff_id = null, client_id = null) {
         if (start_date && end_date) {
             const startDateRegex = /^\d{4}-\d{2}-\d{2}$/;
             const endDateRegex = /^\d{4}-\d{2}-\d{2}$/;
@@ -38,6 +42,8 @@
                 jspa("/Trip", "listTripsByDate", {
                     start_date: start_date,
                     end_date: end_date,
+                    staff_id: staff_id,
+                    client_id: client_id,
                 }).then((result) => {
                     trips = result.result;
                     // trips = trips.filter((trip) => trip.staff_id == 100);
@@ -51,7 +57,7 @@
         }
     }
 
-    $: getTripsByDate(start_date, end_date);
+    $: getTripsByDate(start_date, end_date, staff_id, client_id);
 
     function displayClaimableKms(trip) {
         // Maximum Claimable Time: Auto-calculation or a display based on zone constraints.
@@ -101,6 +107,8 @@
     <div class="flex flex-wrap space-x-2 items-center md:flex-no-wrap">
         <FloatingDate label="Start Date" bind:value={start_date} />
         <FloatingDate label="End Date" bind:value={end_date} />
+        <StaffSelector bind:staff_id={staff_id} clearable />
+        <ClientSelector bind:client_id={client_id} bind:staff_id={staff_id} clearable />
     </div>
 </div>
 

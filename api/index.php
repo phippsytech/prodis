@@ -94,7 +94,9 @@ $app->post('/Client/Note', new ControllerFactory(\NDISmate\Controllers\ClientNot
 $app->post('/Client/Report', new ControllerFactory(\NDISmate\Controllers\ClientReportController::class));
 $app->post('/Client/Staff', new ControllerFactory(\NDISmate\Controllers\ClientStaffController::class));
 $app->post('/Client/Stakeholder', new ControllerFactory(\NDISmate\Controllers\ClientStakeholderController::class));
+$app->post('/DocumentType', new ControllerFactory(\NDISmate\Controllers\DocumentTypeController::class));
 $app->post('/Geo', new ControllerFactory(\NDISmate\Controllers\GeoController::class));
+$app->post('/Participant/Document', new ControllerFactory(\NDISmate\Controllers\ParticipantDocumentController::class));
 $app->post('/Participant/Service', new ControllerFactory(\NDISmate\Controllers\ParticipantServiceController::class));
 $app->post('/Participant/ServiceAgreement', new ControllerFactory(\NDISmate\Controllers\ParticipantServiceAgreementController::class));
 $app->post('/Postcode', new ControllerFactory(\NDISmate\Controllers\PostcodeController::class));
