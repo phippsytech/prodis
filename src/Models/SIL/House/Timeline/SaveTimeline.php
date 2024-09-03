@@ -9,41 +9,51 @@ use \RedBeanPHP\R as R;
 class SaveTimeline {
 
     function __invoke($data) {
-
+        
         try {
-            echo 'test';
             // unset($data['jwt_claims']);
-            
-            $timeline = R::findOne('timeline', 'id = ?', [$data['id']]); 
-            print_r($data);
-            if (!is_null($timeline)) {
-                $ids = $data['_id'];
-    
-                unset ($data['_id']);
-             
-                if ($is_array($id)) {
-                    $ids = implode('', $ids);
-                }
-    
-                $result = R::store(json_encode($data));
-    
-                return JsonResponse::ok(["result" => R::findOne('timeline', 'id = ?', [$result])]);
+            var_dump($data);
+            if (isset($data['id'])) {   
+
+                $timeline = R::findOne('timelines', 'id = ?', [$data['id']]); 
+           
+                if (!is_null($timeline)) {
+                    $ids = $data['_id'];
+        
+                    unset ($data['_id']);
                 
+                    if ($is_array($id)) {
+                        $ids = implode('', $ids);
+                    }
+        
+                    $id = R::store(json_encode($data));
+        
+                    return R::findOne('timelines', 'id = ?', [$id]);
+                    
+                } 
             } else {
-                
+                print_r('paolo');
                 // Insert new record
-                $timeline = R::dispense('timeline');
+                $timeline = R::dispense('timelines');
                 foreach ($data as $key => $value) {
+                    if ($key === 'form_data') {
+                        $timeline->$key = json_encode($value);
+                        continue;
+                    }
                     $timeline->$key = $value;
                 }
     
-                $result =  R::store($timeline);
-    
-                return JsonResponse::ok(["result" => R::findOne('timeline', 'id = ?', [$result])]);
+                $id =  R::store($timeline);
+                var_dump($result);
+
+        
+                return R::findOne('timelines', 'id = ?', [$id]);
     
             }
+            
         } catch (\Exception $e) {
-            return JsonResponse::error($e->getMessage());
+            echo 'test';
+            throw new \Exception($e->getMessage());
         }
        
 
