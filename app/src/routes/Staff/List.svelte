@@ -3,10 +3,14 @@
   import { onMount } from "svelte";
   import { jspa } from "@shared/jspa.js";
   import Badge from "@shared/PhippsyTech/Tailwind/App/Elements/Badge.svelte";
+  import Filter from "@shared/PhippsyTech/svelte-ui/Filter.svelte";
 
   let staff = [];
   let staff_list = [];
   let showArchived = false;
+  let filters = [
+      { label: "archived", enabled: false }
+  ];
   export let search = "";
 
   onMount(() => {
@@ -27,6 +31,9 @@
   });
 
   $: {
+
+    showArchived = filters.find((f) => f.label === "archived").enabled;
+
     if (!showArchived) {
       staff_list = staff.filter((staffer) => staffer.archived != 1);
     } else {
@@ -51,10 +58,9 @@
   }
 </script>
 
-<label class="text-xs text-gray-400 px-6 flex justify-end">
-  <input type="checkbox" bind:checked={showArchived} class="mr-2" />
-  Include archived
-</label>
+<div class="px-6">
+  <Filter bind:filters />
+</div>
 
 <!-- <h2 class="mt-2 text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight pt-5 px-5">Staff</h2> -->
 <ul role="list" class="divide-y divide-gray-100">
