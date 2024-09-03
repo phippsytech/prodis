@@ -24,10 +24,10 @@ class DeleteTimeline {
             $timeline = R::load('timeline', $id);
 
             // Check if the bean exists
-            if ($timeline->id) {
+            if (!is_null($timeline)) {
                 // Trash the bean
-                R::trash($timeline);
-                return JsonResponse::ok(["result" => "Record deleted successfully"]);
+                $result = R::trash($timeline);
+                return JsonResponse::ok(["result" => $result]);
             } else {
                 return JsonResponse::error("Record not found");
             }
