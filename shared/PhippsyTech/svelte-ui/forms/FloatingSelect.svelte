@@ -50,7 +50,8 @@
             class="
             block
             w-full
-            p-0
+            px-0
+            py-1
             -mx-1
             text-base
             font-normal
