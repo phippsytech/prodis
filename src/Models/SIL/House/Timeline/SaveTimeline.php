@@ -12,21 +12,29 @@ class SaveTimeline {
         
         try {
             // unset($data['jwt_claims']);
-            var_dump($data);
+            
             if (isset($data['id'])) {   
-
+                print_r($data);
                 $timeline = R::findOne('timelines', 'id = ?', [$data['id']]); 
-           
+               
                 if (!is_null($timeline)) {
-                    $ids = $data['_id'];
+                    $ids = $data['id'];
         
-                    unset ($data['_id']);
+                    unset ($data['id']);
                 
-                    if ($is_array($id)) {
+                    if (is_array($ids)) {
                         $ids = implode('', $ids);
                     }
+
+                    foreach ($data as $key => $value) {
+                        if ($key === 'form_data') {
+                            $timeline->$key = json_encode($value);
+                            continue;
+                        }
+                        $timeline->$key = $value;
+                    }
         
-                    $id = R::store(json_encode($data));
+                    $id = R::store($timeline);
         
                     $result = R::findOne('timelines', 'id = ?', [$id]);
 
