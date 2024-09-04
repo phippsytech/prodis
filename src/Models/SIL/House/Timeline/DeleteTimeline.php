@@ -10,30 +10,29 @@ class DeleteTimeline {
     function __invoke($data) {
         // Delete timeline by id
 
-        unset($data['jwt_claims']);
+        // unset($data['jwt_claims']);
 
         // Check if the _id field is set in the data
-        if (isset($data['_id'])) {
+        if (isset($data['id'])) {
             // Delete the record with the given _id
-            $id = $data['_id'];
-            if (is_array($id)) {
-                $id = implode('', $id);
-            }
+            $id = $data['id'];
+            // if (is_array($id)) {
+            //     $id = implode('', $id);
+            // }
 
             // Load the bean
-            $timeline = R::load('timeline', $id);
+            $timeline = R::load('timelines', $id);
 
             // Check if the bean exists
             if (!is_null($timeline)) {
                 // Trash the bean
                 $result = R::trash($timeline);
-                return JsonResponse::ok(["result" => $result]);
+                return $result;
             } else {
-                return JsonResponse::error("Record not found");
+                throw new \Exception("Timeline not found", 404);
             }
         } else {
-            // Return an error if the _id field is not set
-            return JsonResponse::error("Missing _id field");
+            throw new \Exception("Missing id field", 400);
         }
     }
 }
