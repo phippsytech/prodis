@@ -10,7 +10,10 @@
     import Container from "@shared/Container.svelte";
     import FloatingInput from "@shared/PhippsyTech/svelte-ui/forms/FloatingInput.svelte";
     import { jspa } from "@shared/jspa.js";
-    import { PhoneIcon } from "@app/../node_modules/heroicons-svelte/dist/24/outline";
+    import {
+        PhoneIcon,
+        EnvelopeIcon,
+    } from "@app/../node_modules/heroicons-svelte/dist/24/outline";
     import { toastError, toastSuccess } from "@shared/toastHelper.js";
     import { createEventDispatcher } from "svelte";
     const dispatch = createEventDispatcher();
@@ -80,47 +83,32 @@
 <Container>
     <div class="text-xs opacity-50 mb-2">User Details</div>
 
-    <div class="flex flex-col sm:flex-row justify-between gap-0 sm:gap-2">
-        <div class="flex-grow">
-            <FloatingInput
-                bind:value={user.first_name}
-                label="First Name"
-                placeholder="eg: Annie"
-            />
-        </div>
-        <div class="flex-grow">
-            <FloatingInput
-                bind:value={user.last_name}
-                label="Last Name"
-                placeholder="eg: Walker"
-            />
-        </div>
-    </div>
-    <FloatingInput
-        bind:value={user.name}
-        label="Display Name"
-        placeholder="eg: Bella"
-        autocomplete="off"
-    />
-    <FloatingInput
-        bind:value={user.email}
-        label="Email"
-        placeholder="eg: annie.walker@cia.gov"
-    />
     <div class="flex justify-between gap-2 items-stretch">
         <div class="flex-grow">
-            <FloatingInput
-                bind:value={user.phone}
-                label="Phone"
-                placeholder="eg: 04XX XXX XXX"
-            />
-        </div>
+            <div
+                class="text-2xl text-indigo-900 tracking-tight font-fredoka-one-regular"
+            >
+                {user.display_name}
+            </div>
+            <div>
+                {user.first_name}
+                {user.last_name}
 
-        <a
-            href="tel:{user.phone}"
-            class="flex items-center justify-center mb-2 block rounded-md bg-indigo-600 px-4 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-        >
-            <PhoneIcon class="h-5 w-5 inline-block" />
-        </a>
+                {#if user.email}
+                    <a class="text-indigo-600 ml-2" href="mailto:{user.email}">
+                        <EnvelopeIcon
+                            class="h-4 w-4 inline-block"
+                        />{user.email}</a
+                    >
+                {/if}
+                {#if user.phone}
+                    <a class="text-indigo-600 ml-2" href="tel:{user.phone}">
+                        <PhoneIcon
+                            class="h-4 w-4 inline-block"
+                        />{user.phone}</a
+                    >
+                {/if}
+            </div>
+        </div>
     </div>
 </Container>

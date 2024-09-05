@@ -14,7 +14,7 @@ class GetUser
         } else {
             $user_id = $data['user_id'];
         }
-        // $user_id = $guard->user_id;
+        
 
         // Do get single user
         $user = R::load('users', $user_id);
@@ -23,7 +23,11 @@ class GetUser
             throw new \Exception('User Not Found', 404);
         } else {
             $user = $user->export();
-            $user['roles'] = json_decode($user['roles'], true);
+
+            // Get user roles
+            // $user['roles'] = json_decode((new \NDISMate\Models\UserRole\GetRoles)(["user_id" => $user_id]), true);
+
+            $user['roles'] = (new \NDISMate\Models\UserRole\GetRoles)(["user_id" => $user_id]);
 
             return $user;
         }

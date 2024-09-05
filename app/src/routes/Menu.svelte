@@ -42,15 +42,6 @@
     });
 </script>
 
-<!-- <div class="pt-2 px-4">
-    <div class="text-xs text-slate-800">Welcome</div>
-    <div
-        class="text-2xl text-indigo-900 tracking-tight font-fredoka-one-regular"
-    >
-        {$UserStore.name}
-    </div>
-</div> -->
-
 <div class="text-indigo-600 bg-white rounded-md p-2 my-2 px-4">
     <div
         class="text-2xl text-indigo-700 tracking-tight font-fredoka-one-regular"

@@ -1,15 +1,15 @@
 <?php
-namespace NDISmate\Models\User\Participant;
+namespace NDISmate\Models\UserRole\Participant;
 
 use \RedBeanPHP\R as R;
 
-class Allow
+class Deny
 {
     public function __invoke($data)
     {
         try {
             $bean = R::findOrCreate('userparticipants', ['user_id' => $data['user_id'], 'participant_id' => $data['participant_id']]);
-            $bean->allowed = 1;
+            $bean->allowed = 0;
             R::store($bean);
 
             return true;

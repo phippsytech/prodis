@@ -3,9 +3,9 @@
 namespace NDISmate\Controllers;
 
 use NDISmate\CORE\BaseController;
-use NDISmate\Models\User\DisableAdminLogin;
-use NDISmate\Models\User\EnableAdminLogin;
-use NDISmate\Models\User\GetRoles;
+use NDISmate\Models\UserRole\DisableAdminLogin;
+use NDISmate\Models\UserRole\EnableAdminLogin;
+use NDISmate\Models\UserRole\GetRoles;
 use NDISmate\Models\User\GetUser;
 use NDISmate\Models\User\ListUsers;
 use NDISmate\Models\User;

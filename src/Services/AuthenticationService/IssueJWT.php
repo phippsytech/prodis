@@ -12,7 +12,7 @@ final class IssueJWT
 
         $user_hash = $hashids->encode($data['user_id']);
         $jwt = JWT::encode([
-            'iss' => 'NDISmate App',  // issuer
+            'iss' => 'Prodis',  // issuer
             // "aud" => "zero.fail", // audience
             'iat' => time(),
             'nbf' => time() - 60,

@@ -5,20 +5,16 @@ use NDISmate\CORE\NewCustomModel;
 use RedBeanPHP\R as R;
 use Respect\Validation\Validator as v;
 
-
-// TODO: This needs to be managed in the prodis database
-
-class User extends NewCustomModel
+class UserRole extends NewCustomModel
 {
     public function __construct($bean = null)
     {
-        parent::__construct($bean ?: R::dispense('users'));
+        parent::__construct($bean ?: R::dispense('userroles'));
         $this->fields = [
-            'display_name' => [v::optional(v::stringType())],
-            'first_name' => [v::optional(v::stringType())],
-            'last_name' => [v::optional(v::stringType())],
+            'user_id' => [v::numericVal()],
             'email' => [v::stringType()],
-            'phone' => [v::optional(v::stringType())],
+            'roles' => [v::optional(v::arrayType())],
+            'access_all_participants' => [v::boolVal()]
         ];
     }
 

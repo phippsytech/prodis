@@ -13,7 +13,7 @@ class GetStaffer
     {
         $bean = R::getRow(
             'SELECT 
-                users.name as name,
+                users.display_name as name,
                 users.first_name as first_name,
                 users.last_name as last_name,
                 users.email as email,

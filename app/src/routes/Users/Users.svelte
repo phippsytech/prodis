@@ -22,10 +22,17 @@
     let showArchived = false;
     let userList = [];
     $: {
-        userList = users.filter(
-            (user) =>
-                user.email.toLowerCase().includes(search.toLowerCase()) == true,
-        );
+        const lowerSearch = search.toLowerCase(); // Normalize search input once
+
+        // Filter by email, phone, display_name, first_name, or last_name
+        userList = users.filter((user) => {
+            return (
+                user.phone?.toLowerCase().includes(lowerSearch) ||
+                user.display_name?.toLowerCase().includes(lowerSearch) ||
+                user.first_name?.toLowerCase().includes(lowerSearch) ||
+                user.last_name?.toLowerCase().includes(lowerSearch)
+            );
+        });
 
         // sort emails alphabetically
         userList.sort(function (a, b) {
@@ -79,15 +86,6 @@
                             name="search"
                         />
                     </div>
-
-                    <div class="flex items-center gap-x-4 lg:gap-x-6">
-                        <button
-                            on:click={() => push("/users/add")}
-                            type="button"
-                            class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                            >Add User</button
-                        >
-                    </div>
                 </div>
             </div>
 
@@ -137,7 +135,7 @@
 
                             <!-- </div> -->
                             <div class="pl-2">
-                                <div>{user.name}</div>
+                                <div>{user.display_name}</div>
                                 <div class="block text-xs w-full">
                                     {user.email}
                                 </div>

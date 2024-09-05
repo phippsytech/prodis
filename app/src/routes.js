@@ -742,10 +742,6 @@ export default {
         asyncComponent: () => import('./routes/Users/Users.svelte')
     }),
 
-    '/users/add': wrap({
-        asyncComponent: () => import('./routes/Users/Add.svelte')
-    }),
-
     '/users/:user_id': wrap({
         asyncComponent: () => import('./routes/Users/User.svelte')
     }),

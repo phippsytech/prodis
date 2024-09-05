@@ -1,7 +1,5 @@
 <script>
     import { onMount } from "svelte";
-    import { push } from "svelte-spa-router";
-
     import Container from "@shared/Container.svelte";
 
     // import DocumentList from '@shared/Document/List.svelte';
@@ -23,7 +21,6 @@
     import { StafferStore, BreadcrumbStore } from "@shared/stores.js";
     import RadioButtonGroup from "@shared/PhippsyTech/svelte-ui/forms/RadioButtonGroup.svelte";
 
-    // import PayGradeSelector from '../Payroll/PayGrades/PayGradeSelector.svelte';
     import PayGradeSelector from "../Payroll/Staff/SILPayGrade.svelte";
     import { convertMicrosoftDate } from "@shared/utilities.js";
 
@@ -37,7 +34,6 @@
     let stored_staffer = {};
     let mounted = false;
     let show = false;
-    let userComponent;
 
     $: {
         if (mounted) {
@@ -80,41 +76,6 @@
         });
     }
 
-    // handles the delete event called from the DcocumentList component
-    function deleteDocument(event) {
-        let document_id = event.detail.document_id;
-        staffer.documents.forEach((document, index) => {
-            if (document.id == document_id) {
-                staffer.documents[index].status = "deleting";
-            }
-        });
-        let document = {
-            id: event.detail.document_id,
-            staff_id: params.id,
-        };
-        jspa("/Staff/Document", "deleteStafferDocument", document).then(
-            (result) => {
-                staffer.documents = staffer.documents.filter(
-                    (document) => document.id !== event.detail.document_id,
-                );
-            },
-        );
-    }
-
-    // function setStaffer(){
-
-    //             StafferStore.update((currentData)=>{
-    //                 let newData = currentData;
-    //                 newData ={
-    //                     id: staffer.id,
-    //                     name: staffer.name,
-    //                     masquerading: true
-    //                 }
-    //                 return newData;
-    //             });
-
-    // }
-
     function fetchXeroEmployee(xero_employee_ref) {
         jspa("/Xero", "getEmployee", { employee_id: xero_employee_ref }).then(
             (result) => {
@@ -148,18 +109,12 @@
 
     function undo() {
         staffer = Object.assign({}, stored_staffer);
-        userComponent.undo(); // this undoes any changes in the user component
     }
 
     async function save() {
         try {
-            const user_id = await userComponent.upsert();
             jspa("/Staff", "updateStaffer", staffer).then((result) => {
-                // Make a copy of the object
-
                 stored_staffer = Object.assign({}, staffer);
-
-                // push("/staff")
             });
         } catch (error) {
             console.error(error);
@@ -178,15 +133,6 @@
             });
         }
     }
-
-    function handleLoaded(event) {
-        staffer.user = event.detail;
-        stored_staffer.user = Object.assign({}, event.detail);
-    }
-
-    function handleChanged(event) {
-        staffer.user = Object.assign({}, event.detail);
-    }
 </script>
 
 <div class="py-2 px-4 mb-2 flex justify-between items-center">
@@ -203,21 +149,8 @@
                 {staffer.first_name}
                 {staffer.last_name}
             </div>{/if}
-        <!-- <div class="text-2xl font-medium">Michael Phipps</div> -->
     </div>
-
-    <!-- <Role roles={["admin"]} >
-        <div class="flex justify-end ">
-            <button on:click={()=>setStaffer()}  type="button" class="inline-block px-6 py-2 shadow flexitems-center border border-gray-600 text-gray-600  rounded hover:bg-black hover:bg-opacity-5 focus:outline-none focus:ring-0 mb-4">
-            <svg  class="h-5 w-5 inline text-gray-600 flex-shrink-0" fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 576 512"><path d="M288 64C64 64 0 160 0 272S80 448 176 448h8.4c24.2 0 46.4-13.7 57.2-35.4l23.2-46.3c4.4-8.8 13.3-14.3 23.2-14.3s18.8 5.5 23.2 14.3l23.2 46.3c10.8 21.7 33 35.4 57.2 35.4H400c96 0 176-64 176-176s-64-208-288-208zM96 256a64 64 0 1 1 128 0A64 64 0 1 1 96 256zm320-64a64 64 0 1 1 0 128 64 64 0 1 1 0-128z"/></svg>
-            <span class="pl-2">Masquerade as {staffer.name}</span></button>
-        </div>
-    </Role> -->
 </div>
-
-<Role roles={["super"]}>
-    <StaffKPIReport {staff_id} />
-</Role>
 
 {#if staffer.archived == 1}
     <div
@@ -237,15 +170,36 @@
 {/if}
 
 {#if staffer.user_id}
-    <UserComponent
-        bind:this={userComponent}
-        bind:user_id={staffer.user_id}
-        on:loaded={(event) => handleLoaded(event)}
-        on:changed={(event) => handleChanged(event)}
-    />
+    <UserComponent bind:user_id={staffer.user_id} />
+
+    <FloatingDate label="Date of Birth" bind:value={staffer.date_of_birth} />
+
+    <Container>
+        <FloatingInput
+            bind:value={staffer.address_line_1}
+            label="Address Line 1"
+            placeholder="eg: Unit 1"
+        />
+        <FloatingInput
+            bind:value={staffer.address_line_2}
+            label="Address Line 2"
+            placeholder="eg: 123 Test St"
+        />
+        <FloatingInput
+            bind:value={staffer.suburb}
+            label="Suburb"
+            placeholder="eg: Adelaide"
+        />
+        <FloatingStateSelect bind:value={staffer.state} />
+        <FloatingInput
+            bind:value={staffer.postcode}
+            label="Postcode"
+            placeholder="eg: 3000"
+        />
+    </Container>
 {/if}
 
-{#if staffer.xero_employee_ref}
+<!-- {#if staffer.xero_employee_ref}
     <div
         class="rounded-md bg-indigo-50 py-2 px-4 mb-2 border border-indigo-200"
     >
@@ -261,102 +215,79 @@
             >
         </div>
     </div>
-{/if}
-
-<FloatingSelect
-    bind:value={staffer.status}
-    label="Status"
-    instruction="Select Status"
-    options={[
-        {
-            option: "Onboarding",
-            value: "onboarding",
-        },
-        {
-            option: "Current",
-            value: "current",
-        },
-        {
-            option: "Archived",
-            value: "archived",
-        },
-    ]}
-/>
-
-<FloatingDate label="Start Date" bind:value={staffer.start_date} />
-
-<FloatingSelect
-    bind:value={staffer.employment_type}
-    label="Employment Type"
-    instruction="Select Employment Type"
-    options={[
-        {
-            option: "Employee",
-            value: "employee",
-        },
-        {
-            option: "Contractor",
-            value: "contractor",
-        },
-    ]}
-/>
-
-<div class="bg-white px-3 pt-2 pb-4 mb-2 border border-gray-300 rounded-md">
-    <div class="text-xs opacity-50 mb-2">Staff Groups</div>
-    <CheckboxButtonGroup
-        options={[
-            { value: "therapist", option: "Therapist" },
-            { value: "sil", option: "SIL" },
-            { value: "admin", option: "Admin" },
-        ]}
-        bind:values={staffer.groups}
-    />
-</div>
-<StaffRoleSelector bind:staff_role={staffer.staff_role} />
-
-<FloatingDate label="Date of Birth" bind:value={staffer.date_of_birth} />
+{/if} -->
 
 <Container>
-    <FloatingInput
-        bind:value={staffer.address_line_1}
-        label="Address Line 1"
-        placeholder="eg: Unit 1"
-    />
-    <FloatingInput
-        bind:value={staffer.address_line_2}
-        label="Address Line 2"
-        placeholder="eg: 123 Test St"
-    />
-    <FloatingInput
-        bind:value={staffer.suburb}
-        label="Suburb"
-        placeholder="eg: Adelaide"
-    />
-    <FloatingStateSelect bind:value={staffer.state} />
-    <FloatingInput
-        bind:value={staffer.postcode}
-        label="Postcode"
-        placeholder="eg: 3000"
-    />
-</Container>
+    <div class="text-xs opacity-50 mb-2">Employment Details</div>
 
-<Role roles={["admin"]}>
-    <FloatingInput
-        bind:value={staffer.billable_hours_kpi}
-        label="Billable Hours KPI (hours)"
-        placeholder="eg: 25"
-        inputmode="tel"
-        autocomplete="off"
+    <FloatingSelect
+        bind:value={staffer.status}
+        label="Status"
+        instruction="Select Status"
+        options={[
+            {
+                option: "Onboarding",
+                value: "onboarding",
+            },
+            {
+                option: "Current",
+                value: "current",
+            },
+            {
+                option: "Archived",
+                value: "archived",
+            },
+        ]}
     />
 
-    {#if staffer.employment_type == "employee"}
-        <!-- <FloatingInput bind:value={staffer.level} label="Pay Grade (used for house earnings rates)" placeholder="eg: 1 - 4" inputmode="tel" autocomplete="off"/> -->
-        {#if staffer.groups.includes("sil")}
-            <PayGradeSelector bind:value={staffer.paygrade_id} />
+    <FloatingDate label="Start Date" bind:value={staffer.start_date} />
+
+    <FloatingSelect
+        bind:value={staffer.employment_type}
+        label="Employment Type"
+        instruction="Select Employment Type"
+        options={[
+            {
+                option: "Employee",
+                value: "employee",
+            },
+            {
+                option: "Contractor",
+                value: "contractor",
+            },
+        ]}
+    />
+
+    <div class="bg-white px-3 pt-2 pb-4 mb-2 border border-gray-300 rounded-md">
+        <div class="text-xs opacity-50 mb-2">Staff Groups</div>
+        <CheckboxButtonGroup
+            options={[
+                { value: "therapist", option: "Therapist" },
+                { value: "sil", option: "SIL" },
+                { value: "admin", option: "Admin" },
+            ]}
+            bind:values={staffer.groups}
+        />
+    </div>
+    <StaffRoleSelector bind:staff_role={staffer.staff_role} />
+
+    <Role roles={["admin"]}>
+        <FloatingInput
+            bind:value={staffer.billable_hours_kpi}
+            label="Billable Hours KPI (hours)"
+            placeholder="eg: 25"
+            inputmode="tel"
+            autocomplete="off"
+        />
+
+        {#if staffer.employment_type == "employee"}
+            {#if staffer.groups.includes("sil")}
+                <PayGradeSelector bind:value={staffer.paygrade_id} />
+            {/if}
         {/if}
-    {/if}
-    <EmployeeSelector bind:xero_employee_id={staffer.xero_employee_ref} />
-</Role>
+        <EmployeeSelector bind:xero_employee_id={staffer.xero_employee_ref} />
+    </Role>
+</Container>
 
 <Role roles={["admin"]}>
     <div class="flex justify-between">

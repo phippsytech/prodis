@@ -1,5 +1,5 @@
 <?php
-namespace NDISmate\Models\User\Participant;
+namespace NDISmate\Models\UserRole\Participant;
 
 use \RedBeanPHP\R as R;
 

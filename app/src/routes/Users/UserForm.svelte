@@ -1,4 +1,5 @@
 <script>
+    import Container from "@shared/Container.svelte";
     import FloatingInput from "@shared/PhippsyTech/svelte-ui/forms/FloatingInput.svelte";
     import CheckboxButtonGroup from "@shared/PhippsyTech/svelte-ui/forms/CheckboxButtonGroup.svelte";
     import ParticipantAccessControl from "./ParticipantAccessControl.svelte";
@@ -7,37 +8,17 @@
 </script>
 
 <div class="mb-2"></div>
-<FloatingInput
-    bind:value={user.name}
-    label="Display Name"
-    placeholder="eg: Bella"
-    autocomplete="off"
-/>
-<FloatingInput
-    bind:value={user.first_name}
-    label="First Name"
-    placeholder="eg: Annie"
-    autocomplete="off"
-/>
-<FloatingInput
-    bind:value={user.last_name}
-    label="Last Name"
-    placeholder="eg: Walker"
-    autocomplete="off"
-/>
-<FloatingInput
-    bind:value={user.email}
-    label="Email"
-    placeholder="eg: annie.walker@cia.gov"
-    autocomplete="off"
-/>
-<FloatingInput
-    bind:value={user.phone}
-    label="Phone"
-    placeholder="eg: 04XX XXX XXX"
-    autocomplete="off"
-/>
-
+<Container>
+    <div
+        class="text-2xl text-indigo-900 tracking-tight font-fredoka-one-regular"
+    >
+        {user.display_name}
+    </div>
+    <div>
+        {user.first_name}
+        {user.last_name} - {user.email} - {user.phone}
+    </div>
+</Container>
 <div class="bg-white px-3 pt-2 pb-4 mb-2 border border-indigo-100 rounded-md">
     <div class="text-xs opacity-50 mb-2">User Roles</div>
     <CheckboxButtonGroup

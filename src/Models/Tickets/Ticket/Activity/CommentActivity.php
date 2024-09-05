@@ -23,7 +23,7 @@ class CommentActivity implements ActivityInterface
 
     public function get($activity_id)
     {
-        $comment = R::getRow('SELECT ticketcomment.*, users.name AS user_name 
+        $comment = R::getRow('SELECT ticketcomment.*, users.display_name AS user_name 
         FROM ticketcomment 
         LEFT JOIN users ON ticketcomment.user_id = users.id 
         WHERE ticketcomment.id=:comment_id',

@@ -16,7 +16,7 @@ class ListNotesByClientId
                     clientnotes.user_id,
                     clientnotes.archived,
                     DATE_FORMAT(clientnotes.created, '%Y-%m-%d %H:%i:%s') as created,
-                    users.name AS user_name 
+                    users.display_name AS user_name 
                 FROM clientnotes
                 JOIN clients 
                     ON (clients.id = clientnotes.client_id)

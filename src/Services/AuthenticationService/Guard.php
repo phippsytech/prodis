@@ -81,13 +81,13 @@ final class Guard
 
             $this->user_id = $hashids->decode($this->claims->user_hash)[0];
 
-            $this->roles = (new \NDISmate\Models\User\GetRoles)(['user_id' => $this->user_id], null, $this);
+            $this->roles = (new \NDISmate\Models\UserRole\GetRoles)(['user_id' => $this->user_id], null, $this);
 
             if ($roles == [])
                 return true;  // if no additional role is required, proceed
 
             // If a role is required, check the current user has that role
-            if ((new \NDISmate\Models\User\CheckRoles)(['user_id' => $this->user_id, 'roles' => $roles], null, $this)) {
+            if ((new \NDISmate\Models\UserRole\CheckRoles)(['user_id' => $this->user_id, 'roles' => $roles], null, $this)) {
                 return true;
             }
 

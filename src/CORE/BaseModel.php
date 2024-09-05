@@ -34,10 +34,6 @@ class BaseModel
 
                     try {
                         $guard->protect($role);
-
-                        // the following data is now being passed via $guard rather than in $data
-                        // $data['user_id'] =$guard->user_id;
-                        // $user_roles = $guard->roles;
                     } catch (\Exception $e) {
                         return JsonResponse::unauthorized([$e->getMessage()]);
                     }

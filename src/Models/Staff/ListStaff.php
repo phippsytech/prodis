@@ -20,7 +20,7 @@ class ListStaff
                 staffs.hours_per_week,
                 staffs.paygrade_id,
                 staffs.archived,
-                users.name as staff_name,
+                users.display_name as staff_name,
                 users.first_name,
                 users.last_name,
                 users.email,
