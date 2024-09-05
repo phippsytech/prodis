@@ -2,7 +2,6 @@
 
 namespace NDISmate\Models\SIL\House\Timeline;
 
-use \NDISmate\CORE\JsonResponse;
 use \RedBeanPHP\R as R;
 
 class GetClientTimelineSummary {

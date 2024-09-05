@@ -9,7 +9,8 @@ use NDISmate\Models\SIL\House\Timeline\DeleteTimeline;
 use NDISmate\Models\SIL\House\Timeline\GetTimelineList;
 use NDISmate\Models\SIL\House\Timeline\GetTimelineSummary;
 use NDISmate\Models\SIL\House\Timeline\GetClientTimelineSummary;
-
+use NDISmate\Models\SIL\House\Timeline\GetStaffShiftTimeline;
+use NDISmate\Models\SIL\House\Timeline\GetAvailableReportTypes;
 
 final class TimelineController extends BaseController
 {
@@ -21,7 +22,9 @@ final class TimelineController extends BaseController
             'deleteTimeline' => [new DeleteTimeline, null, false, [], []],
             'getTimelineList' => [new GetTimelineList, null, false, []],
             'getTimelineSummary' => [new GetTimelineSummary, null, false, [], []],
-            'getClientTimelineSummary' => [new GetClientTimelineSummary, null, false, []]
+            'getClientTimelineSummary' => [new GetClientTimelineSummary, null, false, []],
+            'getStaffShiftTimeline' => [new GetStaffShiftTimeline, null, false, []],
+            'getAvailableReportTypes' => [new GetAvailableReportTypes, null, false, []]
         ];
     }
 }
