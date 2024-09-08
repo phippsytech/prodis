@@ -34,10 +34,11 @@
 
 <ReportPanel
     on:click={() => push("/reports/due")}
-    label="Client Plan Report Due Dates"
+    label="Participant Compliance Document Report"
 >
-    Shows due dates of Interim, Comprehensive and Yearly reports for all
-    clients.
+    <b>Previously known as Client Plan Report Due Dates</b>, this report is a
+    summary that Shows due dates of Interim, Comprehensive and Yearly reports
+    for all clients.
 </ReportPanel>
 
 <ReportPanel

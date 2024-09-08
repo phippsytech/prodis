@@ -24,7 +24,10 @@
         });
 
         BreadcrumbStore.set({
-            path: [{ url: null, name: "Credentials" }],
+            path: [
+                { url: "/compliance", name: "Compliance" },
+                { url: null, name: "Credentials" },
+            ],
         });
     });
 </script>

@@ -7,7 +7,13 @@
     import { jspa } from "@shared/jspa.js";
 
     import { slide } from "svelte/transition";
-    import { XMarkIcon, PlusIcon } from "heroicons-svelte/24/outline";
+    import {
+        DocumentArrowUpIcon,
+        DocumentTextIcon,
+        CheckIcon,
+        XMarkIcon,
+        PlusIcon,
+    } from "heroicons-svelte/24/outline";
     import { onMount } from "svelte";
 
     import createStore from "@shared/createStore";
@@ -58,11 +64,11 @@
 
     function addReport(newReport) {
         if (newReport.report_type === null) {
-            toastError("Please select a report type");
+            toastError("Please select a document type");
             return;
         }
         if (newReport.due_date === null) {
-            toastError("Please select a due date for the report");
+            toastError("Please select a due date for the document");
             return;
         }
         ClientReports.add(newReport);
@@ -111,7 +117,7 @@
 
     function showAddReport(report) {
         ModalStore.set({
-            label: "Add Service Agreement",
+            label: "Add Compliance Document",
             show: true,
             props: report,
             component: ReportForm,
@@ -122,13 +128,13 @@
 </script>
 
 <div class="flex sm:flex-row flex-col sm:items-center mt-6 mb-1">
-    <h3 class="text-slate-800 font-bold mx-2">Reports</h3>
+    <h3 class="text-slate-800 font-bold mx-2">Compliance Documents</h3>
     <Role roles={["admin"]}>
         <button
             class="text-xs text-indigo-600 hover:underline text-left mx-2"
             on:click={() => showAddReport(report)}
         >
-            <PlusIcon class="w-4 h-4 inline" /> Add Report
+            <PlusIcon class="w-4 h-4 inline" /> Add Document
         </button>
     </Role>
 </div>
@@ -164,7 +170,7 @@
             <li
                 in:slide={{ duration: 200 }}
                 out:slide={{ duration: 200 }}
-                class="group flex justify-between items-center hover:bg-indigo-50 px-4 py-2 focus:outline-none focus:ring-0 focus:bg-indigo-600 focus:text-slate-600 transition duration-500 {$ClientReports.length -
+                class="group flex justify-between items-start hover:bg-indigo-50 px-4 py-2 focus:outline-none focus:ring-0 focus:bg-indigo-600 focus:text-slate-600 transition duration-500 {$ClientReports.length -
                     1 ==
                 index
                     ? 'rounded-b-lg '
@@ -175,7 +181,7 @@
                         "
             >
                 <div class="flex flex-row items-top">
-                    <Role roles={["admin"]}>
+                    <!-- <Role roles={["admin"]}>
                         <div class="w-auto my-auto">
                             <input
                                 class=" appearance-none h-4 w-4 border border-slate-300 rounded-sm bg-white checked:bg-indigo-600 checked:border-indigo-600 focus:outline-none transition duration-200 bg-no-repeat bg-center bg-contain float-left mr-2 mb-2 cursor-pointer"
@@ -187,31 +193,51 @@
                                         : markUndone(report.id)}
                             />
                         </div>
-                    </Role>
+                    </Role> -->
                     <div>
-                        <div class="text-sm font-bold text-slate-800">
+                        <div class="text-md font-bold text-slate-800">
                             {getReportName(report.report_type)}
-                            {#if report.is_done}
+                            <!-- {#if report.is_done}
                                 <span class="text-xs">- Done</span>
-                            {/if}
+                            {/if} -->
                         </div>
-                        <div class="text-xs">
-                            {formatDate(report.due_date)}
+                        <div class="text-sm">
                             {#if !report.is_done}
+                                {formatDate(report.due_date)}
                                 <span class="italic"
-                                    >- {timeAgo(report.due_date)}</span
-                                >{/if}
+                                    >- due {timeAgo(report.due_date)}</span
+                                >
+                            {:else}
+                                <div class="block text-xs text-gray-900/50">
+                                    Document History
+                                </div>
+
+                                <div class="flex items-center">
+                                    <a
+                                        href="#"
+                                        class="text-indigo-600 hover:underline"
+                                        ><DocumentTextIcon
+                                            class="h3- w-4 inline mr-1"
+                                        />
+                                        {formatDate(report.due_date)} by Bob Rodges
+                                        <!-- {report.staff_name} -->
+                                        <span class="text-xs"
+                                            >- View Document</span
+                                        ></a
+                                    >
+                                </div>
+                            {/if}
                         </div>
                     </div>
                 </div>
-                <Role roles={["admin"]}>
-                    <button
-                        on:click={() => removeReport(report)}
-                        type="button"
-                        class="flex p-1 rounded-full text-center text-sm font-semibold text-indigo-600 hover:bg-indigo-600 hover:text-white transition duration-300"
-                        ><XMarkIcon class="h-4 w-4 inline m-0 p-0" /></button
-                    >
-                </Role>
+
+                <!-- {#if !report.is_done} -->
+                <button
+                    type="button"
+                    class="ml-4 rounded rounded-full bg-white m-0 p-0 px-4 py-1 text-xs font-semibold text-indigo-600 ring-1 ring-inset ring-indigo-600 hover:ring-0 hover:bg-indigo-600 hover:text-white transition duration-300"
+                    >Upload</button
+                >
+                <!-- {/if} -->
             </li>
         {/each}
     </ul>

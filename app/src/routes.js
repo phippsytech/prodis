@@ -158,6 +158,10 @@ export default {
     }),
 
 
+    '/compliance': wrap({
+        asyncComponent: () => import('./routes/Compliance/Compliance.svelte'),
+    }),
+
 
     '/credentials': wrap({
         asyncComponent: () => import('./routes/Credentials/List.svelte'),
@@ -712,9 +716,6 @@ export default {
         asyncComponent: () => import('./routes/Settings/Staff/Staff.svelte')
     }),
 
-    '/settings/reports': wrap({
-        asyncComponent: () => import('./routes/Settings/Reports/Reports.svelte')
-    }),
 
     '/tickets': wrap({
         asyncComponent: () => import('./routes/Tickets/Tickets.svelte')

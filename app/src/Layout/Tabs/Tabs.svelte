@@ -635,13 +635,6 @@
                         active: true,
                         roles: ["house", "therapist", "admin"],
                     },
-
-                    {
-                        name: "Reports",
-                        url: "/settings/reports",
-                        active: true,
-                        roles: ["house", "therapist", "admin"],
-                    },
                 ];
             },
         },

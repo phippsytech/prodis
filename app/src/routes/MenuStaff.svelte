@@ -132,15 +132,9 @@
         },
 
         {
-            url: "/credentials",
-            name: "Credentials",
+            url: "/compliance",
+            name: "Compliance",
             icon: ShieldCheckIcon,
-            role: ["manager", "admin"],
-        },
-        {
-            url: "/documenttypes",
-            name: "Document Types",
-            icon: DocumentIcon,
             role: ["manager", "admin"],
         },
 

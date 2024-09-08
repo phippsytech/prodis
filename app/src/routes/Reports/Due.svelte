@@ -12,7 +12,7 @@
     BreadcrumbStore.set({
         path: [
             { url: "/reports", name: "Reports" },
-            { url: null, name: "Participant Reports" },
+            { url: null, name: "Participant Compliance Document Report" },
         ],
     });
 
@@ -84,9 +84,12 @@
     <h2
         class="text-2xl font-fredoka-one-regular tracking-tight text-indigo-900"
     >
-        Participant Reports
+        Participant Compliance Document Report
     </h2>
-    <p>Participant Reports that are overdue or due in the next 21 days.</p>
+    <p>
+        Participant Compliance Documents that are overdue or due in the next 21
+        days.
+    </p>
 </div>
 
 <div class="bg-white px-3 mb-2 rounded-md pb-1">
