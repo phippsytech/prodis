@@ -49,6 +49,7 @@
                 result.plan_manager_name = await getPlanManagerName(
                     result.plan_manager_id,
                 );
+                
                 return result;
             },
         },
@@ -61,7 +62,8 @@
             // let participant_service = convertFieldsToBoolean(result.result, [
             //     "include_travel",
             // ]);
-            let participant_service = result.result;
+            let participant_service = convertFieldsToBoolean(result.result, ["is_active"]);;
+            
             return participant_service;
         });
     }
