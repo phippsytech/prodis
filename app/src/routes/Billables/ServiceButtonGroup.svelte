@@ -46,7 +46,7 @@
                         selected = true;
                     }
 
-                    if (service.archived != 1) serviceList.push(options);
+                    if (service.archived != 1 && service.is_active == 1) serviceList.push(options);
                 });
 
                 // if (!selected) service_id = "Choose service"; // unset the selected client_id

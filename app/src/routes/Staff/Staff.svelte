@@ -11,10 +11,10 @@
 </script>
 
 <div
-    class="flex grow flex-col gap-y-2 overflow-y-auto border-r border-gray-200 bg-white"
+    class="flex grow flex-col gap-4 mt-2"
 >
-    <div class="flex h-16 shrink-0 items-center">
-        <div class="flex flex-1 gap-x-4 self-stretch lg:gap-x-2 px-6">
+    <div class="flex h-16 shrink-0 items-center bg-white rounded-md">
+        <div class="flex flex-1 gap-x-4 self-stretch lg:gap-x-2 px-3">
             <div class="relative flex flex-1">
                 <label for="search-field" class="sr-only">Search</label>
                 <svg
@@ -51,3 +51,4 @@
     </div>
     <List bind:search />
 </div>
+
