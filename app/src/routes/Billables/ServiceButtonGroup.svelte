@@ -1,4 +1,5 @@
 <script>
+	import { convertFieldsToBoolean } from '@shared/utilities/convertFieldsToBoolean';
     import { onMount } from "svelte";
     import RadioButtonGroup from "@shared/PhippsyTech/svelte-ui/forms/RadioButtonGroup.svelte";
     import { jspa } from "@shared/jspa.js";
@@ -30,7 +31,7 @@
         })
             .then((result) => {
                 serviceList = []; // clear the servicList
-                services = result.result;
+                services = convertFieldsToBoolean(result.result, ["is_active"]);
 
                 let selected = false;
 
@@ -63,9 +64,11 @@
 
                 stored_client_id = client_id;
 
+                // count the number of services with is_active
+                const activeServices = services.filter(service => service.is_active);
                 // if only one service, automatically select it
-                if (services.length == 1) {
-                    participant_service_id = services[0].id;
+                if (activeServices.length == 1) {
+                    participant_service_id = activeServices[0].id;
                 }
             })
             .catch((error) => {});
