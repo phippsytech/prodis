@@ -60,7 +60,7 @@
 
     function getTimeline(client_id) {
         let summary = mode == "summary";
-        jspa("/SIL/House/Form", "getTimeline", {
+        jspa("/SIL/House/Timeline", "getTimelineList", {
             participant_id: client_id,
             summary: false,
         })

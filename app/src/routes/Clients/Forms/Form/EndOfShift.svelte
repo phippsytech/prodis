@@ -17,10 +17,12 @@
         time: date.toTimeString().slice(0, 5),
         staff_id: staff_id,
         participant_id: participant_id,
-        report_type: "EndOfShift",
-        positive_engagements: null,
-        negative_moments: null,
-        additional_details: null,
+        form_data: {
+            report_type: "EndOfShift",
+            positive_engagements: null,
+            negative_moments: null,
+            additional_details: null,
+        },
     };
 
     const yes_no_options = [
@@ -38,13 +40,13 @@
 
 <FloatingTime
     label="Shift Start Time"
-    bind:value={form.start_shift}
+    bind:value={form.form_data.start_shift}
     step="900"
     {readOnly}
 />
 <FloatingTime
     label="Shift End Time"
-    bind:value={form.end_shift}
+    bind:value={form.form_data.end_shift}
     step="900"
     {readOnly}
 />
@@ -62,8 +64,8 @@
     <StafferShiftTimeline
         client_id={form.participant_id}
         date={form.date}
-        start_time={form.start_shift}
-        end_time={form.end_shift}
+        start_time={form.form_data.start_shift}
+        end_time={form.form_data.end_shift}
         staff_id={form.staff_id}
     />
 </Container>
@@ -99,7 +101,7 @@
     placeholder="other information..."
     class="rounded border py-0 p-1.5 border-gray-300 focus:border-blue-600 focus:outline-none w-full"
     style="height:70px"
-    bind:value={form.additional_details}
+    bind:value={form.form_data.additional_details}
     {readOnly}
 ></textarea>
 

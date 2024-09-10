@@ -26,10 +26,11 @@
     function getForm(form_id) {
         loaded = false;
         message = "";
-        jspa("/SIL/House/Form", "getForm", { id: form_id })
+        jspa("/SIL/House/Timeline", "showTimeline", { id: form_id })
             .then((result) => {
                 form = result.result;
-                loadComponent(form.report_type);
+
+                loadComponent(form.form_data.report_type);
             })
             .catch((error) => {
                 message = "Form not found";

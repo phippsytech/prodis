@@ -23,16 +23,16 @@ class SaveForm {
         if (isset($data['_id'])) {
             // Create an update query to update the record
             $id = $data['_id'];
-    unset($data['_id']); // Remove _id field from data
-    $updateQuery = ['$set' => $data];
-    if (is_array($id)) {
-        $id = implode('', $id);
-    }
-    $result = $forms->updateOne(['_id' => new \MongoDB\BSON\ObjectID($id)], $updateQuery);
+            unset($data['_id']); // Remove _id field from data
+            $updateQuery = ['$set' => $data];
+            if (is_array($id)) {
+                $id = implode('', $id);
+            }
+            $result = $forms->updateOne(['_id' => new \MongoDB\BSON\ObjectID($id)], $updateQuery);
 
 
 
-    return JsonResponse::ok(["result" => $result]);
+            return JsonResponse::ok(["result" => $result]);
         } else {
             // Insert a new record if the _id field is not set
             $result = $forms->insertOne($data);

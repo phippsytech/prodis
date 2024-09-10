@@ -56,7 +56,7 @@
         }
 
         SpinnerStore.set({ show: true, message: "Saving Form" });
-        jspa("/SIL/House/Form", "saveForm", form)
+        jspa("/SIL/House/Timeline", "saveTimeline", form)
             .then((result) => {
                 stored_form = Object.assign({}, form);
                 push("/clients/" + client.id + "/timeline");

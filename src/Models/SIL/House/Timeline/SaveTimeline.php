@@ -14,6 +14,7 @@ class SaveTimeline {
             // unset($data['jwt_claims']);
             
             if (isset($data['id'])) {   
+                
                 print_r($data);
                 $timeline = R::findOne('timelines', 'id = ?', [$data['id']]); 
                
@@ -44,9 +45,9 @@ class SaveTimeline {
 
                     return $result;
                     
-                } 
+                }
             } else {
-                print_r('paolo');
+                
                 // Insert new record
                 $timeline = R::dispense('timelines');
                 foreach ($data as $key => $value) {
@@ -58,10 +59,7 @@ class SaveTimeline {
                 }
     
                 $id =  R::store($timeline);
-                var_dump($result);
-
-        
-               $result = R::findOne('timelines', 'id = ?', [$id]);
+                $result = R::findOne('timelines', 'id = ?', [$id]);
 
                 if (!is_null($result) ) {
                     $result->form_data = json_decode($result->form_data);
