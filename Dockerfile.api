@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y \
     unzip \
     libgmp-dev \
     inotify-tools \
+    cron \
     && rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
@@ -53,6 +54,12 @@ RUN composer install --no-dev --optimize-autoloader
 # Copy supervisord configuration file
 COPY supervisord.conf /etc/supervisor/conf.d/prodis.conf
 
+# Set permissions for cronjobs and ensure newline
+RUN chmod 0644 /etc/cron.d/cronjobs \
+    && echo "" >> /etc/cron.d/cronjobs \  
+    && crontab /etc/cron.d/cronjobs \
+    && touch /var/log/cron.log
+
 
 # Expose ports
 EXPOSE 80
@@ -60,4 +67,8 @@ EXPOSE 8080
 EXPOSE 443
 
 # Command to run supervisord
-CMD ["supervisord"]
+#CMD ["supervisord"]
+
+
+# Start cron service and supervisord
+CMD ["sh", "-c", "cron && supervisord -c /etc/supervisor/conf.d/prodis.conf"]

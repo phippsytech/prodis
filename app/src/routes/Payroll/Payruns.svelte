@@ -90,7 +90,7 @@
             </div>
 
             {#if draft_payruns.length === 0}
-                <Role roles={["sysadmin"]}>
+                <Role roles={["payroll"]}>
                     <button
                         on:click={() => createPayrun()}
                         type="button"

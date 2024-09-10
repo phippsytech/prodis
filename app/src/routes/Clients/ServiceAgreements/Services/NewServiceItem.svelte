@@ -25,7 +25,6 @@
 
     // Function to calculate hours per week based on allocated hours and date range
     function hoursPerWeek(allocatedHours, startDate, endDate) {
-        console.log(service);
 
         // Initialize start and end dates
         startDate = startDate ? startDate : new Date(service.budget_start_date);
@@ -33,10 +32,6 @@
         endDate = endDate
             ? endDate
             : new Date(service_agreement.service_agreement_end_date);
-
-        console.log("start date: " + startDate);
-
-        console.log("end date: " + endDate);
 
         // Get the difference in time (in milliseconds)
         const timeInterval = endDate.getTime() - startDate.getTime();
@@ -47,21 +42,12 @@
 
         const totalWeeks = (totalDaysInTheServiceDateRange / 7).toFixed(2);
 
-        console.log("total weeks: " + totalWeeks);
-
-        console.log("days difference " + totalDaysInTheServiceDateRange);
-
-        console.log("allocated hours " + allocatedHours);
-
         // Calculate daily hours
         const dailyHours = allocatedHours / totalDaysInTheServiceDateRange;
-        console.log("daily hours " + dailyHours);
 
         // Calculate total hours per week
         let result = dailyHours * 7;
 
-        console.log("weekly hour " + result);
-        console.log("weekly hour in minutes " + result * 60);
         return result;
     }
 
@@ -71,8 +57,6 @@
         const end = new Date(endDate).getTime();
         const current = new Date().getTime();
 
-        console.log("r start date: " + start);
-
         //Ensure the current date is within the interval
         if (current < start || current > end) {
             console.log("Current date is outside the service interval.");
@@ -81,14 +65,10 @@
 
         // Calculate the remaining duration in milliseconds
         const remainingDurationInMs = end - current;
-        console.log("remainingDurationInMs " + remainingDurationInMs);
         const remainingDurationInDays =
             remainingDurationInMs / (1000 * 60 * 60 * 24);
-        console.log("remainingDurationInDays " + remainingDurationInDays);
         // Calculate weeks
         const remainingWeeks = remainingDurationInDays / 7;
-
-        console.log("remaining weeks: " + remainingWeeks);
 
         return remainingWeeks;
     }
@@ -96,11 +76,7 @@
     function totalRemainingBudgetInMinutes() {
         const minutesSpent = (service.spent / service.rate) * 60;
 
-        console.log("minutes Spent: " + minutesSpent);
-
         const totalBudgetInHours = service.budget / service.rate;
-
-        console.log("total budget in hours: " + totalBudgetInHours);
 
         let totalBudgetInMinutes = totalBudgetInHours * 60;
 
@@ -111,8 +87,6 @@
 
             totalBudgetInMinutes -= Math.abs(service.spend_status);
         }
-
-        console.log("total budget in minutes: " + totalBudgetInMinutes);
 
         return totalBudgetInMinutes;
     }
@@ -127,8 +101,6 @@
         }
 
         const adjustedWeeklyTime = remainingMinutes / remainingWeeks;
-
-        console.log("adjusted weekly time: " + adjustedWeeklyTime);
 
         return adjustedWeeklyTime;
     }
