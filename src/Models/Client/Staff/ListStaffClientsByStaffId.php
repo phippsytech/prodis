@@ -21,7 +21,8 @@ class ListStaffClientsByStaffId
                     ON clients.id = csa.client_id
                 WHERE 
                     (clients.archived IS NULL OR clients.archived != 1)
-                    AND csa.staff_id = :staff_id',
+                    AND csa.staff_id = :staff_id
+                ORDER BY client_name ASC',
                 [':staff_id' => $data['staff_id']]
             );
 

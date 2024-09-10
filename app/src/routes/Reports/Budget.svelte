@@ -67,6 +67,15 @@
                         clients[index].services = filteredResult;
                         client.services = filteredResult;
                         clientList = [...clientList, client];
+
+                        // sort clientList by client_name
+                        clientList.sort(function (a, b) {
+                            const nameA = a.client_name.toUpperCase(); // ignore upper and lowercase
+                            const nameB = b.client_name.toUpperCase(); // ignore upper and lowercase
+                            if (nameA < nameB) return -1;
+                            if (nameA > nameB) return 1;    
+                            return 0; // names must be equal
+                        });
                     });
                 }
             });

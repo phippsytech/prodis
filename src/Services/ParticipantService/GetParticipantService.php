@@ -68,7 +68,8 @@ class GetParticipantService
                             ELSE COALESCE(timetrackings.session_duration, 0) * timetrackings.rate
                         END
                     ) AS spent,
-                    ANY_VALUE(clientplanservices.is_active) AS is_active
+                    ANY_VALUE(clientplanservices.is_active) AS is_active,
+                    clientplanservices.adjust_weekly_time AS adjust_weekly_time
                 FROM clientplanservices
                 LEFT JOIN timetrackings ON timetrackings.participant_service_id = clientplanservices.id
                     AND timetrackings.session_date >= clientplanservices.budget_start_date
