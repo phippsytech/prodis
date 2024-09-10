@@ -2,6 +2,7 @@
     import ServiceItem from "@app/routes/Clients/ServiceAgreements/Services/NewServiceItem.svelte";
     import { onMount } from "svelte";
     import { jspa } from "@shared/jspa.js";
+    import { convertFieldsToBoolean } from "@shared/utilities/convertFieldsToBoolean";
 
     // export let service_id = null;
     export let participant_service_id = null;
@@ -32,7 +33,7 @@
     function getParticipantService(data) {
         return jspa("/Participant/Service", "getParticipantService", data).then(
             (result) => {
-                return result.result;
+                return convertFieldsToBoolean(result.result, ["is_active", "adjust_weekly_time"]);
             },
         );
     }

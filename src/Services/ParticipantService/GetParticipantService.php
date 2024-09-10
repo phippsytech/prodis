@@ -69,7 +69,7 @@ class GetParticipantService
                         END
                     ) AS spent,
                     ANY_VALUE(clientplanservices.is_active) AS is_active,
-                    clientplanservices.adjust_weekly_time AS adjust_weekly_time
+                    ANY_VALUE(clientplanservices.adjust_weekly_time) AS adjust_weekly_time
                 FROM clientplanservices
                 LEFT JOIN timetrackings ON timetrackings.participant_service_id = clientplanservices.id
                     AND timetrackings.session_date >= clientplanservices.budget_start_date
@@ -97,7 +97,7 @@ class GetParticipantService
             );
 
             $converter = new ConvertFieldsToBoolean();
-            $bean = $converter($bean, ['is_active']);
+            $bean = $converter($bean, ['is_active', 'adjust_weekly_time']);
 
             return $bean;
         } catch (RedException $e) {
