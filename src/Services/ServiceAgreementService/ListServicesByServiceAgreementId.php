@@ -41,7 +41,8 @@ class ListServicesByServiceAgreementId
                         END
                     ) AS spent,
                     clientplanservices.is_active AS is_active,
-                    clientplanservices.adjust_weekly_time AS adjust_weekly_time
+                    clientplanservices.adjust_weekly_time AS adjust_weekly_time,
+                    clientplanservices.allocated_funding as allocated_funding
                 FROM clientplanservices
                 LEFT JOIN timetrackings ON timetrackings.participant_service_id = clientplanservices.id
                     AND timetrackings.session_date >= clientplanservices.budget_start_date
