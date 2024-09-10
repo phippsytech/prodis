@@ -244,7 +244,7 @@
         </div>
         <div class="ml-3">
             <h3 class="text-sm font-medium text-red-800">
-                This client's services are inactive.
+                There are no active services for this participant.
             </h3>
         </div>
     </div>
