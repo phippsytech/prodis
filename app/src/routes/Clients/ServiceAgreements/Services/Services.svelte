@@ -62,7 +62,7 @@
             // let participant_service = convertFieldsToBoolean(result.result, [
             //     "include_travel",
             // ]);
-            let participant_service = convertFieldsToBoolean(result.result, ["is_active"]);;
+            let participant_service = convertFieldsToBoolean(result.result, ["is_active", "adjust_weekly_time"]);
             
             return participant_service;
         });
