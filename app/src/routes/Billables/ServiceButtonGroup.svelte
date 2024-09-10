@@ -31,7 +31,7 @@
             .then((result) => {
                 serviceList = []; // clear the servicList
                 services = result.result;
-
+                
                 let selected = false;
 
                 services.forEach((service) => {
