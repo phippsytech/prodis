@@ -15,11 +15,11 @@
     let clientList = [];
 
     let search = "";
-    let filter = "all";
+    let filter = null;
 
     function changeFilter(value) {
         filter = value;
-        console.log(staff_id);
+        staff_id = value;
     }
 
     BreadcrumbStore.set({
@@ -51,15 +51,13 @@
         staffList = staffList;
     }
 
-    $: if (staff_id) {
+    $: if (staff_id != null) {
         changeFilter(staff_id);
-    }
-
-    $: {
         handleStaffChange(staff_id);
     }
 
     function handleStaffChange(staff_id) {
+        // changeFilter(staff_id); // to make the select box show the selected staff
         clients = [];
         clientList = [];
 
@@ -98,7 +96,10 @@
     }
 </script>
 
-<QueryManager params={{ filter, search }} />
+<QueryManager
+    params={{ filter, search }}
+    onParamsChange={(params) => (staff_id = params.filter)}
+/>
 
 <FloatingSelect
     bind:value={staff_id}
