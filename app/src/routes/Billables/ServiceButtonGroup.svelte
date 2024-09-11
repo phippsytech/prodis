@@ -22,7 +22,6 @@
     $: {
         if (client_id && client_id != stored_client_id) {
             loadServices(client_id);
-            participant_service_id = null;
         }
     }
 
@@ -32,6 +31,7 @@
         })
             .then((result) => {
                 serviceList = []; // clear the servicList
+                participant_service_id = null; // clear the selected service
                 services = convertFieldsToBoolean(result.result, ["is_active"]);
 
                 let selected = false;
