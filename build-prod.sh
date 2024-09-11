@@ -1,7 +1,9 @@
 #!/bin/bash
 
 # log into the vultr container registry
-docker login sjc.vultrcr.com/phippsytech
+# docker login sjc.vultrcr.com/phippsytech
+
+# NOTE: I've attempted to use credsStore to manage the login, but it doesn't seem to work.
 
 # Get the current date and time in the format YYYY-MM-DD-HH-MM
 CURRENT_DATE=$(date +'%Y-%m-%d-%H-%M')
