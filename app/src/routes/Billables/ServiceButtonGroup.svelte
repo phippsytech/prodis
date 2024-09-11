@@ -22,6 +22,7 @@
     $: {
         if (client_id && client_id != stored_client_id) {
             loadServices(client_id);
+            participant_service_id = null;
         }
     }
 
