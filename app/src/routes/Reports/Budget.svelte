@@ -5,6 +5,7 @@
     import ClientPlanServicesService from "@app/routes/Clients/ServiceAgreements/Services/ServiceItemAdapter.svelte";
     import { jspa } from "@shared/jspa.js";
     import { BreadcrumbStore } from "@shared/stores.js";
+    import QueryManager from "@shared/QueryManager.svelte";
 
     let staff_id = null;
     let clients = [];
@@ -12,6 +13,14 @@
     let staffList = [];
 
     let clientList = [];
+
+    let search = "";
+    let filter = "all";
+
+    function changeFilter(value) {
+        filter = value;
+        console.log(staff_id);
+    }
 
     BreadcrumbStore.set({
         path: [
@@ -42,6 +51,10 @@
         staffList = staffList;
     }
 
+    $: if (staff_id) {
+        changeFilter(staff_id);
+    }
+
     $: {
         handleStaffChange(staff_id);
     }
@@ -49,6 +62,7 @@
     function handleStaffChange(staff_id) {
         clients = [];
         clientList = [];
+
         jspa("/Client/Staff", "listStaffClientsByStaffId", {
             staff_id: staff_id,
         }).then((result) => {
@@ -61,19 +75,20 @@
                         "listParticipantServicesByParticipantId",
                         { participant_id: client.client_id },
                     ).then((result) => {
-
                         // filter out inactive services
-                        const filteredResult = result.result.filter(service => service.is_active === "1");
+                        const filteredResult = result.result.filter(
+                            (service) => service.is_active === "1",
+                        );
                         clients[index].services = filteredResult;
                         client.services = filteredResult;
                         clientList = [...clientList, client];
-                        
+
                         // sort clientList by client_name
                         clientList.sort(function (a, b) {
                             const nameA = a.client_name.toUpperCase(); // ignore upper and lowercase
                             const nameB = b.client_name.toUpperCase(); // ignore upper and lowercase
                             if (nameA < nameB) return -1;
-                            if (nameA > nameB) return 1;    
+                            if (nameA > nameB) return 1;
                             return 0; // names must be equal
                         });
                     });
@@ -82,6 +97,8 @@
         });
     }
 </script>
+
+<QueryManager params={{ filter, search }} />
 
 <FloatingSelect
     bind:value={staff_id}
