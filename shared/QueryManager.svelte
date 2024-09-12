@@ -5,7 +5,7 @@
     export let onParamsChange;
 
     // Helper function to update the query string in the URL
-    function updateQueryString() {
+    function updateQueryString(params) {
         const url = new URL(window.location);
         const searchParams = new URLSearchParams();
 
@@ -63,8 +63,9 @@
     });
 
     // Reactive: update query string when params change
-    $: {
-        params = { ...params };
-        updateQueryString();
-    }
+    // $: {
+    //     params = { ...params };
+    //     updateQueryString(params);
+    // }
+    $: updateQueryString(params);
 </script>

@@ -6,6 +6,7 @@
     import { jspa } from "@shared/jspa.js";
     import { BreadcrumbStore } from "@shared/stores.js";
     import QueryManager from "@shared/QueryManager.svelte";
+    import { getQueryParams } from "@shared/utilities.js";
 
     let staff_id = null;
     let clients = [];
@@ -14,13 +15,8 @@
 
     let clientList = [];
 
-    let search = "";
-    let filter = null;
-
-    function changeFilter(value) {
-        filter = value;
-        staff_id = value;
-    }
+    let queryParams = getQueryParams();
+    staff_id = queryParams.staff_id;
 
     BreadcrumbStore.set({
         path: [
@@ -51,8 +47,9 @@
         staffList = staffList;
     }
 
-    $: if (staff_id != null) {
-        changeFilter(staff_id);
+    $: queryParams = { staff_id };
+
+    $: {
         handleStaffChange(staff_id);
     }
 
@@ -97,8 +94,8 @@
 </script>
 
 <QueryManager
-    params={{ filter, search }}
-    onParamsChange={(params) => (staff_id = params.filter)}
+    params={{ ...queryParams }}
+    onParamsChange={(params) => (staff_id = params.staff_id)}
 />
 
 <FloatingSelect
