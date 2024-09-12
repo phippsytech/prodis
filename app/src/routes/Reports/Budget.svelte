@@ -8,7 +8,7 @@
     import QueryManager from "@shared/QueryManager.svelte";
     import { getQueryParams } from "@shared/utilities.js";
 
-    let staff_id = null;
+    // let staff_id = null;
     let clients = [];
     let staff = [];
     let staffList = [];
@@ -16,7 +16,8 @@
     let clientList = [];
 
     let queryParams = getQueryParams();
-    staff_id = queryParams.staff_id;
+    let staff_id = queryParams.staff_id;
+    $: queryParams = { staff_id };
 
     BreadcrumbStore.set({
         path: [
@@ -46,8 +47,6 @@
 
         staffList = staffList;
     }
-
-    $: queryParams = { staff_id };
 
     $: {
         handleStaffChange(staff_id);
@@ -93,10 +92,7 @@
     }
 </script>
 
-<QueryManager
-    params={{ ...queryParams }}
-    onParamsChange={(params) => (staff_id = params.staff_id)}
-/>
+<QueryManager params={queryParams} />
 
 <FloatingSelect
     bind:value={staff_id}
