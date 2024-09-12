@@ -13,3 +13,4 @@ data/
 cyrstelcare.mongodb.tar.gz
 app.conf
 backups/
+app/package-lock.json
