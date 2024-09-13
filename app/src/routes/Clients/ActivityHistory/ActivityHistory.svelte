@@ -40,9 +40,10 @@
         class="grid grid-cols-2 border-b border-gray-200 items-center py-1 text-xs font-medium text-gray-500"
         style="grid-template-columns: 6fr 1fr;"
     >
-        <div class="grid grid-cols-2 gap-4 items-center">
+        <div class="grid grid-cols-3 gap-4 items-center">
             <div>Action Type</div>
             <div>Reason</div>
+            <div>User</div>
         </div>
         <div>Date</div>
     </div>
@@ -58,11 +59,14 @@
                 style="grid-template-columns: 6fr 1fr;"
             >
                 <div
-                    class="grid grid-cols-1 gap-0 sm:gap-4 sm:grid-cols-2 w-full items-center"
+                    class="grid grid-cols-1 gap-0 sm:gap-4 sm:grid-cols-3 w-full items-center"
                 >
                     <div class="text-sm">{item.action_type}</div>
                     <div class="text-xs whitespace-no-wrap">
                         {item.reason}
+                    </div>
+                    <div class="text-xs whitespace-no-wrap">
+                        {item.user_name}
                     </div>
                 </div>
                 <div class="font-medium">{item.timestamp}</div>
