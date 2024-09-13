@@ -8,7 +8,7 @@
 
     let max_rate;
 
-    let billing_code; 
+    let billing_code;
 
     let over_max_rate;
     $: {
@@ -40,7 +40,7 @@
     bind:max_rate
     bind:location={service.location}
     bind:name={service.name}
-    bind:billing_code={billing_code}
+    bind:billing_code
 />
 
 <FloatingSelect
@@ -121,7 +121,6 @@
     ]}
     hideValidation={true}
 />
-
 
 <!-- <Toggle
     bind:value={service.record_travelled_kilometers}

@@ -63,29 +63,24 @@
     >
 </div>
 
-
-<div class="flex justify-between gap-x-2 ">
-
-    <div class="flex-grow">  
+<div class="flex justify-between gap-x-2">
+    <div class="flex-grow">
         <FloatingSelect
-        bind:value={props.service_id}
-        label="Service"
-        instruction="Choose service"
-        options={serviceList}
-        hideValidation={true}
-    />
-    
+            bind:value={props.service_id}
+            label="Service"
+            instruction="Choose service"
+            options={serviceList}
+            hideValidation={true}
+        />
+    </div>
+    <div class="flex-shrink">
+        <FloatingInput
+            bind:value={props.rate}
+            label="Service Rate (per unit)"
+            placeholder="eg: 193.99"
+        />
+    </div>
 </div>
-<div class="flex-shrink">  
-
-<FloatingInput
-    bind:value={props.rate}
-    label="Service Rate (per unit)"
-    placeholder="eg: 193.99"
-/>
-</div>
-</div>
-
 
 <FloatingInput
     bind:value={props.allocated_funding}
@@ -100,26 +95,21 @@
     </div>
 {/if} -->
 
-
-
-
-
-<div class="flex justify-between gap-x-2 ">
-
-    <div class="flex-grow">  
-
-<FloatingInput
-    bind:value={props.budget}
-    label="Current Service Budget"
-    placeholder="eg: 12000"
-/></div>
-<div class="flex-grow">
-<FloatingDate
-    bind:value={props.budget_start_date}
-    label="As of Date"
-    placeholder="eg: 2021-01-01"
-/>
-</div>
+<div class="flex justify-between gap-x-2">
+    <div class="flex-grow">
+        <FloatingInput
+            bind:value={props.budget}
+            label="Current Service Budget"
+            placeholder="eg: 12000"
+        />
+    </div>
+    <div class="flex-grow">
+        <FloatingDate
+            bind:value={props.budget_start_date}
+            label="As of Date"
+            placeholder="eg: 2021-01-01"
+        />
+    </div>
 </div>
 
 <!-- <FloatingInput
@@ -128,21 +118,21 @@
     placeholder="eg: 200"
 /> -->
 
-
 {#if props.budget_display == "weekly"}
-<div class="flex items-center mb-2">
-    <input
-        type="checkbox"
-        id="adjustWeeklyTime"
-        bind:checked={props.adjust_weekly_time}
-        class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-    />
-    <label for="adjustWeeklyTime" class="ml-2 text-sm font-medium text-gray-900"
-        >Calculate weekly time using remaining funds.</label
-    >
-</div>
+    <div class="flex items-center mb-2">
+        <input
+            type="checkbox"
+            id="adjustWeeklyTime"
+            bind:checked={props.adjust_weekly_time}
+            class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+        />
+        <label
+            for="adjustWeeklyTime"
+            class="ml-2 text-sm font-medium text-gray-900"
+            >Calculate weekly time using remaining funds.</label
+        >
+    </div>
 {/if}
-
 
 <div class="flex items-center mb-2">
     <input
