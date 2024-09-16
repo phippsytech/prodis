@@ -30,17 +30,22 @@
         if (search.length > 0) {
             serviceList = serviceList.filter(
                 (service) =>
-                    service.name &&
-                    service.name.toLowerCase().includes(search.toLowerCase()) ==
-                        true,
-            );
+                    (service.name &&
+                        service.name
+                            .toLowerCase()
+                            .includes(search.toLowerCase())) ||
+                    (service.code &&
+                        service.code
+                            .toLowerCase()
+                            .includes(search.toLowerCase())),
+            );  
         }
     }
 </script>
 
-<div class="bg-white px-3 rounded-md pb-1">
+<!-- <div class="bg-white px-3 rounded-md pb-1">
     <Filter bind:filters />
-</div>
+</div> -->
 
 <div class="relative flex items-center mt-5">
     <div class="h-16 shrink-0 items-center w-full bg-white rounded-md">
