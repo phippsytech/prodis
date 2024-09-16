@@ -98,7 +98,7 @@ class AddKmsToPayrun
                     // km allowance (below ATO rate)
                     $earningsLine = new \XeroAPI\XeroPHP\Models\PayrollAu\EarningsLine;
                     $earningsLine->setEarningsRateID($kilometer_earnings_below_tax_rate_id);
-                    $earningsLine->setRatePerUnit(0.85);
+                    $earningsLine->setRatePerUnit(0.88);
                     $earningsLine->setNumberOfUnits($kms);
                     $earningsLines[] = $earningsLine;
 

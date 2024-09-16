@@ -28,7 +28,7 @@ class ListKMsByStaffId
         $earningsLines[] = [
             'earningsRateID' => $kilometer_earnings_below_tax_rate_id,
             'numberOfUnits' => $kms,
-            'ratePerUnit' => '0.85',
+            'ratePerUnit' => '0.88',
         ];
 
         // km allowance (above ATO rate)
