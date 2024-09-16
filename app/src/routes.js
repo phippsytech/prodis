@@ -433,13 +433,50 @@ export default {
 
 
 
-    '/documents': wrap({
-        asyncComponent: () => import('./routes/Documents/Documents.svelte')
+    '/documenttypes': wrap({
+        asyncComponent: () => import('./routes/DocumentTypes/List.svelte'),
+        conditions: [
+            (detail) => {
+                replace(detail.location + '/list')
+            }
+        ]
     }),
 
-    '/documents/:folder_id': wrap({
-        asyncComponent: () => import('./routes/Documents/Documents.svelte')
+    '/documenttypes/add': wrap({
+        asyncComponent: () => import('./routes/DocumentTypes/Add.svelte')
     }),
+
+    '/documenttypes/list': wrap({
+        asyncComponent: () => import('./routes/DocumentTypes/List.svelte')
+    }),
+
+
+
+    '/documenttypes/:document_type_id': wrap({
+        asyncComponent: () => import('./routes/DocumentTypes/Edit.svelte')
+    }),
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     '/billables': wrap({
@@ -641,6 +678,9 @@ export default {
         asyncComponent: () => import('./routes/Clients/Invoices/Invoices.svelte')
     }),
 
+    '/clients/:client_id/activities': wrap({
+        asyncComponent: () => import('./routes/Clients/ActivityHistory/ActivityHistory.svelte')
+    }),
 
     '/clients/:client_id/settings': wrap({
         asyncComponent: () => import('./routes/Clients/Settings/Settings.svelte')

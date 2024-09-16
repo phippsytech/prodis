@@ -1,7 +1,7 @@
 <script>
     import { onMount } from "svelte";
     import { ModalStore } from "@app/Overlays/stores.js";
-    import Credential from "./Credential.svelte";
+    import Document from "./Document.svelte";
     import { jspa } from "@shared/jspa.js";
     import { formatDate } from "@shared/utilities.js";
     import { SpinnerStore } from "@app/Overlays/stores.js";
@@ -9,48 +9,48 @@
 
     $: modal = $ModalStore;
 
-    export let credential = {};
-    export let staff_id;
+    export let document = {};
+    export let participant_id;
     export let required = false;
 
-    let staff_credential = {};
+    let participant_document = {};
     let loaded = false;
 
     onMount(async () => {
-        jspa("/Staff/Credential", "getCredential", {
-            staff_id: staff_id,
-            credential_id: credential.id,
+        jspa("/Participant/Document", "getParticipantDocument", {
+            participant_id: participant_id,
+            documenttype_id: document.id,
         })
             .then((result) => {
-                staff_credential = result.result;
-                // if(result.result.length > 0) staff_credential = result.result;//[0];
+                participant_document = result.result;
+                // if(result.result.length > 0) participant_document = result.result;//[0];
             })
             .finally(() => {
                 loaded = true;
             });
     });
 
-    function updateCredential() {
+    function updateDocument() {
         // make a copy of the props so if the data is cleared we can still use it
         let data = Object.assign({}, modal.props);
 
-        data.credential_id = credential.id;
-        data.staff_id = staff_id;
+        data.documenttype_id = parseInt(document.id);
+        data.participant_id = parseInt(participant_id);
 
         if (!data.id) {
-            SpinnerStore.set({ show: true, message: "Adding Credential" });
-            jspa("/Staff/Credential", "addCredential", data)
+            SpinnerStore.set({ show: true, message: "Adding Document" });
+            jspa("/Participant/Document", "addParticipantDocument", data)
                 .then((result) => {
-                    staff_credential = result.result;
+                    participant_document = result.result;
                 })
                 .finally(() => {
                     SpinnerStore.set({ show: false });
                 });
         } else {
-            SpinnerStore.set({ show: true, message: "Updating Credential" });
-            jspa("/Staff/Credential", "updateCredential", data)
+            SpinnerStore.set({ show: true, message: "Updating Document" });
+            jspa("/Participant/Document", "updateParticipantDocument", data)
                 .then((result) => {
-                    staff_credential = result.result;
+                    participant_document = result.result;
                 })
                 .finally(() => {
                     SpinnerStore.set({ show: false });
@@ -58,13 +58,13 @@
         }
     }
 
-    function deleteCredential() {
-        SpinnerStore.set({ show: true, message: "Deleting Credential" });
-        jspa("/Staff/Credential", "deleteCredential", {
-            id: staff_credential.id,
+    function deleteDocument() {
+        SpinnerStore.set({ show: true, message: "Deleting Document" });
+        jspa("/Participant/Document", "deleteParticipantDocument", {
+            id: parseInt(participant_document.id),
         })
             .then((result) => {
-                staff_credential = {};
+                participant_document = {};
             })
             .catch((error) => {
                 toastError(error.message);
@@ -74,49 +74,49 @@
             });
     }
 
-    function editCredential() {
-        (staff_credential.date_collection_option =
-            credential.date_collection_option),
+    function editDocument() {
+        (participant_document.date_collection_option =
+            document.date_collection_option),
             ModalStore.set({
-                label: credential.name,
-                description: credential.description,
+                label: document.name,
+                description: document.description,
                 show: true,
-                props: staff_credential,
-                component: Credential,
+                props: participant_document,
+                component: Document,
                 action_label: "Update",
-                action: () => updateCredential(),
-                delete: () => deleteCredential(),
+                action: () => updateDocument(),
+                delete: () => deleteDocument(),
             });
     }
 
     $: valid = () => isValid();
 
     function isValid() {
-        if (staff_credential) {
-            if (Object.keys(staff_credential).length == 0) {
+        if (participant_document) {
+            if (Object.keys(participant_document).length == 0) {
                 return false;
             }
 
-            if (staff_credential.id == null) {
+            if (participant_document.id == null) {
                 return false;
             }
 
-            if (staff_credential.credential_date == null) return false;
+            if (participant_document.document_date == null) return false;
 
-            let credential_expires = new Date(staff_credential.credential_date);
+            let document_expires = new Date(participant_document.document_date);
 
-            if (credential.date_collection_option == "issued") {
+            if (document.date_collection_option == "issued") {
                 const expiry_year =
-                    credential_expires.getFullYear() +
-                    parseInt(credential.years_until_expiry);
-                credential_expires.setFullYear(expiry_year);
+                    document_expires.getFullYear() +
+                    parseInt(document.years_until_expiry);
+                document_expires.setFullYear(expiry_year);
 
-                if (credential_expires < new Date()) return false;
+                if (document_expires < new Date()) return false;
             }
 
-            if (credential.date_collection_option == "expires") {
-                if (!staff_credential.credential_date) return false;
-                if (credential_expires < new Date()) return false;
+            if (document.date_collection_option == "expires") {
+                if (!participant_document.document_date) return false;
+                if (document_expires < new Date()) return false;
             }
 
             return true;
@@ -128,10 +128,10 @@
 
 {#if loaded}
     <div
-        on:click={() => editCredential()}
+        on:click={() => editDocument()}
         class="relative flex items-center space-x-3 rounded-lg border {valid()
             ? 'border-green-300 bg-green-50'
-            : required || staff_credential.credential_date
+            : required || participant_document.document_date
               ? 'border-red-300 bg-red-50'
               : 'border-gray-300 bg-white'} px-4 py-3 shadow-sm hover:bg-indigo-600 hover:text-white group"
     >
@@ -152,7 +152,7 @@
                         d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                     ></path>
                 </svg>
-            {:else if required || staff_credential.credential_date}
+            {:else if required || participant_document.document_date}
                 <svg
                     class="h-6 w-6 text-red-600"
                     fill="none"
@@ -193,9 +193,9 @@
                 <p
                     class="text-sm font-medium group-hover:text-white flex justify-between"
                 >
-                    {credential.name}
+                    {document.name}
 
-                    {#if staff_credential.vultr_storage_ref}
+                    {#if participant_document.vultr_storage_ref}
                         <svg
                             class="h-4 w-4 inline"
                             fill="none"
@@ -214,31 +214,21 @@
                     {/if}
                 </p>
 
-                {#if credential.description}
+                {#if document.description}
                     <p class="text-xs text-gray-600">
-                        {credential.description}
+                        {document.description}
                     </p>
                 {/if}
 
-                {#if staff_credential && Object.keys(staff_credential).length > 0}
-                    {#if staff_credential.details}
+                {#if participant_document && Object.keys(participant_document).length > 0}
+                    {#if participant_document.details}
                         <div class="text-sm">
-                            {staff_credential.details}
+                            {participant_document.details}
                         </div>{/if}
 
-                    {#if credential.date_collection_option == "expires" && staff_credential.credential_date}
+                    {#if participant_document.document_date}
                         <div class="text-xs font-light">
-                            Expires: {formatDate(
-                                staff_credential.credential_date,
-                            )}
-                        </div>
-                    {/if}
-
-                    {#if credential.date_collection_option == "issued" && staff_credential.credential_date}
-                        <div class="text-xs font-light">
-                            Issued: {formatDate(
-                                staff_credential.credential_date,
-                            )}
+                            {formatDate(participant_document.document_date)}
                         </div>
                     {/if}
                 {:else}{/if}
@@ -272,4 +262,4 @@
     </div>
 {/if}
 
-<!-- CE: {credential_expires} -->
+<!-- CE: {document_expires} -->

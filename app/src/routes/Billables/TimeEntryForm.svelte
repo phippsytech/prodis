@@ -22,9 +22,11 @@
     export let available_session_duration = null;
     export let mode = "add";
 
+    let service_agreement = {};
     let readOnly = false;
     let plan_manager_id = null;
     let stored_service_id;
+    let hasActiveServiceAgreement = true;
 
     let service = {};
 
@@ -73,6 +75,7 @@
     }
 
     $: if (timetracking.participant_service_id) getService(timetracking);
+    $: if (timetracking.client_id) getServiceAgreement(timetracking);
 
     function getService(timetracking) {
         jspa("/Participant/Service", "getParticipantService", {
@@ -86,10 +89,29 @@
             .catch((error) => {});
     }
 
+    function getServiceAgreement(timetracking) {
+        jspa("/Participant/ServiceAgreement", "listServiceAgreementsByParticipantId", {
+            participant_id: timetracking.client_id,
+        })
+            .then((result) => {
+                service_agreement = result.result;
+                hasActiveServiceAgreement = checkIfHasActiveServiceAgreement(service_agreement);
+            })
+            .catch((error) => {
+                console.error("Error fetching service agreements:", error);
+            });
+    }
+
+    function checkIfHasActiveServiceAgreement(service_agreement) {
+        console.log("Checking for active agreements...", service_agreement); // Debug log
+        return service_agreement?.some((agreement) => agreement.is_active) || false;
+    }
+
     function formatErrorMessage(error_message, index) {
         // the error_message is a string with semicolons.  Split it into an array and return the first element
         return error_message.split(";")[index];
     }
+
 </script>
 
 {#if timetracking.error}
@@ -199,6 +221,32 @@
     </div>
 </div>
 
+{#if timetracking?.client_id && !hasActiveServiceAgreement}
+<div class="rounded-md bg-red-50 p-4 mb-4">
+    <div class="flex">
+        <div class="flex-shrink-0">
+            <svg
+                class="h-5 w-5 text-red-400"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+            >
+                <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z"
+                    clip-rule="evenodd"
+                />
+            </svg>
+        </div>
+        <div class="ml-3">
+            <h3 class="text-sm font-medium text-red-800">
+                There are no active services for this participant.
+            </h3>
+        </div>
+    </div>
+</div>
+{/if}
+
 {#if client_on_hold}
     <div class="rounded-md bg-red-50 p-4">
         <div class="flex">
@@ -230,89 +278,120 @@
         {readOnly}
     />
 
+    {#if timetracking.session_date > service_agreement.service_agreement_end_date 
+        || timetracking.session_date < service_agreement.service_agreement_signed_date}
+        
+        <div class="rounded-md bg-red-50 p-4">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <svg
+                        class="h-5 w-5 text-red-400"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                        aria-hidden="true"
+                    >
+                        <path
+                            fill-rule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z"
+                            clip-rule="evenodd"
+                        />
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <h3 class="text-sm font-medium text-red-800">
+                        The date is outside of the service agreement period.
+                    </h3>
+                </div>
+            </div>
+        </div>
+
+    {:else}
+        
     <!-- <ServiceSelector
         bind:participant_service_id={timetracking.participant_service_id}
         bind:client_id={timetracking.client_id}
         {readOnly}
     /> -->
 
-    {#if timetracking.staff_id && timetracking.client_id && timetracking.participant_service_id && timetracking.participant_service_id != "Choose service"}
-        <Container>
-            <ClientPlanServicesService
-                bind:participant_service_id={timetracking.participant_service_id}
-            />
-        </Container>
+        {#if timetracking.staff_id && timetracking.client_id && timetracking.participant_service_id && timetracking.participant_service_id != "Choose service"}
+            <Container>
+                <ClientPlanServicesService
+                    bind:participant_service_id={timetracking.participant_service_id}
+                    bind:service_agreement={service_agreement}
+                />
+            </Container>
 
-        {#if mode == "edit"}
-            <Role roles={["admin"]}>
-                <PlanManagerSelector
-                    bind:planmanager_id={timetracking.planmanager_id}
+            {#if mode == "edit"}
+                <Role roles={["admin"]}>
+                    <PlanManagerSelector
+                        bind:planmanager_id={timetracking.planmanager_id}
+                        {readOnly}
+                    />
+                </Role>
+            {/if}
+
+            {#if available_session_duration > 0}
+                <ClaimSelector
+                    bind:claim_type={timetracking.claim_type}
+                    bind:cancellation_reason={timetracking.cancellation_reason}
                     {readOnly}
                 />
-            </Role>
-        {/if}
 
-        {#if available_session_duration > 0}
-            <ClaimSelector
-                bind:claim_type={timetracking.claim_type}
-                bind:cancellation_reason={timetracking.cancellation_reason}
-                {readOnly}
-            />
-
-            <FloatingDurationSelect
-                label="Session Duration"
-                bind:value={timetracking.session_duration}
-                {readOnly}
-            />
-            {#if budget_exceeded}
-                <div class="text-center text-red-500 font-bold">
-                    This will take you over budget. There is only {@html convertMinutesToHoursAndMinutes(
-                        available_session_duration,
-                    )} available.
+                <FloatingDurationSelect
+                    label="Session Duration"
+                    bind:value={timetracking.session_duration}
+                    {readOnly}
+                />
+                {#if budget_exceeded}
+                    <div class="text-center text-red-500 font-bold">
+                        This will take you over budget. There is only {@html convertMinutesToHoursAndMinutes(
+                            available_session_duration,
+                        )} available.
+                    </div>
+                {/if}
+            {:else}
+                <div class="text-center text-red-500">
+                    No available session duration for this service.
                 </div>
             {/if}
-        {:else}
-            <div class="text-center text-red-500">
-                No available session duration for this service.
-            </div>
-        {/if}
 
-        <!-- <FloatingInput
-            label="Billing Summary"
-            placeholder="eg: Developmental assessment conducted via video call."
-            bind:value={timetracking.actual_travel_time}
-            {readOnly}
-        /> -->
+            <!-- <FloatingInput
+                label="Billing Summary"
+                placeholder="eg: Developmental assessment conducted via video call."
+                bind:value={timetracking.actual_travel_time}
+                {readOnly}
+            /> -->
 
-        <Container>
-            <div style="z-index:1">
-                <div class="mb-2 opacity-50 text-xs">Case Note</div>
-                <div class="flex items-start px-2 mb-2">
-                    <div class="flex h-6 items-center">
-                        <input
-                            id="comments"
-                            aria-describedby="comments-description"
-                            name="comments"
-                            type="checkbox"
-                            bind:checked={timetracking.internal}
-                            class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-                        />
+            <Container>
+                <div style="z-index:1">
+                    <div class="mb-2 opacity-50 text-xs">Case Note</div>
+                    <div class="flex items-start px-2 mb-2">
+                        <div class="flex h-6 items-center">
+                            <input
+                                id="comments"
+                                aria-describedby="comments-description"
+                                name="comments"
+                                type="checkbox"
+                                bind:checked={timetracking.internal}
+                                class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                            />
+                        </div>
+                        <div class="ml-2 text-sm leading-6">
+                            <label for="comments" class="font-medium text-gray-900"
+                                >Internal Only</label
+                            >
+                            <span
+                                id="comments-description"
+                                class="text-gray-500 text-xs italic"
+                                ><span class="sr-only">Internal Only </span> (Tick to
+                                prevent stakeholders reading this case note)</span
+                            >
+                        </div>
                     </div>
-                    <div class="ml-2 text-sm leading-6">
-                        <label for="comments" class="font-medium text-gray-900"
-                            >Internal Only</label
-                        >
-                        <span
-                            id="comments-description"
-                            class="text-gray-500 text-xs italic"
-                            ><span class="sr-only">Internal Only </span> (Tick to
-                            prevent stakeholders reading this case note)</span
-                        >
-                    </div>
+
+                    <RTE bind:content={timetracking.notes} />
                 </div>
-
-                <RTE bind:content={timetracking.notes} />
-            </div>
-        </Container>
+            </Container>
+        {/if}
     {/if}
 {/if}

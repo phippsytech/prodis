@@ -9,12 +9,21 @@
         formatDate,
     } from "@shared/utilities.js";
     import { ExclamationTriangleIcon } from "heroicons-svelte/24/outline";
+    import StaffSelector from "@shared/StaffSelector.svelte";
+    import ClientSelector from "@shared/ClientSelector.svelte";
+    import Filter from "@shared/PhippsyTech/svelte-ui/Filter.svelte";
 
     const date = new Date();
 
     let trips = [];
     let start_date = getMonday();
     let end_date = getDatePlus7Days(start_date);
+    let staff_id = null;
+    let client_id = null;
+    let trips_list = [];
+    let filters = [
+		{ label: "Speed < 40Kms/hr", value: "not_acceptable_speed", enabled: false }
+	];
 
     BreadcrumbStore.set({
         path: [
@@ -23,7 +32,7 @@
         ],
     });
 
-    function getTripsByDate(start_date, end_date) {
+    function getTripsByDate(start_date, end_date, staff_id = null, client_id = null) {
         if (start_date && end_date) {
             const startDateRegex = /^\d{4}-\d{2}-\d{2}$/;
             const endDateRegex = /^\d{4}-\d{2}-\d{2}$/;
@@ -38,20 +47,38 @@
                 jspa("/Trip", "listTripsByDate", {
                     start_date: start_date,
                     end_date: end_date,
+                    staff_id: staff_id,
+                    client_id: client_id,
                 }).then((result) => {
                     trips = result.result;
+                    trips_list = trips;
                     // trips = trips.filter((trip) => trip.staff_id == 100);
-                    trips = result.result.filter(
-                        (trip) =>
-                            !isSpeedAcceptable(trip.kms, trip.trip_duration),
-                    );
+                    // trips = result.result.filter(
+                    //     (trip) =>
+                    //         !isSpeedAcceptable(trip.kms, trip.trip_duration),
+                    // );
                     // trips.sort((a, b) => Number(b.kms) - Number(a.kms));
                 });
             }
         }
     }
 
-    $: getTripsByDate(start_date, end_date);
+    $: getTripsByDate(start_date, end_date, staff_id, client_id);
+
+    $: {
+        const showNotAcceptableSpeed = filters.find(
+            (f) => f.value === "not_acceptable_speed",
+        ).enabled;
+        
+        
+        if (showNotAcceptableSpeed) {
+            trips_list = trips.filter((trip) =>
+                !isSpeedAcceptable(trip.kms, trip.trip_duration)
+            );
+        } else {
+            trips_list = trips;
+        }
+    }
 
     function displayClaimableKms(trip) {
         // Maximum Claimable Time: Auto-calculation or a display based on zone constraints.
@@ -101,12 +128,18 @@
     <div class="flex flex-wrap space-x-2 items-center md:flex-no-wrap">
         <FloatingDate label="Start Date" bind:value={start_date} />
         <FloatingDate label="End Date" bind:value={end_date} />
+        <StaffSelector bind:staff_id={staff_id} clearable />
+        <ClientSelector bind:client_id={client_id} bind:staff_id={staff_id} clearable />
     </div>
+</div>
+
+<div class="bg-white px-3 rounded-md pb-1 my-2">
+    <Filter bind:filters />
 </div>
 
 <Container>
     <ul class="list-none m-0 p-0 divide-y divide-slate-200">
-        {#each trips as trip (trip.id)}
+        {#each trips_list as trip (trip.id)}
             <a href="/#/trips/{trip.id}">
                 <li
                     class="flex justify-between items-center px-4 py-2 hover:bg-indigo-50 hover:text-indigo-600 cursor-pointer"

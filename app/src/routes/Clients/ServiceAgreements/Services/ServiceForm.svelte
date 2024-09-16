@@ -63,19 +63,46 @@
     >
 </div>
 
-<FloatingSelect
-    bind:value={props.service_id}
-    label="Service"
-    instruction="Choose service"
-    options={serviceList}
-    hideValidation={true}
+
+<div class="flex justify-between gap-x-2 ">
+
+    <div class="flex-grow">  
+        <FloatingSelect
+        bind:value={props.service_id}
+        label="Service"
+        instruction="Choose service"
+        options={serviceList}
+        hideValidation={true}
+    />
+    
+</div>
+<div class="flex-shrink">  
+
+<FloatingInput
+    bind:value={props.rate}
+    label="Service Rate (per unit)"
+    placeholder="eg: 193.99"
+/>
+</div>
+</div>
+
+
+<FloatingInput
+    bind:value={props.allocated_funding}
+    label="Total Allocated Funding"
+    placeholder="eg: 12000.00"
 />
 
+<!-- 
 {#if selectedServiceName}
     <div class="block p-4 mb-2 rounded-lg border bg-white">
         <div class=" text-sm">{selectedServiceName}</div>
     </div>
-{/if}
+{/if} -->
+
+
+
+
 
 <div class="flex justify-between gap-x-2 ">
 
@@ -83,7 +110,7 @@
 
 <FloatingInput
     bind:value={props.budget}
-    label="Service Budget"
+    label="Current Service Budget"
     placeholder="eg: 12000"
 /></div>
 <div class="flex-grow">
@@ -95,11 +122,27 @@
 </div>
 </div>
 
-<FloatingInput
+<!-- <FloatingInput
     bind:value={props.xero_account_code}
     label="Xero Account Code"
     placeholder="eg: 200"
-/>
+/> -->
+
+
+{#if props.budget_display == "weekly"}
+<div class="flex items-center mb-2">
+    <input
+        type="checkbox"
+        id="adjustWeeklyTime"
+        bind:checked={props.adjust_weekly_time}
+        class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+    />
+    <label for="adjustWeeklyTime" class="ml-2 text-sm font-medium text-gray-900"
+        >Calculate weekly time using remaining funds.</label
+    >
+</div>
+{/if}
+
 
 <div class="flex items-center mb-2">
     <input

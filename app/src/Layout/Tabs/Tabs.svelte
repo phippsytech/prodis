@@ -39,13 +39,13 @@
                         name: "Add Trip",
                         url: "/trips/add",
                         active: true,
-                        roles: ["house", "therapist", "admin"],
+                        roles: ["house", "therapist", "admin", "trip"],
                     },
                     {
                         name: "Trip History",
                         url: "/trips/history",
                         active: true,
-                        roles: ["house", "therapist", "admin"],
+                        roles: ["house", "therapist", "admin", "trip"],
                     },
                 ];
             },
@@ -108,6 +108,12 @@
                     {
                         name: "Invoices",
                         url: "/clients/" + params.client_id + "/invoices",
+                        active: true,
+                        roles: ["accounts", "admin"],
+                    },
+                    {
+                        name: "Activity History",
+                        url: "/clients/" + params.client_id + "/activities",
                         active: true,
                         roles: ["accounts", "admin"],
                     },
@@ -565,6 +571,25 @@
                 ];
             },
         },
+
+        // {
+        //     "/documenttypes": (params) => {
+        //         tabs = [
+        //             {
+        //                 name: "Types",
+        //                 url: "/documenttypes/list",
+        //                 active: true,
+        //                 roles: ["admin"],
+        //             },
+        //             {
+        //                 name: "Missing",
+        //                 url: "/documenttypes/missing",
+        //                 active: true,
+        //                 roles: ["admin"],
+        //             },
+        //         ];
+        //     },
+        // },
 
         {
             "/profile": (params) => {

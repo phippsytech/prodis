@@ -1,3 +1,15 @@
 [
-    "admin","house","house.lead","roster","forms","timeline","invoicing","service_agreements","support_items","therapist","payroll","sysadmin"
+    "admin",
+    "house",
+    "house.lead",
+    "trip",
+    "roster",
+    "forms",
+    "timeline",
+    "invoicing",
+    "service_agreements",
+    "support_items",
+    "therapist",
+    "payroll",
+    "sysadmin"
 ]

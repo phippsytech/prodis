@@ -6,7 +6,7 @@ use NDISmate\Middleware\CorsMiddleware;
 use NDISmate\Middleware\PulseMiddleware;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
+// use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use React\Http\Message\Response as ReactResponse;
 use React\Http\Server as ReactServer;
 use React\Socket\SecureServer;
@@ -14,6 +14,12 @@ use React\Socket\Server as SocketServer;
 use RedBeanPHP\R;
 use Respect\Validation\Factory;
 use Slim\Factory\AppFactory;
+// use Slim\Psr7\Factory\StreamFactory;
+
+use React\Http\Middleware\StreamingRequestMiddleware;
+use React\Http\Middleware\LimitConcurrentRequestsMiddleware;
+use React\Http\Middleware\RequestBodyBufferMiddleware;
+use React\Http\Middleware\RequestBodyParserMiddleware;
 
 require '/var/www/prodis/init.php';
 
@@ -69,7 +75,7 @@ $app->options('/{routes:.+}', function ($request, $response, $args) {
 // # GET ROUTES #
 // ##############
 $app->get('/App', new ControllerFactory(\NDISmate\Init::class));
-$app->get('/Google', new ControllerFactory(\NDISmate\GoogleAPI\Controller::class));
+
 $app->get('/My', new ControllerFactory(\NDISmate\MyInit::class));
 $app->get('/Xero', new ControllerFactory(\NDISmate\Xero\Controller::class));  // TODO: improve response speed
 
@@ -79,6 +85,7 @@ $app->get('/Xero', new ControllerFactory(\NDISmate\Xero\Controller::class));  //
 
 // UPDATED ROUTE
 /* these routes have had their controllers moved to the new structure */
+$app->post('/ActivityLog', new ControllerFactory(\NDISmate\Controllers\ActivityLogController::class));
 $app->post('/App', new ControllerFactory(\NDISmate\Controllers\ApplicationController::class));
 $app->post('/Auth', new ControllerFactory(\NDISmate\Controllers\AuthenticationController::class));
 $app->post('/Client', new ControllerFactory(\NDISmate\Controllers\ClientController::class));  // This is an alias for Participant
@@ -88,7 +95,9 @@ $app->post('/Client/Note', new ControllerFactory(\NDISmate\Controllers\ClientNot
 $app->post('/Client/Report', new ControllerFactory(\NDISmate\Controllers\ClientReportController::class));
 $app->post('/Client/Staff', new ControllerFactory(\NDISmate\Controllers\ClientStaffController::class));
 $app->post('/Client/Stakeholder', new ControllerFactory(\NDISmate\Controllers\ClientStakeholderController::class));
+$app->post('/DocumentType', new ControllerFactory(\NDISmate\Controllers\DocumentTypeController::class));
 $app->post('/Geo', new ControllerFactory(\NDISmate\Controllers\GeoController::class));
+$app->post('/Participant/Document', new ControllerFactory(\NDISmate\Controllers\ParticipantDocumentController::class));
 $app->post('/Participant/Service', new ControllerFactory(\NDISmate\Controllers\ParticipantServiceController::class));
 $app->post('/Participant/ServiceAgreement', new ControllerFactory(\NDISmate\Controllers\ParticipantServiceAgreementController::class));
 $app->post('/Postcode', new ControllerFactory(\NDISmate\Controllers\PostcodeController::class));
@@ -96,11 +105,14 @@ $app->post('/Report', new ControllerFactory(\NDISmate\Controllers\ReportControll
 $app->post('/Roster', new ControllerFactory(\NDISmate\Controllers\RosterController::class));
 $app->post('/Service', new ControllerFactory(\NDISmate\Controllers\ServiceController::class));
 $app->post('/SignatureRequest', new ControllerFactory(\NDISmate\Controllers\SignatureRequestController::class));
+
+$app->post('/Staff/Credential', new ControllerFactory(\NDISmate\Controllers\StaffCredentialController::class));
+
 $app->post('/SupportItem', new ControllerFactory(\NDISmate\Controllers\SupportItemController::class));
-$app->post('/Task', new ControllerFactory(\NDISmate\Controllers\TaskController::class));
 $app->post('/TimeTracking', new ControllerFactory(\NDISmate\Controllers\TimeTrackingController::class));
 $app->post('/Trip', new ControllerFactory(\NDISmate\Controllers\TripController::class));
 $app->post('/Utilities', new ControllerFactory(\NDISmate\Controllers\UtilityController::class));
+$app->post('/Storage', new ControllerFactory(\NDISmate\Controllers\ObjectStorageController::class));
 
 // CONVERSION IN PROGRESS
 $app->post('/User', new ControllerFactory(\NDISmate\Controllers\UserController::class));
@@ -112,9 +124,11 @@ $app->post('/Billing', new ControllerFactory(\NDISmate\Models\Billing::class));
 $app->post('/Client/Document', new ControllerFactory(\NDISmate\Models\Client\Document::class));
 $app->post('/Client/Plan', new ControllerFactory(\NDISmate\Models\Client\Plan::class));
 
+/* new routes */
+
+
 $app->post('/Credential', new ControllerFactory(\NDISmate\Models\Credential::class));
-$app->post('/Google', new ControllerFactory(\NDISmate\GoogleAPI\Controller::class));
-$app->post('/Google/SharedDrive', new ControllerFactory(\NDISmate\GoogleAPI\SharedDrive\Controller::class));
+
 $app->post('/Invoice', new ControllerFactory(\NDISmate\Models\Invoice::class));
 $app->post('/Invoice/NDIA/PaymentRequestStatus', new ControllerFactory(\NDISmate\Models\Invoice\NDIA\PaymentRequestStatus::class));
 $app->post('/Invoice/NDIA/Remittance', new ControllerFactory(\NDISmate\Models\Invoice\NDIA\Remittance::class));
@@ -144,7 +158,7 @@ $app->post('/SIL/House/Staff', new ControllerFactory(\NDISmate\Models\SIL\House\
 $app->post('/SIL/Payrun', new ControllerFactory(\NDISmate\Models\SIL\Payrun\Controller::class));  // TODO: improve response speed
 $app->post('/Staff', new ControllerFactory(\NDISmate\Models\Staff::class));
 $app->post('/Staff/Schedule', new ControllerFactory(\NDISmate\Models\Staff\Schedule\Controller::class));
-$app->post('/Staff/Credential', new ControllerFactory(\NDISmate\Models\Staff\Credential::class));
+
 $app->post('/Staff/Document', new ControllerFactory(\NDISmate\Models\Staff\Document::class));
 $app->post('/Staff/Team', new ControllerFactory(\NDISmate\Models\Staff\Team::class));
 $app->post('/Tickets', new ControllerFactory(\NDISmate\Models\Tickets\Controller::class));
@@ -154,6 +168,10 @@ $app->post('/Xero/Payroll', new ControllerFactory(\NDISmate\Xero\Payroll\Control
 $app->post('/Xero/Payroll/Migrate', new ControllerFactory(\NDISmate\Xero\Payroll\Migrate\Controller::class));  // TODO: improve response speed
 
 // ## DISABLED ENDPOINTS ##
+// $app->get('/Google', new ControllerFactory(\NDISmate\GoogleAPI\Controller::class));
+// $app->post('/Google', new ControllerFactory(\NDISmate\GoogleAPI\Controller::class));
+// $app->post('/Google/SharedDrive', new ControllerFactory(\NDISmate\GoogleAPI\SharedDrive\Controller::class));
+
 // $app->post('/SIL/RosterOfCare', new ControllerFactory(\NDISmate\Models\SIL\RosterOfCare::class));
 // $app->post('/SIL/RosterOfCare/Shift', new ControllerFactory(\NDISmate\Models\SIL\RosterOfCare\Shift::class));
 // $app->post('/Stakeholder', new ControllerFactory(\NDISmate\Models\Stakeholder::class));
@@ -165,11 +183,15 @@ $app->post('/Xero/Payroll/Migrate', new ControllerFactory(\NDISmate\Xero\Payroll
 $DOMAIN = API_DOMAIN;
 $PORT = 8080;
 
-
-// $CERT_PATH = '/etc/letsencrypt/live/' . $DOMAIN;
+// // Middleware components
+$streamingMiddleware = new StreamingRequestMiddleware();
+$limitMiddleware = new LimitConcurrentRequestsMiddleware(100); // 100 concurrent requests
+$bufferMiddleware = new RequestBodyBufferMiddleware(16 * 1024 * 1024); // Max 16 MiB per request
+$parserMiddleware = new RequestBodyParserMiddleware();
 
 // Create ReactPHP HTTP server
-$server = new ReactServer(function (Request $request) use ($app) {
+$server = new ReactServer($streamingMiddleware,$limitMiddleware,$bufferMiddleware,$parserMiddleware,function (Request $request) use ($app) {
+
     try {
         $slimResponse = $app->handle($request);
         return new ReactResponse(
@@ -187,27 +209,11 @@ $server = new ReactServer(function (Request $request) use ($app) {
     }
 });
 
-
-// Create socket server without SSL
+// Create socket server
 $socket = new SocketServer('0.0.0.0:' . $PORT);
 
 // Start the ReactPHP server
 $server->listen($socket);
-
-
-// // Create socket server
-// $socket = new SocketServer('0.0.0.0:' . $HTTPS_PORT);
-
-// // Secure the socket server
-// $secureSocket = new SecureServer($socket, null, [
-//     'local_cert' => $CERT_PATH . '/fullchain.pem',
-//     'local_pk' => $CERT_PATH . '/privkey.pem',
-//     'allow_self_signed' => false,
-//     'verify_peer' => false,
-// ]);
-
-// // Start the ReactPHP server
-// $server->listen($secureSocket);
 
 // Set up a periodic timer to keep the database connection alive
 $interval = 300;  // Interval in seconds (e.g., every 5 minutes)
