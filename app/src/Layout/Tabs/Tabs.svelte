@@ -112,6 +112,12 @@
                         roles: ["accounts", "admin"],
                     },
                     {
+                        name: "Activity History",
+                        url: "/clients/" + params.client_id + "/activities",
+                        active: true,
+                        roles: ["accounts", "admin"],
+                    },
+                    {
                         name: "Settings",
                         url: "/clients/" + params.client_id + "/settings",
                         active: true,
