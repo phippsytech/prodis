@@ -37,6 +37,10 @@
         getAvailableSessionDuration();
     });
 
+    $: {
+        console.log(hasActiveServiceAgreement);
+    }
+
     $: if (timetracking.participant_service_id != stored_service_id) {
         getAvailableSessionDuration();
         stored_service_id = timetracking.participant_service_id;
@@ -304,9 +308,8 @@
                 </div>
             </div>
         </div>
-
     {:else}
-        
+
     <!-- <ServiceSelector
         bind:participant_service_id={timetracking.participant_service_id}
         bind:client_id={timetracking.client_id}
