@@ -9,15 +9,15 @@ class GetShiftsByStaffId{
 
     function __invoke($data){
 
-        $sql = 'SELECT 
+        $sql = "SELECT 
             houserosters.id, 
             houserosters.house_id, 
             houserosters.start_date, 
             houserosters.start_time, 
             houserosters.end_date, 
             houserosters.end_time, 
-            CONCAT(houserosters.start_date, " ", houserosters.start_time) AS start, 
-            CONCAT(houserosters.end_date, " ", houserosters.end_time) AS end, 
+            CONCAT(houserosters.start_date, ' ', houserosters.start_time) AS start, 
+            CONCAT(houserosters.end_date, ' ', houserosters.end_time) AS end, 
             houserosters.passive,
             houserosters.kms,
             houserosters.do_not_bill,
@@ -32,7 +32,7 @@ class GetShiftsByStaffId{
         LEFT JOIN staffs ON staffs.id = houserosters.staff_id
         left join houses on houses.id = houserosters.house_id
         left join clients on clients.id = houses.client_id
-        WHERE houserosters.staff_id = :staff_id';
+        WHERE houserosters.staff_id = :staff_id";
 
 
         $params = [':staff_id' => $data['staff_id']];
