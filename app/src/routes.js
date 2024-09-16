@@ -678,6 +678,9 @@ export default {
         asyncComponent: () => import('./routes/Clients/Invoices/Invoices.svelte')
     }),
 
+    '/clients/:client_id/activities': wrap({
+        asyncComponent: () => import('./routes/Clients/ActivityHistory/ActivityHistory.svelte')
+    }),
 
     '/clients/:client_id/settings': wrap({
         asyncComponent: () => import('./routes/Clients/Settings/Settings.svelte')
