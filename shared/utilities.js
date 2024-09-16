@@ -94,6 +94,35 @@ export function formatDate(str_date, options = {
     return date.toLocaleDateString("en-UK", options);
 }
 
+export function formatDateTime(
+    str_date,
+    options = {
+        day: "numeric",
+        month: "short", // short, numeric
+        year: "numeric",
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true // Add this option to use 12-hour format
+    },
+) {
+    if (options.year == null) delete options.year;
+
+    if (!str_date) return null;
+    let [datePart, timePart] = str_date.split(" ");
+    let [year, month, day] = datePart.split("-");
+    let [hour, minute, second] = timePart.split(":");
+    let date = new Date(
+        parseInt(year, 10),
+        parseInt(month, 10) - 1,
+        parseInt(day, 10),
+        parseInt(hour, 10),
+        parseInt(minute, 10),
+        parseInt(second, 10)
+    );
+
+    return date.toLocaleDateString("en-UK", options);
+}
+
 
 export function getDaysUntilDate(dateString) {
     const today = new Date();
@@ -315,4 +344,8 @@ export function convertToLocalDate(utcDate) {
 
 export function decimalRounder(value) {
     return Math.round((value + Number.EPSILON) * 100) / 100;
+}
+// format snake case to pretty name
+export function formatPrettyName(str) {
+    return str?.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 }
