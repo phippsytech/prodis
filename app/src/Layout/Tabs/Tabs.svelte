@@ -1,6 +1,6 @@
 <script>
     // import { fly } from "svelte/transition";
-    import { onMount, beforeUpdate } from "svelte";
+    import { onMount } from "svelte"; 
     import { RolesStore } from "@shared/stores.js";
     import { haveCommonElements } from "@shared/utilities.js";
     import { getClient } from "@shared/api.js";
@@ -21,10 +21,6 @@
             window.removeEventListener("hashchange", updateHashValue);
         };
     });
-
-    // beforeUpdate(() => {
-    //     updateHashValue();
-    // });
 
     $: rolesStore = $RolesStore;
 
