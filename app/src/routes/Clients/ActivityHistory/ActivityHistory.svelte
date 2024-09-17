@@ -37,15 +37,13 @@
 <!-- Header -->
 <div class="hidden sm:block">
     <div
-        class="grid grid-cols-2 border-b border-gray-200 items-center py-1 text-xs font-medium text-gray-500"
-        style="grid-template-columns: 6fr 1fr;"
-    >
-        <div class="grid grid-cols-3 gap-4 items-center">
+        class="grid grid-cols-12 border-b border-gray-200 items-center py-1 text-xs font-medium text-gray-500 gap-4">
+        <div class="grid grid-cols-3 gap-4 items-center col-span-10">
             <div>Action Type</div>
             <div>Reason</div>
             <div>User</div>
         </div>
-        <div>Date</div>
+        <div class="col-span-2">Date</div>
     </div>
 </div>
 
@@ -55,11 +53,9 @@
         {#each activities as item, index}
             <div
                 in:slide|global={{ duration: 150 }}
-                class="grid grid-cols-2 border-b border-gray-200 items-center hover:bg-indigo-50 py-1 cursor-pointer"
-                style="grid-template-columns: 6fr 1fr;"
-            >
+                class="grid grid-cols-12 border-b border-gray-200 items-center hover:bg-indigo-50 py-1 cursor-pointer gap-4">
                 <div
-                    class="grid grid-cols-1 gap-0 sm:gap-4 sm:grid-cols-3 w-full items-center"
+                    class="grid grid-cols-1 gap-0 sm:gap-4 sm:grid-cols-3 w-full items-center col-span-8 sm:col-span-10"
                 >
                     <div class="text-sm">{item.action_type}</div>
                     <div class="text-xs whitespace-no-wrap">
@@ -69,7 +65,7 @@
                         {item.user_name}
                     </div>
                 </div>
-                <div class="font-medium">{formatDateTime(item.timestamp)}</div>
+                <div class="font-medium text-sm sm:text-base col-span-4 sm:col-span-2">{formatDateTime(item.timestamp)}</div>
             </div>
         {/each}
     {/key}
