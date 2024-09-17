@@ -17,12 +17,15 @@ class LogActivity
      *
      * @return void
      */
-    public static function log($data, $actionType, $entity, $reason, $guard)
+    public static function log($entityId, $actionType, $entity, $reason, $userId = 0)
     {
         // Ensure necessary parameters are available
-        if (!isset($data['id']) || !$guard || !isset($guard->user_id)) {
+        if (!$entityId) {
             throw new \InvalidArgumentException('Invalid data or guard provided for logging activity.');
         }
+
+        $entityId = (int) $entityId;
+        $userId = (int) $userId;
 
         // Create an activity log entry
         $activityLog = new ActivityLog();
@@ -30,9 +33,9 @@ class LogActivity
             'timestamp' => date('Y-m-d H:i:s'),
             'action_type' => $actionType,
             'reason' => $reason,
-            'user_id' => $guard->user_id,
+            'user_id' => $userId,
             'entity_type' => $entity,
-            'entity_id' => $data['id'],
+            'entity_id' => $entityId,
         ]);
     }
 }

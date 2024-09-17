@@ -57,9 +57,9 @@ class Client extends NewCustomModel
             'id' => $data['id'],
             'on_hold' => true,
         ]);
-
+        
         // log on hold participant
-        LogActivity::log($data, 'on-hold', 'participant', $data['reason'], $guard);
+        LogActivity::log($data['id'], 'on-hold', 'participant', $data['reason'], $guard->user_id);
     }
 
     public function resumeClient($data, $fields, $guard)
@@ -68,8 +68,8 @@ class Client extends NewCustomModel
             'id' => $data['id'],
             'on_hold' => false,
         ]);
-
+        
         // log resumed participant
-        LogActivity::log($data, 'resumed', 'participant', $data['reason'], $guard);
+        LogActivity::log($data['id'], 'resumed', 'participant', $data['reason'], $guard->user_id);
     }
 }
