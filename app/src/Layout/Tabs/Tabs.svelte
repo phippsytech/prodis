@@ -22,9 +22,9 @@
         };
     });
 
-    beforeUpdate(() => {
-        updateHashValue();
-    });
+    // beforeUpdate(() => {
+    //     updateHashValue();
+    // });
 
     $: rolesStore = $RolesStore;
 
