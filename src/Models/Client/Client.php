@@ -59,7 +59,7 @@ class Client extends NewCustomModel
         ]);
 
         // log on hold participant
-        LogActivity::log($data, 'on-hold', 'participant', 'Participant has been put on hold', $guard);
+        LogActivity::log($data, 'on-hold', 'participant', $data['reason'], $guard);
     }
 
     public function resumeClient($data, $fields, $guard)
@@ -70,6 +70,6 @@ class Client extends NewCustomModel
         ]);
 
         // log resumed participant
-        LogActivity::log($data, 'resumed', 'participant', 'Participant has been resumed', $guard);
+        LogActivity::log($data, 'resumed', 'participant', $data['reason'], $guard);
     }
 }
