@@ -75,7 +75,9 @@
         <Role roles={["stakeholder", "therapist", "house"]}>
             <ParticipantList />
         </Role>
-        <TaskList />
+        <Role roles={["sysadmin"]}>
+            <TaskList />
+        </Role>
     </div>
     <div class="md:w-1/2">
         <Role roles={["therapist"]}>

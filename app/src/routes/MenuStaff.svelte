@@ -108,7 +108,7 @@
             url: "/tasks",
             name: "Tasks",
             icon: ListCheckIcon,
-            role: ["admin"],
+            role: ["sysadmin"],
         },
 
         {
