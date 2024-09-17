@@ -42,15 +42,15 @@ class GetOverdueVisits
             FROM timetrackings t2
             WHERE client_id=timetrackings.client_id 
             AND service_id=timetrackings.service_id
-            AND session_date >= clientplans.service_agreement_signed_date
+            AND session_date >= serviceagreements.service_agreement_signed_date
         ) as total_session_minutes,
-        ((clientplanservices.budget/timetrackings.rate)*60) as budget
+        ((servicebookings.budget/timetrackings.rate)*60) as budget
         FROM timetrackings 
         JOIN clients on (clients.id = timetrackings.client_id)
         JOIN services on (services.id = timetrackings.service_id)
         JOIN staffs on (staffs.id = timetrackings.staff_id)
-        JOIN clientplans on (clientplans.client_id = timetrackings.client_id)
-        JOIN clientplanservices on (clientplanservices.plan_id = clientplans.id and clientplanservices.service_id = timetrackings.service_id)
+        JOIN serviceagreements on (serviceagreements.client_id = timetrackings.client_id)
+        JOIN servicebookings on (servicebookings.plan_id = serviceagreements.id and servicebookings.service_id = timetrackings.service_id)
         LEFT JOIN clientstaffassignments on (clientstaffassignments.client_id = timetrackings.client_id and clientstaffassignments.staff_id = timetrackings.staff_id)
         WHERE (
         clients.archived != 1 
@@ -65,12 +65,12 @@ class GetOverdueVisits
         AND clientstaffassignements.staff_role in ('bsp','ot','sp')
         
         AND (
-        clientplans.ndis_plan_end_date is not null
-        AND DATEDIFF(DATE(clientplans.ndis_plan_end_date), NOW()) > 0
+        serviceagreements.ndis_plan_end_date is not null
+        AND DATEDIFF(DATE(serviceagreements.ndis_plan_end_date), NOW()) > 0
         )
         AND (
         timetrackings.service_id NOT IN (1,4,20)
-        AND timetrackings.service_id IN (select service_id from clientplanservices where plan_id=clientplans.id)
+        AND timetrackings.service_id IN (select service_id from servicebookings where plan_id=serviceagreements.id)
         )
         ";
 

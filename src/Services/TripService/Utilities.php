@@ -7,12 +7,12 @@ use NDISmate\Services\TripService\Utilities\GetProviderTravelServiceId;
 
 class Utilities
 {
-    public static function calculateClaimable($kms, $trip_duration, $participant_service_id)
+    public static function calculateClaimable($kms, $trip_duration, $service_booking_id)
     {
         return (new CalculateClaimable)(
             kms: $kms,
             trip_duration: $trip_duration,
-            participant_service_id: $participant_service_id
+            service_booking_id: $service_booking_id
         );
     }
 

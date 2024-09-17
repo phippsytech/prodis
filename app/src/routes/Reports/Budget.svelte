@@ -2,7 +2,7 @@
     import { push } from "svelte-spa-router";
     import Container from "@shared/Container.svelte";
     import FloatingSelect from "@shared/PhippsyTech/svelte-ui/forms/FloatingSelect.svelte";
-    import ClientPlanServicesService from "@app/routes/Clients/ServiceAgreements/Services/ServiceItemAdapter.svelte";
+    import ServiceBookings from "@app/routes/Clients/ServiceAgreements/Services/ServiceItemAdapter.svelte";
     import { jspa } from "@shared/jspa.js";
     import { BreadcrumbStore } from "@shared/stores.js";
     import QueryManager from "@shared/QueryManager.svelte";
@@ -65,8 +65,8 @@
                 // only get the services
                 if (client.is_primary == "1") {
                     jspa(
-                        "/Participant/Service",
-                        "listParticipantServicesByParticipantId",
+                        "/Participant/ServiceBooking",
+                        "listParticipantServiceBookingsByParticipantId",
                         { participant_id: client.client_id },
                     ).then((result) => {
                         // filter out inactive services
@@ -117,9 +117,7 @@
             </h1>
             {#if client.services && client.services.length > 0}
                 {#each client.services as service, index (service.id)}
-                    <ClientPlanServicesService
-                        participant_service_id={service.id}
-                    />
+                    <ServiceBookings service_booking_id={service.id} />
                     {#if index < client.services.length - 1}<hr
                             class="my-2"
                         />{/if}

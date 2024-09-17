@@ -16,8 +16,8 @@ class GetClientsWithoutAgreement
                 clients.name,
                 clients.on_hold
             FROM clients
-            LEFT JOIN clientplans ON clients.id = clientplans.client_id
-            WHERE (clientplans.service_agreement_signed_date IS NULL OR clientplans.client_id IS NULL)
+            LEFT JOIN serviceagreements ON clients.id = serviceagreements.client_id
+            WHERE (serviceagreements.service_agreement_signed_date IS NULL OR serviceagreements.client_id IS NULL)
             AND (clients.archived != 1 OR clients.archived IS NULL)
             '
         );

@@ -98,7 +98,8 @@ $app->post('/Client/Stakeholder', new ControllerFactory(\NDISmate\Controllers\Cl
 $app->post('/DocumentType', new ControllerFactory(\NDISmate\Controllers\DocumentTypeController::class));
 $app->post('/Geo', new ControllerFactory(\NDISmate\Controllers\GeoController::class));
 $app->post('/Participant/Document', new ControllerFactory(\NDISmate\Controllers\ParticipantDocumentController::class));
-$app->post('/Participant/Service', new ControllerFactory(\NDISmate\Controllers\ParticipantServiceController::class));
+
+$app->post('/Participant/ServiceBooking', new ControllerFactory(\NDISmate\Controllers\ParticipantServiceBookingController::class));
 $app->post('/Participant/ServiceAgreement', new ControllerFactory(\NDISmate\Controllers\ParticipantServiceAgreementController::class));
 $app->post('/Postcode', new ControllerFactory(\NDISmate\Controllers\PostcodeController::class));
 $app->post('/Report', new ControllerFactory(\NDISmate\Controllers\ReportController::class));
@@ -123,7 +124,7 @@ $app->post('/User/Participant', new ControllerFactory(\NDISmate\Controllers\User
 /* these routes have NOT been updated to the new structure */
 $app->post('/Billing', new ControllerFactory(\NDISmate\Models\Billing::class));
 $app->post('/Client/Document', new ControllerFactory(\NDISmate\Models\Client\Document::class));
-$app->post('/Client/Plan', new ControllerFactory(\NDISmate\Models\Client\Plan::class));
+
 
 /* new routes */
 
@@ -177,7 +178,7 @@ $app->post('/Xero/Payroll/Migrate', new ControllerFactory(\NDISmate\Xero\Payroll
 // $app->post('/SIL/RosterOfCare/Shift', new ControllerFactory(\NDISmate\Models\SIL\RosterOfCare\Shift::class));
 // $app->post('/Stakeholder', new ControllerFactory(\NDISmate\Models\Stakeholder::class));
 // $app->post('/appsec', new ControllerFactory(\NDISmate\Services\AuthenticationService\Controller::class));
-// $app->post('/Client/Plan/Service', new ControllerFactory(\NDISmate\Models\Client\Plan\Service::class));
+// $app->post('/Client/ServiceAgreement/Service', new ControllerFactory(\NDISmate\Models\Client\Plan\Service::class));
 
 // Make it a ReactPHP Server
 

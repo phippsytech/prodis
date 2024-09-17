@@ -12,7 +12,7 @@ class GetClientReportDueDates
         UNIX_TIMESTAMP(DATE_ADD(DATE(FROM_UNIXTIME(service_agreement_signed_date)), INTERVAL 4 WEEK)) AS interim_date,
         UNIX_TIMESTAMP(DATE_ADD(DATE(FROM_UNIXTIME(service_agreement_signed_date)), INTERVAL 6 MONTH)) AS comprehensive_date,
         UNIX_TIMESTAMP(DATE_ADD(DATE(FROM_UNIXTIME(service_agreement_signed_date)), INTERVAL 18 MONTH)) AS review_date
-        FROM clientplans
+        FROM serviceagreements
         WHERE
         client_id=:client_id ', [':client_id' => $data['client_id']]);
 

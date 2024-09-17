@@ -81,8 +81,8 @@ class PulseMiddleware
             'addCredential', // contains large data I don't want to store
             'updateCredential', // contains large data I don't want to store
             'listPlanManagers',
-            'getClientPlanService',
-            'listClientPlanServicesByParticipantId',
+            'getservicebooking',
+            'listservicebookingsByParticipantId',
             'listServicesByParticipantId',
             'getService',
             'listStaff',
@@ -147,9 +147,9 @@ class PulseMiddleware
             'listNotesByClientId',
             'listClientReportsByClientId',
             'listServices',
-            'getClientPlan',
-            'listClientPlanServicesByClientId',
-            'getClientServiceSummary',
+            'getserviceagreement',
+            'listservicebookingsByClientId',
+            'getClientServiceBookingSummary',
             'getStafferKPI',
             'listParticipantsByUserId',
             'listUsers',

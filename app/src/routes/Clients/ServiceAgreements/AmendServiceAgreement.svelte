@@ -18,9 +18,9 @@
     let service_agreement_id = params.service_agreement_id;
 
     let ParticipantServiceStore = createStore(
-        "/Participant/Service",
+        "/Participant/ServiceBooking",
         {
-            list: "listServicesByServiceAgreementId",
+            list: "listServiceBookingsByServiceAgreementId",
         },
         {},
     );

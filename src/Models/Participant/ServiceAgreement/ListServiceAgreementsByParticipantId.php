@@ -10,7 +10,7 @@ class ListServiceAgreementsByParticipantId
     {
         $beans = R::getAll(
             'SELECT *
-            FROM clientplans
+            FROM serviceagreements
             WHERE client_id = :participant_id',
             [':participant_id' => $data['participant_id']]
         );

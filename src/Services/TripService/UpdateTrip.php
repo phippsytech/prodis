@@ -25,13 +25,13 @@ class UpdateTrip
         // Now work out the data for billing
         $client_id = $data['client_id'];
         $service_id = $data['service_id'];
-        $participant_service_id = $data['participant_service_id'];
+        $service_booking_id = $data['service_booking_id'];
         $planmanager_id = $data['planmanager_id'];
 
         $claimable = Utilities::calculateClaimable(
             kms: $data['kms'],
             trip_duration: $data['trip_duration'],
-            participant_service_id: $participant_service_id
+            service_booking_id: $service_booking_id
         );
 
         if (isset($data['kms']) && $data['kms'] > 0) {
@@ -43,7 +43,7 @@ class UpdateTrip
                     'staff_id' => $data['staff_id'],
                     'client_id' => $client_id,
                     'service_id' => $provider_travel_service_id,
-                    'participant_service_id' => $participant_service_id,
+                    'service_booking_id' => $service_booking_id,
                     'planmanager_id' => $planmanager_id,
                     'session_date' => $data['trip_date'],
                     'session_duration' => $claimable['kms'],
@@ -58,7 +58,7 @@ class UpdateTrip
                 'staff_id' => $data['staff_id'],
                 'client_id' => $client_id,
                 'service_id' => $service_id,
-                'participant_service_id' => $participant_service_id,
+                'service_booking_id' => $service_booking_id,
                 'planmanager_id' => $planmanager_id,
                 'session_date' => $data['trip_date'],
                 'session_duration' => $claimable['duration'],

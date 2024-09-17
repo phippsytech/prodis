@@ -15,7 +15,7 @@ class MakeExpiredServiceAgreementsInactive
     private function deactivateExpiredServiceAgreements(): void
     {
         $query = '
-            UPDATE clientplans
+            UPDATE serviceagreements
             SET is_active = 0
             WHERE is_active = 1 
             AND service_agreement_end_date < CURDATE()

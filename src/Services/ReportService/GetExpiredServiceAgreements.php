@@ -9,11 +9,11 @@ class GetExpiredServiceAgreements
     {
         try {
             $sql =
-                'WITH LatestClientPlans AS (
+                'WITH Latestserviceagreements AS (
                 SELECT 
                     client_id, 
                     MAX(service_agreement_end_date) as max_end_date
-                FROM clientplans
+                FROM serviceagreements
                 GROUP BY client_id
             )
             SELECT 
@@ -24,9 +24,9 @@ class GetExpiredServiceAgreements
                 DATEDIFF(DATE(lcp.max_end_date), NOW()) as days_ago,
                 cp.is_active
             FROM clients
-            LEFT JOIN LatestClientPlans lcp
+            LEFT JOIN Latestserviceagreements lcp
                 ON clients.id = lcp.client_id
-            LEFT JOIN clientplans cp
+            LEFT JOIN serviceagreements cp
                 ON lcp.client_id = cp.client_id 
                 AND lcp.max_end_date = cp.service_agreement_end_date
             WHERE 

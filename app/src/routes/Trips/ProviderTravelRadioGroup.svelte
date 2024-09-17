@@ -5,7 +5,7 @@
 
     export let client_id = null;
     export let service;
-    export let participant_service_id = null;
+    export let service_booking_id = null;
     export let support_item_count = 0;
 
     let stored_client_id = null;
@@ -39,7 +39,7 @@
         // client_id is not set, just return
         if (client_id === null) return;
 
-        jspa("/Participant/Service", "listProviderTravelByClientId", {
+        jspa("/Participant/ServiceBooking", "listProviderTravelByClientId", {
             client_id: client_id,
         })
             .then((result) => {
@@ -53,13 +53,11 @@
                 services.forEach((service) => {
                     let options = {
                         option: service.code,
-                        value: service.participant_service_id,
+                        value: service.service_booking_id,
                         selected: false,
                     };
 
-                    if (
-                        service.participant_service_id == participant_service_id
-                    ) {
+                    if (service.service_booking_id == service_booking_id) {
                         options.selected = true;
                         selected = true;
                         service = service;
@@ -81,38 +79,38 @@
                 if (services.length == 1) {
                     // if only one service, automatically select it
                     service = services[0];
-                    participant_service_id = services[0].participant_service_id;
+                    service_booking_id = services[0].service_booking_id;
                 }
 
-                dispatch("change", { value: participant_service_id });
+                dispatch("change", { value: service_booking_id });
             })
             .catch((error) => {
                 console.log(error);
             });
     }
 
-    function selectService(participant_service_id) {
+    function selectService(service_booking_id) {
         const item = services.find(
-            (item) => item.participant_service_id === participant_service_id,
+            (item) => item.service_booking_id === service_booking_id,
         );
         return item ? item : null;
     }
 
     // Watch for changes in selectedBillingCode and update the travel code accordingly
     $: {
-        if (participant_service_id) {
-            service = selectService(participant_service_id);
+        if (service_booking_id) {
+            service = selectService(service_booking_id);
         }
     }
 
     function handleChange() {
-        dispatch("change", { value: participant_service_id });
+        dispatch("change", { value: service_booking_id });
     }
 </script>
 
 <RadioGroup
     on:click
     on:change={handleChange}
-    bind:value={participant_service_id}
+    bind:value={service_booking_id}
     options={serviceList}
 />

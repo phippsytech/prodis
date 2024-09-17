@@ -3,7 +3,7 @@
     import FloatingDurationSelect from "@shared/PhippsyTech/svelte-ui/forms/FloatingDurationSelect.svelte";
     import FloatingDate from "@shared/PhippsyTech/svelte-ui/forms/FloatingDate.svelte";
     import FloatingInput from "@shared/PhippsyTech/svelte-ui/forms/FloatingInput.svelte";
-    import ClientPlanServicesService from "@app/routes/Clients/ServiceAgreements/Services/ServiceItemAdapter.svelte";
+    import ServiceBooking from "@app/routes/Clients/ServiceAgreements/Services/ServiceItemAdapter.svelte";
     import PlanManagerSelector from "@app/routes/Accounts/PlanManagers/PlanManagerSelector.svelte";
     import StaffSelector from "./StaffSelector.svelte";
     import ClientSelector from "./ClientSelector.svelte";
@@ -37,9 +37,9 @@
         getAvailableSessionDuration();
     });
 
-    $: if (timetracking.participant_service_id != stored_service_id) {
+    $: if (timetracking.service_booking_id != stored_service_id) {
         getAvailableSessionDuration();
-        stored_service_id = timetracking.participant_service_id;
+        stored_service_id = timetracking.service_booking_id;
     }
 
     $: if (
@@ -52,8 +52,8 @@
     }
 
     function getAvailableSessionDuration() {
-        jspa("/Participant/Service", "getAvailableSessionDuration", {
-            participant_service_id: timetracking.participant_service_id,
+        jspa("/Participant/ServiceBooking", "getAvailableSessionDuration", {
+            service_booking_id: timetracking.service_booking_id,
         })
             .then((result) => {
                 available_session_duration =
@@ -74,13 +74,14 @@
         readOnly = "true";
     }
 
-    $: if (timetracking.participant_service_id) getService(timetracking);
-    $: if (timetracking.client_id || timetracking.session_date) getServiceAgreement(timetracking);
+    $: if (timetracking.service_booking_id) getService(timetracking);
+    $: if (timetracking.client_id || timetracking.session_date)
+        getServiceAgreement(timetracking);
     $: if (timetracking.session_date) getServiceAgreement(timetracking);
 
     function getService(timetracking) {
-        jspa("/Participant/Service", "getParticipantService", {
-            id: timetracking.participant_service_id,
+        jspa("/Participant/ServiceBooking", "getParticipantServiceBooking", {
+            id: timetracking.service_booking_id,
         })
             .then((result) => {
                 service = convertFieldsToBoolean(result.result, [
@@ -91,12 +92,17 @@
     }
 
     function getServiceAgreement(timetracking) {
-        jspa("/Participant/ServiceAgreement", "listServiceAgreementsByParticipantId", {
-            participant_id: timetracking.client_id,
-        })
+        jspa(
+            "/Participant/ServiceAgreement",
+            "listServiceAgreementsByParticipantId",
+            {
+                participant_id: timetracking.client_id,
+            },
+        )
             .then((result) => {
                 service_agreement = result.result;
-                hasActiveServiceAgreement = checkIfHasActiveServiceAgreement(service_agreement);
+                hasActiveServiceAgreement =
+                    checkIfHasActiveServiceAgreement(service_agreement);
             })
             .catch((error) => {
                 console.error("Error fetching service agreements:", error);
@@ -105,14 +111,15 @@
 
     function checkIfHasActiveServiceAgreement(service_agreement) {
         console.log("Checking for active agreements...", service_agreement); // Debug log
-        return service_agreement?.some((agreement) => agreement.is_active) || false;
+        return (
+            service_agreement?.some((agreement) => agreement.is_active) || false
+        );
     }
 
     function formatErrorMessage(error_message, index) {
         // the error_message is a string with semicolons.  Split it into an array and return the first element
         return error_message.split(";")[index];
     }
-
 </script>
 
 {#if timetracking.error}
@@ -247,15 +254,13 @@
         </div>
     </div>
 {:else}
-
     <ServiceButtonGroup
-        bind:participant_service_id={timetracking.participant_service_id}
+        bind:service_booking_id={timetracking.service_booking_id}
         bind:client_id={timetracking.client_id}
         {readOnly}
     />
 
     {#if timetracking?.client_id && !hasActiveServiceAgreement}
-
         <div class="rounded-md bg-red-50 p-4 mb-4">
             <div class="flex">
                 <div class="flex-shrink-0">
@@ -281,9 +286,7 @@
         </div>
     {/if}
 
-    {#if timetracking.session_date > service_agreement.service_agreement_end_date 
-        || timetracking.session_date < service_agreement.service_agreement_signed_date}
-        
+    {#if timetracking.session_date > service_agreement.service_agreement_end_date || timetracking.session_date < service_agreement.service_agreement_signed_date}
         <div class="rounded-md bg-red-50 p-4">
             <div class="flex">
                 <div class="flex-shrink-0">
@@ -307,20 +310,18 @@
                 </div>
             </div>
         </div>
-
     {:else}
-        
         <!-- <ServiceSelector
-            bind:participant_service_id={timetracking.participant_service_id}
+            bind:service_booking_id={timetracking.service_booking_id}
             bind:client_id={timetracking.client_id}
             {readOnly}
         /> -->
 
-        {#if timetracking.staff_id && timetracking.client_id && timetracking.participant_service_id && timetracking.participant_service_id != "Choose service"}
+        {#if timetracking.staff_id && timetracking.client_id && timetracking.service_booking_id && timetracking.service_booking_id != "Choose service"}
             <Container>
-                <ClientPlanServicesService
-                    bind:participant_service_id={timetracking.participant_service_id}
-                    bind:service_agreement={service_agreement}
+                <ServiceBooking
+                    bind:service_booking_id={timetracking.service_booking_id}
+                    bind:service_agreement
                 />
             </Container>
 
@@ -380,14 +381,16 @@
                             />
                         </div>
                         <div class="ml-2 text-sm leading-6">
-                            <label for="comments" class="font-medium text-gray-900"
+                            <label
+                                for="comments"
+                                class="font-medium text-gray-900"
                                 >Internal Only</label
                             >
                             <span
                                 id="comments-description"
                                 class="text-gray-500 text-xs italic"
-                                ><span class="sr-only">Internal Only </span> (Tick to
-                                prevent stakeholders reading this case note)</span
+                                ><span class="sr-only">Internal Only </span> (Tick
+                                to prevent stakeholders reading this case note)</span
                             >
                         </div>
                     </div>

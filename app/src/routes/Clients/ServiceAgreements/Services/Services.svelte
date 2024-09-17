@@ -26,13 +26,13 @@
         participant_id: participant_id,
     };
 
-    let ParticipantServiceStore = createStore(
-        "/Participant/Service",
+    let ParticipantServiceBookingStore = createStore(
+        "/Participant/ServiceBooking",
         {
-            list: "listServicesByServiceAgreementId",
-            add: "addService",
-            update: "updateService",
-            delete: "deleteService",
+            list: "listServiceBookingsByServiceAgreementId",
+            add: "addServiceBooking",
+            update: "updateServiceBooking",
+            delete: "deleteServiceBooking",
         },
         {
             // load: async (result) => {
@@ -49,21 +49,28 @@
                 result.plan_manager_name = await getPlanManagerName(
                     result.plan_manager_id,
                 );
-                
+
                 return result;
             },
         },
     );
 
-    function getParticipantService(participant_service_id) {
-        return jspa("/Participant/Service", "getParticipantService", {
-            id: participant_service_id,
-        }).then((result) => {
+    function getParticipantService(service_booking_id) {
+        return jspa(
+            "/Participant/ServiceBooking",
+            "getParticipantServiceBooking",
+            {
+                id: service_booking_id,
+            },
+        ).then((result) => {
             // let participant_service = convertFieldsToBoolean(result.result, [
             //     "include_travel",
             // ]);
-            let participant_service = convertFieldsToBoolean(result.result, ["is_active", "adjust_weekly_time"]);
-            
+            let participant_service = convertFieldsToBoolean(result.result, [
+                "is_active",
+                "adjust_weekly_time",
+            ]);
+
             return participant_service;
         });
     }
@@ -78,12 +85,12 @@
     }
 
     onMount(() => {
-        ParticipantServiceStore.load({
+        ParticipantServiceBookingStore.load({
             service_agreement_id: service_agreement.id,
         });
     });
 
-    function editClientPlanService(participant_service) {
+    function editservicebooking(participant_service) {
         if (haveCommonElements(roles, ["serviceagreement.modify"])) {
             editService(participant_service);
         }
@@ -153,29 +160,30 @@
         if (validateParticipantService() == false) {
             return;
         }
-        ParticipantServiceStore.add(participant_service);
+        ParticipantServiceBookingStore.add(participant_service);
     }
 
     function updateService(participant_service) {
         if (validateParticipantService() == false) {
             return;
         }
-        ParticipantServiceStore.updateItem(participant_service)
-        .then(()=>{
-            toastSuccess("Service updated successfully.");
-        });
+        ParticipantServiceBookingStore.updateItem(participant_service).then(
+            () => {
+                toastSuccess("Service updated successfully.");
+            },
+        );
     }
 
     function deleteService(participant_service) {
-        ParticipantServiceStore.remove(participant_service);
+        ParticipantServiceBookingStore.remove(participant_service);
     }
 </script>
 
-{#each $ParticipantServiceStore as participant_service, index}
+{#each $ParticipantServiceBookingStore as participant_service, index}
     <li
         in:slide={{ duration: 200 }}
         out:slide={{ duration: 200 }}
-        class="px-3 py-2 w-full rounded-t-lg {$ParticipantServiceStore.length -
+        class="px-3 py-2 w-full rounded-t-lg {$ParticipantServiceBookingStore.length -
             1 ==
         index
             ? ''
@@ -191,8 +199,7 @@
                 {#if service_agreement.is_active}
                     <button
                         class="w-full text-left text-slate-400 cursor-pointer text-sm"
-                        on:click={() =>
-                            editClientPlanService(participant_service)}
+                        on:click={() => editservicebooking(participant_service)}
                     >
                         <ServiceItem
                             {service_agreement}
@@ -220,17 +227,17 @@
             <li
                 class="px-3 py-2 border-t border-indigo-100 w-full text-slate-400 cursor-default text-sm"
             >
-                No services have been added to this agreement. &nbsp;<button
+                No service bookings have been added to this agreement. &nbsp;<button
                     on:click={() => showService()}
                     class="text-indigo-600 cursor-pointer hover:underline"
-                    >Add a service</button
+                    >Add a service booking</button
                 >
             </li>
         </Role>
     {/if}
 {/each}
 
-{#if $ParticipantServiceStore.length > 0}
+{#if $ParticipantServiceBookingStore.length > 0}
     {#if service_agreement.is_active}
         <Role roles={["serviceagreement.modify"]}>
             <li
@@ -239,7 +246,7 @@
                 <button
                     on:click={() => showService()}
                     class="text-indigo-600 cursor-pointer hover:underline"
-                    >Add another service</button
+                    >Add another service booking</button
                 >
             </li>
         </Role>

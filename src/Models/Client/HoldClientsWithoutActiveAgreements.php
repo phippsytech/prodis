@@ -18,7 +18,7 @@ class HoldClientsWithoutActiveAgreements
             JOIN (
                 SELECT c.id
                 FROM clients c
-                LEFT JOIN clientplans cp
+                LEFT JOIN serviceagreements cp
                 ON c.id = cp.client_id AND cp.is_active = 1
                 GROUP BY c.id
                 HAVING COUNT(cp.id) = 0

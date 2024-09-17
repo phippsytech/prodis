@@ -1,5 +1,5 @@
 <?php
-namespace NDISmate\Services\ParticipantService;
+namespace NDISmate\Services\ParticipantServiceBooking;
 
 use \RedBeanPHP\R as R;
 
@@ -15,12 +15,12 @@ class ListProviderTravelByClientId
             s.id as service_id,
             s.billing_code,
             s.code,
-            cps.id as participant_service_id,
+            cps.id as service_booking_id,
             cps.plan_manager_id,
             cps.max_claimable_travel_duration
         FROM services s
-        join clientplanservices cps on cps.service_id = s.id
-        JOIN clientplans cp ON cp.id = cps.plan_id
+        join servicebookings cps on cps.service_id = s.id
+        JOIN serviceagreements cp ON cp.id = cps.plan_id
         WHERE 
         (cps.include_travel = 1 or cps.service_id=49)
         AND cp.is_active = 1

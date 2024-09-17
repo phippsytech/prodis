@@ -9,7 +9,7 @@ class AddTimeTracking
 {
     public function __invoke($data)
     {
-        if (!isset($data['participant_service_id'])) {
+        if (!isset($data['service_booking_id'])) {
             throw new \Exception('Participant Service Id is required.', 400);
         }
 
@@ -17,9 +17,9 @@ class AddTimeTracking
             'SELECT 
                 plan_manager_id,
                 service_id
-            FROM clientplanservices
-            WHERE id = :participant_service_id',
-            [':participant_service_id' => $data['participant_service_id']]
+            FROM servicebookings
+            WHERE id = :service_booking_id',
+            [':service_booking_id' => $data['service_booking_id']]
         );
 
         $data['planmanager_id'] = $client_plan_service['plan_manager_id'];
@@ -28,10 +28,10 @@ class AddTimeTracking
         $data['rate'] = R::getCell(
             'SELECT 
                 services.rate
-            FROM clientplanservices
-            JOIN services ON services.id = clientplanservices.service_id
-            WHERE clientplanservices.id = :participant_service_id',
-            [':participant_service_id' => $data['participant_service_id']]
+            FROM servicebookings
+            JOIN services ON services.id = servicebookings.service_id
+            WHERE servicebookings.id = :service_booking_id',
+            [':service_booking_id' => $data['service_booking_id']]
         );
 
         // Add Time Tracking
