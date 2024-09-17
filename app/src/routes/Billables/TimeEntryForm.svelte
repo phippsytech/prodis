@@ -75,7 +75,8 @@
     }
 
     $: if (timetracking.participant_service_id) getService(timetracking);
-    $: if (timetracking.client_id) getServiceAgreement(timetracking);
+    $: if (timetracking.client_id || timetracking.session_date) getServiceAgreement(timetracking);
+    $: if (timetracking.session_date) getServiceAgreement(timetracking);
 
     function getService(timetracking) {
         jspa("/Participant/Service", "getParticipantService", {
@@ -221,32 +222,6 @@
     </div>
 </div>
 
-{#if timetracking?.client_id && !hasActiveServiceAgreement}
-<div class="rounded-md bg-red-50 p-4 mb-4">
-    <div class="flex">
-        <div class="flex-shrink-0">
-            <svg
-                class="h-5 w-5 text-red-400"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                aria-hidden="true"
-            >
-                <path
-                    fill-rule="evenodd"
-                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z"
-                    clip-rule="evenodd"
-                />
-            </svg>
-        </div>
-        <div class="ml-3">
-            <h3 class="text-sm font-medium text-red-800">
-                There are no active services for this participant.
-            </h3>
-        </div>
-    </div>
-</div>
-{/if}
-
 {#if client_on_hold}
     <div class="rounded-md bg-red-50 p-4">
         <div class="flex">
@@ -272,11 +247,39 @@
         </div>
     </div>
 {:else}
+
     <ServiceButtonGroup
         bind:participant_service_id={timetracking.participant_service_id}
         bind:client_id={timetracking.client_id}
         {readOnly}
     />
+
+    {#if timetracking?.client_id && !hasActiveServiceAgreement}
+
+        <div class="rounded-md bg-red-50 p-4 mb-4">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <svg
+                        class="h-5 w-5 text-red-400"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                        aria-hidden="true"
+                    >
+                        <path
+                            fill-rule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z"
+                            clip-rule="evenodd"
+                        />
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <h3 class="text-sm font-medium text-red-800">
+                        There are no active services for this participant.
+                    </h3>
+                </div>
+            </div>
+        </div>
+    {/if}
 
     {#if timetracking.session_date > service_agreement.service_agreement_end_date 
         || timetracking.session_date < service_agreement.service_agreement_signed_date}
@@ -307,11 +310,11 @@
 
     {:else}
         
-    <!-- <ServiceSelector
-        bind:participant_service_id={timetracking.participant_service_id}
-        bind:client_id={timetracking.client_id}
-        {readOnly}
-    /> -->
+        <!-- <ServiceSelector
+            bind:participant_service_id={timetracking.participant_service_id}
+            bind:client_id={timetracking.client_id}
+            {readOnly}
+        /> -->
 
         {#if timetracking.staff_id && timetracking.client_id && timetracking.participant_service_id && timetracking.participant_service_id != "Choose service"}
             <Container>
