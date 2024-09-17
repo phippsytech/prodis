@@ -85,6 +85,7 @@ $app->get('/Xero', new ControllerFactory(\NDISmate\Xero\Controller::class));  //
 
 // UPDATED ROUTE
 /* these routes have had their controllers moved to the new structure */
+$app->post('/ActivityLog', new ControllerFactory(\NDISmate\Controllers\ActivityLogController::class));
 $app->post('/App', new ControllerFactory(\NDISmate\Controllers\ApplicationController::class));
 $app->post('/Auth', new ControllerFactory(\NDISmate\Controllers\AuthenticationController::class));
 $app->post('/Client', new ControllerFactory(\NDISmate\Controllers\ClientController::class));  // This is an alias for Participant
@@ -108,6 +109,7 @@ $app->post('/SignatureRequest', new ControllerFactory(\NDISmate\Controllers\Sign
 $app->post('/Staff/Credential', new ControllerFactory(\NDISmate\Controllers\StaffCredentialController::class));
 
 $app->post('/SupportItem', new ControllerFactory(\NDISmate\Controllers\SupportItemController::class));
+$app->post('/Task', new ControllerFactory(\NDISmate\Controllers\TaskController::class));
 $app->post('/TimeTracking', new ControllerFactory(\NDISmate\Controllers\TimeTrackingController::class));
 $app->post('/Trip', new ControllerFactory(\NDISmate\Controllers\TripController::class));
 $app->post('/Utilities', new ControllerFactory(\NDISmate\Controllers\UtilityController::class));
@@ -122,6 +124,9 @@ $app->post('/User/Participant', new ControllerFactory(\NDISmate\Controllers\User
 $app->post('/Billing', new ControllerFactory(\NDISmate\Models\Billing::class));
 $app->post('/Client/Document', new ControllerFactory(\NDISmate\Models\Client\Document::class));
 $app->post('/Client/Plan', new ControllerFactory(\NDISmate\Models\Client\Plan::class));
+
+/* new routes */
+
 
 $app->post('/Credential', new ControllerFactory(\NDISmate\Models\Credential::class));
 

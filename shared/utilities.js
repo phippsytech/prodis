@@ -94,6 +94,52 @@ export function formatDate(str_date, options = {
     return date.toLocaleDateString("en-UK", options);
 }
 
+export function formatDateTime(
+    str_date,
+    options = {
+        day: "numeric",
+        month: "short", // short, numeric
+        year: "numeric",
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true // Use 12-hour format if true
+    },
+) {
+    if (!options.year) delete options.year;
+
+    if (!str_date) return null;
+
+    let [datePart, timePart] = str_date.split(" ");
+    let [year, month, day] = datePart.split("-");
+    let [hour, minute, second] = timePart.split(":");
+
+    // Parse the date as UTC
+    let date = new Date(Date.UTC(
+        parseInt(year, 10),
+        parseInt(month, 10) - 1,
+        parseInt(day, 10),
+        parseInt(hour, 10),
+        parseInt(minute, 10),
+        parseInt(second, 10)
+    ));
+
+    // Format only the date part
+    let formattedDate = date.toLocaleDateString("en-UK", {
+        day: options.day,
+        month: options.month,
+        year: options.year,
+    });
+
+    // Format only the time part
+    let formattedTime = date.toLocaleTimeString("en-UK", {
+        hour: options.hour,
+        minute: options.minute,
+        hour12: options.hour12,
+    });
+
+    // Combine date and time with "at" in between
+    return `${formattedDate} at ${formattedTime}`;
+}
 
 export function getDaysUntilDate(dateString) {
     const today = new Date();
@@ -327,4 +373,9 @@ export function getQueryParams() {
         result[key] = value;
     });
     return result;
+}
+
+// format snake case to pretty name
+export function formatPrettyName(str) {
+    return str?.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 }
