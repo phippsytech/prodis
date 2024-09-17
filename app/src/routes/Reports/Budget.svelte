@@ -92,7 +92,11 @@
     }
 </script>
 
-<QueryManager params={queryParams} />
+<!-- <QueryManager params={queryParams} /> -->
+<QueryManager
+    params={{ ...queryParams }}
+    onParamsChange={(params) => (staff_id = params.staff_id)}
+/>
 
 <FloatingSelect
     bind:value={staff_id}
