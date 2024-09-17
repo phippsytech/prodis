@@ -102,27 +102,44 @@ export function formatDateTime(
         year: "numeric",
         hour: "numeric",
         minute: "2-digit",
-        hour12: true // Add this option to use 12-hour format
+        hour12: true // Use 12-hour format if true
     },
 ) {
-    if (options.year == null) delete options.year;
+    if (!options.year) delete options.year;
 
     if (!str_date) return null;
+
     let [datePart, timePart] = str_date.split(" ");
     let [year, month, day] = datePart.split("-");
     let [hour, minute, second] = timePart.split(":");
-    let date = new Date(
+
+    // Parse the date as UTC
+    let date = new Date(Date.UTC(
         parseInt(year, 10),
         parseInt(month, 10) - 1,
         parseInt(day, 10),
         parseInt(hour, 10),
         parseInt(minute, 10),
         parseInt(second, 10)
-    );
+    ));
 
-    return date.toLocaleDateString("en-UK", options);
+    // Format only the date part
+    let formattedDate = date.toLocaleDateString("en-UK", {
+        day: options.day,
+        month: options.month,
+        year: options.year,
+    });
+
+    // Format only the time part
+    let formattedTime = date.toLocaleTimeString("en-UK", {
+        hour: options.hour,
+        minute: options.minute,
+        hour12: options.hour12,
+    });
+
+    // Combine date and time with "at" in between
+    return `${formattedDate} at ${formattedTime}`;
 }
-
 
 export function getDaysUntilDate(dateString) {
     const today = new Date();
