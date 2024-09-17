@@ -4,7 +4,7 @@
     import { slide } from "svelte/transition";
     import { getClient } from "@shared/api.js";
     import { BreadcrumbStore } from "@shared/stores.js";
-    import { formatDate, formatCurrency, timeAgo } from "@shared/utilities.js";
+    import { formatDateTime } from "@shared/utilities.js";
 
     export let params;
 
@@ -20,7 +20,7 @@
                 { url: "/clients", name: "Clients" },
                 { url: "/clients/" + client_id, name: client.name },
             ],
-        });
+        }); 
     });
 
     jspa("/ActivityLog", "listActivityLogs", { entity_type: 'participant', entity_id: client_id }).then(
@@ -69,7 +69,7 @@
                         {item.user_name}
                     </div>
                 </div>
-                <div class="font-medium">{item.timestamp}</div>
+                <div class="font-medium">{formatDateTime(item.timestamp)}</div>
             </div>
         {/each}
     {/key}
