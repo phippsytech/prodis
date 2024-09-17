@@ -362,6 +362,19 @@ export function convertToLocalDate(utcDate) {
 export function decimalRounder(value) {
     return Math.round((value + Number.EPSILON) * 100) / 100;
 }
+
+// Function to extract query parameters from the hash
+export function getQueryParams() {
+    const hash = window.location.hash;
+    const queryString = hash.split('?')[1]; // Get the part after ?
+    const params = new URLSearchParams(queryString);
+    const result = {};
+    params.forEach((value, key) => {
+        result[key] = value;
+    });
+    return result;
+}
+
 // format snake case to pretty name
 export function formatPrettyName(str) {
     return str?.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
