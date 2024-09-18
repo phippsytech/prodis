@@ -9,7 +9,7 @@ class ServiceAgreement extends NewCustomModel
 {
     public function __construct($bean = null)
     {
-        parent::__construct($bean ?: R::dispense('clientplans'));  // TODO: Migrate to participantserviceagreements
+        parent::__construct($bean ?: R::dispense('serviceagreements'));  // TODO: Migrate to participantserviceagreements
         // parent::__construct($bean ?: R::dispense('participantserviceagreements'));
         $this->fields = [
             'client_id' => [v::numericVal()],  // TODO: Migrate to participant_id

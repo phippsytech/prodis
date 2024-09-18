@@ -38,93 +38,6 @@
         .split("/")
         .reverse()
         .join("-");
-
-    // downtime_id is actually the client_plan_downtime_id.  I'm not sure if I should clear the ambiguity up
-    function showDowntime(staff_id) {
-        let downtime = {};
-        downtime.staff_id = staff_id;
-
-        ModalStore.set({
-            label: "Add Unavailability",
-            show: true,
-            props: downtime,
-            component: DowntimeForm,
-            action_label: "Add",
-            action: () => addDowntime(),
-        });
-    }
-
-    function showException(staff_id) {
-        let exception = {};
-        exception.staff_id = staff_id;
-
-        ModalStore.set({
-            label: "Add Exception to Recurring Unavailability",
-            show: true,
-            props: exception,
-            component: ExceptionForm,
-            action_label: "Add",
-            action: () => addException(),
-        });
-    }
-
-    function editDowntime(client_id, plan_id, client_plan_downtime_id) {
-        // jspa("/Client/Plan/downtime", "getClientPlandowntime", {id: client_plan_downtime_id}).then((result)=>{
-        //     downtime = result.result;
-
-        ModalStore.set({
-            label: "Update downtime",
-            show: true,
-            props: downtime,
-            component: downtime,
-            action_label: "Update",
-            action: () => updateDowntime(client_plan_downtime_id),
-            delete: () => deleteDowntime(client_plan_downtime_id),
-        });
-
-        // });
-    }
-
-    function addDowntime() {
-        jspa("/Client/Plan/downtime", "addClientPlandowntime", downtime).then(
-            (result) => {
-                if (result.result.id != 0) {
-                    client_plan_downtimes.push(result.result);
-                    client_plan_downtimes = client_plan_downtimes;
-                }
-            },
-        );
-    }
-
-    function updateDowntime(client_plan_downtime_id) {
-        // downtime.plan_id = plan_id;
-        jspa(
-            "/Client/Plan/downtime",
-            "updateClientPlandowntime",
-            downtime,
-        ).then((result) => {
-            client_plan_downtimes = client_plan_downtimes.map(
-                (client_plan_downtime) => {
-                    if (client_plan_downtime.id == client_plan_downtime_id) {
-                        client_plan_downtime = downtime;
-                    }
-                    return client_plan_downtime;
-                },
-            );
-            client_plan_downtimes = client_plan_downtimes;
-        });
-    }
-
-    function deletedowntime(client_plan_downtime_id) {
-        jspa("/Client/Plan/downtime", "deleteClientPlandowntime", {
-            id: client_plan_downtime_id,
-        }).then((result) => {
-            client_plan_downtimes = client_plan_downtimes.filter(
-                (client_plan_downtime) =>
-                    client_plan_downtime.id != client_plan_downtime_id,
-            );
-        });
-    }
 </script>
 
 <div class="flex items-center mb-2">
@@ -132,7 +45,6 @@
         <div class="text-xl">Unavailable Dates & Times</div>
     </div>
     <button
-        on:click={() => showDowntime(99)}
         type="button"
         class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >Add</button
@@ -180,7 +92,6 @@
         <div class="text-xs text-gray-600">
             <span class="font-medium">Exceptions:</span> 24th July 2023
             <button
-                on:click={() => showException(99)}
                 type="button"
                 class="rounded-md px-1 text-center text-xs text-indigo-600 hover:text-white hover:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >Add Exception</button

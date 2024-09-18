@@ -1,12 +1,12 @@
 <?php
 
-namespace NDISmate\Services\ParticipantService;
+namespace NDISmate\Services\ParticipantServiceBooking;
 
 use NDISmate\Utilities\ConvertFieldsToBoolean;
 use RedBeanPHP\R as R;
 use RedBeanPHP\RedException;
 
-class GetParticipantService
+class GetParticipantServiceBooking
 {
     function __invoke($data)
     {
@@ -18,18 +18,18 @@ class GetParticipantService
         }
 
         if (!empty($data['participant_id']) && !empty($data['code'])) {
-            $where = ' clientplanservices.participant_id = :participant_id AND services.code = :code';
+            $where = ' servicebookings.participant_id = :participant_id AND services.code = :code';
             $params = [':participant_id' => $data['participant_id'], ':code' => $data['code']];
         }
 
         if (!empty($data['participant_id']) && !empty($data['service_id'])) {
-            $where = ' clientplanservices.participant_id = :participant_id AND clientplanservices.service_id = :service_id ';
+            $where = ' servicebookings.participant_id = :participant_id AND servicebookings.service_id = :service_id ';
             $params = [':participant_id' => $data['participant_id'], ':service_id' => $data['service_id']];
         }
 
         if (!empty($data['id'])) {
-            $where = ' clientplanservices.id = :clientplanservice_id ';
-            $params = [':clientplanservice_id' => $data['id']];
+            $where = ' servicebookings.id = :servicebooking_id ';
+            $params = [':servicebooking_id' => $data['id']];
         }
 
 
@@ -40,21 +40,21 @@ class GetParticipantService
         try {
             $query =
                 "SELECT
-                    clientplanservices.id,
-                    clientplanservices.plan_id,
-                    ANY_VALUE(clientplanservices.service_id) AS service_id,
-                    ANY_VALUE(clientplanservices.plan_manager_id) AS plan_manager_id,
+                    servicebookings.id,
+                    servicebookings.plan_id,
+                    ANY_VALUE(servicebookings.service_id) AS service_id,
+                    ANY_VALUE(servicebookings.plan_manager_id) AS plan_manager_id,
                     ANY_VALUE(planmanagers.name) AS plan_manager_name,
                     ANY_VALUE(services.code) AS code,
-                    ANY_VALUE(clientplanservices.include_travel) AS include_travel,
-                    ANY_VALUE(clientplanservices.budget) AS budget,
-                    ANY_VALUE(clientplanservices.budget_start_date) AS budget_start_date,
+                    ANY_VALUE(servicebookings.include_travel) AS include_travel,
+                    ANY_VALUE(servicebookings.budget) AS budget,
+                    ANY_VALUE(servicebookings.budget_start_date) AS budget_start_date,
                     ANY_VALUE(services.budget_display) AS budget_display,
                     ANY_VALUE(services.billing_code) AS billing_code,
                     ANY_VALUE(services.billing_unit) AS billing_unit,
                     MAX(timetrackings.session_date) AS last_session_date,
                     COALESCE(SUM(timetrackings.session_duration), 0 ) AS session_duration,
-                    ANY_VALUE(clientplanservices.rate) AS rate,
+                    ANY_VALUE(servicebookings.rate) AS rate,
                     SUM(
                          CASE
                             WHEN services.billing_unit = 'hour' 
@@ -68,23 +68,23 @@ class GetParticipantService
                             ELSE COALESCE(timetrackings.session_duration, 0) * timetrackings.rate
                         END
                     ) AS spent,
-                    ANY_VALUE(clientplanservices.is_active) AS is_active,
-                    ANY_VALUE(clientplanservices.adjust_weekly_time) AS adjust_weekly_time
-                FROM clientplanservices
-                LEFT JOIN timetrackings ON timetrackings.participant_service_id = clientplanservices.id
-                    AND timetrackings.session_date >= clientplanservices.budget_start_date
+                    ANY_VALUE(servicebookings.is_active) AS is_active,
+                    ANY_VALUE(servicebookings.adjust_weekly_time) AS adjust_weekly_time
+                FROM servicebookings
+                LEFT JOIN timetrackings ON timetrackings.service_booking_id = servicebookings.id
+                    AND timetrackings.session_date >= servicebookings.budget_start_date
                     AND (timetrackings.session_duration > 0 AND timetrackings.session_duration is not null)
-                JOIN services ON services.id = clientplanservices.service_id
-                JOIN planmanagers ON planmanagers.id = clientplanservices.plan_manager_id 
+                JOIN services ON services.id = servicebookings.service_id
+                JOIN planmanagers ON planmanagers.id = servicebookings.plan_manager_id 
                 WHERE "
                 . $where
                 . '
                 GROUP BY
-                    clientplanservices.plan_id,
-                    clientplanservices.id
+                    servicebookings.plan_id,
+                    servicebookings.id
                 ORDER BY
-                    clientplanservices.plan_id,
-                    clientplanservices.id
+                    servicebookings.plan_id,
+                    servicebookings.id
                 ';
 
             if (!defined('DB_TYPE') || DB_TYPE == 'mariadb') {

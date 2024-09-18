@@ -11,8 +11,8 @@ class GetClientsByPlanManagerId{
 
         $beans = R::getAll('SELECT DISTINCT clients.name, clients.id 
             FROM clients 
-            JOIN clientplans ON (clients.id = clientplans.client_id)
-            JOIN clientplanservices ON (clientplans.id = clientplanservices.plan_id)
+            JOIN serviceagreements ON (clients.id = serviceagreements.client_id)
+            JOIN servicebookings ON (serviceagreements.id = servicebookings.plan_id)
             WHERE plan_manager_id=:plan_manager_id',
             [
                 ':plan_manager_id' => $data['plan_manager_id']

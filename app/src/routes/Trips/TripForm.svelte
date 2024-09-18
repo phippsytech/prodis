@@ -25,7 +25,7 @@
         kms: null,
         do_not_bill: false,
         // service_id: null,
-        participant_service_id: null,
+        service_booking_id: null,
         planmanager_id: null,
         max_claimable_travel_duration: null,
         trip_purpose: null,
@@ -54,7 +54,7 @@
         if (trip.do_not_bill) {
             // I might need to remember these settings if they toggle back
             trip.client_id = null;
-            trip.participant_service_id = null;
+            trip.service_booking_id = null;
             trip.planmanager_id = null;
         }
     }
@@ -117,7 +117,7 @@
     function handleParticipantChange(e) {
         trip.planmanager_id = null;
         //     providerTravelComponent.loadServices(e.detail.value);
-        trip.participant_service_id = null;
+        trip.service_booking_id = null;
         trip.planmanager_id = null;
     }
 </script>
@@ -156,7 +156,7 @@
             class="bg-white px-3 pt-2 pb-4 mb-2 border border-indigo-100 rounded-md"
         >
             <div class="text-xs opacity-50 mb-2">Billing Item</div>
-            {#if !trip.participant_service_id}<div>
+            {#if !trip.service_booking_id}<div>
                     Which support item should be billed for this travel?
                 </div>{/if}
             <ProviderTravelRadioGroup
@@ -164,7 +164,7 @@
                 on:change={handleChange}
                 bind:client_id={trip.client_id}
                 bind:service
-                bind:participant_service_id={trip.participant_service_id}
+                bind:service_booking_id={trip.service_booking_id}
                 bind:support_item_count
             />
         </div>
@@ -200,7 +200,7 @@
         </div>
     </div>
 {:else}
-    {#if trip.participant_service_id != null}
+    {#if trip.service_booking_id != null}
         {#if bill_to_participant}
             <Role roles={["accounts"]}>
                 <PlanManagerSelector
@@ -210,7 +210,7 @@
         {/if}
     {/if}
 
-    {#if trip.participant_service_id != null || bill_to_participant == false}
+    {#if trip.service_booking_id != null || bill_to_participant == false}
         <div
             class="bg-white px-3 pt-2 pb-4 mb-2 border border-indigo-100 rounded-md"
         >

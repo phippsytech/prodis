@@ -137,10 +137,10 @@ class GenerateInvoicesInXero
     {
         $xero_account_code = R::getCell(
             'SELECT xero_account_code 
-            FROM clientplanservices
-            JOIN clientplans ON (clientplans.id = clientplanservices.plan_id)
-            JOIN clients ON (clients.id = clientplans.client_id)
-            JOIN services ON (services.id = clientplanservices.service_id)
+            FROM servicebookings
+            JOIN serviceagreements ON (serviceagreements.id = servicebookings.plan_id)
+            JOIN clients ON (clients.id = serviceagreements.client_id)
+            JOIN services ON (services.id = servicebookings.service_id)
             WHERE clients.ndis_number=:ndis_number 
             AND services.billing_code=:billing_code',
             [

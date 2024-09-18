@@ -10,9 +10,9 @@ class GetAnonClientServices
         $bean = R::getAll(
             'SELECT clients.id, md5(concat(clients.id,"phippsy")) anon_hash, clients.name, GROUP_CONCAT(services.code) AS service_codes
             FROM clients
-            JOIN clientplans ON clients.id = clientplans.client_id
-            JOIN clientplanservices ON clientplans.id = clientplanservices.plan_id
-            JOIN services ON services.id = clientplanservices.service_id
+            JOIN serviceagreements ON clients.id = serviceagreements.client_id
+            JOIN servicebookings ON serviceagreements.id = servicebookings.plan_id
+            JOIN services ON services.id = servicebookings.service_id
             WHERE (clients.archived IS NULL OR archived != 1)
             GROUP BY clients.id
             ORDER BY clients.name

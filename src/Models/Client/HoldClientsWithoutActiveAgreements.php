@@ -14,12 +14,12 @@ class HoldClientsWithoutActiveAgreements
 
     private function holdClientsWithoutActiveAgreements(): void
     {
-        $query = '
-            SELECT c.id
+        $query = 'SELECT c.id
             FROM clients c
-            LEFT JOIN clientplans cp ON c.id = cp.client_id AND cp.is_active = 1
+            LEFT JOIN serviceagreements cp
+            ON c.id = cp.client_id AND cp.is_active = 1
             GROUP BY c.id
-            HAVING COUNT(cp.id) = 0;
+            HAVING COUNT(cp.id) = 0
         ';
         
         $clientIds = R::getCol($query);

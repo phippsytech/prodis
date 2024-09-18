@@ -7,14 +7,14 @@ class GetAdditionalData
 {
     function __invoke($data)
     {
-        if ($data['participant_service_id']) {
+        if ($data['service_booking_id']) {
             $client_plan_service = R::getRow(
                 'SELECT
                 service_id,
                 plan_manager_id
-            FROM clientplanservices
-            WHERE id = :participant_service_id',
-                [':participant_service_id' => $data['participant_service_id']]
+            FROM servicebookings
+            WHERE id = :service_booking_id',
+                [':service_booking_id' => $data['service_booking_id']]
             );
 
             $data['service_id'] = $client_plan_service['service_id'];

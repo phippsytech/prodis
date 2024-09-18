@@ -4,7 +4,7 @@ namespace NDISmate\Services\ServiceAgreementService;
 use NDISmate\Utilities\ConvertFieldsToBoolean;
 use RedBeanPHP\R as R;
 
-class ListServicesByServiceAgreementId
+class ListServiceBookingsByServiceAgreementId
 {
     public function __invoke($data)
     {
@@ -12,21 +12,21 @@ class ListServicesByServiceAgreementId
         try {
             $query =
                 "SELECT
-                    clientplanservices.id,
-                    clientplanservices.plan_id,
-                    ANY_VALUE(clientplanservices.service_id) AS service_id,
-                    ANY_VALUE(clientplanservices.plan_manager_id) AS plan_manager_id,
+                    servicebookings.id,
+                    servicebookings.plan_id,
+                    ANY_VALUE(servicebookings.service_id) AS service_id,
+                    ANY_VALUE(servicebookings.plan_manager_id) AS plan_manager_id,
                     ANY_VALUE(planmanagers.name) AS plan_manager_name,
                     ANY_VALUE(services.code) AS code,
-                    ANY_VALUE(clientplanservices.include_travel) AS include_travel,
-                    ANY_VALUE(clientplanservices.budget) AS budget,
-                    ANY_VALUE(clientplanservices.budget_start_date) AS budget_start_date,
+                    ANY_VALUE(servicebookings.include_travel) AS include_travel,
+                    ANY_VALUE(servicebookings.budget) AS budget,
+                    ANY_VALUE(servicebookings.budget_start_date) AS budget_start_date,
                     ANY_VALUE(services.budget_display) AS budget_display,
                     ANY_VALUE(services.billing_code) AS billing_code,
                     ANY_VALUE(services.billing_unit) AS billing_unit,
                     SUM(timetrackings.session_duration) AS session_duration,
                     MAX(timetrackings.session_date) AS last_session_date,
-                    ANY_VALUE(clientplanservices.rate) AS rate,
+                    ANY_VALUE(servicebookings.rate) AS rate,
                     SUM(
                         CASE
                             WHEN services.billing_unit = 'hour' 
@@ -40,23 +40,23 @@ class ListServicesByServiceAgreementId
                             ELSE COALESCE(timetrackings.session_duration, 0) * timetrackings.rate
                         END
                     ) AS spent,
-                    clientplanservices.is_active AS is_active,
-                    clientplanservices.adjust_weekly_time AS adjust_weekly_time,
-                    clientplanservices.allocated_funding as allocated_funding
-                FROM clientplanservices
-                LEFT JOIN timetrackings ON timetrackings.participant_service_id = clientplanservices.id
-                    AND timetrackings.session_date >= clientplanservices.budget_start_date
+                    servicebookings.is_active AS is_active,
+                    servicebookings.adjust_weekly_time AS adjust_weekly_time,
+                    servicebookings.allocated_funding as allocated_funding
+                FROM servicebookings
+                LEFT JOIN timetrackings ON timetrackings.service_booking_id = servicebookings.id
+                    AND timetrackings.session_date >= servicebookings.budget_start_date
                     AND (timetrackings.session_duration > 0 AND timetrackings.session_duration is not null)
-                JOIN services ON services.id = clientplanservices.service_id
-                JOIN planmanagers ON planmanagers.id = clientplanservices.plan_manager_id 
-                WHERE clientplanservices.plan_id = :service_agreement_id
+                JOIN services ON services.id = servicebookings.service_id
+                JOIN planmanagers ON planmanagers.id = servicebookings.plan_manager_id 
+                WHERE servicebookings.plan_id = :service_agreement_id
                     
                 GROUP BY
-                    clientplanservices.plan_id,
-                    clientplanservices.id
+                    servicebookings.plan_id,
+                    servicebookings.id
                 ORDER BY
-                    clientplanservices.plan_id,
-                    clientplanservices.id";
+                    servicebookings.plan_id,
+                    servicebookings.id";
 
             if (!defined('DB_TYPE') || DB_TYPE == 'mariadb') {
                 $query = str_replace('ANY_VALUE', '', $query);

@@ -3,7 +3,7 @@
     import FloatingInput from "@shared/PhippsyTech/svelte-ui/forms/FloatingInput.svelte";
     import FloatingTextArea from "@shared/PhippsyTech/svelte-ui/forms/FloatingTextArea.svelte";
     import FloatingDateSelect from "@shared/PhippsyTech/svelte-ui/forms/FloatingDateSelect.svelte";
-    import ClientPlanServicesService from "@app/routes/Clients/ServiceAgreements/Services/ServiceItem.svelte";
+    import ServiceBooking from "@app/routes/Clients/ServiceAgreements/Services/ServiceItem.svelte";
     import PlanManagerSelector from "@app/routes/Accounts/PlanManagers/PlanManagerSelector.svelte";
     import StaffSelector from "./StaffSelector.svelte";
     import ClientSelector from "./ClientSelector.svelte";
@@ -66,7 +66,7 @@
 />
 
 {#if timetracking.staff_id && timetracking.client_id && timetracking.service_id && timetracking.service_id != "Choose service"}
-    <ClientPlanServicesService
+    <ServiceBooking
         bind:client_id={timetracking.client_id}
         bind:service_id={timetracking.service_id}
     />

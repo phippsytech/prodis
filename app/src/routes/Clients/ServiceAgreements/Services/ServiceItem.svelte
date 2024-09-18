@@ -65,92 +65,90 @@
         data.client_id = client_id;
         data.service_id = service_id;
 
-        getClientServiceSummary(data);
+        getClientServiceBookingSummary(data);
     });
 
     $: {
         let data = {};
         data.client_id = client_id;
         data.service_id = service_id;
-        getClientServiceSummary(data);
+        getClientServiceBookingSummary(data);
     }
 
-    function getClientServiceSummary(data) {
-        jspa("/Client/Plan/Service", "getClientServiceSummary", data).then(
-            (result) => {
-                reset();
-                if (result.service.budget_display != null)
-                    budget_display = result.service.budget_display;
+    function getClientServiceBookingSummary(data) {
+        jspa(
+            "/Client/ServiceAgreement/ServiceBooking",
+            "getClientServiceBookingSummary",
+            data,
+        ).then((result) => {
+            reset();
+            if (result.service.budget_display != null)
+                budget_display = result.service.budget_display;
 
-                if (
-                    CrystelCareStartTimestamp <
-                    convertDateToUnixTimestamp(
-                        result.service.service_agreement_signed_date,
-                    )
-                ) {
-                    service_agreement_signed_date = convertDateToUnixTimestamp(
-                        result.service.service_agreement_signed_date,
-                    );
-                }
+            if (
+                CrystelCareStartTimestamp <
+                convertDateToUnixTimestamp(
+                    result.service.service_agreement_signed_date,
+                )
+            ) {
+                service_agreement_signed_date = convertDateToUnixTimestamp(
+                    result.service.service_agreement_signed_date,
+                );
+            }
 
-                service_agreement_end_date = convertDateToUnixTimestamp(
-                    result.service.service_agreement_end_date,
-                );
-                elapsed_weeks = Math.ceil(
-                    (currentTimestamp - service_agreement_signed_date) /
-                        week_in_seconds,
-                );
+            service_agreement_end_date = convertDateToUnixTimestamp(
+                result.service.service_agreement_end_date,
+            );
+            elapsed_weeks = Math.ceil(
+                (currentTimestamp - service_agreement_signed_date) /
+                    week_in_seconds,
+            );
 
-                weeks = Math.round(
-                    (service_agreement_end_date -
-                        service_agreement_signed_date) /
-                        week_in_seconds,
-                );
-                service_code = result.service.service_code;
+            weeks = Math.round(
+                (service_agreement_end_date - service_agreement_signed_date) /
+                    week_in_seconds,
+            );
+            service_code = result.service.service_code;
 
-                (billing_code = result.service.billing_code),
-                    (support_item_name = result.service.support_item_name),
-                    (registration_group_name =
-                        result.service.registration_group_name),
-                    (support_category_name =
-                        result.service.support_category_name),
-                    (xero_account_code = result.service.xero_account_code);
-                plan_manager_name = result.service.plan_manager_name;
-                budget_total_minutes = Math.round(
-                    (result.service.budget / result.service.service_rate) * 60,
-                );
-                budget_minutes_per_week = Math.round(
-                    budget_total_minutes / weeks,
-                );
-                budget_elapsed_minutes = parseInt(
-                    elapsed_weeks * budget_minutes_per_week,
-                ); // how many minutes should have been used to stay on budget
-                budget_elapsed_minutes_percentage = Math.floor(
-                    (budget_elapsed_minutes / budget_total_minutes) * 100,
-                );
+            (billing_code = result.service.billing_code),
+                (support_item_name = result.service.support_item_name),
+                (registration_group_name =
+                    result.service.registration_group_name),
+                (support_category_name = result.service.support_category_name),
+                (xero_account_code = result.service.xero_account_code);
+            plan_manager_name = result.service.plan_manager_name;
+            budget_total_minutes = Math.round(
+                (result.service.budget / result.service.service_rate) * 60,
+            );
+            budget_minutes_per_week = Math.round(budget_total_minutes / weeks);
+            budget_elapsed_minutes = parseInt(
+                elapsed_weeks * budget_minutes_per_week,
+            ); // how many minutes should have been used to stay on budget
+            budget_elapsed_minutes_percentage = Math.floor(
+                (budget_elapsed_minutes / budget_total_minutes) * 100,
+            );
 
-                actual_elapsed_minutes = parseInt(
-                    result.timetracking.total_session_minutes,
-                ); // how many minutes should have been used to stay on budget
+            actual_elapsed_minutes = parseInt(
+                result.timetracking.total_session_minutes,
+            ); // how many minutes should have been used to stay on budget
 
-                actual_elapsed_minutes_percentage = Math.floor(
-                    (actual_elapsed_minutes / budget_total_minutes) * 100,
+            actual_elapsed_minutes_percentage = Math.floor(
+                (actual_elapsed_minutes / budget_total_minutes) * 100,
+            );
+            budget_diff_actual_minutes =
+                budget_elapsed_minutes - actual_elapsed_minutes;
+
+            if (result.last_seen != null) {
+                last_seen = convertDateToUnixTimestamp(
+                    result.last_seen.session_date,
+                ); // how many days ago the client was last seen for this service
+                last_seen = Math.ceil(
+                    (currentTimestamp - last_seen) / day_in_seconds,
                 );
-                budget_diff_actual_minutes =
-                    budget_elapsed_minutes - actual_elapsed_minutes;
-
-                if (result.last_seen != null) {
-                    last_seen = convertDateToUnixTimestamp(
-                        result.last_seen.session_date,
-                    ); // how many days ago the client was last seen for this service
-                    last_seen = Math.ceil(
-                        (currentTimestamp - last_seen) / day_in_seconds,
-                    );
-                } else {
-                    last_seen = null;
-                }
-            },
-        );
+            } else {
+                last_seen = null;
+            }
+        });
     }
 </script>
 

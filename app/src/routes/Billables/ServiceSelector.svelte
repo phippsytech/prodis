@@ -3,7 +3,7 @@
     import FloatingSelect from "@shared/PhippsyTech/svelte-ui/forms/FloatingSelect.svelte";
     import { jspa } from "@shared/jspa.js";
 
-    export let participant_service_id;
+    export let service_booking_id;
     export let client_id;
     // export let service_id;
     export let readOnly = false;
@@ -26,9 +26,13 @@
     }
 
     function loadServices(client_id) {
-        jspa("/Participant/Service", "listParticipantServicesByParticipantId", {
-            participant_id: client_id,
-        })
+        jspa(
+            "/Participant/ServiceBooking",
+            "listParticipantServiceBookingsByParticipantId",
+            {
+                participant_id: client_id,
+            },
+        )
             .then((result) => {
                 serviceList = []; // clear the servicList
                 services = result.result;
@@ -42,7 +46,7 @@
                         selected: false,
                     };
 
-                    if (service.id == participant_service_id) {
+                    if (service.id == service_booking_id) {
                         options.selected = true;
                         selected = true;
                     }
@@ -50,7 +54,7 @@
                     if (service.archived != 1) serviceList.push(options);
                 });
 
-                if (!selected) participant_service_id = "Choose service"; // unset the selected client_id
+                if (!selected) service_booking_id = "Choose service"; // unset the selected client_id
 
                 serviceList.sort(function (a, b) {
                     const nameA = a.option.toUpperCase(); // ignore upper and lowercase
@@ -66,7 +70,7 @@
 
                 // if only one service, automatically select it
                 if (services.length == 1) {
-                    participant_service_id = services[0].participant_service_id;
+                    service_booking_id = services[0].service_booking_id;
                 }
             })
             .catch((error) => {});
@@ -76,7 +80,7 @@
 {#if serviceList.length > 0}
     <FloatingSelect
         on:change
-        bind:value={participant_service_id}
+        bind:value={service_booking_id}
         label="Service"
         instruction="Choose Service"
         options={serviceList}
