@@ -6,8 +6,7 @@
     import { toastError, toastSuccess } from "@shared/toastHelper";
     import Role from "@shared/Role.svelte";
     import ServiceAgreementForm from "./ServiceAgreementForm.svelte";
-    import Services from "./Services/Services.svelte";
-    import { push } from "svelte-spa-router";
+    import ServiceBookings from "./ServiceBookings/ServiceBookings.svelte";
 
     export let service_agreement;
     export let ServiceAgreementStore;
@@ -20,7 +19,6 @@
             component: ServiceAgreementForm,
             action_label: "Update",
             action: () => updateServiceAgreement(service_agreement),
-            // delete: () => deleteServiceAgreement(service_agreement),
         });
     }
 
@@ -41,20 +39,6 @@
             return;
         }
         ServiceAgreementStore.updateItem(service_agreement);
-    }
-
-    function deleteServiceAgreement(service_agreement) {
-        ServiceAgreementStore.remove(service_agreement);
-    }
-
-    function amendServiceAgreement(service_agreement) {
-        push(
-            "/clients/" +
-                service_agreement.client_id +
-                "/serviceagreements/" +
-                service_agreement.id +
-                "/amend",
-        );
     }
 </script>
 
@@ -81,13 +65,6 @@
 
             <Role roles={["serviceagreement.modify"]}>
                 <div>
-                    <!-- <button
-                        on:click={() =>
-                            amendServiceAgreement(service_agreement)}
-                        class="px-1 hover:rounded-md hover:bg-white text-slate-400 hover:text-indigo-600 cursor-pointer"
-                    >
-                        Amend
-                    </button> -->
                     <button
                         on:click={() => editServiceAgreement(service_agreement)}
                         class="px-1 hover:rounded-md hover:bg-white text-slate-400 hover:text-indigo-600 cursor-pointer"
@@ -99,5 +76,5 @@
         </div>
     </li>
 
-    <Services bind:service_agreement />
+    <ServiceBookings bind:service_agreement />
 </ul>

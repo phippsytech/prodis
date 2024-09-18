@@ -88,13 +88,6 @@
     placeholder="eg: 12000.00"
 />
 
-<!-- 
-{#if selectedServiceName}
-    <div class="block p-4 mb-2 rounded-lg border bg-white">
-        <div class=" text-sm">{selectedServiceName}</div>
-    </div>
-{/if} -->
-
 <div class="flex justify-between gap-x-2">
     <div class="flex-grow">
         <FloatingInput

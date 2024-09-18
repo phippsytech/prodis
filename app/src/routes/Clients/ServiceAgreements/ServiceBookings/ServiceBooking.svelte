@@ -1,37 +1,47 @@
 <script>
-    // Import necessary utilities and components
     import { convertMinutesToHoursAndMinutes } from "@shared/utilities.js";
     import BudgetBar from "@shared/BudgetBar.svelte";
     import BudgetBarWeekly from "@shared/BudgetBarWeekly.svelte";
     import { formatDate, timeAgo } from "@shared/utilities.js";
+    import { jspa } from "@shared/jspa.js";
 
     // Export service agreement and service objects
-    export let service_agreement = {};
-    export let service = {};
 
-    // Function to calculate the number of weeks between two dates
-    function weeksLeft(startDate, endDate) {
-        // Get the difference in time (in milliseconds)
-        const timeDifference = endDate.getTime() - startDate.getTime();
+    // // export let service_booking.id = null;
+    export let service_booking = {};
 
-        // Convert time difference from milliseconds to days
-        const daysDifference = timeDifference / (1000 * 3600 * 24);
+    // Listen for the "refresh" event from the parent
+    // $: if (service_booking.id) {
+    //     loadServiceBooking();
+    // }
 
-        // Convert days to weeks
-        const weeksDifference = daysDifference / 7;
-
-        return weeksDifference;
-    }
+    // async function loadServiceBooking() {
+    //     if (service_booking.id) {
+    //         try {
+    //             const result = await jspa(
+    //                 "/Participant/ServiceBooking",
+    //                 "getParticipantServiceBooking",
+    //                 {
+    //                     id: service_booking.id,
+    //                 },
+    //             );
+    //             service_booking = result.result;
+    //         } catch (error) {
+    //             console.error("Error fetching service booking:", error);
+    //         }
+    //     }
+    // }
 
     // Function to calculate hours per week based on allocated hours and date range
     function hoursPerWeek(allocatedHours, startDate, endDate) {
-
         // Initialize start and end dates
-        startDate = startDate ? startDate : new Date(service.budget_start_date);
+        startDate = startDate
+            ? startDate
+            : new Date(service_booking.budget_start_date);
 
         endDate = endDate
             ? endDate
-            : new Date(service_agreement.service_agreement_end_date);
+            : new Date(service_booking.service_agreement_end_date);
 
         // Get the difference in time (in milliseconds)
         const timeInterval = endDate.getTime() - startDate.getTime();
@@ -74,18 +84,20 @@
     }
 
     function totalRemainingBudgetInMinutes() {
-        const minutesSpent = (service.spent / service.rate) * 60;
+        const minutesSpent =
+            (service_booking.spent / service_booking.rate) * 60;
 
-        const totalBudgetInHours = service.budget / service.rate;
+        const totalBudgetInHours =
+            service_booking.budget / service_booking.rate;
 
         let totalBudgetInMinutes = totalBudgetInHours * 60;
 
         totalBudgetInMinutes -= minutesSpent;
 
-        if (service.spend_status && service.spend_status < 0) {
-            console.log("over budget " + service.spend_status);
+        if (service_booking.spend_status && service_booking.spend_status < 0) {
+            console.log("over budget " + service_booking.spend_status);
 
-            totalBudgetInMinutes -= Math.abs(service.spend_status);
+            totalBudgetInMinutes -= Math.abs(service_booking.spend_status);
         }
 
         return totalBudgetInMinutes;
@@ -106,79 +118,87 @@
     }
 </script>
 
-<div class={service.is_active ? "" : "opacity-50"}>
-    {#if service.budget_display == "weekly"}
+<div class={service_booking.is_active ? "" : "opacity-50"}>
+    {#if service_booking.budget_display == "weekly"}
         <div class="block w-full">
             <div
                 class="mt-0 p-0 mx-0 sm:flex sm:justify-between"
                 style="line-height:0.8rem"
             >
                 <div>
-                    <span class="text-slate-800 font-bold">{service.code}</span>
-                    {#if service.budget && service.budget > 0}
+                    <span class="text-slate-800 font-bold"
+                        >{service_booking.code}</span
+                    >
+                    {#if service_booking.budget && service_booking.budget > 0}
                         <span class="text-slate-600">
                             {@html convertMinutesToHoursAndMinutes(
-                                (service.budget / service.rate) * 60,
+                                (service_booking.budget /
+                                    service_booking.rate) *
+                                    60,
                             )}
                         </span>
 
-                        {#if service.adjust_weekly_time}
-                            {#if hoursPerWeek(service.remainingMinutes / 60, new Date(), new Date(service_agreement.service_agreement_end_date)) != 0}
+                        {#if service_booking.adjust_weekly_time}
+                            {#if hoursPerWeek(service_booking.remainingMinutes / 60, new Date(), new Date(service_booking.service_agreement_end_date)) != 0}
                                 <span class="text-xs text-slate-400 ml-1">
                                     ({@html convertMinutesToHoursAndMinutes(
                                         getAdjustedWeeklyTimeInMinutes(
-                                            new Date(service.budget_start_date),
                                             new Date(
-                                                service_agreement.service_agreement_end_date,
+                                                service_booking.budget_start_date,
+                                            ),
+                                            new Date(
+                                                service_booking.service_agreement_end_date,
                                             ),
                                         ),
                                     )} / wk )
                                 </span>
                             {/if}
-                        {:else if hoursPerWeek(service.totalServiceDuration / 60, new Date(service_agreement.service_agreement_signed_date), new Date(service_agreement.service_agreement_end_date)) > 1}
+                        {:else if hoursPerWeek(service_booking.totalServiceDuration / 60, new Date(service_booking.service_agreement_signed_date), new Date(service_booking.service_agreement_end_date)) > 1}
                             <span class="italic text-xs text-slate-400">
                                 ({@html convertMinutesToHoursAndMinutes(
                                     hoursPerWeek(
-                                        service.budget / service.rate,
+                                        service_booking.budget /
+                                            service_booking.rate,
                                         new Date(
-                                            service_agreement.service_agreement_signed_date,
+                                            service_booking.service_agreement_signed_date,
                                         ),
                                         new Date(
-                                            service_agreement.service_agreement_end_date,
+                                            service_booking.service_agreement_end_date,
                                         ),
                                     ) * 60,
                                 )} / wk)
                             </span>
                         {/if}
                     {/if}
-                    {#if !service.is_active}
+                    {#if !service_booking.is_active}
                         - NOT ACTIVE
                     {/if}
                 </div>
                 <span
                     class="text-xs text-indigo-300 uppercase hidden sm:inline-block"
                 >
-                    {service.plan_manager_name}
+                    {service_booking.plan_manager_name}
                 </span>
             </div>
             <BudgetBarWeekly
-                totalBudget={service.budget}
-                hourlyRate={service.rate}
-                spentBudget={service.spent}
-                startDate={service.budget_start_date}
-                endDate={service_agreement.service_agreement_end_date}
-                bind:spendStatus={service.spend_status}
-                bind:remainingBudget={service.remainingBudget}
-                bind:remainingMinutes={service.remainingMinutes}
-                bind:totalServiceDuration={service.totalServiceDuration}
+                totalBudget={service_booking.budget}
+                hourlyRate={service_booking.rate}
+                spentBudget={service_booking.spent}
+                startDate={service_booking.budget_start_date}
+                endDate={service_booking.service_agreement_end_date}
+                bind:spendStatus={service_booking.spend_status}
+                bind:remainingBudget={service_booking.remainingBudget}
+                bind:remainingMinutes={service_booking.remainingMinutes}
+                bind:totalServiceDuration={service_booking.totalServiceDuration}
             />
-            {#if service.budget && service.budget > 0}
-                {#if !service.adjust_weekly_time && service.spend_status != 0}
+
+            {#if service_booking.budget && service_booking.budget > 0}
+                {#if !service_booking.adjust_weekly_time && service_booking.spend_status != 0}
                     <span class="text-xs text-slate-400 ml-1">
                         {@html convertMinutesToHoursAndMinutes(
-                            Math.abs(service.spend_status),
+                            Math.abs(service_booking.spend_status),
                         )}
-                        {service.spend_status > 0
+                        {service_booking.spend_status > 0
                             ? "of overflow"
                             : "over budget"}
                     </span>
@@ -192,42 +212,46 @@
                 style="line-height:0.8rem"
             >
                 <div>
-                    <span class="text-slate-800 font-bold">{service.code}</span>
+                    <span class="text-slate-800 font-bold"
+                        >{service_booking.code}</span
+                    >
                     <span class="text-slate-600">
                         {@html convertMinutesToHoursAndMinutes(
-                            (service.budget / service.rate) * 60,
+                            (service_booking.budget / service_booking.rate) *
+                                60,
                         )}
                     </span>
-                    {#if !service.is_active}
+                    {#if !service_booking.is_active}
                         - NOT ACTIVE
                     {/if}
                 </div>
                 <span
                     class="text-xs text-indigo-300 uppercase hidden sm:inline-block"
                 >
-                    {service.plan_manager_name}
+                    {service_booking.plan_manager_name}
                 </span>
             </div>
             <BudgetBar
-                totalBudget={service.budget}
-                hourlyRate={service.rate}
-                spentBudget={service.spent}
-                bind:remainingMinutes={service.remainingMinutes}
+                totalBudget={service_booking.budget}
+                hourlyRate={service_booking.rate}
+                spentBudget={service_booking.spent}
+                bind:remainingMinutes={service_booking.remainingMinutes}
             />
-            {#if service.last_session_date && service.budget && service.budget > 0 && service.rate && service.remainingMinutes > 1}
+
+            {#if service_booking.last_session_date && service_booking.budget && service_booking.budget > 0 && service_booking.rate && service_booking.remainingMinutes > 1}
                 <span class="text-xs text-slate-400 ml-1">
                     {@html convertMinutesToHoursAndMinutes(
-                        service.remainingMinutes,
+                        service_booking.remainingMinutes,
                     )} remaining
                 </span>
             {/if}
         </div>
     {/if}
 
-    {#if service.last_session_date}
+    {#if service_booking.last_session_date}
         <div class="px-1 text-xs text-slate-400">
-            Last billed {timeAgo(service.last_session_date)}
-            {formatDate(service.last_session_date)}
+            Last billed {timeAgo(service_booking.last_session_date)}
+            {formatDate(service_booking.last_session_date)}
         </div>
     {/if}
 </div>
