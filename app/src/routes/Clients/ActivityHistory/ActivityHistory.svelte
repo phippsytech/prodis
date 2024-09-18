@@ -62,7 +62,7 @@
                         {item.reason}
                     </div>
                     <div class="text-xs whitespace-no-wrap">
-                        {item.user_name}
+                        {item.user_id == 0 ? 'System Generated' : item.user_name}
                     </div>
                 </div>
                 <div class="font-medium text-sm sm:text-base col-span-4 sm:col-span-2">{formatDateTime(item.timestamp)}</div>
