@@ -15,7 +15,7 @@ class Trip extends NewCustomModel
             'staff_id' => [v::numericVal()],
             'planmanager_id' => [v::optional(v::numericVal())],
             'service_id' => [v::optional(v::numericVal())],
-            'participant_service_id' => [v::optional(v::numericVal())],
+            'service_booking_id' => [v::optional(v::numericVal())],
             'trip_date' => [v::stringType()],
             'vehicle_type' => [v::optional(v::stringType())],
             'do_not_bill' => [v::boolVal()],

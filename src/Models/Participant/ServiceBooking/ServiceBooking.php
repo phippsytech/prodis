@@ -5,11 +5,11 @@ use NDISmate\CORE\NewCustomModel;
 use RedBeanPHP\R as R;
 use Respect\Validation\Validator as v;
 
-class Service extends NewCustomModel
+class ServiceBooking extends NewCustomModel
 {
     public function __construct($bean = null)
     {
-        parent::__construct($bean ?: R::dispense('clientplanservices'));  // TODO: Migrate to participantservices
+        parent::__construct($bean ?: R::dispense('servicebookings'));  // TODO: Migrate to participantservices
         // parent::__construct($bean ?: R::dispense('participantservices'));
         $this->fields = [
             'participant_id' => [v::numericVal()],

@@ -14,7 +14,7 @@ class TimeTracking extends NewCustomModel
             'staff_id' => [v::optional(v::numericVal())],
             'client_id' => [v::optional(v::numericVal())],
             'service_id' => [v::optional(v::numericVal())],
-            'participant_service_id' => [v::optional(v::numericVal())],
+            'service_booking_id' => [v::optional(v::numericVal())],
             'planmanager_id' => [v::numericVal()],
             'session_date' => [v::date('Y-m-d')],
             'claim_type' => [v::stringType()],

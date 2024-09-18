@@ -1,7 +1,7 @@
 <?php
-namespace NDISmate\Services\ParticipantService;
+namespace NDISmate\Services\ParticipantServiceBooking;
 
-use NDISmate\Models\Participant\Service as ParticipantService;
+use NDISmate\Models\Participant\ServiceBooking as ParticipantServiceBooking;
 use NDISmate\Models\Service\GetService;
 use RedBeanPHP\R as R;
 
@@ -13,7 +13,7 @@ use RedBeanPHP\R as R;
  * sets the rate from the retrieved service, and then creates a new
  * participant service with the provided data.
  */
-class AddParticipantService
+class AddParticipantServiceBooking
 {
     /**
      * Invoke method to add a participant service.
@@ -27,8 +27,8 @@ class AddParticipantService
         try {
             $service = (new GetService)(['id' => $data['service_id']]);
             $data['rate'] = $service['rate'];
-            $participant_service = (new ParticipantService)->create($data);
-            return $participant_service;
+            $participant_service_booking = (new ParticipantServiceBooking)->create($data);
+            return $participant_service_booking;
         } catch (RedException $e) {
             // Handle RedBeanPHP specific exceptions
             throw new \Exception('Error executing query: ' . $e->getMessage());

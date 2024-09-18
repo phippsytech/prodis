@@ -33,7 +33,7 @@
         if (
             timetracking.staff_id &&
             timetracking.client_id &&
-            timetracking.participant_service_id
+            timetracking.service_booking_id
         ) {
             jspa("/TimeTracking", "addTimeTracking", timetracking)
                 .then((result) => {
@@ -122,7 +122,7 @@
 
         <div class="flex-grow">
             <ServiceSelector
-                bind:participant_service_id={timetracking.participant_service_id}
+                bind:service_booking_id={timetracking.service_booking_id}
                 bind:client_id={timetracking.client_id}
                 {readOnly}
             />

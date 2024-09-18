@@ -19,7 +19,7 @@
         kms: null,
         do_not_bill: false,
         // service_id: null,
-        participant_service_id: null,
+        service_booking_id: null,
         planmanager_id: null,
         max_claimable_travel_duration: null,
         trip_purpose: null,
@@ -69,7 +69,7 @@
 
     let show = false;
     $: {
-        if (trip.participant_service_id != null || trip.do_not_bill == true) {
+        if (trip.service_booking_id != null || trip.do_not_bill == true) {
             show = true;
         } else {
             show = false;

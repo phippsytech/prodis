@@ -24,7 +24,7 @@ class GenerateSessions
                 ]);
 
                 $item['session_date'] = $item['start_date'];
-                $item['participant_service_id'] = $participant_service['id'];
+                $item['service_booking_id'] = $participant_service['id'];
 
                 $item['claim_type'] = '';
                 // $item['cancellation_reason'] = null;

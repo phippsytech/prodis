@@ -40,7 +40,7 @@
         // client_id is not set, just return
         if (client_id === null) return;
 
-        jspa("/Participant/Service", "listProviderTravelByClientId", {
+        jspa("/Participant/ServiceBooking", "listProviderTravelByClientId", {
             client_id: client_id,
         })
             .then((result) => {

@@ -1,11 +1,11 @@
 <script>
-	import { convertFieldsToBoolean } from '@shared/utilities/convertFieldsToBoolean';
+    import { convertFieldsToBoolean } from "@shared/utilities/convertFieldsToBoolean";
     import { onMount } from "svelte";
     import RadioButtonGroup from "@shared/PhippsyTech/svelte-ui/forms/RadioButtonGroup.svelte";
     import { jspa } from "@shared/jspa.js";
 
     export let client_id;
-    export let participant_service_id;
+    export let service_booking_id;
     export let readOnly = false;
 
     let stored_client_id = null;
@@ -26,12 +26,16 @@
     }
 
     function loadServices(client_id) {
-        jspa("/Participant/Service", "listParticipantServicesByParticipantId", {
-            participant_id: client_id,
-        })
+        jspa(
+            "/Participant/ServiceBooking",
+            "listParticipantServiceBookingsByParticipantId",
+            {
+                participant_id: client_id,
+            },
+        )
             .then((result) => {
                 serviceList = []; // clear the servicList
-                participant_service_id = null; // clear the selected service
+                service_booking_id = null; // clear the selected service
                 services = convertFieldsToBoolean(result.result, ["is_active"]);
 
                 let selected = false;
@@ -43,12 +47,13 @@
                         selected: false,
                     };
 
-                    if (service.id == participant_service_id) {
+                    if (service.id == service_booking_id) {
                         options.selected = true;
                         selected = true;
                     }
 
-                    if (service.archived != 1 && service.is_active == 1) serviceList.push(options);
+                    if (service.archived != 1 && service.is_active == 1)
+                        serviceList.push(options);
                 });
 
                 // if (!selected) service_id = "Choose service"; // unset the selected client_id
@@ -66,10 +71,12 @@
                 stored_client_id = client_id;
 
                 // count the number of services with is_active
-                const activeServices = services.filter(service => service.is_active);
+                const activeServices = services.filter(
+                    (service) => service.is_active,
+                );
                 // if only one service, automatically select it
                 if (activeServices.length == 1) {
-                    participant_service_id = activeServices[0].id;
+                    service_booking_id = activeServices[0].id;
                 }
             })
             .catch((error) => {});
@@ -81,7 +88,7 @@
         <!-- Services -->
         <RadioButtonGroup
             on:change
-            bind:value={participant_service_id}
+            bind:value={service_booking_id}
             label="Services"
             options={serviceList}
             {readOnly}

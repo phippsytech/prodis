@@ -118,7 +118,7 @@ class GenerateServiceAgreementAmendment
         $services = [];
         foreach ($data['services'] as $service) {
             $services[] = [
-                'participant_service_id' => $service['participant_service_id'],
+                'service_booking_id' => $service['service_booking_id'],
                 'new_rate' => $service['new_rate'],
             ];
         }

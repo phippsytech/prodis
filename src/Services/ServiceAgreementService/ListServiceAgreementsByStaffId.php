@@ -9,11 +9,11 @@ class ListServiceAgreementsByStaffId
     {
         try {
             $query =
-                'WITH ActiveClientPlans AS (
+                'WITH Activeserviceagreements AS (
                     SELECT 
                         client_id, 
                         MAX(service_agreement_end_date) as max_end_date
-                    FROM clientplans
+                    FROM serviceagreements
                     WHERE is_active = 1
                     GROUP BY client_id
                 ),
@@ -29,7 +29,7 @@ class ListServiceAgreementsByStaffId
                         ON clients.id = csa.client_id
                     JOIN staffs 
                         ON staffs.id = csa.staff_id
-                    LEFT JOIN ActiveClientPlans acp
+                    LEFT JOIN Activeserviceagreements acp
                         ON clients.id = acp.client_id
                     WHERE 
                         (clients.archived IS NULL OR clients.archived != 1)

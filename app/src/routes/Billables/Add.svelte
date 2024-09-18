@@ -41,7 +41,7 @@
             !budget_exceeded &&
             timetracking.staff_id &&
             timetracking.client_id &&
-            timetracking.participant_service_id
+            timetracking.service_booking_id
         ) {
             show = true;
         }

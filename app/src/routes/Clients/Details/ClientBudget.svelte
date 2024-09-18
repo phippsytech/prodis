@@ -6,7 +6,9 @@
 
     let plan = {};
 
-    jspa("/Client/Plan", "getClientPlan", { client_id: client.id })
+    jspa("/Client/ServiceAgreement", "getserviceagreement", {
+        client_id: client.id,
+    })
         .then((result) => {
             plan = result.result;
         })

@@ -29,9 +29,13 @@
     }
 
     function loadServices(client_id) {
-        jspa("/Participant/Service", "listParticipantServicesByParticipantId", {
-            participant_id: client_id,
-        })
+        jspa(
+            "/Participant/ServiceBooking",
+            "listParticipantServiceBookingsByParticipantId",
+            {
+                participant_id: client_id,
+            },
+        )
             .then((result) => {
                 serviceList = []; // clear the servicList
                 services = result.result;

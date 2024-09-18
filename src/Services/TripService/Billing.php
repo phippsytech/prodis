@@ -38,7 +38,7 @@ class Billing
         $timetracking->staff_id = $data['staff_id'];
         $timetracking->client_id = $data['client_id'];
         $timetracking->service_id = $data['service_id'];
-        $timetracking->participant_service_id = $data['participant_service_id'];
+        $timetracking->service_booking_id = $data['service_booking_id'];
         $timetracking->planmanager_id = $data['planmanager_id'];
         $timetracking->session_date = $data['session_date'];
         $timetracking->session_duration = $data['session_duration'];
@@ -61,7 +61,7 @@ class Billing
         $timetracking->staff_id = $data['staff_id'];
         $timetracking->client_id = $data['client_id'];
         $timetracking->service_id = $data['service_id'];
-        $timetracking->participant_service_id = $data['participant_service_id'];
+        $timetracking->service_booking_id = $data['service_booking_id'];
         $timetracking->planmanager_id = $data['planmanager_id'];
         $timetracking->session_date = $data['session_date'];
         $timetracking->session_duration = $data['session_duration'];

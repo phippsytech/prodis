@@ -5,14 +5,14 @@ use RedBeanPHP\R as R;
 
 class CalculateClaimable
 {
-    function __invoke($kms, $trip_duration, $participant_service_id)
+    function __invoke($kms, $trip_duration, $service_booking_id)
     {
         $maxClaimableTime = R::getCell(
             'SELECT 
                 max_claimable_travel_duration
-            FROM clientplanservices 
-            WHERE id = :participant_service_id',
-            [':participant_service_id' => $participant_service_id]
+            FROM servicebookings 
+            WHERE id = :service_booking_id',
+            [':service_booking_id' => $service_booking_id]
         );
 
         // If trip_duration is not set or 0, return 0 for both claimableKms and claimableTime

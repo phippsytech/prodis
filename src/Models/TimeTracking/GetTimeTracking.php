@@ -13,7 +13,7 @@ class GetTimeTracking
                 timetrackings.client_id,
                 timetrackings.planmanager_id,
                 timetrackings.service_id,
-                timetrackings.participant_service_id,
+                timetrackings.service_booking_id,
                 timetrackings.staff_id,
                 timetrackings.session_date,
                 timetrackings.end_time,

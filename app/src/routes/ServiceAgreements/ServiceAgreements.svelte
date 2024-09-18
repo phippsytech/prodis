@@ -68,7 +68,7 @@ There are {service_agreements.length} to amend
         <th class="text-right">Rate</th>
         <th class="text-right">New Rate</th>
     </tr>
-    {#each service_agreements as agreement, index (agreement.participant_service_id)}
+    {#each service_agreements as agreement, index (agreement.service_booking_id)}
         <tr>
             <td>{agreement.service_agreement_id}</td>
             <td>{agreement.participant_name}</td>

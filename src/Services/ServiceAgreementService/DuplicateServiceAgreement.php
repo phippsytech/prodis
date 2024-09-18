@@ -10,13 +10,13 @@ class DuplicateServiceAgreement
         try {
             $service_agreement_id = $data['service_agreement_id'];
 
-            $originalBean = R::load('clientplans', $service_agreement_id);
+            $originalBean = R::load('serviceagreements', $service_agreement_id);
 
             // Unbox the original bean to get its properties
             $properties = $originalBean->export();
 
             // Create a new bean with the same properties
-            $newBean = R::dispense('clientplans');
+            $newBean = R::dispense('serviceagreements');
             $newBean->import($properties);
 
             unset($newBean->id);  // Remove the ID to avoid conflicts

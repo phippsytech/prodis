@@ -8,7 +8,7 @@ class GetServiceAgreement
 {
     public function __invoke($data)
     {
-        $bean = R::load('clientplans', $data['id']);
+        $bean = R::load('serviceagreements', $data['id']);
         $bean = (new ConvertFieldsToBoolean)($bean, ['is_active']);
         return $bean;
     }

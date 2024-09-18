@@ -30,7 +30,7 @@ Invoice Date: pay_req_doc_date
 Invoice Due Date - calculate from invoice date
 Invoice Number: prov_claim_ref
 Reference: Look up client name from clients so invoice data is consistent.
-Account Code (eg 200, 201).  I can get this from the clientplanservices table.
+Account Code (eg 200, 201).  I can get this from the servicebookings table.
 
 
 Item Code: I can look this up from the services table.
