@@ -22,7 +22,6 @@
         jspa("/Staff", "listStaff", {})
             .then((result) => {
                 staff = result.result;
-
                 let selected = false;
 
                 staff.forEach((staffer) => {
@@ -46,7 +45,9 @@
                         staffList.push(options);
                 });
 
-                // if (!selected) staff_id = "Choose staffer"; // unset the selected client_id
+                console.log("Options:", staffList);
+
+                if (!selected) staff_id = "Choose staffer"; // unset the selected client_id
 
                 staffList.sort(function (a, b) {
                     const nameA = a.option.toUpperCase(); // ignore upper and lowercase
@@ -61,9 +62,6 @@
             .catch(() => {});
     }
 
-    function handleStaffChange(event) {
-        staff_id = event.detail.value;
-    }
 </script>
 
 <!-- {#if display}
@@ -86,7 +84,7 @@
 <NewFloatingSelect
     label="Staff"
     bind:value={staff_id}
-    on:change={handleStaffChange}
+    on:change
     instruction="Choose staffer"
     options={staffList}
     {readOnly}
