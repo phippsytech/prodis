@@ -6,7 +6,7 @@
     import { ActionBarStore } from "@app/Layout/BottomNav/stores.js";
     import { toastError, toastSuccess } from "@shared/toastHelper.js";
     import { RolesStore } from "@shared/stores.js";
-    import { haveCommonElements } from "@shared/utilities.js";
+    import { formatDateTime, haveCommonElements } from "@shared/utilities.js";
     import ClientReports from "@app/routes/Clients/Reports/ClientReports.svelte";
     import Container from "@shared/Container.svelte";
     import ClientServiceAgreements from "@app/routes/Clients/ServiceAgreements/ServiceAgreements.svelte";
@@ -30,6 +30,7 @@
     let show = false;
     let dob_start_year = new Date().getFullYear() - 120;
     let dob_end_year = new Date().getFullYear();
+    let latest_activity = null;
 
     let readOnly = false;
 
@@ -65,6 +66,18 @@
         });
     }
 
+    function retrieveLatestActivity(actionType) {
+        let data = {
+            entity_id: client_id,
+            entity_type: "participant",
+            action_type: actionType
+        }
+
+        jspa("/ActivityLog", "getLatestActivityLog", data).then((result) => {
+            latest_activity = result.result;
+        });
+    }
+
     $: {
         if (mounted) {
             ActionBarStore.set({
@@ -75,6 +88,10 @@
                 undo: () => undo(),
                 save: () => save(),
             });
+        }
+
+        if (client.on_hold == 1) {
+            retrieveLatestActivity("on-hold");
         }
     }
 </script>
@@ -110,10 +127,20 @@
 
 {#if client.on_hold == 1}
     <div
-        class="bg-indigo-100 rounded-md px-4 py-2 mb-2 text-base text-indigo-600 mb-3 flex justify-between items-center"
+        class="bg-indigo-100 rounded-md px-4 py-2 mb-2 text-base text-indigo-600 mb-3"
         role="alert"
     >
-        {client.name} is on hold
+        <div class="flex justify-between items-center">
+            {client.name} is on hold
+        </div>
+        {#if latest_activity?.reason != null || latest_activity?.reason != ""}
+        <div>
+            Reason: {latest_activity?.reason}
+        </div>
+        {/if}
+        <div>
+            Date: {formatDateTime(latest_activity?.timestamp)} 
+        </div>
     </div>
 {/if}
 
