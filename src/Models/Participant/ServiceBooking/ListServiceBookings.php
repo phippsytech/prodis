@@ -1,19 +1,22 @@
 <?php
-namespace NDISmate\Services\ServiceAgreementService;
+namespace NDISmate\Models\Participant\ServiceBooking;
 
-use NDISmate\Utilities\ConvertFieldsToBoolean;
 use RedBeanPHP\R as R;
+use RedBeanPHP\RedException;
+use NDISmate\Utilities\ConvertFieldsToBoolean;
 
-class ListServiceBookingsByServiceAgreementId
+class ListServiceBookings
 {
     public function __invoke($data)
     {
-
         try {
+
             $query =
                 "SELECT
                     servicebookings.id,
                     servicebookings.plan_id,
+                    ANY_VALUE(serviceagreements.service_agreement_signed_date) AS service_agreement_signed_date,
+                    ANY_VALUE(serviceagreements.service_agreement_end_date) AS service_agreement_end_date,
                     ANY_VALUE(servicebookings.service_id) AS service_id,
                     ANY_VALUE(servicebookings.plan_manager_id) AS plan_manager_id,
                     ANY_VALUE(planmanagers.name) AS plan_manager_name,
@@ -48,30 +51,24 @@ class ListServiceBookingsByServiceAgreementId
                     AND timetrackings.session_date >= servicebookings.budget_start_date
                     AND (timetrackings.session_duration > 0 AND timetrackings.session_duration is not null)
                 JOIN services ON services.id = servicebookings.service_id
+                JOIN serviceagreements ON serviceagreements.id = servicebookings.plan_id
                 JOIN planmanagers ON planmanagers.id = servicebookings.plan_manager_id 
-                WHERE servicebookings.plan_id = :service_agreement_id
-                    
+                WHERE (servicebookings.participant_id = :participant_id OR servicebookings.plan_id = :service_agreement_id)
                 GROUP BY
-                    servicebookings.plan_id,
                     servicebookings.id
                 ORDER BY
-                    servicebookings.plan_id,
                     servicebookings.id";
-
-            if (!defined('DB_TYPE') || DB_TYPE == 'mariadb') {
-                $query = str_replace('ANY_VALUE', '', $query);
-            }
 
             $beans = R::getAll(
                 $query,
-                [':service_agreement_id' => $data['service_agreement_id']]
+                [
+                    ':participant_id' => $data['participant_id'],
+                    ':service_agreement_id' => $data['service_agreement_id'] ?? null
+                ]
             );
 
-            // THERE IS AN ERROR HERE
             $converter = new ConvertFieldsToBoolean();
             $beans = $converter($beans, ['include_travel', 'is_active', 'adjust_weekly_time']);
-
-            // $beans = (new ConvertFieldsToBoolean)($beans, ['include_travel']);
 
             return $beans;
         } catch (RedException $e) {

@@ -92,14 +92,12 @@
         <div class="flex sm:flex-row flex-col sm:items-center">
             <h3 class="text-slate-800 font-bold mx-2">Service Agreements</h3>
             <Role roles={["serviceagreement.modify"]}>
-                <!-- {#if $ServiceAgreementStore.length < 1} -->
                 <button
                     class="text-xs text-indigo-600 hover:underline text-left mx-2"
                     on:click={() => showServiceAgreement(service_agreement)}
                 >
                     <PlusIcon class="w-4 h-4 inline" /> Add Service Agreement
                 </button>
-                <!-- {/if} -->
             </Role>
         </div>
         {#if hasInactiveAgreements}

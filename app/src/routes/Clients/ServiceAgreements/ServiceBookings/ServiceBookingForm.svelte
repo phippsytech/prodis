@@ -17,13 +17,10 @@
     let serviceList = [];
     let selectedServiceName = null;
     let selectedServiceRecordTravelledKilometers = false;
-    // let enableProviderTravel = false;
 
-    // onMount(async ()=>{
     jspa("/Service", "listServices", {}).then(
         (result) => (services = result.result),
     );
-    // });
 
     // get Service List for Select
     $: {
@@ -46,7 +43,14 @@
                 } else {
                     selectedServiceRecordTravelledKilometers = false;
                 }
+                props.rate = services[serviceIndex].rate;
             }
+        }
+    }
+
+    $: {
+        if (props.mode == "add") {
+            props.allocated_funding = props.budget;
         }
     }
 </script>
@@ -59,7 +63,7 @@
         class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
     />
     <label for="isActive" class="ml-2 text-sm font-medium text-gray-900"
-        >Active Service</label
+        >Active</label
     >
 </div>
 
@@ -82,35 +86,49 @@
     </div>
 </div>
 
-<FloatingInput
+<!-- <FloatingInput
     bind:value={props.allocated_funding}
     label="Total Allocated Funding"
     placeholder="eg: 12000.00"
-/>
+/> -->
 
-<!-- 
-{#if selectedServiceName}
-    <div class="block p-4 mb-2 rounded-lg border bg-white">
-        <div class=" text-sm">{selectedServiceName}</div>
+{#if props.mode == "update"}
+    <div class="flex justify-between gap-x-2">
+        <div class="flex-grow">
+            <FloatingInput
+                bind:value={props.budget}
+                label="Remaining Funding"
+                placeholder="eg: 12000"
+            />
+        </div>
+        <div class="flex-grow">
+            <FloatingDate
+                bind:value={props.budget_start_date}
+                label="As of Date"
+                placeholder="eg: 2021-01-01"
+            />
+        </div>
     </div>
-{/if} -->
+{/if}
 
-<div class="flex justify-between gap-x-2">
-    <div class="flex-grow">
-        <FloatingInput
-            bind:value={props.budget}
-            label="Current Service Budget"
-            placeholder="eg: 12000"
-        />
+{#if props.mode == "add"}
+    <div class="flex justify-between gap-x-2">
+        <div class="flex-grow">
+            <FloatingInput
+                bind:value={props.budget}
+                label="Funding"
+                placeholder="eg: 12000"
+            />
+        </div>
+        <div class="flex-grow">
+            <FloatingDate
+                bind:value={props.budget_start_date}
+                label="As of Date"
+                placeholder="eg: 2021-01-01"
+            />
+        </div>
     </div>
-    <div class="flex-grow">
-        <FloatingDate
-            bind:value={props.budget_start_date}
-            label="As of Date"
-            placeholder="eg: 2021-01-01"
-        />
-    </div>
-</div>
+{/if}
 
 <!-- <FloatingInput
     bind:value={props.xero_account_code}

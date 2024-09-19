@@ -7,9 +7,8 @@ use NDISmate\Models\Participant\ServiceBooking;
 use NDISmate\Services\ParticipantServiceBooking\AddParticipantServiceBooking;
 use NDISmate\Services\ParticipantServiceBooking\GetAvailableSessionDuration;
 use NDISmate\Services\ParticipantServiceBooking\GetParticipantServiceBooking;
-use NDISmate\Services\ParticipantServiceBooking\ListParticipantServiceBookingsByParticipantId;
 use NDISmate\Services\ParticipantServiceBooking\ListProviderTravelByClientId;
-use NDISmate\Services\ServiceAgreementService\ListServiceBookingsByServiceAgreementId;
+use NDISmate\Models\Participant\ServiceBooking\ListServiceBookings;
 
 final class ParticipantServiceBookingController extends BaseController  // Final prevents inheritance
 {
@@ -22,9 +21,8 @@ final class ParticipantServiceBookingController extends BaseController  // Final
             'getServiceBooking' => [new GetServiceBooking, null, true, []],
             'getParticipantServiceBooking' => [new GetParticipantServiceBooking, null, true, []],
             'getAvailableSessionDuration' => [new GetAvailableSessionDuration, null, true, []],
-            'listParticipantServiceBookingsByParticipantId' => [new ListParticipantServiceBookingsByParticipantId, null, true, []],
             'listProviderTravelByClientId' => [new ListProviderTravelByClientId, null, true, []],
-            'listServiceBookingsByServiceAgreementId' => [new ListServiceBookingsByServiceAgreementId, null, true, []],
+            'listServiceBookings' => [new ListServiceBookings, null, true, []],
         ];
     }
 }
