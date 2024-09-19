@@ -46,7 +46,7 @@
                         staffList.push(options);
                 });
 
-                if (!selected) staff_id = "Choose staffer"; // unset the selected client_id
+                // if (!selected) staff_id = "Choose staffer"; // unset the selected client_id
 
                 staffList.sort(function (a, b) {
                     const nameA = a.option.toUpperCase(); // ignore upper and lowercase
@@ -59,6 +59,10 @@
                 staffList = staffList;
             })
             .catch(() => {});
+    }
+
+    function handleStaffChange(event) {
+        staff_id = event.detail.value;
     }
 </script>
 
@@ -78,10 +82,11 @@
     {readOnly}
 /> -->
 
+
 <NewFloatingSelect
-    on:change={(event) => staff_id = event.detail.value}
-    bind:value={staff_id}
     label="Staff"
+    bind:value={staff_id}
+    on:change={handleStaffChange}
     instruction="Choose staffer"
     options={staffList}
     {readOnly}
