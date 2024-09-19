@@ -97,10 +97,12 @@
             plan_id: service_agreement.id,
             client_id: participant_id,
             participant_id: participant_id,
+            mode: "add",
+            budget_start_date: service_agreement.service_agreement_signed_date,
         };
 
         ModalStore.set({
-            label: "Add Service",
+            label: "Add Service Booking",
             show: true,
             props: service_booking,
             component: ServiceForm,
@@ -111,8 +113,9 @@
 
     function editServiceBooking(service_booking) {
         if (haveCommonElements(roles, ["serviceagreement.modify"])) {
+            service_booking.mode = "update";
             ModalStore.set({
-                label: "Update Service",
+                label: "Update Service Booking",
                 show: true,
                 props: service_booking,
                 component: ServiceForm,
@@ -135,7 +138,7 @@
             return;
         }
         ServiceBookingsStore.updateItem(service_booking).then(() => {
-            toastSuccess("Service updated successfully.");
+            toastSuccess("Service Booking updated successfully.");
         });
     }
 

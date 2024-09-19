@@ -3,34 +3,8 @@
     import BudgetBar from "@shared/BudgetBar.svelte";
     import BudgetBarWeekly from "@shared/BudgetBarWeekly.svelte";
     import { formatDate, timeAgo } from "@shared/utilities.js";
-    import { jspa } from "@shared/jspa.js";
 
-    // Export service agreement and service objects
-
-    // // export let service_booking.id = null;
     export let service_booking = {};
-
-    // Listen for the "refresh" event from the parent
-    // $: if (service_booking.id) {
-    //     loadServiceBooking();
-    // }
-
-    // async function loadServiceBooking() {
-    //     if (service_booking.id) {
-    //         try {
-    //             const result = await jspa(
-    //                 "/Participant/ServiceBooking",
-    //                 "getParticipantServiceBooking",
-    //                 {
-    //                     id: service_booking.id,
-    //                 },
-    //             );
-    //             service_booking = result.result;
-    //         } catch (error) {
-    //             console.error("Error fetching service booking:", error);
-    //         }
-    //     }
-    // }
 
     // Function to calculate hours per week based on allocated hours and date range
     function hoursPerWeek(allocatedHours, startDate, endDate) {
@@ -49,8 +23,6 @@
         // Convert time difference from milliseconds to days
         const totalDaysInTheServiceDateRange =
             timeInterval / (1000 * 3600 * 24);
-
-        const totalWeeks = (totalDaysInTheServiceDateRange / 7).toFixed(2);
 
         // Calculate daily hours
         const dailyHours = allocatedHours / totalDaysInTheServiceDateRange;
