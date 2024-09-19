@@ -1,6 +1,9 @@
 <script>
-  export let client = {};
+  import { jspa } from "@shared/jspa.js";
+  import { formatDate } from "@shared/utilities.js";
 
+  export let client = {};
+  let latest_activity = null;
   function getFirstLetters(str) {
     return str
       .split(" ")
@@ -8,6 +11,24 @@
       .join("")
       .toUpperCase();
   }
+
+  function retrieveLatestActivity(actionType) {
+      let data = {
+          entity_id: client.client_id,
+          entity_type: "participant",
+          action_type: actionType
+      }
+
+      jspa("/ActivityLog", "getLatestActivityLog", data).then((result) => {
+          latest_activity = result.result;
+      });
+  }
+
+  $: {
+        if (client.on_hold) {
+            retrieveLatestActivity("on-hold");
+        }
+    }
 </script>
 
 <a
@@ -41,8 +62,24 @@
     >
       {client.client_name}
     </div>
-    {#if client.on_hold == "1"}<div class="text-xs font-bold text-red-600">
-        ON HOLD
-      </div>{/if}
+    {#if client.on_hold}
+      <div class="flex gap-1">
+        <span class="text-xs font-bold text-red-600">
+          ON HOLD
+        </span>
+        {#if latest_activity}
+        <span class="text-xs">
+          {formatDate(latest_activity?.timestamp)} 
+        </span>
+        {/if}
+      </div>
+      {#if latest_activity}
+      {#if latest_activity?.reason != null || latest_activity?.reason != ""}
+        <div class="text-xs">
+            {latest_activity?.reason}
+        </div>
+      {/if}
+      {/if}
+    {/if}
   </div>
 </a>
