@@ -1,6 +1,7 @@
 <script>
     import { onMount } from "svelte";
     import FloatingSelect from "@shared/PhippsyTech/svelte-ui/forms/FloatingSelect.svelte";
+    import NewFloatingSelect from "@shared/PhippsyTech/svelte-ui/forms/NewFloatingSelect.svelte";
     import { jspa } from "@shared/jspa.js";
 
     export let staff_id = null;
@@ -68,8 +69,17 @@
     </div>
 {:else} -->
 
-<FloatingSelect
+<!-- <FloatingSelect
     on:change
+    bind:value={staff_id}
+    label="Staff"
+    instruction="Choose staffer"
+    options={staffList}
+    {readOnly}
+/> -->
+
+<NewFloatingSelect
+    on:change={(event) => staff_id = event.detail.value}
     bind:value={staff_id}
     label="Staff"
     instruction="Choose staffer"
