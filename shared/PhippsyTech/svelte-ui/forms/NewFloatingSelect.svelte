@@ -36,16 +36,14 @@
 
     $: {
         console.log("Current value:", value);
-        console.log("Options array:", options);
         const selectedOption = options.find((option) => String(option.value) === String(value));
         
         if (!value || !selectedOption) {
-            selectValue = "Choose staffer"; // Default display when no value is selected
+            selectValue = value; // Default display when no value is selected
         } else {
             selectValue = selectedOption.option; // Display the staff name
         }
         console.log("Select value:", selectValue);
-        display_value = selectValue;
     }
 
     function handleChange(event) {

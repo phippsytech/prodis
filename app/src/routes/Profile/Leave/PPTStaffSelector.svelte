@@ -12,6 +12,7 @@
 
     let staff = [];
     let staffList = [];
+    let name = "";
 
     onMount(() => {
         loadStaff(staff_id);
@@ -45,7 +46,6 @@
                         staffList.push(options);
                 });
 
-                console.log("Options:", staffList);
 
                 if (!selected) staff_id = "Choose staffer"; // unset the selected client_id
 
@@ -62,6 +62,13 @@
             .catch(() => {});
     }
 
+    $: if (staff_id != "Choose staffer") {
+        staffList.forEach((staffer) => {
+            if (staffer.value == staff_id) {
+                name = staffer.option;
+            }
+        });
+    }
 </script>
 
 <!-- {#if display}
@@ -80,7 +87,6 @@
     {readOnly}
 /> -->
 
-
 <NewFloatingSelect
     label="Staff"
     bind:value={staff_id}
@@ -89,4 +95,5 @@
     options={staffList}
     {readOnly}
 />
+{name}
 <!-- {/if} -->
