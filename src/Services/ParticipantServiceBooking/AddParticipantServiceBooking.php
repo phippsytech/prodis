@@ -1,9 +1,12 @@
 <?php
+
 namespace NDISmate\Services\ParticipantServiceBooking;
 
 use NDISmate\Models\Participant\ServiceBooking as ParticipantServiceBooking;
-use NDISmate\Models\Service\GetService;
-use RedBeanPHP\R as R;
+use NDISmate\Services\ParticipantService\CheckUniqueServiceBooking as ParticipantServiceCheckUniqueServiceBooking;
+use NDISmate\Services\ParticipantServiceBooking\GetParticipantServiceBooking;
+use NDISmate\Services\ParticipantServiceBooking\CheckUniqueServiceBooking;
+
 
 /**
  * Class AddParticipantService
@@ -23,15 +26,24 @@ class AddParticipantServiceBooking
      * @throws \Exception If there is an error during the process.
      */
     public function __invoke($data)
+
     {
         try {
-            $service = (new GetService)(['id' => $data['service_id']]);
-            $data['rate'] = $service['rate'];
-            $participant_service_booking = (new ParticipantServiceBooking)->create($data);
-            return $participant_service_booking;
-        } catch (RedException $e) {
-            // Handle RedBeanPHP specific exceptions
-            throw new \Exception('Error executing query: ' . $e->getMessage());
+
+            // This should be looked up in the form, allowing the user to override the rate.
+            // $service = (new GetService)(['id' => $data['service_id']]);
+            // $data['rate'] = $service['rate'];
+
+            //I need to check that there are no other active servicebookings for the same service for this participant.
+            $isUniqueServiceBooking = (new CheckUniqueServiceBooking)($data);
+
+            if ($isUniqueServiceBooking === false) {
+                throw new \Exception('An active service of this type already exists for this participant.');
+            }
+
+            $result = (new ParticipantServiceBooking)->create($data);
+            $service_booking = (new GetParticipantServiceBooking)(['id' => $result['id']]);
+            return $service_booking;
         } catch (\Exception $e) {
             // Handle other exceptions
             throw $e;

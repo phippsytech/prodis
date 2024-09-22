@@ -13,8 +13,9 @@ function createStore(endpoint, actions, transformations = {}) {
     };
 
     const handleError = (error, message) => {
-        toastError(message);
+        toastError(error.errors);
         console.error(error);
+        throw error;
     };
 
     async function load(params) {
@@ -27,10 +28,10 @@ function createStore(endpoint, actions, transformations = {}) {
         }
     }
 
-    async function add(item) {
+    async function add(item, useResult = false) {
         try {
             const result = await jspa(endpoint, actions.add, item);
-            const transformedResult = await handleTransformation('add', result.result);
+            const transformedResult = await handleTransformation('update', useResult ? result.result : item);
             if (transformedResult.id != 0) {
                 update(items => [...items, transformedResult]);
             }
@@ -39,10 +40,10 @@ function createStore(endpoint, actions, transformations = {}) {
         }
     }
 
-    async function updateItem(item) {
+    async function updateItem(item, useResult = false) {
         try {
-            await jspa(endpoint, actions.update, item);
-            const transformedItem = await handleTransformation('update', item);
+            const result = await jspa(endpoint, actions.update, item);
+            const transformedItem = await handleTransformation('update', useResult ? result.result : item);
             update(items =>
                 items.map(existingItem =>
                     transformedItem.id === existingItem.id

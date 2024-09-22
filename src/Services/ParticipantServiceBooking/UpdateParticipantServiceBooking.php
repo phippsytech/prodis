@@ -1,9 +1,10 @@
 <?php
+
 namespace NDISmate\Services\ParticipantServiceBooking;
 
 use NDISmate\Models\Participant\ServiceBooking as ParticipantServiceBooking;
-use NDISmate\Models\Service\GetService;
-use RedBeanPHP\R as R;
+use NDISmate\Services\ParticipantServiceBooking\GetParticipantServiceBooking;
+use NDISmate\Services\ParticipantServiceBooking\CheckUniqueServiceBooking;
 
 /**
  * Class UpdateParticipantService
@@ -25,13 +26,22 @@ class UpdateParticipantServiceBooking
     public function __invoke($data)
     {
         try {
-            // $service = (new GetService)(['id' => $data['service_id']]);
-            // $data['rate'] = $service['rate'];
-            $participant_service = (new ParticipantServiceBooking)->update($data);
+
+
+            $isUniqueServiceBooking = (new CheckUniqueServiceBooking)($data);
+
+            // return $isUniqueServiceBooking;
+
+            if ($isUniqueServiceBooking === false) {
+                throw new \Exception('An active service of this type already exists for this participant.');
+            }
+
+
+            $result = (new ParticipantServiceBooking)->update($data);
+
+            $participant_service = (new GetParticipantServiceBooking)(['id' => $result['id']]);
+
             return $participant_service;
-        } catch (RedException $e) {
-            // Handle RedBeanPHP specific exceptions
-            throw new \Exception('Error executing query: ' . $e->getMessage());
         } catch (\Exception $e) {
             // Handle other exceptions
             throw $e;
