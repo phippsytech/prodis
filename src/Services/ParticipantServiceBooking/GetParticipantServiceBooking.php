@@ -4,7 +4,7 @@ namespace NDISmate\Services\ParticipantServiceBooking;
 
 use NDISmate\Utilities\ConvertFieldsToBoolean;
 use RedBeanPHP\R as R;
-use RedBeanPHP\RedException;
+use RedBeanPHP\RedException as RedException;
 
 class GetParticipantServiceBooking
 {
@@ -31,9 +31,6 @@ class GetParticipantServiceBooking
             $where = ' servicebookings.id = :servicebooking_id ';
             $params = [':servicebooking_id' => $data['id']];
         }
-
-
-        // $where = ($where ? $where . ' AND ' : '') . 'timetrackings.session_duration > 0 and timetrackings.session_duration is not null';
 
 
         // remember servicebookings.plan_id = serviceagreements.id
@@ -91,17 +88,16 @@ class GetParticipantServiceBooking
                     servicebookings.id
                 ';
 
-            if (!defined('DB_TYPE') || DB_TYPE == 'mariadb') {
-                $query = str_replace('ANY_VALUE', '', $query);
-            }
-
             $bean = R::getRow(
                 $query,
                 $params
             );
 
+
             $converter = new ConvertFieldsToBoolean();
-            $bean = $converter($bean, ['is_active', 'adjust_weekly_time','include_travel']);
+            $bean = $converter([$bean], ['is_active', 'adjust_weekly_time', 'include_travel'])[0];
+
+
 
             return $bean;
         } catch (RedException $e) {
