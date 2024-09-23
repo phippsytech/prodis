@@ -35,15 +35,16 @@
     let selectValue = value;
 
     $: {
-        console.log("Current value:", value);
+     
         const selectedOption = options.find((option) => String(option.value) === String(value));
         
         if (!value || !selectedOption) {
             selectValue = value; // Default display when no value is selected
         } else {
             selectValue = selectedOption.option; // Display the staff name
+            console.log("Selected option: ", selectValue);
         }
-        console.log("Select value:", selectValue);
+       
     }
 
     function handleChange(event) {
@@ -113,9 +114,8 @@
         </div>
         <div class="flex-grow relative mx-2">
             <select
-                {id}
                 on:change={handleChange}
-                bind:value={selectValue}
+                bind:value={id}
                 on:blur={handleBlur}
                 class="
     px-0 py-1

@@ -13,6 +13,7 @@
     let staff = [];
     let staffList = [];
     let name = "";
+    let selected = false;
 
     onMount(() => {
         loadStaff(staff_id);
@@ -23,7 +24,7 @@
         jspa("/Staff", "listStaff", {})
             .then((result) => {
                 staff = result.result;
-                let selected = false;
+               
 
                 staff.forEach((staffer) => {
                     let options = {
