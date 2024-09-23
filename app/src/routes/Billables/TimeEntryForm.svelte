@@ -62,11 +62,19 @@
     $: if (timetracking.session_date) getServiceAgreement(timetracking);
 
     function getAvailableSessionDuration() {
-        console.log("timetracking" + JSON.stringify(timetracking));
         jspa("/Participant/ServiceBooking", "getAvailableSessionDuration", {
             service_booking_id: timetracking.service_booking_id,
         })
             .then((result) => {
+                console.log(
+                    "test timetracking: " + timetracking.service_booking_id,
+                );
+
+                console.log("store service id: " + stored_service_id);
+                console.log(
+                    "timetracking service id: " +
+                        timetracking.service_booking_id,
+                );
                 available_session_duration =
                     result.result.available_session_duration;
 

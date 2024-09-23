@@ -33,7 +33,7 @@
         })
             .then((result) => {
                 serviceBookingList = []; // clear the servicList
-                service_booking_id = null; // clear the selected service
+                // service_booking_id = null; // clear the selected service
                 serviceBookings = result.result;
                 console.log(serviceBookings);
                 let selected = false;
