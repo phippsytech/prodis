@@ -6,7 +6,7 @@
     import { ActionBarStore } from "@app/Layout/BottomNav/stores.js";
     import { toastError, toastSuccess } from "@shared/toastHelper.js";
     import { RolesStore } from "@shared/stores.js";
-    import { formatDateTime, haveCommonElements } from "@shared/utilities.js";
+    import { formatDate, haveCommonElements } from "@shared/utilities.js";
     import ClientReports from "@app/routes/Clients/Reports/ClientReports.svelte";
     import Container from "@shared/Container.svelte";
     import ClientServiceAgreements from "@app/routes/Clients/ServiceAgreements/ServiceAgreements.svelte";
@@ -130,17 +130,17 @@
         class="bg-indigo-100 rounded-md px-4 py-2 mb-2 text-base text-indigo-600 mb-3"
         role="alert"
     >
-        <div class="flex justify-between items-center">
-            {client.name} is on hold
+        <div class="flex items-center gap-1">
+            <span>{client.name} is on hold</span>
+            <span>
+                {formatDate(latest_activity?.timestamp)} 
+            </span>
         </div>
         {#if latest_activity?.reason != null || latest_activity?.reason != ""}
         <div>
-            Reason: {latest_activity?.reason}
+            {latest_activity?.reason}
         </div>
         {/if}
-        <div>
-            Date: {formatDateTime(latest_activity?.timestamp)} 
-        </div>
     </div>
 {/if}
 
