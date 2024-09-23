@@ -3,6 +3,9 @@ version: '3.8'
 services:
   app:
     container_name: prodis-${DEVELOPER_NAME}-app
+    mem_limit: 512m
+    memswap_limit: 768m
+    cpus: 0.25 
     build:
       context: .
       dockerfile: Dockerfile.app
@@ -22,6 +25,9 @@ services:
 
   api:
     container_name: prodis-${DEVELOPER_NAME}-api
+    mem_limit: 512m
+    memswap_limit: 768m
+    cpus: 0.25 
     build:
       context: .
       dockerfile: Dockerfile.api
