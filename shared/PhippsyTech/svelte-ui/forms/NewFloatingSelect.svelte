@@ -111,7 +111,7 @@
             <select
                 {id}
                 on:change={handleChange}
-                bind:value={id}
+                bind:value={selectValue}
                 on:blur={handleBlur}
                 class="
     px-0 py-1
