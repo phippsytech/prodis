@@ -132,14 +132,20 @@
     >
         <div class="flex items-center gap-1">
             <span>{client.name} is on hold</span>
-            <span>
-                {formatDate(latest_activity?.timestamp)} 
-            </span>
+            {#if latest_activity}
+                {#if latest_activity.timestamp && latest_activity.timestamp !== null}
+                <span>
+                    {formatDate(latest_activity.timestamp)} 
+                </span>
+                {/if}
+            {/if}
         </div>
-        {#if latest_activity?.reason != null || latest_activity?.reason != ""}
-        <div>
-            {latest_activity?.reason}
-        </div>
+        {#if latest_activity}
+            {#if latest_activity.reason && latest_activity.reason !== ""}
+            <div>
+                {latest_activity.reason}
+            </div>
+            {/if}
         {/if}
     </div>
 {/if}
