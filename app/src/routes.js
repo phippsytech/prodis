@@ -147,12 +147,6 @@ export default {
     }),
 
 
-
-    // this is a timetracking entry form that bypases data restrictions
-    '/billing/add': wrap({
-        asyncComponent: () => import('./routes/Billing/DataEntry/Add.svelte')
-    }),
-
     '/billing/add2': wrap({
         asyncComponent: () => import('./routes/Billing/DataEntry/Add2.svelte')
     }),
