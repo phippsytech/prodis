@@ -12,8 +12,6 @@
 
     let staff = [];
     let staffList = [];
-    let name = "";
-    let selected = false;
 
     onMount(() => {
         loadStaff(staff_id);
@@ -24,7 +22,8 @@
         jspa("/Staff", "listStaff", {})
             .then((result) => {
                 staff = result.result;
-               
+
+                let selected = false;
 
                 staff.forEach((staffer) => {
                     let options = {
@@ -46,7 +45,6 @@
                     )
                         staffList.push(options);
                 });
-
 
                 if (!selected) staff_id = "Choose staffer"; // unset the selected client_id
 
@@ -89,5 +87,4 @@
     options={staffList}
     {readOnly}
 />
-{name}
 <!-- {/if} -->

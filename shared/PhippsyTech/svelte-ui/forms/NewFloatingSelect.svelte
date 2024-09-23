@@ -35,16 +35,11 @@
     let selectValue = value;
 
     $: {
-     
-        const selectedOption = options.find((option) => String(option.value) === String(value));
-        
-        if (!value || !selectedOption) {
-            selectValue = value; // Default display when no value is selected
+        if (!value || !options.find((option) => String(option.value) === String(value))) {
+            selectValue = "";
         } else {
-            selectValue = selectedOption.option; // Display the staff name
-            console.log("Selected option: ", selectValue);
+            selectValue = value;
         }
-       
     }
 
     function handleChange(event) {
@@ -114,6 +109,7 @@
         </div>
         <div class="flex-grow relative mx-2">
             <select
+                {id}
                 on:change={handleChange}
                 bind:value={id}
                 on:blur={handleBlur}
