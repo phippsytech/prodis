@@ -68,17 +68,19 @@
           ON HOLD
         </span>
         {#if latest_activity}
-        <span class="text-xs">
-          {formatDate(latest_activity?.timestamp)} 
-        </span>
+          {#if latest_activity.timestamp && latest_activity.timestamp !== null}
+            <span class="text-xs">
+              {formatDate(latest_activity.timestamp)} 
+            </span>
+          {/if}
         {/if}
       </div>
       {#if latest_activity}
-      {#if latest_activity?.reason != null || latest_activity?.reason != ""}
-        <div class="text-xs">
-            {latest_activity?.reason}
-        </div>
-      {/if}
+        {#if latest_activity.reason && latest_activity.reason !== ""}
+          <div class="text-xs">
+            {latest_activity.reason}
+          </div>
+        {/if}
       {/if}
     {/if}
   </div>
