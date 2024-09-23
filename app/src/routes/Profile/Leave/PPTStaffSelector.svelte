@@ -62,13 +62,6 @@
             .catch(() => {});
     }
 
-    $: if (staff_id != "Choose staffer") {
-        staffList.forEach((staffer) => {
-            if (staffer.value == staff_id) {
-                name = staffer.option;
-            }
-        });
-    }
 </script>
 
 <!-- {#if display}
@@ -90,7 +83,7 @@
 <NewFloatingSelect
     label="Staff"
     bind:value={staff_id}
-    on:change
+    on:change={(e) => staff_id = e.detail.value}
     instruction="Choose staffer"
     options={staffList}
     {readOnly}

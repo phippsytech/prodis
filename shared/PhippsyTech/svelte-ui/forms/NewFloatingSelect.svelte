@@ -53,7 +53,7 @@
         } else {
             value = null;
         }
-        dispatch("change", { value: event.target.value });
+        dispatch("change", { value });
     }
 
     function validate() {
