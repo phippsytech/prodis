@@ -1,8 +1,9 @@
 <?php
+
 namespace NDISmate\Services\RosterService;
 
 use NDISmate\CORE\KeyValue;
-use NDISmate\Services\ParticipantService\GetParticipantService;
+use NDISmate\Services\ParticipantServiceBooking\GetParticipantServiceBooking;
 use NDISmate\Services\TimeTrackingService\AddTimeTracking;
 use RedBeanPHP\R as R;
 
@@ -18,7 +19,7 @@ class GenerateSessions
             foreach ($billing as $item) {
                 $item['client_id'] = $data['client_id'];
 
-                $participant_service = (new GetParticipantService)([
+                $participant_service = (new GetParticipantServiceBooking)([
                     'code' => $item['service_code'],
                     'participant_id' => $item['client_id'],
                 ]);
