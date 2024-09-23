@@ -2,19 +2,16 @@
     import Container from "@shared/Container.svelte";
     import FloatingDurationSelect from "@shared/PhippsyTech/svelte-ui/forms/FloatingDurationSelect.svelte";
     import FloatingDate from "@shared/PhippsyTech/svelte-ui/forms/FloatingDate.svelte";
-    import FloatingInput from "@shared/PhippsyTech/svelte-ui/forms/FloatingInput.svelte";
-    import ServiceBooking from "@app/routes/Clients/ServiceAgreements/Services/ServiceItemAdapter.svelte";
+    import ServiceBooking from "@app/routes/Clients/ServiceAgreements/ServiceBookings/ServiceBooking.svelte";
     import PlanManagerSelector from "@app/routes/Accounts/PlanManagers/PlanManagerSelector.svelte";
     import StaffSelector from "./StaffSelector.svelte";
     import ClientSelector from "./ClientSelector.svelte";
-    import ServiceSelector from "./ServiceSelector.svelte";
     import ServiceButtonGroup from "./ServiceButtonGroup.svelte";
     import ClaimSelector from "./ClaimSelector.svelte";
     import Role from "@shared/Role.svelte";
     import RTE from "@shared/RTE/RTE.svelte";
     import { onMount } from "svelte";
     import { convertMinutesToHoursAndMinutes } from "@shared/utilities";
-    import { convertFieldsToBoolean } from "@shared/utilities/convertFieldsToBoolean";
     import { jspa } from "@shared/jspa.js";
 
     export let timetracking = {};
@@ -28,14 +25,22 @@
     let stored_service_id;
     let hasActiveServiceAgreement = true;
 
-    let service = {};
+    // are these two the same thing?
+    let serviceBooking = {};
 
     let record_travelled_kilometers = false;
     let client_on_hold = false;
 
+    if (timetracking.invoice_batch) {
+        readOnly = "true";
+    }
+
     onMount(() => {
         getAvailableSessionDuration();
+        stored_service_id = timetracking.service_booking_id;
     });
+
+    $: console.log("Time Tracking: " + JSON.stringify(timetracking));
 
     $: if (timetracking.service_booking_id != stored_service_id) {
         getAvailableSessionDuration();
@@ -51,11 +56,25 @@
         budget_exceeded = false;
     }
 
+    $: if (timetracking.service_booking_id) getServiceBooking(timetracking);
+    $: if (timetracking.client_id || timetracking.session_date)
+        getServiceAgreement(timetracking);
+    $: if (timetracking.session_date) getServiceAgreement(timetracking);
+
     function getAvailableSessionDuration() {
         jspa("/Participant/ServiceBooking", "getAvailableSessionDuration", {
             service_booking_id: timetracking.service_booking_id,
         })
             .then((result) => {
+                console.log(
+                    "test timetracking: " + timetracking.service_booking_id,
+                );
+
+                console.log("store service id: " + stored_service_id);
+                console.log(
+                    "timetracking service id: " +
+                        timetracking.service_booking_id,
+                );
                 available_session_duration =
                     result.result.available_session_duration;
 
@@ -70,25 +89,16 @@
             .catch(() => {});
     }
 
-    if (timetracking.invoice_batch) {
-        readOnly = "true";
-    }
-
-    $: if (timetracking.service_booking_id) getService(timetracking);
-    $: if (timetracking.client_id || timetracking.session_date)
-        getServiceAgreement(timetracking);
-    $: if (timetracking.session_date) getServiceAgreement(timetracking);
-
-    function getService(timetracking) {
+    function getServiceBooking(timetracking) {
         jspa("/Participant/ServiceBooking", "getParticipantServiceBooking", {
             id: timetracking.service_booking_id,
         })
             .then((result) => {
-                service = convertFieldsToBoolean(result.result, [
-                    "include_travel",
-                ]);
+                serviceBooking = result.result;
             })
-            .catch((error) => {});
+            .catch((error) => {
+                console.log("Error fetching service booking:", error);
+            });
     }
 
     function getServiceAgreement(timetracking) {
@@ -319,10 +329,7 @@
 
         {#if timetracking.staff_id && timetracking.client_id && timetracking.service_booking_id && timetracking.service_booking_id != "Choose service"}
             <Container>
-                <ServiceBooking
-                    bind:service_booking_id={timetracking.service_booking_id}
-                    bind:service_agreement
-                />
+                <ServiceBooking bind:service_booking={serviceBooking} />
             </Container>
 
             {#if mode == "edit"}

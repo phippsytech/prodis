@@ -13,7 +13,7 @@ class GetAvailableSessionDuration
         // get the budget for the service
 
         // validate that the service_booking_id are set
-        if (!isset($data['service_booking_id']) || !is_numeric($data['service_booking_id'])) {
+        if (!isset($data['service_booking_id']) || !is_numeric($data['service_booking_id']) ) {
             throw new \Exception('service_booking_id is required');
         }
 

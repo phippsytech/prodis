@@ -686,14 +686,6 @@ export default {
         asyncComponent: () => import('./routes/Clients/Settings/Settings.svelte')
     }),
 
-
-    '/clients/:client_id/serviceagreements/:service_agreement_id/amend': wrap({
-        asyncComponent: () => import('./routes/Clients/ServiceAgreements/AmendServiceAgreement.svelte')
-    }),
-
-
-
-
     '/settings': wrap({
         asyncComponent: () => import('./routes/Settings/Settings.svelte')
     }),

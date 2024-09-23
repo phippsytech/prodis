@@ -4,7 +4,7 @@ namespace NDISmate\Services\ParticipantServiceBooking;
 
 use NDISmate\Utilities\ConvertFieldsToBoolean;
 use RedBeanPHP\R as R;
-use RedBeanPHP\RedException;
+use RedBeanPHP\RedException as RedException;
 
 class GetParticipantServiceBooking
 {
@@ -33,15 +33,15 @@ class GetParticipantServiceBooking
         }
 
 
-        // $where = ($where ? $where . ' AND ' : '') . 'timetrackings.session_duration > 0 and timetrackings.session_duration is not null';
-
-
+        // remember servicebookings.plan_id = serviceagreements.id
 
         try {
             $query =
                 "SELECT
                     servicebookings.id,
                     servicebookings.plan_id,
+                    ANY_VALUE(serviceagreements.service_agreement_signed_date) AS service_agreement_signed_date,
+                    ANY_VALUE(serviceagreements.service_agreement_end_date) AS service_agreement_end_date,
                     ANY_VALUE(servicebookings.service_id) AS service_id,
                     ANY_VALUE(servicebookings.plan_manager_id) AS plan_manager_id,
                     ANY_VALUE(planmanagers.name) AS plan_manager_name,
@@ -75,6 +75,7 @@ class GetParticipantServiceBooking
                     AND timetrackings.session_date >= servicebookings.budget_start_date
                     AND (timetrackings.session_duration > 0 AND timetrackings.session_duration is not null)
                 JOIN services ON services.id = servicebookings.service_id
+                JOIN serviceagreements on serviceagreements.id = servicebookings.plan_id
                 JOIN planmanagers ON planmanagers.id = servicebookings.plan_manager_id 
                 WHERE "
                 . $where
@@ -87,17 +88,16 @@ class GetParticipantServiceBooking
                     servicebookings.id
                 ';
 
-            if (!defined('DB_TYPE') || DB_TYPE == 'mariadb') {
-                $query = str_replace('ANY_VALUE', '', $query);
-            }
-
             $bean = R::getRow(
                 $query,
                 $params
             );
 
+
             $converter = new ConvertFieldsToBoolean();
-            $bean = $converter($bean, ['is_active', 'adjust_weekly_time']);
+            $bean = $converter([$bean], ['is_active', 'adjust_weekly_time', 'include_travel'])[0];
+
+
 
             return $bean;
         } catch (RedException $e) {
