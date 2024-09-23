@@ -228,9 +228,7 @@
             {#if index == 0 || group[0].PlanManagerId != groupedItems[index - 1][0].PlanManagerId || group[0].NDISNumber != groupedItems[index - 1][0].NDISNumber}
                 <div class="py-0">
                     <span class="text-sm">
-                        <a
-                            href="/#/planmanagers/{group[0].PlanManagerId}"
-                            class="hover:text-indigo-600"
+                        <a                     
                             title="Go to {group[0].ClientBillingName}"
                             >{group[0].ClientBillingName}</a
                         >
