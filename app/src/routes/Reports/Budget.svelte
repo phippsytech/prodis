@@ -108,12 +108,12 @@
 {#if staff_id != null}
     {#each clientList as client}
         <Container>
-            <h1
-                on:click={() => push("/clients/" + client.client_id)}
-                class="font-bold mt-0 mb-2"
+            <a
+                href="/#/clients/{client.client_id}"
+                class="text-base font-semibold text-gray-900 hover:text-indigo-600 cursor-pointer"
+                title="Go to {client.client_name}"
+                >{client.client_name}</a
             >
-                {client.client_name}
-            </h1>
             {#if client.services && client.services.length > 0}
                 {#each client.services as service, index (service.id)}
                     <ServiceBooking service_booking={service} />
