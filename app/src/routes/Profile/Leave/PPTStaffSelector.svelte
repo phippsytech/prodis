@@ -1,6 +1,5 @@
 <script>
     import { onMount } from "svelte";
-    import FloatingSelect from "@shared/PhippsyTech/svelte-ui/forms/FloatingSelect.svelte";
     import NewFloatingSelect from "@shared/PhippsyTech/svelte-ui/forms/NewFloatingSelect.svelte";
     import { jspa } from "@shared/jspa.js";
 
