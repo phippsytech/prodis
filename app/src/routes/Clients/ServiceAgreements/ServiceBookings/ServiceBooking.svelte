@@ -9,13 +9,9 @@
     // Function to calculate hours per week based on allocated hours and date range
     function hoursPerWeek(allocatedHours, startDate, endDate) {
         // Initialize start and end dates
-        startDate = startDate
-            ? startDate
-            : new Date(service_booking.budget_start_date);
+        startDate = startDate ?? new Date(service_booking.budget_start_date);
 
-        endDate = endDate
-            ? endDate
-            : new Date(service_booking.service_agreement_end_date);
+        endDate = endDate ?? new Date(service_booking.service_agreement_end_date);
 
         // Get the difference in time (in milliseconds)
         const timeInterval = endDate.getTime() - startDate.getTime();
@@ -85,8 +81,23 @@
         }
 
         const adjustedWeeklyTime = remainingMinutes / remainingWeeks;
-
+        
         return adjustedWeeklyTime;
+    }
+
+    let isExpired = false;
+    $: {
+        // Parse the dates
+        const start = new Date(service_booking.budget_start_date).getTime();
+        const end = new Date(service_booking.service_agreement_end_date).getTime();
+        const current = new Date().getTime();
+
+        //Ensure the current date is within the interval
+        if (current < start || current > end) {
+            isExpired = true;
+        } else {
+            isExpired = false;
+        }
     }
 </script>
 
@@ -110,7 +121,7 @@
                             )}
                         </span>
 
-                        {#if service_booking.adjust_weekly_time}
+                        {#if !isExpired && service_booking.adjust_weekly_time}
                             {#if hoursPerWeek(service_booking.remainingMinutes / 60, new Date(), new Date(service_booking.service_agreement_end_date)) != 0}
                                 <span class="text-xs text-slate-400 ml-1">
                                     ({@html convertMinutesToHoursAndMinutes(
@@ -125,7 +136,7 @@
                                     )} / wk )
                                 </span>
                             {/if}
-                        {:else if hoursPerWeek(service_booking.totalServiceDuration / 60, new Date(service_booking.service_agreement_signed_date), new Date(service_booking.service_agreement_end_date)) > 1}
+                        {:else if !isExpired && hoursPerWeek(service_booking.totalServiceDuration / 60, new Date(service_booking.service_agreement_signed_date), new Date(service_booking.service_agreement_end_date)) > 1}
                             <span class="italic text-xs text-slate-400">
                                 ({@html convertMinutesToHoursAndMinutes(
                                     hoursPerWeek(

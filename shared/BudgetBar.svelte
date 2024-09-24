@@ -93,7 +93,7 @@
         {#if totalBudget == 0}
             No budget set.
         {:else if spentBudget == 0}
-            No budget spent.
+            Service Agreement Expired.
         {:else if hourlyRate == 0}
             No hourly rate set for service.
         {:else}
