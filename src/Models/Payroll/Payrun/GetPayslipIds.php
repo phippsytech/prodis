@@ -9,9 +9,8 @@ class GetPayslipIds
     {
         // if force is false, check cache first
         if ($force == false) {
-            $expiryDateTime = new \DateTime();
-            $expiryDateTime->setTime(0, 0, 0);
-            $jsonData = (new \NDISmate\Cache\Retrieve)('xeroPayslipIds', $expiryDateTime);
+          
+            $jsonData = (new \NDISmate\Cache\Retrieve)('xeroPayslipIds');
         }
 
         if (empty($jsonData)) {  // Cache doesn't exist, fetch data
@@ -34,8 +33,8 @@ class GetPayslipIds
                 }
 
                 $jsonData = json_encode($payslip_ids);
-
-                $cache = (new \NDISmate\Cache\Store)('xeroPayslipIds', $jsonData);
+                $expiryInSeconds = 86400 ;
+                $cache = (new \NDISmate\Cache\Store)('xeroPayslipIds', $jsonData, $expiryInSeconds);
             } catch (\Exception $e) {
                 print_r($e);
                 $error = $e->getMessage();
