@@ -1,10 +1,9 @@
 <script>
     import { onMount } from "svelte";
-    import FloatingSelect from "@shared/PhippsyTech/svelte-ui/forms/FloatingSelect.svelte";
     import NewFloatingSelect from "@shared/PhippsyTech/svelte-ui/forms/NewFloatingSelect.svelte";
     import { jspa } from "@shared/jspa.js";
 
-    export let staff_id = null;
+    export let staff_id;
 
     export let readOnly = false;
 
@@ -12,6 +11,7 @@
 
     let staff = [];
     let staffList = [];
+    let selected = false;
 
     onMount(() => {
         loadStaff(staff_id);
@@ -23,19 +23,12 @@
             .then((result) => {
                 staff = result.result;
 
-                let selected = false;
-
                 staff.forEach((staffer) => {
                     let options = {
                         option: staffer.staff_name,
-                        value: parseInt(staffer.id),
+                        value: staffer.id,
                         selected: false,
                     };
-
-                    if (staffer.id === parseInt(staff_id)) {
-                        options.selected = true;
-                        selected = true;
-                    }
 
                     if (
                         staffer.archived != 1 &&
@@ -46,7 +39,6 @@
                         staffList.push(options);
                 });
 
-                if (!selected) staff_id = "Choose staffer"; // unset the selected client_id
 
                 staffList.sort(function (a, b) {
                     const nameA = a.option.toUpperCase(); // ignore upper and lowercase
@@ -59,7 +51,13 @@
                 staffList = staffList;
             })
             .catch(() => {});
-    }
+       
+     }
+
+     $: {
+        if (!selected) staff_id = "Choose staffer"; // unset the selected client_id
+     }
+  
 </script>
 
 <!-- {#if display}
@@ -79,7 +77,7 @@
 /> -->
 
 <NewFloatingSelect
-    on:change={(event) => staff_id = event.detail.value}
+    on:change
     bind:value={staff_id}
     label="Staff"
     instruction="Choose staffer"

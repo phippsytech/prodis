@@ -35,7 +35,7 @@
     let selectValue = value;
 
     $: {
-        if (!value || !options.find((option) => option.value === value)) {
+        if (!value || !options.find((option) => String(option.value) === String(value))) {
             selectValue = "";
         } else {
             selectValue = value;
