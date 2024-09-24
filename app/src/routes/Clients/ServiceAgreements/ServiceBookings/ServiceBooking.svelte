@@ -2,6 +2,7 @@
     import { convertMinutesToHoursAndMinutes } from "@shared/utilities.js";
     import BudgetBar from "@shared/BudgetBar.svelte";
     import BudgetBarWeekly from "@shared/BudgetBarWeekly.svelte";
+    import ExpiredServiceAgreementBudgetBar from "@shared/ExpiredServiceAgreementBudgetBar.svelte";
     import { formatDate, timeAgo } from "@shared/utilities.js";
 
     export let service_booking = {};
@@ -9,13 +10,9 @@
     // Function to calculate hours per week based on allocated hours and date range
     function hoursPerWeek(allocatedHours, startDate, endDate) {
         // Initialize start and end dates
-        startDate = startDate
-            ? startDate
-            : new Date(service_booking.budget_start_date);
+        startDate = startDate ?? new Date(service_booking.budget_start_date);
 
-        endDate = endDate
-            ? endDate
-            : new Date(service_booking.service_agreement_end_date);
+        endDate = endDate ?? new Date(service_booking.service_agreement_end_date);
 
         // Get the difference in time (in milliseconds)
         const timeInterval = endDate.getTime() - startDate.getTime();
@@ -37,10 +34,10 @@
         // Parse the dates
         const start = new Date(startDate).getTime();
         const end = new Date(endDate).getTime();
-        const current = new Date().getTime();
+        const current = getDateOnlyTimestamp(new Date());
 
         //Ensure the current date is within the interval
-        if (current < start || current > end) {
+        if (current <= start || current >= end) {
             console.log("Current date is outside the service interval.");
             return 0;
         }
@@ -85,13 +82,33 @@
         }
 
         const adjustedWeeklyTime = remainingMinutes / remainingWeeks;
-
+        
         return adjustedWeeklyTime;
+    }
+
+    function getDateOnlyTimestamp(dateString) {
+        const date = new Date(dateString);
+        return new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
+    }
+
+    let isExpired = false;
+    $: {
+        // Parse the dates
+        const start = new Date(service_booking.budget_start_date).getTime();
+        const end = new Date(service_booking.service_agreement_end_date).getTime();
+        const current = getDateOnlyTimestamp(new Date());
+    
+        //Ensure the current date is within the interval
+        if (current <= start || current >= end) {
+            isExpired = true;
+        } else {
+            isExpired = false;
+        }
     }
 </script>
 
 <div class={service_booking.is_active ? "" : "opacity-50"}>
-    {#if service_booking.budget_display == "weekly"}
+    {#if service_booking.budget_display == "weekly" && !isExpired}
         <div class="block w-full">
             <div
                 class="mt-0 p-0 mx-0 sm:flex sm:justify-between"
@@ -177,6 +194,29 @@
                 {/if}
             {/if}
         </div>
+    {:else if isExpired}
+        <div class="block w-full">
+            <div
+                class="mt-0 p-0 mx-0 sm:flex sm:justify-between"
+                style="line-height:0.8rem"
+            >
+                <div>
+                    <span class="text-slate-800 font-bold"
+                        >{service_booking.code}</span
+                    >
+                    {#if !service_booking.is_active}
+                        - NOT ACTIVE
+                    {/if}
+                </div>
+                <span
+                    class="text-xs text-indigo-300 uppercase hidden sm:inline-block"
+                >
+                    {service_booking.plan_manager_name}
+                </span>
+            </div>
+            <ExpiredServiceAgreementBudgetBar/>
+        </div>
+        
     {:else}
         <div class="block w-full">
             <div
@@ -220,7 +260,7 @@
         </div>
     {/if}
 
-    {#if service_booking.last_session_date}
+    {#if service_booking.last_session_date && !isExpired}
         <div class="px-1 text-xs text-slate-400">
             Last billed {timeAgo(service_booking.last_session_date)}
             {formatDate(service_booking.last_session_date)}

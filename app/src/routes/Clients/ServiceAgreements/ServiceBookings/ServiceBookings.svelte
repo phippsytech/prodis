@@ -35,6 +35,13 @@
     });
   });
 
+  // re load data when service agreement end date is changed
+  $: if (service_agreement?.service_agreement_end_date) {
+    ServiceBookingsStore.load({
+      service_agreement_id: service_agreement.id,
+    });
+  }
+
   function validateField(field, errorMessage) {
     if (field == null || field == "") {
       return null;
