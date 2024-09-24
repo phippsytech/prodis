@@ -104,12 +104,6 @@
         } else {
             isExpired = false;
         }
-
-        console.log('current:', current);
-        console.log('start:', start);
-        console.log('end:', end);
-        console.log('c < s:', current <= start);
-        console.log('c > e:', current >= end);
     }
 </script>
 
