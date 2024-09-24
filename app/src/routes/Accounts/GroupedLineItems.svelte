@@ -153,7 +153,7 @@
     
 </script>
 
-<nav
+<!-- <nav
     class="bg-white text-gray-600 border border-indigo-100 rounded-lg drop-shadow-sm flex space-x-6 items-center px-3 py-3 mb-2"
     aria-label="Toolbar"
 >
@@ -168,13 +168,13 @@
         {/if}
     </button>
 
-    <!-- <button
+    <button
         on:click={() => (groupItems = !groupItems)}
         class="w-8 h-8 relative inline-flex justify-center items-center rounded-lg hover:bg-indigo-50 hover:text-indigo-600 text-xs"
     >
         <span><FilterListIcon class="inline h-6 w-6 " />Filter</span>
-    </button> -->
-</nav>
+    </button>
+</nav> -->
 
 <div class="hidden xs:block">
     <div
