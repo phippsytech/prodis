@@ -6,19 +6,20 @@
     import { push } from "svelte-spa-router";
     import { jspa } from "@shared/jspa.js";
     import { BreadcrumbStore } from "@shared/stores.js";
-    import { getMonday, getDatePlus7Days, decimalRounder } from "@shared/utilities.js";
+    import { getMonday, getDatePlus7Days, decimalRounder, getQueryParams } from "@shared/utilities.js";
     import { InvoiceBarStore } from "@app/Layout/BottomNav/stores.js";
     import QueryManager from "@shared/QueryManager.svelte";
-    import { getQueryParams } from "@shared/utilities.js";
     import Filter from "@shared/PhippsyTech/svelte-ui/Filter.svelte";
     import { consoleLogs } from "@app/Overlays/stores";
+  import { onMount } from "svelte";
     
 
 
     let queryParams = getQueryParams();
     let search = queryParams.search;
-
-    $: queryParams = { search };
+    let filter = queryParams.filter;
+ 
+    $: queryParams = { search, filter };
 
     let filters = [
 		{ label: "name", enabled: false }
@@ -30,17 +31,21 @@
     let selected_total = 0;
     let managed = [];
     let generating_invoices = false;
-    let filterByName = false;
+  
     let filteredManaged = [];
 
     let selectedLineItems = [];
     let lineItemElement;
 
+
+   
+
     BreadcrumbStore.set({
         path: [{ url: null, name: "Accounts" }],
     });
 
-    jspa("/Invoice", "listUnbilled", {}).then((result) => {
+    onMount(() => {
+        jspa("/Invoice", "listUnbilled", {}).then((result) => {
             managed = result.result;
             unbilled_total = 0;
             managed.forEach((item) => {
@@ -55,7 +60,10 @@
                 }
                 return a.ClientName > b.ClientName ? 1 : -1;
             });
-    });
+        });
+    })
+
+    
 
     function generateInvoices() {
         generating_invoices = true;
@@ -87,22 +95,31 @@
     }
 
     $: {
-        if (filters.find((f) => f.label === "name").enabled && search) {
+        if (filters.find((f) => f.label === "name").enabled) {
+            filter = 'name';
+        }
+    }
+
+    $: {
+        if (search) {
+            if (filter && search) {
             
-            filteredManaged = managed.filter( (item)  => item.ClientName &&
+                managed = managed.filter( (item)  => item.ClientName &&
                             item.ClientName.toLowerCase().includes(search.toLowerCase())); 
 
-    
-        }  else {
-            filteredManaged = managed;
+            }  else {
+                managed = managed;
+             }
+        } else if (!filter && !search) {
+            managed = managed;
         }
+      
 
 	}
 </script>
 
 <QueryManager
     params={{ ...queryParams }}
-    onParamsChange={(params) => (search = params.search)}
 />
 
 <div class="flex h-16 shrink-0 items-center bg-white rounded-md">
@@ -161,7 +178,7 @@
 
         <GroupedLineItems
             bind:this={lineItemElement}
-            line_items={filteredManaged}
+            line_items={managed}
             bind:selected_total
             bind:selectedLineItems
         />
