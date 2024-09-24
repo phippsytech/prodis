@@ -49,7 +49,7 @@
     <h3 class="px-3 pt-2 text-xs text-gray-500">{label}</h3>
 
     <Select
-      containerStyles="border:none; margin:0 0.75rem; padding:0 0; min-height:34px;width:auto;"
+      containerStyles="border:none; margin:-4px 0.75rem; padding:0 0; min-height:34px;width:auto;"
       --list-position="fixed"
       {items}
       {value}
