@@ -11,10 +11,14 @@
     import QueryManager from "@shared/QueryManager.svelte";
     import { getQueryParams } from "@shared/utilities.js";
     import Filter from "@shared/PhippsyTech/svelte-ui/Filter.svelte";
+    import { consoleLogs } from "@app/Overlays/stores";
+    
 
 
     let queryParams = getQueryParams();
     let search = queryParams.search;
+
+    $: queryParams = { search };
 
     let filters = [
 		{ label: "name", enabled: false }
@@ -27,6 +31,7 @@
     let managed = [];
     let generating_invoices = false;
     let filterByName = false;
+    let filteredManaged = [];
 
     let selectedLineItems = [];
     let lineItemElement;
@@ -36,20 +41,20 @@
     });
 
     jspa("/Invoice", "listUnbilled", {}).then((result) => {
-        managed = result.result;
-        unbilled_total = 0;
-        managed.forEach((item) => {
-            //unbilled_total = unbilled_total + item.Quantity * item.UnitPrice;
-            let itemTotal = decimalRounder(item.Quantity * item.UnitPrice);
-            unbilled_total = decimalRounder(unbilled_total + itemTotal);
-        });
-        console.log(managed);
-        managed.sort((a, b) => {
-            if (a.ClientName === b.ClientName) {
-                return a.PlanManagerId > b.PlanManagerId ? 1 : -1;
-            }
-            return a.ClientName > b.ClientName ? 1 : -1;
-        });
+            managed = result.result;
+            unbilled_total = 0;
+            managed.forEach((item) => {
+                //unbilled_total = unbilled_total + item.Quantity * item.UnitPrice;
+                let itemTotal = decimalRounder(item.Quantity * item.UnitPrice);
+                unbilled_total = decimalRounder(unbilled_total + itemTotal);
+            });
+            console.log(managed);
+            managed.sort((a, b) => {
+                if (a.ClientName === b.ClientName) {
+                    return a.PlanManagerId > b.PlanManagerId ? 1 : -1;
+                }
+                return a.ClientName > b.ClientName ? 1 : -1;
+            });
     });
 
     function generateInvoices() {
@@ -82,25 +87,55 @@
     }
 
     $: {
+        if (filters.find((f) => f.label === "name").enabled && search) {
+            
+            filteredManaged = managed.filter( (item)  => item.ClientName &&
+                            item.ClientName.toLowerCase().includes(search.toLowerCase())); 
 
-		filterByName = filters.find((f) => f.label === "name").enabled;
+    
+        }  else {
+            filteredManaged = managed;
+        }
 
-		// if (!filterByName) {
-		// 	managed = managed.filter((item) => item.ClientName == search);
-		// }
-
-		// if (search.length > 0) {
-		// 	// filter by client name
-		// 	// there is a problem which will mean if client.name is removed it will effectively hide the record
-		// 	managed = managed.filter(
-		// 	(item) =>
-        //         item.ClientName &&
-        //         item.ClientName.toLowerCase().includes(search.toLowerCase()) ==
-		// 		true,
-		// 	);
-		// }
 	}
 </script>
+
+<QueryManager
+    params={{ ...queryParams }}
+    onParamsChange={(params) => (search = params.search)}
+/>
+
+<div class="flex h-16 shrink-0 items-center bg-white rounded-md">
+    <div class="flex flex-1 gap-x-4 self-stretch lg:gap-x-2 px-3">
+        <div class="relative flex flex-1">
+            <label for="search-field" class="sr-only">Search</label>
+            <svg
+                class="pointer-events-none absolute inset-y-0 left-0 h-full w-5 text-gray-400"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+            >
+                <path
+                    fill-rule="evenodd"
+                    d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z"
+                    clip-rule="evenodd"
+                />
+            </svg>
+            <input
+                bind:value={search}
+                id="search-field"
+                class="block h-full w-full border-0 py-0 pl-8 pr-0 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm outline-none"
+                placeholder="search by staff name..."
+                type="search"
+                name="search"
+            />
+        </div>
+
+    </div>
+</div>
+<div class="bg-white px-3 rounded-md pb-1">
+    <Filter bind:filters />
+</div>
 
 {#if managed.length}
     {#if !generating_invoices}
@@ -117,38 +152,6 @@
             </div>
         </div>
 
-        <div class="flex h-16 shrink-0 items-center bg-white rounded-md">
-            <div class="flex flex-1 gap-x-4 self-stretch lg:gap-x-2 px-3">
-                <div class="relative flex flex-1">
-                    <label for="search-field" class="sr-only">Search</label>
-                    <svg
-                        class="pointer-events-none absolute inset-y-0 left-0 h-full w-5 text-gray-400"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                        aria-hidden="true"
-                    >
-                        <path
-                            fill-rule="evenodd"
-                            d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z"
-                            clip-rule="evenodd"
-                        />
-                    </svg>
-                    <input
-                        bind:value={search}
-                        id="search-field"
-                        class="block h-full w-full border-0 py-0 pl-8 pr-0 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm outline-none"
-                        placeholder="search by staff name..."
-                        type="search"
-                        name="search"
-                    />
-                </div>
-
-            </div>
-        </div>
-        <div class="bg-white px-3 rounded-md pb-1">
-            <Filter bind:filters />
-        </div>
-
         <!-- <LineItems
             bind:this={lineItemElement}
             line_items={managed}
@@ -158,7 +161,7 @@
 
         <GroupedLineItems
             bind:this={lineItemElement}
-            line_items={managed}
+            line_items={filteredManaged}
             bind:selected_total
             bind:selectedLineItems
         />
