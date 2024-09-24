@@ -1,10 +1,7 @@
 <script>
     import { XMarkIcon } from "heroicons-svelte/24/outline";
     import LineItem from "./LineItem.svelte";
-    import GroupIcon from "@shared/PhippsyTech/svelte-ui/icons/Group.svelte";
-    import UngroupIcon from "@shared/PhippsyTech/svelte-ui/icons/Ungroup.svelte";
-    import FilterListIcon from "@shared/PhippsyTech/svelte-ui/icons/FilterList.svelte";
-
+    
     export let line_items = [];
     export let selected_total = 0;
     export let selectedLineItems = [];
@@ -75,8 +72,6 @@
 
     $: calculateSelectedTotal(selectedLineItems);
 
-    let groupItems = false;
-
     function groupBy(items, keys) {
         return Object.values(
             items.reduce((result, item) => {
@@ -87,7 +82,7 @@
         );
     }
 
-    $: groupedItems = groupBy(line_items, [
+    $: lineItems = groupBy(line_items, [
         "NDISNumber",
         "PlanManagerId",
         "SupportNumber",
@@ -153,29 +148,6 @@
     
 </script>
 
-<nav
-    class="bg-white text-gray-600 border border-indigo-100 rounded-lg drop-shadow-sm flex space-x-6 items-center px-3 py-3 mb-2"
-    aria-label="Toolbar"
->
-    <button
-        on:click={() => (groupItems = !groupItems)}
-        class="w-8 h-8 relative inline-flex justify-center items-center rounded-lg hover:bg-indigo-50 hover:text-indigo-600 text-xs"
-    >
-        {#if groupItems}
-            <span><UngroupIcon class="inline h-6 w-6 " />Ungroup</span>
-        {:else}
-            <span><GroupIcon class="inline h-6 w-6 " />Group</span>
-        {/if}
-    </button>
-
-    <!-- <button
-        on:click={() => (groupItems = !groupItems)}
-        class="w-8 h-8 relative inline-flex justify-center items-center rounded-lg hover:bg-indigo-50 hover:text-indigo-600 text-xs"
-    >
-        <span><FilterListIcon class="inline h-6 w-6 " />Filter</span>
-    </button> -->
-</nav>
-
 <div class="hidden xs:block">
     <div
         class="grid grid-cols-2 items-center py-1 text-xs font-medium text-gray-500"
@@ -202,48 +174,40 @@
     </div>
 </div>
 
-<!-- {#each Object.values(groupedItems) as group, index} -->
-{#key groupedItems}
-    {#each groupedItems as group, index (index)}
+<!-- {#each Object.values(lineItems) as item, index} -->
+{#key lineItems}
+    {#each lineItems as lineItem, index (index)}
         <div
             class=".content-container {index == 0 ||
-            group[0].NDISNumber != groupedItems[index - 1][0].NDISNumber
+            lineItem[0].NDISNumber != lineItems[index - 1][0].NDISNumber
                 ? 'border-t border-gray-200 pt-2 mt-2'
                 : ''}"
         >
-            {#if index == 0 || group[0].NDISNumber != groupedItems[index - 1][0].NDISNumber}
+            {#if index == 0 || lineItem[0].NDISNumber != lineItems[index - 1][0].NDISNumber}
                 <div class="flex justify-between py-0">
                     <a
-                        href="/#/clients/{group[0].ClientId}"
+                        href="/#/clients/{lineItem[0].ClientId}"
                         class="text-base font-semibold text-gray-900 hover:text-indigo-600 cursor-pointer"
-                        title="Go to {group[0].ClientName}"
-                        >{group[0].ClientName}</a
+                        title="Go to {lineItem[0].ClientName}"
+                        >{lineItem[0].ClientName}</a
                     >
                     <div class="text-right font-semibold">
-                        ${getTotalByNDISNumber(group[0].NDISNumber)}
+                        ${getTotalByNDISNumber(lineItem[0].NDISNumber)}
                     </div>
                 </div>
             {/if}
 
-            {#if index == 0 || group[0].PlanManagerId != groupedItems[index - 1][0].PlanManagerId || group[0].NDISNumber != groupedItems[index - 1][0].NDISNumber}
+            {#if index == 0 || lineItem[0].PlanManagerId != lineItems[index - 1][0].PlanManagerId || lineItem[0].NDISNumber != lineItems[index - 1][0].NDISNumber}
                 <div class="py-0">
                     <span class="text-sm">
-                        {group[0].ClientBillingName}
+                        {lineItem[0].ClientBillingName}
                     </span>
                 </div>
             {/if}
 
-            {#if groupItems}
-                <LineItem
-                    item={aggregateGroup(group)}
-                    bind:selectedLineItems
-                    grouped={true}
-                />
-            {:else}
-                {#each group as item, index}
-                    <LineItem {item} bind:selectedLineItems grouped={false} />
-                {/each}
-            {/if}
+            {#each lineItem as item, index}
+                <LineItem {item} bind:selectedLineItems grouped={false} />
+            {/each}
         </div>
     {/each} 
 {/key}
