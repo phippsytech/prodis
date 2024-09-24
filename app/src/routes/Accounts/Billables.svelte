@@ -34,8 +34,6 @@
     let lineItemElement;
 
 
-   
-
     BreadcrumbStore.set({
         path: [{ url: null, name: "Accounts" }],
     });
