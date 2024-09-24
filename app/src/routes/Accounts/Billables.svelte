@@ -6,38 +6,69 @@
     import { push } from "svelte-spa-router";
     import { jspa } from "@shared/jspa.js";
     import { BreadcrumbStore } from "@shared/stores.js";
-    import { getMonday, getDatePlus7Days, decimalRounder } from "@shared/utilities.js";
+    import { getMonday, getDatePlus7Days, decimalRounder, getQueryParams } from "@shared/utilities.js";
     import { InvoiceBarStore } from "@app/Layout/BottomNav/stores.js";
+    import QueryManager from "@shared/QueryManager.svelte";
+    import Filter from "@shared/PhippsyTech/svelte-ui/Filter.svelte";
+    import { consoleLogs } from "@app/Overlays/stores";
+    import { onMount } from "svelte";
+    import ClientSelector from "@shared/ClientSelector.svelte";
+    import Client from "@app/Layout/SideBar/Client.svelte";
+    import FloatingCombo from "@shared/PhippsyTech/svelte-ui/forms/FloatingCombo.svelte";
+
+
+    let queryParams = getQueryParams();
+    let client_id = queryParams.client_id;
+ 
+    $: queryParams = { client_id };
+
 
     let start_date = getMonday();
     let end_date = getDatePlus7Days(start_date);
     let unbilled_total = 0;
     let selected_total = 0;
     let managed = [];
+    let clients;
+    let filteredManaged = [];
     let generating_invoices = false;
 
     let selectedLineItems = [];
     let lineItemElement;
+
 
     BreadcrumbStore.set({
         path: [{ url: null, name: "Accounts" }],
     });
 
     jspa("/Invoice", "listUnbilled", {}).then((result) => {
-        managed = result.result;
-        unbilled_total = 0;
-        managed.forEach((item) => {
-            //unbilled_total = unbilled_total + item.Quantity * item.UnitPrice;
-            let itemTotal = decimalRounder(item.Quantity * item.UnitPrice);
-            unbilled_total = decimalRounder(unbilled_total + itemTotal);
-        });
-        managed.sort((a, b) => {
-            if (a.ClientName === b.ClientName) {
-                return a.PlanManagerId > b.PlanManagerId ? 1 : -1;
-            }
-            return a.ClientName > b.ClientName ? 1 : -1;
-        });
+            managed = result.result;
+            unbilled_total = 0;
+            managed.forEach((item) => {
+                //unbilled_total = unbilled_total + item.Quantity * item.UnitPrice;
+                let itemTotal = decimalRounder(item.Quantity * item.UnitPrice);
+                unbilled_total = decimalRounder(unbilled_total + itemTotal);
+            });
+            console.log(managed);
+            managed.sort((a, b) => {
+                if (a.ClientName === b.ClientName) {
+                    return a.PlanManagerId > b.PlanManagerId ? 1 : -1;
+                }
+                return a.ClientName > b.ClientName ? 1 : -1;
+            });
     });
+
+
+    jspa("/Participant", "listClients", {}).then((result) => {
+        clients = result.result
+        .filter((item) => item.archived != 1) // Filter out archived staff
+        .map((item) => ({
+            label: `${item.client_name}`,
+            value: item.client_id,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
+    });
+
+    
 
     function generateInvoices() {
         generating_invoices = true;
@@ -67,7 +98,27 @@
             generateInvoices: () => generateInvoices(),
         });
     }
+
+
+    $: {
+        if (client_id) {
+         
+            filteredManaged = managed.filter( (item)  =>
+                            item.ClientId == client_id);
+         
+        } else {
+            
+            filteredManaged = managed;
+        }
+      
+
+	}
 </script>
+
+<QueryManager
+    params={{ ...queryParams }}
+   />
+
 
 {#if managed.length}
     {#if !generating_invoices}
@@ -84,6 +135,21 @@
             </div>
         </div>
 
+
+        <!-- <div class="flex flex-wrap space-x-2 items-center md:flex-no-wrap">
+            <ClientSelector bind:client_id={client_id} clearable />
+         
+            
+        </div> -->
+
+
+        <FloatingCombo
+            label="Clients"
+            items={clients}
+            bind:value={client_id}
+            placeholderText="Select or type name ..."
+        />
+
         <!-- <LineItems
             bind:this={lineItemElement}
             line_items={managed}
@@ -93,7 +159,7 @@
 
         <GroupedLineItems
             bind:this={lineItemElement}
-            line_items={managed}
+            line_items={filteredManaged}
             bind:selected_total
             bind:selectedLineItems
         />
