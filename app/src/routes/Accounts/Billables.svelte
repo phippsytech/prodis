@@ -19,8 +19,8 @@
 
     let queryParams = getQueryParams();
     let client_id = queryParams.client_id;
- 
-    $: queryParams = { client_id };
+    let service_id = queryParams.service_id;
+    $: queryParams = { client_id, service_id };
 
 
     let start_date = getMonday();
@@ -29,6 +29,7 @@
     let selected_total = 0;
     let managed = [];
     let clients;
+    let services = [];
     let filteredManaged = [];
     let generating_invoices = false;
 
@@ -64,6 +65,17 @@
         .map((item) => ({
             label: `${item.client_name}`,
             value: item.client_id,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
+    });
+
+
+    jspa("/Service", "listServices", {}).then((result) => {
+        console.log(result.result);
+        services = result.result.filter((item) => item.archived != 1) 
+        .map((item) => ({
+            label: `${item.code}`,
+            value: item.id,
         }))
         .sort((a, b) => a.label.localeCompare(b.label));
     });
@@ -106,12 +118,14 @@
             filteredManaged = managed.filter( (item)  =>
                             item.ClientId == client_id);
          
-        } else {
+        } else if (service_id)  {
+            filteredManaged = managed.filter( (item)  =>
+                item.ServiceId == service_id);
+        }else {
             
             filteredManaged = managed;
         }
       
-
 	}
 </script>
 
@@ -148,6 +162,14 @@
             items={clients}
             bind:value={client_id}
             placeholderText="Select or type name ..."
+        />
+
+
+        <FloatingCombo
+            label="Services"
+            items={services}
+            bind:value={service_id}
+            placeholderText="Select or type service code ..."
         />
 
         <!-- <LineItems
