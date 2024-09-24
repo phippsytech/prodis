@@ -11,19 +11,16 @@
     import QueryManager from "@shared/QueryManager.svelte";
     import Filter from "@shared/PhippsyTech/svelte-ui/Filter.svelte";
     import { consoleLogs } from "@app/Overlays/stores";
-  import { onMount } from "svelte";
-    
+    import { onMount } from "svelte";
+    import ClientSelector from "@shared/ClientSelector.svelte";
+  import Client from "@app/Layout/SideBar/Client.svelte";
 
 
     let queryParams = getQueryParams();
-    let search = queryParams.search;
-    let filter = queryParams.filter;
+    let client_id = queryParams.client_id;
  
-    $: queryParams = { search, filter };
+    $: queryParams = { client_id };
 
-    let filters = [
-		{ label: "name", enabled: false }
-	];
 
     let start_date = getMonday();
     let end_date = getDatePlus7Days(start_date);
@@ -31,8 +28,6 @@
     let selected_total = 0;
     let managed = [];
     let generating_invoices = false;
-  
-    let filteredManaged = [];
 
     let selectedLineItems = [];
     let lineItemElement;
@@ -94,23 +89,14 @@
         });
     }
 
-    $: {
-        if (filters.find((f) => f.label === "name").enabled) {
-            filter = 'name';
-        }
-    }
 
     $: {
-        if (search) {
-            if (filter && search) {
-            
-                managed = managed.filter( (item)  => item.ClientName &&
-                            item.ClientName.toLowerCase().includes(search.toLowerCase())); 
-
-            }  else {
-                managed = managed;
-             }
-        } else if (!filter && !search) {
+        if (client_id) {
+            console.log(client_id);
+            managed = managed.filter( (item)  =>
+                            item.ClientId == client_id);
+         
+        } else  {
             managed = managed;
         }
       
@@ -120,39 +106,8 @@
 
 <QueryManager
     params={{ ...queryParams }}
-/>
+   />
 
-<div class="flex h-16 shrink-0 items-center bg-white rounded-md">
-    <div class="flex flex-1 gap-x-4 self-stretch lg:gap-x-2 px-3">
-        <div class="relative flex flex-1">
-            <label for="search-field" class="sr-only">Search</label>
-            <svg
-                class="pointer-events-none absolute inset-y-0 left-0 h-full w-5 text-gray-400"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                aria-hidden="true"
-            >
-                <path
-                    fill-rule="evenodd"
-                    d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z"
-                    clip-rule="evenodd"
-                />
-            </svg>
-            <input
-                bind:value={search}
-                id="search-field"
-                class="block h-full w-full border-0 py-0 pl-8 pr-0 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm outline-none"
-                placeholder="search by staff name..."
-                type="search"
-                name="search"
-            />
-        </div>
-
-    </div>
-</div>
-<div class="bg-white px-3 rounded-md pb-1">
-    <Filter bind:filters />
-</div>
 
 {#if managed.length}
     {#if !generating_invoices}
@@ -168,6 +123,12 @@
                 <FloatingDate label="End Date" bind:value={end_date} />
             </div>
         </div>
+
+
+        <div class="flex flex-wrap space-x-2 items-center md:flex-no-wrap">
+            <ClientSelector bind:client_id={client_id} clearable />
+        </div>
+
 
         <!-- <LineItems
             bind:this={lineItemElement}
