@@ -27,6 +27,7 @@
     let unbilled_total = 0;
     let selected_total = 0;
     let managed = [];
+    let filteredManaged = [];
     let generating_invoices = false;
 
     let selectedLineItems = [];
@@ -92,12 +93,12 @@
 
     $: {
         if (client_id) {
-            console.log(client_id);
-            managed = managed.filter( (item)  =>
+         
+            filteredManaged = managed.filter( (item)  =>
                             item.ClientId == client_id);
          
-        } else  {
-            managed = managed;
+        } else {
+            filteredManaged = managed;
         }
       
 
@@ -139,7 +140,7 @@
 
         <GroupedLineItems
             bind:this={lineItemElement}
-            line_items={managed}
+            line_items={filteredManaged}
             bind:selected_total
             bind:selectedLineItems
         />
