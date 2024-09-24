@@ -2,6 +2,7 @@
     import { convertMinutesToHoursAndMinutes } from "@shared/utilities.js";
     import BudgetBar from "@shared/BudgetBar.svelte";
     import BudgetBarWeekly from "@shared/BudgetBarWeekly.svelte";
+    import ExpiredServiceAgreementBudgetBar from "@shared/ExpiredServiceAgreementBudgetBar.svelte";
     import { formatDate, timeAgo } from "@shared/utilities.js";
 
     export let service_booking = {};
@@ -33,10 +34,10 @@
         // Parse the dates
         const start = new Date(startDate).getTime();
         const end = new Date(endDate).getTime();
-        const current = new Date().getTime();
+        const current = getDateOnlyTimestamp(new Date());
 
         //Ensure the current date is within the interval
-        if (current < start || current > end) {
+        if (current <= start || current >= end) {
             console.log("Current date is outside the service interval.");
             return 0;
         }
@@ -85,24 +86,35 @@
         return adjustedWeeklyTime;
     }
 
+    function getDateOnlyTimestamp(dateString) {
+        const date = new Date(dateString);
+        return new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
+    }
+
     let isExpired = false;
     $: {
         // Parse the dates
         const start = new Date(service_booking.budget_start_date).getTime();
         const end = new Date(service_booking.service_agreement_end_date).getTime();
-        const current = new Date().getTime();
-
+        const current = getDateOnlyTimestamp(new Date());
+    
         //Ensure the current date is within the interval
-        if (current < start || current > end) {
+        if (current <= start || current >= end) {
             isExpired = true;
         } else {
             isExpired = false;
         }
+
+        console.log('current:', current);
+        console.log('start:', start);
+        console.log('end:', end);
+        console.log('c < s:', current <= start);
+        console.log('c > e:', current >= end);
     }
 </script>
 
 <div class={service_booking.is_active ? "" : "opacity-50"}>
-    {#if service_booking.budget_display == "weekly"}
+    {#if service_booking.budget_display == "weekly" && !isExpired}
         <div class="block w-full">
             <div
                 class="mt-0 p-0 mx-0 sm:flex sm:justify-between"
@@ -121,7 +133,7 @@
                             )}
                         </span>
 
-                        {#if !isExpired && service_booking.adjust_weekly_time}
+                        {#if service_booking.adjust_weekly_time}
                             {#if hoursPerWeek(service_booking.remainingMinutes / 60, new Date(), new Date(service_booking.service_agreement_end_date)) != 0}
                                 <span class="text-xs text-slate-400 ml-1">
                                     ({@html convertMinutesToHoursAndMinutes(
@@ -136,7 +148,7 @@
                                     )} / wk )
                                 </span>
                             {/if}
-                        {:else if !isExpired && hoursPerWeek(service_booking.totalServiceDuration / 60, new Date(service_booking.service_agreement_signed_date), new Date(service_booking.service_agreement_end_date)) > 1}
+                        {:else if hoursPerWeek(service_booking.totalServiceDuration / 60, new Date(service_booking.service_agreement_signed_date), new Date(service_booking.service_agreement_end_date)) > 1}
                             <span class="italic text-xs text-slate-400">
                                 ({@html convertMinutesToHoursAndMinutes(
                                     hoursPerWeek(
@@ -188,6 +200,29 @@
                 {/if}
             {/if}
         </div>
+    {:else if isExpired}
+        <div class="block w-full">
+            <div
+                class="mt-0 p-0 mx-0 sm:flex sm:justify-between"
+                style="line-height:0.8rem"
+            >
+                <div>
+                    <span class="text-slate-800 font-bold"
+                        >{service_booking.code}</span
+                    >
+                    {#if !service_booking.is_active}
+                        - NOT ACTIVE
+                    {/if}
+                </div>
+                <span
+                    class="text-xs text-indigo-300 uppercase hidden sm:inline-block"
+                >
+                    {service_booking.plan_manager_name}
+                </span>
+            </div>
+            <ExpiredServiceAgreementBudgetBar/>
+        </div>
+        
     {:else}
         <div class="block w-full">
             <div
@@ -231,7 +266,7 @@
         </div>
     {/if}
 
-    {#if service_booking.last_session_date}
+    {#if service_booking.last_session_date && !isExpired}
         <div class="px-1 text-xs text-slate-400">
             Last billed {timeAgo(service_booking.last_session_date)}
             {formatDate(service_booking.last_session_date)}
