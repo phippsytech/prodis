@@ -13,7 +13,8 @@
     import { consoleLogs } from "@app/Overlays/stores";
     import { onMount } from "svelte";
     import ClientSelector from "@shared/ClientSelector.svelte";
-  import Client from "@app/Layout/SideBar/Client.svelte";
+    import Client from "@app/Layout/SideBar/Client.svelte";
+    import FloatingCombo from "@shared/PhippsyTech/svelte-ui/forms/FloatingCombo.svelte";
 
 
     let queryParams = getQueryParams();
@@ -27,6 +28,7 @@
     let unbilled_total = 0;
     let selected_total = 0;
     let managed = [];
+    let clients;
     let filteredManaged = [];
     let generating_invoices = false;
 
@@ -38,8 +40,7 @@
         path: [{ url: null, name: "Accounts" }],
     });
 
-    onMount(() => {
-        jspa("/Invoice", "listUnbilled", {}).then((result) => {
+    jspa("/Invoice", "listUnbilled", {}).then((result) => {
             managed = result.result;
             unbilled_total = 0;
             managed.forEach((item) => {
@@ -54,8 +55,18 @@
                 }
                 return a.ClientName > b.ClientName ? 1 : -1;
             });
-        });
-    })
+    });
+
+
+    jspa("/Participant", "listClients", {}).then((result) => {
+        clients = result.result
+        .filter((item) => item.archived != 1) // Filter out archived staff
+        .map((item) => ({
+            label: `${item.client_name}`,
+            value: item.client_id,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
+    });
 
     
 
@@ -96,6 +107,7 @@
                             item.ClientId == client_id);
          
         } else {
+            
             filteredManaged = managed;
         }
       
@@ -124,10 +136,19 @@
         </div>
 
 
-        <div class="flex flex-wrap space-x-2 items-center md:flex-no-wrap">
+        <!-- <div class="flex flex-wrap space-x-2 items-center md:flex-no-wrap">
             <ClientSelector bind:client_id={client_id} clearable />
-        </div>
+         
+            
+        </div> -->
 
+
+        <FloatingCombo
+            label="Clients"
+            items={clients}
+            bind:value={client_id}
+            placeholderText="Select or type name ..."
+        />
 
         <!-- <LineItems
             bind:this={lineItemElement}
