@@ -20,7 +20,8 @@
     let queryParams = getQueryParams();
     let client_id = queryParams.client_id;
     let service_id = queryParams.service_id;
-    $: queryParams = { client_id, service_id };
+    let staff_id = queryParams.staff_id;
+    $: queryParams = { client_id, service_id, staff_id };
 
 
     let start_date = getMonday();
@@ -30,6 +31,7 @@
     let managed = [];
     let clients;
     let services = [];
+    let staffs = [];
     let filteredManaged = [];
     let generating_invoices = false;
 
@@ -80,6 +82,17 @@
         .sort((a, b) => a.label.localeCompare(b.label));
     });
 
+
+    jspa("/Staff", "listStaff", {}).then((result) => {
+        console.log(result.result);
+        staffs = result.result.filter((item) => item.archived != 1) 
+        .map((item) => ({
+            label: `${item.staff_name}`,
+            value: item.id,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
+    });
+
     
 
     function generateInvoices() {
@@ -123,6 +136,11 @@
         if (service_id) {
             filteredManaged = filteredManaged.filter((item) => item.ServiceId == service_id);
         }
+
+           
+        if (staff_id) {
+            filteredManaged = filteredManaged.filter((item) => item.StaffId == staff_id);
+        }
     }
 </script>
 
@@ -137,29 +155,37 @@
      
             <div class="text-sm mb-1 text-slate-400">Filter</div>
 
-            <div class="flex flex-wrap space-x-2 items-center md:space-x-5 md:flex-no-wrap">
-                <div class="w-full md:w-1/5"> 
+            <div class="flex flex-wrap gap-2 items-center">
+                <div class="flex gap-2 flex-none"> 
                     <FloatingDate label="Start Date" bind:value={start_date} />
-                </div>
-                <div class="w-full md:w-1/5">
                     <FloatingDate label="End Date" bind:value={end_date} />
                 </div>
-                <div class="w-full md:w-1/5">
+                <div class="sm:flex-none w-full sm:w-auto min-w-[200px]">
                     <FloatingCombo
                         label="Clients"
                         items={clients}
                         bind:value={client_id}
                         placeholderText="Select or type name ..." />
                 </div>
-                <div class="w-full md:w-1/5">
+                <div class="sm:flex-none w-full sm:w-auto min-w-[270px]">
                     <FloatingCombo
                         label="Services"
                         items={services}
                         bind:value={service_id}
                         placeholderText="Select or type service code ..." />
                 </div>
+                <div class="sm:flex-none w-full sm:w-auto min-w-[270px]"> 
+                    <FloatingCombo
+                        label="Staffs"
+                        items={staffs}
+                        bind:value={staff_id}
+                        placeholderText="Select or type staff name ..."
+                    />
+                </div>
             </div>
         </div>
+
+
 
         <GroupedLineItems
             bind:this={lineItemElement}
