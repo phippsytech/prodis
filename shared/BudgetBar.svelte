@@ -70,9 +70,12 @@
             : 0;
 
     $: remainingMinutes = totalAvailableMinutes - spentMinutes;
+
+
+
 </script>
 
-<div class="flex w-full h-6 bg-indigo-50">
+<div class="flex w-full h-6 {(totalBudget==0)?'bg-red-50':'bg-indigo-50'} ">
     <div
         in:slide|global={{ duration: 500, axis: "x" }}
         class="bg-indigo-600 h-full"
@@ -88,10 +91,10 @@
     <div
         class="absolute font-bold text-white text-sm px-1 {weekly
             ? ''
-            : 'py-0.5'} drop-shadow-[0px_0px_8px_rgba(79,70,229,1)]"
+            : 'py-0.5'} {(totalBudget==0)?'drop-shadow-[0px_0px_8px_rgba(220,38,38,1)]':'drop-shadow-[0px_0px_8px_rgba(79,70,229,1)]'}"
     >
         {#if totalBudget == 0}
-            No budget set.
+            No budget available.
         {:else if spentBudget == 0}
             No budget spent.
         {:else if hourlyRate == 0}

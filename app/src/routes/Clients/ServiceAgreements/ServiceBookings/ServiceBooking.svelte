@@ -94,7 +94,7 @@
     let isExpired = false;
     $: {
         // Parse the dates
-        const start = new Date(service_booking.budget_start_date).getTime();
+        const start = new Date(service_booking.service_agreement_signed_date).getTime();
         const end = new Date(service_booking.service_agreement_end_date).getTime();
         const current = getDateOnlyTimestamp(new Date());
     
@@ -107,8 +107,33 @@
     }
 </script>
 
+    {#if isExpired}
+        <div class="block w-full">
+            <div
+                class="mt-0 p-0 mx-0 sm:flex sm:justify-between"
+                style="line-height:0.8rem"
+            >
+                <div>
+                    <span class="text-slate-800 font-bold"
+                        >{service_booking.code}</span
+                    >
+                    {#if !service_booking.is_active}
+                        - NOT ACTIVE
+                    {/if}
+                </div>
+                <span
+                    class="text-xs text-indigo-300 uppercase hidden sm:inline-block"
+                >
+                    {service_booking.plan_manager_name}
+                </span>
+            </div>
+            <ExpiredServiceAgreementBudgetBar/>
+        </div>
+        
+    {:else}
+       
 <div class={service_booking.is_active ? "" : "opacity-50"}>
-    {#if service_booking.budget_display == "weekly" && !isExpired}
+    {#if service_booking.budget_display == "weekly"}
         <div class="block w-full">
             <div
                 class="mt-0 p-0 mx-0 sm:flex sm:justify-between"
@@ -194,29 +219,6 @@
                 {/if}
             {/if}
         </div>
-    {:else if isExpired}
-        <div class="block w-full">
-            <div
-                class="mt-0 p-0 mx-0 sm:flex sm:justify-between"
-                style="line-height:0.8rem"
-            >
-                <div>
-                    <span class="text-slate-800 font-bold"
-                        >{service_booking.code}</span
-                    >
-                    {#if !service_booking.is_active}
-                        - NOT ACTIVE
-                    {/if}
-                </div>
-                <span
-                    class="text-xs text-indigo-300 uppercase hidden sm:inline-block"
-                >
-                    {service_booking.plan_manager_name}
-                </span>
-            </div>
-            <ExpiredServiceAgreementBudgetBar/>
-        </div>
-        
     {:else}
         <div class="block w-full">
             <div
@@ -260,10 +262,12 @@
         </div>
     {/if}
 
-    {#if service_booking.last_session_date && !isExpired}
+    {#if service_booking.last_session_date}
         <div class="px-1 text-xs text-slate-400">
             Last billed {timeAgo(service_booking.last_session_date)}
             {formatDate(service_booking.last_session_date)}
         </div>
     {/if}
 </div>
+    {/if}
+
