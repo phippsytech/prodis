@@ -20,7 +20,8 @@
     let queryParams = getQueryParams();
     let client_id = queryParams.client_id;
     let service_id = queryParams.service_id;
-    $: queryParams = { client_id, service_id };
+    let staff_id = queryParams.staff_id;
+    $: queryParams = { client_id, service_id, staff_id };
 
 
     let start_date = getMonday();
@@ -30,6 +31,7 @@
     let managed = [];
     let clients;
     let services = [];
+    let staffs = [];
     let filteredManaged = [];
     let generating_invoices = false;
 
@@ -80,6 +82,17 @@
         .sort((a, b) => a.label.localeCompare(b.label));
     });
 
+
+    jspa("/Staff", "listStaff", {}).then((result) => {
+        console.log(result.result);
+        staffs = result.result.filter((item) => item.archived != 1) 
+        .map((item) => ({
+            label: `${item.staff_name}`,
+            value: item.id,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
+    });
+
     
 
     function generateInvoices() {
@@ -123,6 +136,11 @@
         if (service_id) {
             filteredManaged = filteredManaged.filter((item) => item.ServiceId == service_id);
         }
+
+           
+        if (staff_id) {
+            filteredManaged = filteredManaged.filter((item) => item.StaffId == staff_id);
+        }
     }
 </script>
 
@@ -144,7 +162,7 @@
                 <div class="w-full md:w-1/5">
                     <FloatingDate label="End Date" bind:value={end_date} />
                 </div>
-                <div class="w-full md:w-1/5">
+                <div class="w-full md:w-2/5">
                     <FloatingCombo
                         label="Clients"
                         items={clients}
@@ -158,8 +176,18 @@
                         bind:value={service_id}
                         placeholderText="Select or type service code ..." />
                 </div>
+                <div class="w-full md:w-1/5"> 
+                    <FloatingCombo
+                        label="Staffs"
+                        items={staffs}
+                        bind:value={staff_id}
+                        placeholderText="Select or type staff name ..."
+                    />
+                </div>
             </div>
         </div>
+
+
 
         <GroupedLineItems
             bind:this={lineItemElement}
