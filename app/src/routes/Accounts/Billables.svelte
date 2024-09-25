@@ -113,20 +113,18 @@
 
 
     $: {
+        filteredManaged = managed;
+
+       
         if (client_id) {
-         
-            filteredManaged = managed.filter( (item)  =>
-                            item.ClientId == client_id);
-         
-        } else if (service_id)  {
-            filteredManaged = managed.filter( (item)  =>
-                item.ServiceId == service_id);
-        }else {
-            
-            filteredManaged = managed;
+            filteredManaged = filteredManaged.filter((item) => item.ClientId == client_id);
         }
-      
-	}
+
+       
+        if (service_id) {
+            filteredManaged = filteredManaged.filter((item) => item.ServiceId == service_id);
+        }
+    }
 </script>
 
 <QueryManager
