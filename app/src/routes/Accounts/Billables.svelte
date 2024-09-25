@@ -115,12 +115,11 @@
     $: {
         filteredManaged = managed;
 
-       
         if (client_id) {
             filteredManaged = filteredManaged.filter((item) => item.ClientId == client_id);
         }
 
-       
+    
         if (service_id) {
             filteredManaged = filteredManaged.filter((item) => item.ServiceId == service_id);
         }
