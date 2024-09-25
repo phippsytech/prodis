@@ -7,10 +7,17 @@
     import FloatingSelect from "@shared/PhippsyTech/svelte-ui/forms/FloatingSelect.svelte";
     import Button from "@shared/PhippsyTech/svelte-ui/Button.svelte";
     import StaffSelector from "@shared/StaffSelector.svelte";
+    import FloatingDate from "@shared/PhippsyTech/svelte-ui/forms/FloatingDate.svelte";
+    import RadioButtonGroup from "@shared/PhippsyTech/svelte-ui/forms/RadioButtonGroup.svelte";
 
     let training = {};
 
-    training.status = "open";
+    // training.status = "open";
+    
+    // training.date = new Date().toISOString().split("T")[0]; 
+    // training.completion_date = null; 
+    // training.has_evidence = false; 
+     training.staff_ids = [1, 2, 3]; 
 
     let staff = [];
     let staffList = [];
@@ -29,7 +36,7 @@
         })
         .catch(() => {});
 
-    training.staff_ids = null;
+    // training.staff_ids = null;
 
     let trainingStatusSelectElement = null;
 
@@ -41,7 +48,7 @@
     function addTraining() {
         jspa("/Register/Training", "addTraining", training)
             .then((result) => {
-                let training_id = result.result.id;
+                 let training_id = result.result.id;
                 push("/registers/trainings/" + training_id);
             })
             .catch(() => {});
@@ -58,16 +65,39 @@
     clearable /> -->
 
 <FloatingInput
-    bind:value={training.type}
-    label="Type of training"
-    placeholder="Type of training"
+    bind:value={training.course_title}
+    label="Course Title"
+    placeholder="Title of the training course"
 />
-<FloatingTextArea
+
+<FloatingInput
+    bind:value={training.trainer}
+    label="Trainer"
+    placeholder="John Doe"
+/>
+
+<FloatingDate label="Training Date" bind:value={training.date} />
+
+<label class="block mb-2">
+    <span class="text-xs opacity-50 p-0 m-0 block mb-2">Training Status</span>
+    <RadioButtonGroup
+        columns={2}
+        options={[
+            { option: "Completed", value: "completed" },
+            { option: "In Progress", value: "in_progress" },
+        ]}
+        bind:value={training.status}
+    />
+</label>
+
+<!-- <FloatingTextArea
     bind:value={training.description}
     label="Description"
     placeholder="Describe the training"
     style="height:250px"
-/>
+/> -->
+
+<FloatingDate label="Training Completion Date" bind:value={training.completion_date} />
 
 <div class="flex justify-between">
     <span></span>

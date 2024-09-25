@@ -22,12 +22,24 @@ class Training extends NewCustomModel
 
     public function create($data)
     {
-        $bean = parent::create($data);
-        // fetch
-        // $data[staf_ids]
-        // loop through staff_ids
+        try {
+            $bean = parent::create($data);
+            if (is_array($data['staff_ids']) && !empty($data['staff_ids'])) {
+                foreach ($data['staff_ids'] as $staff_id) {
+                    if (is_numeric($staff_id)) {
+                        $trainingAssignee = R::dispense('trainingassignees');  
+                        $trainingAssignee->training_id = $bean->id;   
+                        $trainingAssignee->staff_id = $staff_id;               
+                        R::store($trainingAssignee);  
+                    }
+                }
+            }
 
-        return $bean;
+            R::store($bean);
+            return $bean;
+        } catch (\Exception $e) {
+            return $e;
+        }
     }
 
     public function update($data)

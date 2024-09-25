@@ -26,8 +26,6 @@
     BreadcrumbStore.set({ path: [{ url: "/registers", name: "Registers" }] });
 </script>
 
-<!--            
-    <Breadcrumbs path={breadcrumbs_path} target="training Register" action={breadcrumbs_action} /> -->
 <div class="sm:flex sm:items-center mb-4">
     <div class="sm:flex-auto">
         <div
@@ -42,8 +40,7 @@
             on:click={() => push("/registers/trainings/add")}
             type="button"
             class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            >Add training</button
-        >
+        >Add training</button>
     </div>
 </div>
 
@@ -52,27 +49,21 @@
 </h1>
 <ul class="bg-white rounded-lg border border-gray-200 w-full text-gray-900">
     {#each trainings as training, index (training.id)}
-        {#if training.status == "open"}
+        {#if training.status == "in_progress"}
             <li
                 in:slide={{ duration: 200 }}
                 out:slide|local={{ duration: 200 }}
                 on:click={() => push("/registers/trainings/" + training.id)}
-                class="px-4 py-2 hover:bg-blue-700 hover:text-white focus:outline-none focus:ring-0 focus:bg-gray-200 focus:text-gray-600 transition duration-500 cursor-pointer {training.length -
-                    1 ==
-                index
-                    ? 'rounded-b-lg'
-                    : ''}border-b border-gray-200 w-full {training.archived == 1
-                    ? 'text-gray-400 cursor-default'
-                    : ''}"
+                class="px-4 py-2 hover:bg-blue-700 hover:text-white focus:outline-none focus:ring-0 focus:bg-gray-200 focus:text-gray-600 transition duration-500 cursor-pointer {training.length - 1 == index ? 'rounded-b-lg' : ''} border-b border-gray-200 w-full {training.archived == 1 ? 'text-gray-400 cursor-default' : ''}"
             >
                 <div class="justify-between flex">
                     <span class="text-xs">{training.date_identified}</span>
                     <span class="text-xs">#{training.id}</span>
                 </div>
-
                 <div>
-                    <span class="font-bold">{training.type}</span><br />
-                    <span class="text-sm">{training.description}</span>
+                    <span class="font-bold">{training.course_title}</span><br />
+                    <span class="text-sm">Trainer: {training.trainer}</span><br />
+                    <span class="text-sm">Status: {training.status}</span>
                 </div>
             </li>
         {/if}
@@ -84,26 +75,22 @@
 </h1>
 <ul class="bg-white rounded-lg border border-gray-200 w-full text-gray-900">
     {#each trainings as training, index (training.id)}
-        {#if training.status == "closed"}
+        {#if training.status == "completed"}
             <li
                 in:slide={{ duration: 200 }}
                 out:slide|local={{ duration: 200 }}
                 on:click={() => push("/registers/trainings/" + training.id)}
-                class="px-4 py-2 hover:bg-blue-700 hover:text-white focus:outline-none focus:ring-0 focus:bg-gray-200 focus:text-gray-600 transition duration-500 cursor-pointer {training.length -
-                    1 ==
-                index
-                    ? 'rounded-b-lg'
-                    : ''}border-b border-gray-200 w-full {training.archived == 1
-                    ? 'text-gray-400 cursor-default'
-                    : ''}"
+                class="px-4 py-2 hover:bg-blue-700 hover:text-white focus:outline-none focus:ring-0 focus:bg-gray-200 focus:text-gray-600 transition duration-500 cursor-pointer {training.length - 1 == index ? 'rounded-b-lg' : ''} border-b border-gray-200 w-full {training.archived == 1 ? 'text-gray-400 cursor-default' : ''}"
             >
                 <div class="justify-between flex">
                     <span class="text-xs">{training.date_identified}</span>
                     <span class="text-xs">#{training.id}</span>
                 </div>
                 <div>
-                    <span class="font-bold">{training.type}</span><br />
-                    <span class="text-sm">{training.resolution}</span>
+                    <span class="font-bold">{training.course_title}</span><br />
+                    <span class="text-sm">Trainer: {training.trainer}</span><br />
+                    <span class="text-sm">Completion Date: {training.completion_date ? training.completion_date : 'N/A'}</span><br />
+                    <span class="text-sm">Status: {training.status}</span>
                 </div>
             </li>
         {/if}
