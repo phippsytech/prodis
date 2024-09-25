@@ -19,6 +19,7 @@ class Client extends NewCustomModel
             'date_of_birth' => [v::optional(v::stringType())],  // int(10) unsigned
             'phone_number' => [v::optional(v::stringType())],
             'ndis_number' => [v::stringType()],
+            'ndis_plan_start_date' => [v::optional(v::stringType())],
             'ndis_plan_end_date' => [v::optional(v::stringType())],
             'mailing_address' => [v::optional(v::stringType())],  // optional
             'service_provision_location' => [v::optional(v::stringType())],
