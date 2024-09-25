@@ -4,6 +4,8 @@
   import { getDaysUntilDate } from "@shared/utilities.js";
   import { BreadcrumbStore, StafferStore } from "@shared/stores.js";
   import { push } from "svelte-spa-router";
+  import { slide } from "svelte/transition";
+  import { flip } from "svelte/animate";
 
   $: stafferStore = $StafferStore;
 
@@ -34,58 +36,45 @@
   }
 </script>
 
-<div class="flex sm:flex-row flex-col sm:items-center mt-6 mb-1">
-  <h3 class="text-slate-800 font-bold mx-2">Your Tasks</h3>
-</div>
+{#if taskList.length > 0}
+  <div class="flex sm:flex-row flex-col sm:items-center mt-6 mb-1">
+    <h3 class="text-slate-800 font-bold mx-2">Your Tasks</h3>
+  </div>
 
-<div
-  class="bg-white rounded-lg border border-indigo-100 w-full text-slate-800 p-4"
->
-  {#if taskList.length > 0}
-    <table class="w-full">
-      <tr class="border-b-2">
-        <th class="text-left">Task</th>
-        <th class="text-right">Due Date</th>
-      </tr>
+  <ul
+    class="bg-white rounded-lg border border-indigo-100 w-full text-slate-900"
+  >
+    {#each taskList as task, index (index)}
+      <li
+        animate:flip={{ duration: 200 }}
+        in:slide={{ duration: 200 }}
+        out:slide|local={{ duration: 200 }}
+        class="px-4 py-2 hover:bg-indigo-50/50 hover:text-indigo-600 focus:outline-none focus:ring-0 focus:bg-indigo-50/50 focus:text-slate-600 {isOverDue(
+          task.due_date
+        )
+          ? 'text-red-800'
+          : ''} transition duration-500 cursor-pointer {taskList.length - 1 ==
+        index
+          ? 'rounded-b-lg'
+          : ''} border-b border-indigo-100 w-full
 
-      {#each taskList as task, index (index)}
-        <tr
-          class="border-b hover:bg-blue-700 hover:text-white focus:outline-none focus:ring-0 focus:bg-gray-200 focus:text-gray-600 transition duration-500 cursor-pointer {isOverDue(
-            task.due_date
-          )
-            ? 'bg-red-500 text-white'
-            : ''}"
-          on:click={() => push("/tasks/" + task.id)}
-        >
-          <td class="font-semibold p-2">{task.title}</td>
-          <td class="text-right"
-            >{task.due_date ? getDaysUntilDate(task.due_date) : ""}</td
-          >
-        </tr>
-      {/each}
-    </table>
-  {:else}
-    <div class="text-sm text-center text-slate-500 p-4 pt-2">
-      <div
-        class="flex justify-center items-center h-8 w-8 text-slate-300 mx-auto m-2"
+        {isOverDue(task.due_date) ? 'bg-red-50' : ''}
+                  "
       >
-        <svg
-          data-slot="icon"
-          fill="none"
-          stroke-width="1.5"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-          aria-hidden="true"
+        <a
+          href="/#/tasks/{task.id}"
+          class="flex justify-between items-start text-sm gap-x-4"
         >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M18.364 18.364A9 9 0 0 0 5.636 5.636m12.728 12.728A9 9 0 0 1 5.636 5.636m12.728 12.728L5.636 5.636"
-          ></path>
-        </svg>
-      </div>
-      <div>No Tasks found</div>
-    </div>
-  {/if}
-</div>
+          <div>
+            {task.title}
+          </div>
+          {#if task.due_date}
+            <div class="whitespace-nowrap text-xs">
+              Due {task.due_date ? getDaysUntilDate(task.due_date) : ""}
+            </div>
+          {/if}
+        </a>
+      </li>
+    {/each}
+  </ul>
+{/if}
