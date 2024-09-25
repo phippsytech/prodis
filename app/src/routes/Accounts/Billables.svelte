@@ -137,8 +137,8 @@
      
             <div class="text-sm mb-1 text-slate-400">Filter</div>
 
-            <div class="flex flex-wrap space-x-2 items-center md:space-x-4 md:flex-no-wrap">
-                <div class="w-full md:w-1/5"> <!-- Full width on mobile, 1/4 on desktop -->
+            <div class="flex flex-wrap space-x-2 items-center md:space-x-5 md:flex-no-wrap">
+                <div class="w-full md:w-1/5"> 
                     <FloatingDate label="Start Date" bind:value={start_date} />
                 </div>
                 <div class="w-full md:w-1/5">
