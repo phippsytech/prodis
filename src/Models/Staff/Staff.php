@@ -1,4 +1,5 @@
 <?php
+
 namespace NDISmate\Models;
 
 use Psr\Http\Message\ResponseInterface;
@@ -42,7 +43,6 @@ class Staff extends BaseModel
             'xero_employee_ref' => [v::stringType()],
             'xero_super_membership_ref' => [v::stringType()],
             'pin' => [v::stringType()],
-            'google_folder' => [v::stringType()],
         ]);
 
         // action, class method, guard, roles
@@ -63,7 +63,6 @@ class Staff extends BaseModel
             ['restoreStaffer', 'restore', true, ['admin']],
             ['updatePin', 'updatePin', true, ['house']],
             ['checkPin', 'checkPin', true, ['house']],
-            ['createGoogleDriveFolders', 'createGoogleDriveFolders', false, ['admin']],
         ];
 
         return $this->invoke($request, $response, $args, $this);
@@ -97,11 +96,7 @@ class Staff extends BaseModel
         return ['http_code' => 200, 'result' => $bean];
     }
 
-    // bulk create google drive folders for participants in the connected directory
-    function createGoogleDriveFolders($data)
-    {
-        return (new \NDISmate\Models\Staff\CreateGoogleDriveFolders)($data);
-    }
+
 
     function addStaffer($data)
     {

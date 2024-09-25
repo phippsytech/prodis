@@ -1,4 +1,5 @@
 <?php
+
 namespace NDISmate\Models;
 
 use \RedBeanPHP\R as R;
@@ -6,6 +7,7 @@ use NDISmate\Models\ActivityLog;
 use NDISmate\CORE\NewCustomModel;
 use Respect\Validation\Validator as v;
 use NDISmate\Utilities\LogActivity;
+
 class Client extends NewCustomModel
 {
     public function __construct($bean = null)
@@ -30,7 +32,6 @@ class Client extends NewCustomModel
             'sil_enabled' => [v::boolVal()],
             'sil_email' => [v::optional(v::stringType())],
             'sil_folder' => [v::optional(v::stringType())],
-            'google_folder' => [v::optional(v::stringType())],
             'notes' => [v::optional(v::stringType())],
         ];
     }
@@ -57,7 +58,7 @@ class Client extends NewCustomModel
             'id' => $data['id'],
             'on_hold' => true,
         ]);
-        
+
         // log on hold participant
         LogActivity::log($data['id'], 'on-hold', 'participant', $data['reason'], $guard->user_id);
     }
@@ -68,7 +69,7 @@ class Client extends NewCustomModel
             'id' => $data['id'],
             'on_hold' => false,
         ]);
-        
+
         // log resumed participant
         LogActivity::log($data['id'], 'resumed', 'participant', $data['reason'], $guard->user_id);
     }
