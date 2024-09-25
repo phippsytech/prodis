@@ -25,8 +25,6 @@
             console.warn("Invalid items structure. Each item must have a 'label' and 'value' property.");
         }
     });
-
-    $: console.log("Selected values in FloatingMultiCombo:", values);  // Debugging log for the selected values
 </script>
 
 {#if readOnly}

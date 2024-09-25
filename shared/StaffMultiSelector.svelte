@@ -22,8 +22,6 @@
         .catch((err) => {
             console.error("Error fetching staff:", err);
         });
-
-    $: console.log("Selected staff IDs:", staff_id);  // Track selected IDs for debugging
 </script>
 
 <FloatingMultiCombo
