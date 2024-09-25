@@ -1,7 +1,6 @@
 <script>
     import { onDestroy, createEventDispatcher } from "svelte";
-
-    import FloatingSelect from "@shared/PhippsyTech/svelte-ui/forms/NewFloatingSelect.svelte";
+    import FloatingCombo from "@shared/PhippsyTech/svelte-ui/forms/FloatingCombo.svelte"; // Keep only FloatingCombo
     import { jspa } from "@shared/jspa.js";
     import { StafferStore, RolesStore } from "@shared/stores.js";
     import { haveCommonElements } from "@shared/utilities.js";
@@ -19,7 +18,6 @@
 
     const unsubscribe = StafferStore.subscribe(($staffer) => {
         if ($staffer.id && staff_id === null) {
-            // Check if staff_id prop is null
             staff_id = $staffer.id;
             loadClients(staff_id);
         }
@@ -51,35 +49,19 @@
 
         jspa(endpoint, action, { staff_id: staff_id })
             .then((result) => {
-                clientList = []; // clear the clientList
+                clientList = []; 
                 clients = result.result;
-
-                let selected = false;
 
                 clients.forEach((client) => {
                     let options = {
-                        option: client.client_name,
+                        label: client.client_name, 
                         value: client.client_id,
-                        selected: false,
                     };
-
-                    if (client.client_id == client_id) {
-                        options.selected = true;
-                        selected = true;
-                    }
 
                     if (client.archived != 1) clientList.push(options);
                 });
 
-                // if (!selected) client_id = null; // unset the selected client_id
-
-                clientList.sort(function (a, b) {
-                    const nameA = a.option.toUpperCase(); // ignore upper and lowercase
-                    const nameB = b.option.toUpperCase(); // ignore upper and lowercase
-                    if (nameA < nameB) return -1;
-                    if (nameA > nameB) return 1;
-                    return 0; // names must be equal
-                });
+                clientList.sort((a, b) => a.label.localeCompare(b.label));
             })
             .catch((error) => {});
     }
@@ -97,13 +79,12 @@
     }
 </script>
 
-<FloatingSelect
-    on:change={handleChange}
-    bind:value={client_id}
+
+<FloatingCombo
     label="Client"
-    instruction="Choose client"
-    options={clientList}
-    hideValidation={true}
+    items={clientList}
+    bind:value={client_id}
+    placeholderText="Select or type client name ..."
+    on:change={handleChange}
     {readOnly}
-    {clearable}
 />

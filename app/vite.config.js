@@ -27,7 +27,7 @@ export default defineConfig({
   server: {
     port: 5173,
     watch: {
-      usePolling: true,
+      usePolling: false,
       interval: 1000, // Set a higher interval (milliseconds)
     },
   },

@@ -1,7 +1,9 @@
 <?php
+
 namespace NDISmate\Services\ParticipantServiceBooking;
 
 use RedBeanPHP\R as R;
+use RedBeanPHP\RedException;
 
 class DuplicateParticipantServiceBooking
 {

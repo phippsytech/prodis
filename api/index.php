@@ -116,6 +116,7 @@ $app->post('/Trip', new ControllerFactory(\NDISmate\Controllers\TripController::
 $app->post('/Utilities', new ControllerFactory(\NDISmate\Controllers\UtilityController::class));
 $app->post('/Storage', new ControllerFactory(\NDISmate\Controllers\ObjectStorageController::class));
 
+
 // CONVERSION IN PROGRESS
 $app->post('/User', new ControllerFactory(\NDISmate\Controllers\UserController::class));
 $app->post('/User/Participant', new ControllerFactory(\NDISmate\Controllers\UserParticipantController::class));
@@ -123,8 +124,6 @@ $app->post('/User/Participant', new ControllerFactory(\NDISmate\Controllers\User
 // OTHER ROUTES
 /* these routes have NOT been updated to the new structure */
 $app->post('/Billing', new ControllerFactory(\NDISmate\Models\Billing::class));
-$app->post('/Client/Document', new ControllerFactory(\NDISmate\Models\Client\Document::class));
-
 
 /* new routes */
 
@@ -135,7 +134,6 @@ $app->post('/Invoice', new ControllerFactory(\NDISmate\Models\Invoice::class));
 $app->post('/Invoice/NDIA/PaymentRequestStatus', new ControllerFactory(\NDISmate\Models\Invoice\NDIA\PaymentRequestStatus::class));
 $app->post('/Invoice/NDIA/Remittance', new ControllerFactory(\NDISmate\Models\Invoice\NDIA\Remittance::class));
 $app->post('/MeetingNote', new ControllerFactory(\NDISmate\Models\MeetingNote::class));
-$app->post('/MeetingNote/Document', new ControllerFactory(\NDISmate\Models\MeetingNote\Document::class));
 $app->post('/Message', new ControllerFactory(\NDISmate\Models\Message\Controller::class));
 $app->post('/Payroll/Leave', new ControllerFactory(\NDISmate\Models\Payroll\Leave\Controller::class));
 $app->post('/Payroll/Leave/LeaveRequest', new ControllerFactory(\NDISmate\Models\Payroll\Leave\LeaveRequest::class));
@@ -161,7 +159,6 @@ $app->post('/SIL/Payrun', new ControllerFactory(\NDISmate\Models\SIL\Payrun\Cont
 $app->post('/Staff', new ControllerFactory(\NDISmate\Models\Staff::class));
 $app->post('/Staff/Schedule', new ControllerFactory(\NDISmate\Models\Staff\Schedule\Controller::class));
 
-$app->post('/Staff/Document', new ControllerFactory(\NDISmate\Models\Staff\Document::class));
 $app->post('/Staff/Team', new ControllerFactory(\NDISmate\Models\Staff\Team::class));
 $app->post('/Tickets', new ControllerFactory(\NDISmate\Models\Tickets\Controller::class));
 $app->post('/TimeLog', new ControllerFactory(\NDISmate\Models\TimeLog::class));
@@ -170,9 +167,6 @@ $app->post('/Xero/Payroll', new ControllerFactory(\NDISmate\Xero\Payroll\Control
 $app->post('/Xero/Payroll/Migrate', new ControllerFactory(\NDISmate\Xero\Payroll\Migrate\Controller::class));  // TODO: improve response speed
 
 // ## DISABLED ENDPOINTS ##
-// $app->get('/Google', new ControllerFactory(\NDISmate\GoogleAPI\Controller::class));
-// $app->post('/Google', new ControllerFactory(\NDISmate\GoogleAPI\Controller::class));
-// $app->post('/Google/SharedDrive', new ControllerFactory(\NDISmate\GoogleAPI\SharedDrive\Controller::class));
 
 // $app->post('/SIL/RosterOfCare', new ControllerFactory(\NDISmate\Models\SIL\RosterOfCare::class));
 // $app->post('/SIL/RosterOfCare/Shift', new ControllerFactory(\NDISmate\Models\SIL\RosterOfCare\Shift::class));
@@ -192,7 +186,7 @@ $bufferMiddleware = new RequestBodyBufferMiddleware(16 * 1024 * 1024); // Max 16
 $parserMiddleware = new RequestBodyParserMiddleware();
 
 // Create ReactPHP HTTP server
-$server = new ReactServer($streamingMiddleware,$limitMiddleware,$bufferMiddleware,$parserMiddleware,function (Request $request) use ($app) {
+$server = new ReactServer($streamingMiddleware, $limitMiddleware, $bufferMiddleware, $parserMiddleware, function (Request $request) use ($app) {
 
     try {
         $slimResponse = $app->handle($request);

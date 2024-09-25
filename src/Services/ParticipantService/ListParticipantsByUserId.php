@@ -4,6 +4,7 @@ namespace NDISmate\Services\ParticipantService;
 
 use RedBeanPHP\R as R;
 use RedBeanPHP\RedException;
+use NDISmate\Utilities\ConvertFieldsToBoolean;
 
 class ListParticipantsByUserId
 {
@@ -42,7 +43,10 @@ class ListParticipantsByUserId
                 [':user_id' => $user_id]
             );
 
+            
+            $beans = (new ConvertFieldsToBoolean)($beans, ['on_hold']);
             return $beans;
+            
         } catch (RedException $e) {
             // Handle RedBeanPHP specific exceptions
             throw new \Exception('Error executing query: ' . $e->getMessage());

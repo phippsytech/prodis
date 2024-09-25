@@ -63,13 +63,12 @@ class CorsMiddleware
             'https://app.prodis.staging.phippsy.tech',
             'https://crm.crystelcare.com.au',
             'https://crystelcare.com.au',
-            
             'https://app.prodis.phippsy.phippsy.tech',
             'https://app.prodis.santos.phippsy.tech',
             'https://app.prodis.babasa.phippsy.tech',
             'https://app.prodis.pabustan.phippsy.tech',
 
-            
+
         ]) || $this->anon) {
             $origin = $http_origin;
         }

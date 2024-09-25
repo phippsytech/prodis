@@ -9,10 +9,7 @@ class GetEmployees
     {
         $where = 'Status=="ACTIVE"';
 
-        $expiryDateTime = new \DateTime();
-        $expiryDateTime->setTime(0, 0, 0);
-
-        $jsonData = (new \NDISmate\Cache\Retrieve)('xeroEmployees', $expiryDateTime);
+        $jsonData = (new \NDISmate\Cache\Retrieve)('xeroEmployees');
 
         if (empty($jsonData)) {  // Cache doesn't exist, fetch data
             try {
@@ -20,8 +17,9 @@ class GetEmployees
 
                 $jsonData = json_encode($apiResponse);
 
+                $expiryInSeconds = 86400 ;
                 // Write JSON data to Cache
-                $cache = (new \NDISmate\Cache\Store)('xeroEmployees', $jsonData);
+                $cache = (new \NDISmate\Cache\Store)('xeroEmployees', $jsonData, $expiryInSeconds);
             } catch (\XeroAPI\XeroPHP\ApiException $e) {
                 $error = json_decode($e->getResponseBody(), true);
                 return ['http_code' => 400, 'error' => $error];
