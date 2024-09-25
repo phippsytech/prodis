@@ -19,8 +19,8 @@
 
     let queryParams = getQueryParams();
     let client_id = queryParams.client_id;
- 
-    $: queryParams = { client_id };
+    let service_id = queryParams.service_id;
+    $: queryParams = { client_id, service_id };
 
 
     let start_date = getMonday();
@@ -29,6 +29,7 @@
     let selected_total = 0;
     let managed = [];
     let clients;
+    let services = [];
     let filteredManaged = [];
     let generating_invoices = false;
 
@@ -68,6 +69,17 @@
         .sort((a, b) => a.label.localeCompare(b.label));
     });
 
+
+    jspa("/Service", "listServices", {}).then((result) => {
+        console.log(result.result);
+        services = result.result.filter((item) => item.archived != 1) 
+        .map((item) => ({
+            label: `${item.code}`,
+            value: item.id,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
+    });
+
     
 
     function generateInvoices() {
@@ -101,18 +113,17 @@
 
 
     $: {
-        if (client_id) {
-         
-            filteredManaged = managed.filter( (item)  =>
-                            item.ClientId == client_id);
-         
-        } else {
-            
-            filteredManaged = managed;
-        }
-      
+        filteredManaged = managed;
 
-	}
+        if (client_id) {
+            filteredManaged = filteredManaged.filter((item) => item.ClientId == client_id);
+        }
+
+    
+        if (service_id) {
+            filteredManaged = filteredManaged.filter((item) => item.ServiceId == service_id);
+        }
+    }
 </script>
 
 <QueryManager
@@ -122,40 +133,33 @@
 
 {#if managed.length}
     {#if !generating_invoices}
-        <div class="bg-slate-100 px-3 pt-2 pb-4 mb-2 rounded-md">
-            <h1 class="text-indigo-900 text-lg font-bold mt-0 mb-2">
-                Select billables to invoice
-            </h1>
+        <div class="bg-slate-100 px-3 pt-2 pb-4 mb- rounded-md">
+     
+            <div class="text-sm mb-1 text-slate-400">Filter</div>
 
-            <div class="text-sm mb-1 text-slate-400">Billing Period</div>
-
-            <div class="flex flex-wrap space-x-2 items-center md:flex-no-wrap">
-                <FloatingDate label="Start Date" bind:value={start_date} />
-                <FloatingDate label="End Date" bind:value={end_date} />
+            <div class="flex flex-wrap space-x-2 items-center md:space-x-5 md:flex-no-wrap">
+                <div class="w-full md:w-1/5"> 
+                    <FloatingDate label="Start Date" bind:value={start_date} />
+                </div>
+                <div class="w-full md:w-1/5">
+                    <FloatingDate label="End Date" bind:value={end_date} />
+                </div>
+                <div class="w-full md:w-1/5">
+                    <FloatingCombo
+                        label="Clients"
+                        items={clients}
+                        bind:value={client_id}
+                        placeholderText="Select or type name ..." />
+                </div>
+                <div class="w-full md:w-1/5">
+                    <FloatingCombo
+                        label="Services"
+                        items={services}
+                        bind:value={service_id}
+                        placeholderText="Select or type service code ..." />
+                </div>
             </div>
         </div>
-
-
-        <!-- <div class="flex flex-wrap space-x-2 items-center md:flex-no-wrap">
-            <ClientSelector bind:client_id={client_id} clearable />
-         
-            
-        </div> -->
-
-
-        <FloatingCombo
-            label="Clients"
-            items={clients}
-            bind:value={client_id}
-            placeholderText="Select or type name ..."
-        />
-
-        <!-- <LineItems
-            bind:this={lineItemElement}
-            line_items={managed}
-            bind:selected_total
-            bind:selectedLineItems
-        /> -->
 
         <GroupedLineItems
             bind:this={lineItemElement}
