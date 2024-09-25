@@ -4,6 +4,7 @@ namespace NDISmate\Controllers;
 
 use NDISmate\CORE\BaseController;
 use NDISmate\Models\Register\Training;
+use NDISmate\Models\Register\Training\ListTraining;
 
 final class TrainingController extends BaseController
 {
@@ -12,6 +13,7 @@ final class TrainingController extends BaseController
         $this->controller = [
             'addTraining' => [new Training, 'create', true, []],
             'updateTraining' => [new Training, 'update', true, []],
+            'listTrainings' => [[new ListTraining, null, true, []]],
         ];
     }
 }
