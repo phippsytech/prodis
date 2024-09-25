@@ -155,28 +155,26 @@
      
             <div class="text-sm mb-1 text-slate-400">Filter</div>
 
-            <div class="flex flex-wrap space-x-2 items-center md:space-x-5 md:flex-no-wrap">
-                <div class="w-full md:w-1/5"> 
+            <div class="flex flex-wrap gap-2 items-center">
+                <div class="flex gap-2 flex-none"> 
                     <FloatingDate label="Start Date" bind:value={start_date} />
-                </div>
-                <div class="w-full md:w-1/5">
                     <FloatingDate label="End Date" bind:value={end_date} />
                 </div>
-                <div class="w-full md:w-2/5">
+                <div class="sm:flex-none w-full sm:w-auto min-w-[200px]">
                     <FloatingCombo
                         label="Clients"
                         items={clients}
                         bind:value={client_id}
                         placeholderText="Select or type name ..." />
                 </div>
-                <div class="w-full md:w-1/5">
+                <div class="sm:flex-none w-full sm:w-auto min-w-[270px]">
                     <FloatingCombo
                         label="Services"
                         items={services}
                         bind:value={service_id}
                         placeholderText="Select or type service code ..." />
                 </div>
-                <div class="w-full md:w-1/5"> 
+                <div class="sm:flex-none w-full sm:w-auto min-w-[270px]"> 
                     <FloatingCombo
                         label="Staffs"
                         items={staffs}
