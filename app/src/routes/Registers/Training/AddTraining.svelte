@@ -6,6 +6,7 @@
     import FloatingTextArea from "@shared/PhippsyTech/svelte-ui/forms/FloatingTextArea.svelte";
     import FloatingSelect from "@shared/PhippsyTech/svelte-ui/forms/FloatingSelect.svelte";
     import Button from "@shared/PhippsyTech/svelte-ui/Button.svelte";
+    import StaffSelector from "@shared/StaffSelector.svelte";
 
     let training = {};
 
@@ -28,14 +29,7 @@
         })
         .catch(() => {});
 
-    training.staff_id = null;
-
-    // get staff id of logged in user
-    jspa("/Staff", "getMyStaffId", {})
-        .then((result) => {
-            training.staff_id = result.result.id;
-        })
-        .catch(() => {});
+    training.staff_ids = null;
 
     let trainingStatusSelectElement = null;
 
@@ -52,17 +46,16 @@
             })
             .catch(() => {});
     }
+    // expected payload for staff
+    // training.staff_ids = [1, 2, 3];
 </script>
 
-<FloatingSelect
-    bind:this={staffSelectElement}
-    bind:value={training.staff_id}
-    bind:option={training.staff_id}
-    label="Who is reporting this training"
-    instruction="Choose staffer"
-    options={staffList}
-    hideValidation={true}
-/>
+
+
+<!-- <StaffSelector 
+    bind:staff_id={training.staff_id} 
+    label="Assignees"
+    clearable /> -->
 
 <FloatingInput
     bind:value={training.type}
