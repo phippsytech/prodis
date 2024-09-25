@@ -44,6 +44,10 @@
     clients = [];
     clientList = [];
 
+
+    const today = new Date().toISOString().split('T')[0]; // Get current date in YYYY-MM-DD format
+
+
     jspa("/Client/Staff", "listStaffClientsByStaffId", {
       staff_id: staff_id,
     }).then((result) => {
@@ -56,8 +60,16 @@
           }).then((result) => {
             // filter out inactive services
             const filteredResult = result.result.filter(
-              (service) => service.is_active === true
+              (service) => {
+                return (
+                  service.is_active === true &&
+            service.service_agreement_end_date &&
+            service.service_agreement_end_date >= today
+              );
+              }
             );
+
+            if (filteredResult.length > 0) {
             clients[index].services = filteredResult;
             client.services = filteredResult;
             console.log(client);
@@ -71,6 +83,7 @@
               if (nameA > nameB) return 1;
               return 0; // names must be equal
             });
+          }
           });
         }
       });
