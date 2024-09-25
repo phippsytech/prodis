@@ -117,9 +117,6 @@ export default {
         asyncComponent: () => import('./routes/MeetingNotes/MeetingNote.svelte')
     }),
 
-    '/meetingnotes/:meetingnote_id/adddocument': wrap({
-        asyncComponent: () => import('./routes/MeetingNotes/MeetingNoteAddDocument.svelte')
-    }),
 
 
 
@@ -313,9 +310,6 @@ export default {
     }),
 
 
-    '/staff/:staff_id/documents': wrap({
-        asyncComponent: () => import('./routes/Staff/Documents/Documents.svelte')
-    }),
 
 
 
@@ -591,13 +585,6 @@ export default {
     // '/clients/:client_id/details': HouseDetails,
 
 
-    '/clients/:client_id/documents': wrap({
-        asyncComponent: () => import('./routes/Clients/Documents/Documents.svelte')
-    }),
-
-    '/clients/:client_id/documents/:folder_id': wrap({
-        asyncComponent: () => import('./routes/Clients/Documents/Documents.svelte')
-    }),
 
 
 
@@ -686,10 +673,6 @@ export default {
 
     '/settings/supportcatalogue': wrap({
         asyncComponent: () => import('./routes/Settings/SupportCatalogue/SupportCatalogue.svelte')
-    }),
-
-    '/settings/documents': wrap({
-        asyncComponent: () => import('./routes/Settings/Documents/Documents.svelte')
     }),
 
 

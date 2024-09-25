@@ -12,7 +12,6 @@ class DeleteParticipantDocument
 
         $deleteResult = (new ParticipantDocument)->delete($data);
 
-        // if google_drive_file_ref exists then we need to delete that file.
         if (isset($deleteResult['vultr_storage_ref'])) {
             try {
                 // TODO: Need to implement deleteFile function

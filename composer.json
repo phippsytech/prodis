@@ -25,15 +25,8 @@
         "react/event-loop": "^1.5",
         "react/promise": "^3.2",
         "react/socket": "^1.15",
-        "php-di/php-di": "^7.0"
-    },
-    "scripts": {
-        "pre-autoload-dump": "Google\\Task\\Composer::cleanup"
-    },
-    "extra": {
-        "google/apiclient-services": [
-            "Drive"
-        ]
+        "php-di/php-di": "^7.0",
+        "predis/predis": "^2.0"
     },
     "autoload": {
         "psr-4": {
