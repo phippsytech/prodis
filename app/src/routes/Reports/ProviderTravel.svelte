@@ -125,11 +125,17 @@
 
     <div class="text-sm mb-1 text-slate-400">Period</div>
 
-    <div class="flex flex-wrap space-x-2 items-center md:flex-no-wrap">
-        <FloatingDate label="Start Date" bind:value={start_date} />
-        <FloatingDate label="End Date" bind:value={end_date} />
-        <StaffSelector bind:staff_id={staff_id} clearable />
-        <ClientSelector bind:client_id={client_id} bind:staff_id={staff_id} clearable />
+    <div class="flex flex-wrap gap-2 items-center">
+        <div class="flex gap-2 flex-none">
+            <FloatingDate label="Start Date" bind:value={start_date} />
+            <FloatingDate label="End Date" bind:value={end_date} />
+        </div>
+        <div class="sm:flex-none w-full sm:w-auto min-w-[200px]">
+            <StaffSelector bind:staff_id={staff_id} clearable />
+        </div>
+        <div class="sm:flex-none w-full sm:w-auto min-w-[270px]">
+            <ClientSelector bind:client_id={client_id} bind:staff_id={staff_id} clearable />
+        </div>
     </div>
 </div>
 
