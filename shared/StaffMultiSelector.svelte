@@ -2,7 +2,7 @@
     import FloatingMultiCombo from "@shared/PhippsyTech/svelte-ui/forms/FloatingMultiCombo.svelte";
     import { jspa } from "@shared/jspa.js";
 
-    export let staff_id = [];  // Must be an array to store multiple IDs
+    export let staff_ids = [];  // Must be an array to store multiple IDs
 
     let staff = [];
     let staffList = [];
@@ -27,7 +27,6 @@
 <FloatingMultiCombo
     label="Staffs"
     items={staffList}  
-    bind:values={staff_id} 
+    bind:values={staff_ids} 
     placeholderText="Select or type staff name ..."
-    clearable
 />
