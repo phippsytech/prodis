@@ -12,7 +12,7 @@
 
     // onMount will convert the passed staff IDs into the correct objects format
     onMount(() => {
-        if (values.length > 0) {
+        if (values.length > 0 && items.length > 0) {
             values.forEach(id => {
                 const matchedItem = items.find(item => item.value == id);
                 if (matchedItem) {
@@ -21,13 +21,6 @@
             });
         }
     });
-
-    $: {
-        if (selectedItems.length > 0) {
-            // Map selectedItems to extract their `value` and update `values`
-            values = selectedItems.map(item => item.value);
-        }
-    }
 
     function updateValues() {
         // When items are selected, update the `selectedItems` array
@@ -53,7 +46,7 @@
             placeholder={placeholderText}
             containerStyles="border:none; margin:-4px 0.75rem; padding:0 0; min-height:34px;width:auto;"
             --list-position="fixed"
-            on:change={updateValues}
+            on:select={updateValues}
         />
     </div>
 {/if}
