@@ -21,7 +21,8 @@
     let client_id = queryParams.client_id;
     let service_id = queryParams.service_id;
     let staff_id = queryParams.staff_id;
-    $: queryParams = { client_id, service_id, staff_id };
+    let planmanager_id = queryParams.planmanager_id;
+    $: queryParams = { client_id, service_id, staff_id, planmanager_id };
 
 
     let start_date = getMonday();
@@ -32,6 +33,7 @@
     let clients;
     let services = [];
     let staffs = [];
+    let planManagers = [];
     let filteredManaged = [];
     let generating_invoices = false;
 
@@ -93,6 +95,16 @@
         .sort((a, b) => a.label.localeCompare(b.label));
     });
 
+    jspa("/PlanManager", "listPlanManagers", {}).then((result) => {
+        console.log(result.result);
+        planManagers = result.result.filter((item) => item.archived != 1) 
+        .map((item) => ({
+            label: `${item.name}`,
+            value: item.id,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
+    });
+
     
 
     function generateInvoices() {
@@ -141,6 +153,11 @@
         if (staff_id) {
             filteredManaged = filteredManaged.filter((item) => item.StaffId == staff_id);
         }
+
+        if (planmanager_id) {
+            filteredManaged = filteredManaged.filter((item) => item.PlanManagerId == planmanager_id);
+        }
+
     }
 </script>
 
@@ -174,12 +191,20 @@
                         bind:value={service_id}
                         placeholderText="Select or type service code ..." />
                 </div>
-                <div class="sm:flex-none w-full sm:w-auto min-w-[270px]"> 
+                <div class="sm:flex-none w-full sm:w-auto min-w-[200px]"> 
                     <FloatingCombo
-                        label="Staffs"
+                        label="Staffer"
                         items={staffs}
                         bind:value={staff_id}
                         placeholderText="Select or type staff name ..."
+                    />
+                </div>
+                <div class="sm:flex-none w-full sm:w-auto min-w-[200px]"> 
+                    <FloatingCombo
+                        label="Payer"
+                        items={planManagers}
+                        bind:value={planmanager_id}
+                        placeholderText="Select or type payer ..."
                     />
                 </div>
             </div>
