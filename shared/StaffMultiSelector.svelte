@@ -6,13 +6,11 @@
 
     let staff = [];
     let staffList = [];
-    let isLoaded = false;
 
     // Fetch staff list and populate the options
     jspa("/Staff", "listStaff", {})
         .then((result) => {
             staff = result.result;
-            isLoaded = true;
             staffList = staff
                 .filter(staffer => staffer.archived != 1)
                 .map(staffer => ({
@@ -26,11 +24,9 @@
         });
 </script>
 
-{#if isLoaded}
 <FloatingMultiCombo
     label="Staffs"
     items={staffList}  
     bind:values={staff_ids} 
     placeholderText="Select or type staff name ..."
 />
-{/if}
