@@ -2,6 +2,7 @@
     import { onMount } from "svelte";
     import FloatingInput from "@shared/PhippsyTech/svelte-ui/forms/FloatingInput.svelte";
     import FloatingDate from "@shared/PhippsyTech/svelte-ui/forms/FloatingDate.svelte";
+    import FloatingSelect from "@shared/PhippsyTech/svelte-ui/forms/FloatingSelect.svelte";
     import RadioButtonGroup from "@shared/PhippsyTech/svelte-ui/forms/RadioButtonGroup.svelte";
     import StaffMultiSelector from "@shared/StaffMultiSelector.svelte";
     import { jspa } from "@shared/jspa.js";
@@ -134,15 +135,21 @@
     placeholder="John Doe"
 />
 
-<FloatingDate label="Training Date" bind:value={training.date} />
+<div class="flex space-x-4 w-full">
+    <div class="flex-1"> 
+        <FloatingDate label="Training Date" bind:value={training.date} />
+    </div>
+    <div class="flex-1">
+        <FloatingDate label="Training Completion Date" bind:value={training.completion_date} />
+    </div>
+    <div class="flex-1">
+        <FloatingSelect
+            bind:value={training.status}
+            label="Location"
+            instruction="Choose Location"
+            options={trainingStatusOptions}
+            hideValidation={true}
+        />
+    </div>
+</div>
 
-<FloatingDate label="Training Completion Date" bind:value={training.completion_date} />
-
-<label class="block mb-2">
-    <span class="text-xs opacity-50 p-0 m-0 block mb-2">Training Status</span>
-    <RadioButtonGroup
-        columns={2}
-        options={trainingStatusOptions}
-        bind:value={training.status}
-    />
-</label>
