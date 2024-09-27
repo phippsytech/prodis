@@ -46,8 +46,9 @@
                     if (training.id) {
                         jspa("/Register/TrainingAssignees", "getTrainingAssignees", { training_id: training.id })
                             .then((result) => {
-                                training_assignees = result.result || { staff_ids: [] };
-                                staff_ids = training_assignees.staff_ids;
+                                staff_ids = (result.result || []).map(id => parseInt(id, 10));
+                                training.staff_ids = staff_ids;
+                                console.log(training.staff_ids)
                             })
                             .catch(() => {});
                     }
@@ -70,7 +71,6 @@
             })
             .then((result) => {
                 training.staff_ids = result.result || [];
-                console.log(training.staff_ids);
             })
             .catch(() => {});
     }
@@ -83,7 +83,9 @@
     Training Details
 </div>
 
-<StaffMultiSelector bind:staff_ids={staff_ids}/> 
+<StaffMultiSelector 
+    bind:staff_ids={training.staff_ids}
+/> 
 
 <FloatingInput
     bind:value={training.course_title}
