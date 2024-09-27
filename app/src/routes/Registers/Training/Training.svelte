@@ -145,8 +145,8 @@
     <div class="flex-1">
         <FloatingSelect
             bind:value={training.status}
-            label="Location"
-            instruction="Choose Location"
+            label="Status"
+            instruction="Training status"
             options={trainingStatusOptions}
             hideValidation={true}
         />
