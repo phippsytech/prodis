@@ -45,10 +45,31 @@ class Training extends NewCustomModel
     public function update($data)
     {
         $bean = parent::update($data);
-        // fetch
-        // $data[staf_ids]
-        // loop through staff_ids
+
+        if (is_array($data['staff_ids']) && !empty($data['staff_ids'])) {
+            $existingAssignees = R::find('trainingassignees', 'training_id = ?', [$bean->id]);
+
+            $existingStaffIds = array_map(function($assignee) {
+                return $assignee->staff_id;
+            }, $existingAssignees);
+
+            foreach ($existingAssignees as $assignee) {
+                if (!in_array($assignee->staff_id, $data['staff_ids'])) {
+                    R::trash($assignee);
+                }
+            }
+
+            foreach ($data['staff_ids'] as $staff_id) {
+                if (is_numeric($staff_id) && !in_array($staff_id, $existingStaffIds)) {
+                    $trainingAssignee = R::dispense('trainingassignees');
+                    $trainingAssignee->training_id = $bean->id;
+                    $trainingAssignee->staff_id = $staff_id;
+                    R::store($trainingAssignee); 
+                }
+            }
+        }
 
         return $bean;
     }
+
 }
