@@ -22,8 +22,8 @@
     let service_id = queryParams.service_id;
     let staff_id = queryParams.staff_id;
     let planmanager_id = queryParams.planmanager_id;
+    
     $: queryParams = { client_id, service_id, staff_id, planmanager_id };
-
 
     let start_date = getMonday();
     let end_date = getDatePlus7Days(start_date);
@@ -162,9 +162,8 @@
 </script>
 
 <QueryManager
-    params={{ ...queryParams }}
+    params={queryParams}
    />
-
 
 {#if managed.length}
     {#if !generating_invoices}
