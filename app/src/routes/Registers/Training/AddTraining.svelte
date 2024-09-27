@@ -6,27 +6,21 @@
     import FloatingDate from "@shared/PhippsyTech/svelte-ui/forms/FloatingDate.svelte";
     import RadioButtonGroup from "@shared/PhippsyTech/svelte-ui/forms/RadioButtonGroup.svelte";
     import Button from "@shared/PhippsyTech/svelte-ui/Button.svelte";
+    import StaffMultiSelector from "@shared/StaffMultiSelector.svelte";
 
     let training = {
         course_title: "",
         trainer: "",
         date: null,
         completion_date: null,
-        status: null // Default status
+        status: null, // Default status
+        staff_ids: [] // Selected staff IDs
     };
 
     let trainingStatusOptions = [
         { option: "Completed", value: "completed" },
         { option: "In Progress", value: "in_progress" },
     ];
-
-    BreadcrumbStore.set({
-        path: [
-            { url: "/registers", name: "Registers" },
-            { url: "/registers/trainings", name: "Trainings" },
-            { url: "", name: "Add Training" }
-        ]
-    });
 
     // update status based on completion date
     $: if (training.completion_date) {
@@ -49,6 +43,7 @@
             .catch(() => {});
     }
 </script>
+<StaffMultiSelector bind:staff_ids={training.staff_ids}/> 
 
 <FloatingInput
     bind:value={training.course_title}

@@ -26,7 +26,11 @@
         console.log(error);
     });
 
-    BreadcrumbStore.set({ path: [{ url: "/registers", name: "Registers" }] });
+    BreadcrumbStore.set({ path: [
+        { url: "/registers", name: "Registers" },
+        { url: "/registers/trainings", name: "Trainings" },
+    ] });
+    
 </script>
 
 <div class="sm:flex sm:items-center mb-4">
