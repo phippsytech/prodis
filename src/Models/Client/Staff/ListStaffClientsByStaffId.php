@@ -1,6 +1,8 @@
 <?php
+
 namespace NDISmate\Models\Client\Staff;
 
+use NDISmate\Utilities\ConvertFieldsToBoolean;
 use \RedBeanPHP\R as R;
 use \RedBeanPHP\RedException;
 
@@ -14,6 +16,7 @@ class ListStaffClientsByStaffId
                     csa.id, 
                     csa.client_id, 
                     clients.name as client_name,
+                    clients.on_hold,
                     csa.staff_role, 
                     csa.is_primary
                 FROM clientstaffassignments csa
@@ -25,6 +28,8 @@ class ListStaffClientsByStaffId
                 ORDER BY client_name ASC',
                 [':staff_id' => $data['staff_id']]
             );
+
+            $beans = (new ConvertFieldsToBoolean)($beans, ['on_hold']);
 
             return $beans;
         } catch (RedException $e) {

@@ -20,8 +20,10 @@
     let queryParams = getQueryParams();
     let client_id = queryParams.client_id;
     let service_id = queryParams.service_id;
-    $: queryParams = { client_id, service_id };
-
+    let staff_id = queryParams.staff_id;
+    let planmanager_id = queryParams.planmanager_id;
+    
+    $: queryParams = { client_id, service_id, staff_id, planmanager_id };
 
     let start_date = getMonday();
     let end_date = getDatePlus7Days(start_date);
@@ -30,6 +32,8 @@
     let managed = [];
     let clients;
     let services = [];
+    let staffs = [];
+    let planManagers = [];
     let filteredManaged = [];
     let generating_invoices = false;
 
@@ -80,6 +84,27 @@
         .sort((a, b) => a.label.localeCompare(b.label));
     });
 
+
+    jspa("/Staff", "listStaff", {}).then((result) => {
+        console.log(result.result);
+        staffs = result.result.filter((item) => item.archived != 1) 
+        .map((item) => ({
+            label: `${item.staff_name}`,
+            value: item.id,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
+    });
+
+    jspa("/PlanManager", "listPlanManagers", {}).then((result) => {
+        console.log(result.result);
+        planManagers = result.result.filter((item) => item.archived != 1) 
+        .map((item) => ({
+            label: `${item.name}`,
+            value: item.id,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
+    });
+
     
 
     function generateInvoices() {
@@ -123,13 +148,22 @@
         if (service_id) {
             filteredManaged = filteredManaged.filter((item) => item.ServiceId == service_id);
         }
+
+           
+        if (staff_id) {
+            filteredManaged = filteredManaged.filter((item) => item.StaffId == staff_id);
+        }
+
+        if (planmanager_id) {
+            filteredManaged = filteredManaged.filter((item) => item.PlanManagerId == planmanager_id);
+        }
+
     }
 </script>
 
 <QueryManager
-    params={{ ...queryParams }}
+    params={queryParams}
    />
-
 
 {#if managed.length}
     {#if !generating_invoices}
@@ -137,29 +171,45 @@
      
             <div class="text-sm mb-1 text-slate-400">Filter</div>
 
-            <div class="flex flex-wrap space-x-2 items-center md:space-x-5 md:flex-no-wrap">
-                <div class="w-full md:w-1/5"> 
+            <div class="flex flex-wrap gap-2 items-center">
+                <div class="flex gap-2 flex-none"> 
                     <FloatingDate label="Start Date" bind:value={start_date} />
-                </div>
-                <div class="w-full md:w-1/5">
                     <FloatingDate label="End Date" bind:value={end_date} />
                 </div>
-                <div class="w-full md:w-1/5">
+                <div class="sm:flex-none w-full sm:w-auto min-w-[200px]">
                     <FloatingCombo
                         label="Clients"
                         items={clients}
                         bind:value={client_id}
                         placeholderText="Select or type name ..." />
                 </div>
-                <div class="w-full md:w-1/5">
+                <div class="sm:flex-none w-full sm:w-auto min-w-[270px]">
                     <FloatingCombo
                         label="Services"
                         items={services}
                         bind:value={service_id}
                         placeholderText="Select or type service code ..." />
                 </div>
+                <div class="sm:flex-none w-full sm:w-auto min-w-[200px]"> 
+                    <FloatingCombo
+                        label="Staffer"
+                        items={staffs}
+                        bind:value={staff_id}
+                        placeholderText="Select or type staff name ..."
+                    />
+                </div>
+                <div class="sm:flex-none w-full sm:w-auto min-w-[200px]"> 
+                    <FloatingCombo
+                        label="Payer"
+                        items={planManagers}
+                        bind:value={planmanager_id}
+                        placeholderText="Select or type payer ..."
+                    />
+                </div>
             </div>
         </div>
+
+
 
         <GroupedLineItems
             bind:this={lineItemElement}
