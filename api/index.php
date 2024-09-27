@@ -149,6 +149,7 @@ $app->post('/PlanManager', new ControllerFactory(\NDISmate\Models\PlanManager::c
 $app->post('/Register/Feedback', new ControllerFactory(\NDISmate\Models\Register\Feedback::class));
 $app->post('/Register/Risk', new ControllerFactory(\NDISmate\Models\Register\Risk::class));
 $app->post('/Register/Training', new ControllerFactory(\NDISmate\Controllers\TrainingController::class));
+$app->post('/Register/TrainingAssignees', new ControllerFactory(\NDISmate\Controllers\TrainingController::class));
 $app->post('/Register/ConflictOfInterest', new ControllerFactory(\NDISmate\Models\Register\ConflictOfInterest::class));
 $app->post('/SIL/Billing', new ControllerFactory(\NDISmate\Models\SIL\Billing\Controller::class));
 $app->post('/SIL/House', new ControllerFactory(\NDISmate\Models\SIL\House::class));

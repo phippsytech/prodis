@@ -6,7 +6,6 @@ use NDISmate\CORE\BaseController;
 use NDISmate\Models\Register\Training;
 use NDISmate\Models\Register\Training\ListTraining;
 use NDISmate\Models\Register\Training\GetTraining;
-use NDISmate\Models\Register\Training\GetTrainingAssignees;
 
 final class TrainingController extends BaseController
 {
@@ -18,7 +17,6 @@ final class TrainingController extends BaseController
             'deleteTraining' => [new Training, 'delete', true, []],
             'listTrainings' => [new ListTraining, null, true, []],
             'getTraining' => [new GetTraining, null, true, []],
-            'getTrainingAssignees' => [new GetTrainingAssignees, null, true, []],
         ];
     }
 }

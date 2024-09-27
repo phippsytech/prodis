@@ -11,6 +11,9 @@
     export let params;
 
     let training = {};
+    let training_assignees = {};
+
+    let staff_ids = [];
 
     let stored_training = Object.assign({}, training);
     let trainingStatusOptions = [
@@ -34,11 +37,20 @@
         if (params.id != "add") {
             jspa("/Register/Training", "getTraining", { id: params.id })
                 .then((result) => {
-                    training = result.result || { staff_ids: [] }; // Ensure fallback
+                    training = result.result || { staff_ids: [] };
                 })
                 .catch(() => {})
                 .finally(() => {
                     stored_training = Object.assign({}, training);
+
+                    if (training.id) {
+                        jspa("/Register/TrainingAssignees", "getTrainingAssignees", { training_id: training.id })
+                            .then((result) => {
+                                training_assignees = result.result || { staff_ids: [] };
+                                staff_ids = training_assignees.staff_ids;
+                            })
+                            .catch(() => {});
+                    }
                 });
         }
         mounted = true;
@@ -71,7 +83,7 @@
     Training Details
 </div>
 
-<StaffMultiSelector staff_ids={training.staff_ids}/> 
+<StaffMultiSelector bind:staff_ids={staff_ids}/> 
 
 <FloatingInput
     bind:value={training.course_title}

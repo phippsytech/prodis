@@ -7,21 +7,18 @@ class GetTrainingAssignees
 {
     public function __invoke($data)
     {
-        // Initialize an empty array for the result
-        $result = [];
-
-        // Basic SQL query to select staff_id from trainingassignees based on training_id
-        $sql = "SELECT staff_id FROM trainingassignees WHERE training_id = ?";
-        
-        // Check if training_id is provided in the input data
+        // Validate the input data
         if (!isset($data['training_id'])) {
             throw new \InvalidArgumentException("training_id must be provided");
         }
 
+        // SQL query to select staff_id from trainingassignees based on training_id
+        $sql = "SELECT staff_id FROM trainingassignees WHERE training_id = ?";
+
         // Prepare parameters
         $params = [$data['training_id']];
 
-        // Execute the query using RedBeanPHP
+        // Execute the query using RedBeanPHP and fetch results
         $result = R::getAll($sql, $params);
 
         // Extract staff IDs from the result
