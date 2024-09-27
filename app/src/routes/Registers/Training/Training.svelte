@@ -2,9 +2,8 @@
     import { onMount } from "svelte";
     import { push } from "svelte-spa-router";
     import FloatingInput from "@shared/PhippsyTech/svelte-ui/forms/FloatingInput.svelte";
-    import FloatingTextArea from "@shared/PhippsyTech/svelte-ui/forms/FloatingTextArea.svelte";
-    import FloatingSelect from "@shared/PhippsyTech/svelte-ui/forms/FloatingSelect.svelte";
-    import FloatingDateSelect from "@shared/PhippsyTech/svelte-ui/forms/FloatingDateSelect.svelte";
+    import FloatingDate from "@shared/PhippsyTech/svelte-ui/forms/FloatingDate.svelte";
+    import RadioButtonGroup from "@shared/PhippsyTech/svelte-ui/forms/RadioButtonGroup.svelte";
     import { jspa } from "@shared/jspa.js";
 
     import { ActionBarStore } from "@app/Layout/BottomNav/stores.js";
@@ -12,16 +11,14 @@
 
     export let params;
 
-    let training = {
-        status: "open",
-    };
+    let training = {};
     let stored_training = Object.assign({}, training);
 
     let trainingStatusSelectElement = null;
 
     let trainingStatusOptions = [
-        { option: "Open", value: "open" },
-        { option: "Closed", value: "closed" },
+        { option: "Completed", value: "completed" },
+        { option: "In Progress", value: "in_progress" },
     ];
 
     let staff = [];
@@ -30,7 +27,13 @@
 
     let readOnly = false;
 
-    BreadcrumbStore.set({ path: [{ url: "/registers", name: "Registers" }] });
+    BreadcrumbStore.set({
+        path: [
+            { url: "/registers", name: "Registers" },
+            { url: "/registers/trainings", name: "Trainings" },
+            { url: "", name: "Training" }
+        ]
+    });
 
     jspa("/Staff", "listStaff", {})
         .then((result) => {
@@ -91,6 +94,18 @@
     $: {
         readOnly = training.status == "closed";
     }
+
+        // update status based on completion date
+        $: if (training.completion_date) {
+        const currentDate = new Date();
+        const completionDate = new Date(training.completion_date);
+
+        if (completionDate <= currentDate) {
+            training.status = "completed"; 
+        } else {
+            training.status = "in_progress"; 
+        }
+    }
 </script>
 
 <div
@@ -99,47 +114,29 @@
 >
     Add training
 </div>
-<FloatingSelect
-    bind:this={trainingStatusSelectElement}
-    bind:value={training.status}
-    bind:option={training.status}
-    label="Status"
-    instruction="Set Status"
-    options={trainingStatusOptions}
-    hideValidation={true}
-/>
 
-<!-- {#if training.status == "open"} -->
-<FloatingSelect
-    bind:this={staffSelectElement}
-    bind:value={training.staff_id}
-    bind:option={training.staff_id}
-    label="Who reported this training"
-    instruction="Choose staffer"
-    options={staffList}
-    hideValidation={true}
-    {readOnly}
-/>
-
-<!-- <FloatingDateSelect bind:value={training.session_date} label="Date"  /> -->
 
 <FloatingInput
-    bind:value={training.type}
-    label="Type of training"
-    placeholder="Type of training"
-    {readOnly}
+    bind:value={training.course_title}
+    label="Course Title"
+    placeholder="Title of the training course"
 />
-<FloatingTextArea
-    bind:value={training.description}
-    label="Description"
-    placeholder="Describe the training"
-    style="height:150px"
-    {readOnly}
+
+<FloatingInput
+    bind:value={training.trainer}
+    label="Trainer"
+    placeholder="John Doe"
 />
-<FloatingTextArea
-    bind:value={training.resolution}
-    label="Resolution"
-    placeholder="List actions taken to mitigate the training."
-    style="height:150px"
-    {readOnly}
-/>
+
+<FloatingDate label="Training Date" bind:value={training.date} />
+
+<FloatingDate label="Training Completion Date" bind:value={training.completion_date} />
+
+<label class="block mb-2">
+    <span class="text-xs opacity-50 p-0 m-0 block mb-2">Training Status</span>
+    <RadioButtonGroup
+        columns={2}
+        options={trainingStatusOptions}
+        bind:value={training.status}
+    />
+</label>
