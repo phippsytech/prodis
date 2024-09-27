@@ -44,8 +44,9 @@
     BreadcrumbStore.set({
         path: [{ url: null, name: "Accounts" }],
     });
-
-    jspa("/Invoice", "listUnbilled", {}).then((result) => {
+    
+    onMount(() => {
+        jspa("/Invoice", "listUnbilled", {}).then((result) => {
             managed = result.result;
             unbilled_total = 0;
             managed.forEach((item) => {
@@ -53,58 +54,57 @@
                 let itemTotal = decimalRounder(item.Quantity * item.UnitPrice);
                 unbilled_total = decimalRounder(unbilled_total + itemTotal);
             });
-            console.log(managed);
             managed.sort((a, b) => {
                 if (a.ClientName === b.ClientName) {
                     return a.PlanManagerId > b.PlanManagerId ? 1 : -1;
                 }
                 return a.ClientName > b.ClientName ? 1 : -1;
             });
+        });
+
+
+        jspa("/Participant", "listClients", {}).then((result) => {
+            clients = result.result
+            .filter((item) => item.archived != 1) // Filter out archived staff
+            .map((item) => ({
+                label: `${item.client_name}`,
+                value: item.client_id,
+            }))
+            .sort((a, b) => a.label.localeCompare(b.label));
+        });
+
+
+        jspa("/Service", "listServices", {}).then((result) => {
+            services = result.result.filter((item) => item.archived != 1) 
+            .map((item) => ({
+                label: `${item.code}`,
+                value: item.id,
+            }))
+            .sort((a, b) => a.label.localeCompare(b.label));
+        });
+
+
+        jspa("/Staff", "listStaff", {}).then((result) => {
+            staffs = result.result.filter((item) => item.archived != 1) 
+            .map((item) => ({
+                label: `${item.staff_name}`,
+                value: item.id,
+            }))
+            .sort((a, b) => a.label.localeCompare(b.label));
+        });
+
+        jspa("/PlanManager", "listPlanManagers", {}).then((result) => {
+            planManagers = result.result.filter((item) => item.archived != 1) 
+            .map((item) => ({
+                label: `${item.name}`,
+                value: item.id,
+            }))
+            .sort((a, b) => a.label.localeCompare(b.label));
+        });
+
     });
 
-
-    jspa("/Participant", "listClients", {}).then((result) => {
-        clients = result.result
-        .filter((item) => item.archived != 1) // Filter out archived staff
-        .map((item) => ({
-            label: `${item.client_name}`,
-            value: item.client_id,
-        }))
-        .sort((a, b) => a.label.localeCompare(b.label));
-    });
-
-
-    jspa("/Service", "listServices", {}).then((result) => {
-        console.log(result.result);
-        services = result.result.filter((item) => item.archived != 1) 
-        .map((item) => ({
-            label: `${item.code}`,
-            value: item.id,
-        }))
-        .sort((a, b) => a.label.localeCompare(b.label));
-    });
-
-
-    jspa("/Staff", "listStaff", {}).then((result) => {
-        console.log(result.result);
-        staffs = result.result.filter((item) => item.archived != 1) 
-        .map((item) => ({
-            label: `${item.staff_name}`,
-            value: item.id,
-        }))
-        .sort((a, b) => a.label.localeCompare(b.label));
-    });
-
-    jspa("/PlanManager", "listPlanManagers", {}).then((result) => {
-        console.log(result.result);
-        planManagers = result.result.filter((item) => item.archived != 1) 
-        .map((item) => ({
-            label: `${item.name}`,
-            value: item.id,
-        }))
-        .sort((a, b) => a.label.localeCompare(b.label));
-    });
-
+    
     
 
     function generateInvoices() {
@@ -137,19 +137,18 @@
     }
 
 
-    $: {
+    function handleFilters()
+    {
         filteredManaged = managed;
-
+        console.log('selectedItems', selectedLineItems);
         if (client_id) {
             filteredManaged = filteredManaged.filter((item) => item.ClientId == client_id);
         }
 
-    
         if (service_id) {
             filteredManaged = filteredManaged.filter((item) => item.ServiceId == service_id);
         }
 
-           
         if (staff_id) {
             filteredManaged = filteredManaged.filter((item) => item.StaffId == staff_id);
         }
@@ -158,11 +157,18 @@
             filteredManaged = filteredManaged.filter((item) => item.PlanManagerId == planmanager_id);
         }
 
+        selectedLineItems = selectedLineItems.filter(selectedItem =>
+        
+            filteredManaged.some(managedItem => managedItem.SessionId === selectedItem)
+        );
+
     }
+
 </script>
 
 <QueryManager
     params={queryParams}
+    onParamsChange={(params) => (handleFilters())}
    />
 
 {#if managed.length}
