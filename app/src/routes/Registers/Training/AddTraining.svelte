@@ -12,13 +12,21 @@
         trainer: "",
         date: null,
         completion_date: null,
-        status: "in_progress" // Default status
+        status: null // Default status
     };
 
     let trainingStatusOptions = [
         { option: "Completed", value: "completed" },
         { option: "In Progress", value: "in_progress" },
     ];
+
+    BreadcrumbStore.set({
+        path: [
+            { url: "/registers", name: "Registers" },
+            { url: "/registers/trainings", name: "Trainings" },
+            { url: "", name: "Add Training" }
+        ]
+    });
 
     // update status based on completion date
     $: if (training.completion_date) {
