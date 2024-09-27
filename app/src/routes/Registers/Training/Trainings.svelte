@@ -17,10 +17,12 @@
         trainings = result.result;
         // sort the trainings reverse chronologically
         trainings.sort(function (a, b) {
-            let aDateTime = Date.parse(a.date_identified);
-            let bDateTime = Date.parse(b.date_identified);
+            let aDateTime = Date.parse(a.date);
+            let bDateTime = Date.parse(b.date);
             return bDateTime - aDateTime;
         });
+    }).catch((error) => {
+        console.log(error);
     });
 
     BreadcrumbStore.set({ path: [{ url: "/registers", name: "Registers" }] });
@@ -56,10 +58,10 @@
                 on:click={() => push("/registers/trainings/" + training.id)}
                 class="px-4 py-2 hover:bg-blue-700 hover:text-white focus:outline-none focus:ring-0 focus:bg-gray-200 focus:text-gray-600 transition duration-500 cursor-pointer {training.length - 1 == index ? 'rounded-b-lg' : ''} border-b border-gray-200 w-full {training.archived == 1 ? 'text-gray-400 cursor-default' : ''}"
             >
-                <div class="justify-between flex">
+                <!-- <div class="justify-between flex">
                     <span class="text-xs">{training.date_identified}</span>
                     <span class="text-xs">#{training.id}</span>
-                </div>
+                </div> -->
                 <div>
                     <span class="font-bold">{training.course_title}</span><br />
                     <span class="text-sm">Trainer: {training.trainer}</span><br />
@@ -82,10 +84,10 @@
                 on:click={() => push("/registers/trainings/" + training.id)}
                 class="px-4 py-2 hover:bg-blue-700 hover:text-white focus:outline-none focus:ring-0 focus:bg-gray-200 focus:text-gray-600 transition duration-500 cursor-pointer {training.length - 1 == index ? 'rounded-b-lg' : ''} border-b border-gray-200 w-full {training.archived == 1 ? 'text-gray-400 cursor-default' : ''}"
             >
-                <div class="justify-between flex">
+                <!-- <div class="justify-between flex">
                     <span class="text-xs">{training.date_identified}</span>
                     <span class="text-xs">#{training.id}</span>
-                </div>
+                </div> -->
                 <div>
                     <span class="font-bold">{training.course_title}</span><br />
                     <span class="text-sm">Trainer: {training.trainer}</span><br />

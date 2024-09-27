@@ -13,7 +13,7 @@ final class TrainingController extends BaseController
         $this->controller = [
             'addTraining' => [new Training, 'create', true, []],
             'updateTraining' => [new Training, 'update', true, []],
-            'listTrainings' => [[new ListTraining, null, true, []]],
+            'listTrainings' => [new ListTraining, null, true, []],
         ];
     }
 }
