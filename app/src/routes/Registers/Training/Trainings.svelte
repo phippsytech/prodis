@@ -4,6 +4,7 @@
     import { slide } from "svelte/transition";
     import { jspa } from "@shared/jspa.js";
     import { BreadcrumbStore } from "@shared/stores.js";
+    import { formatPrettyName } from "@shared/utilities.js";
 
     let trainings = [];
 
@@ -47,7 +48,7 @@
 </div>
 
 <h1 class="text-black text-1xl font-bold mt-0 mb-2 drop-shadow mb-2">
-    Open trainings
+    Trainings in progress
 </h1>
 <ul class="bg-white rounded-lg border border-gray-200 w-full text-gray-900">
     {#each trainings as training, index (training.id)}
@@ -65,7 +66,7 @@
                 <div>
                     <span class="font-bold">{training.course_title}</span><br />
                     <span class="text-sm">Trainer: {training.trainer}</span><br />
-                    <span class="text-sm">Status: {training.status}</span>
+                    <span class="text-sm">{formatPrettyName(training.status)}</span>
                 </div>
             </li>
         {/if}
@@ -73,7 +74,7 @@
 </ul>
 
 <h1 class="text-black text-1xl font-bold mt-0 mb-2 drop-shadow mb-2">
-    Closed trainings
+    Completed trainings
 </h1>
 <ul class="bg-white rounded-lg border border-gray-200 w-full text-gray-900">
     {#each trainings as training, index (training.id)}
@@ -92,7 +93,7 @@
                     <span class="font-bold">{training.course_title}</span><br />
                     <span class="text-sm">Trainer: {training.trainer}</span><br />
                     <span class="text-sm">Completion Date: {training.completion_date ? training.completion_date : 'N/A'}</span><br />
-                    <span class="text-sm">Status: {training.status}</span>
+                    <span class="text-sm">{formatPrettyName(training.status)}</span>
                 </div>
             </li>
         {/if}
