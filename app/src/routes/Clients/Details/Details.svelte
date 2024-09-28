@@ -152,7 +152,7 @@
   placeholder="eg: Chris Person"
   {readOnly}
 />
-<div class="flex gap-2 flex-wrap">
+<div class="flex gap-x-2 flex-wrap">
   <div class="w-full sm:w-auto sm:flex-1">
     <FloatingInput
       bind:value={client.ndis_number}
@@ -161,7 +161,9 @@
       {readOnly}
     />
   </div>
-  <div class="flex flex-wrap xs:flex-nowrap gap-2 justify-between w-full sm:w-auto">
+  <div
+    class="flex flex-wrap xs:flex-nowrap gap-2 justify-between w-full sm:w-auto"
+  >
     <FloatingDate
       class="w-full sm:w-auto"
       bind:value={client.ndis_plan_start_date}
