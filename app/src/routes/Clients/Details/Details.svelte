@@ -161,7 +161,7 @@
       {readOnly}
     />
   </div>
-  <div class="flex flex-wrap gap-2 justify-between w-full sm:w-auto">
+  <div class="flex flex-wrap xs:flex-nowrap gap-2 justify-between w-full sm:w-auto">
     <FloatingDate
       class="w-full sm:w-auto"
       bind:value={client.ndis_plan_start_date}
