@@ -87,17 +87,7 @@
 
 <div class="mb-2">
   <div class="flex justify-between sm:items-center mt-6 mb-1">
-    <div class="flex sm:flex-row flex-col sm:items-center">
-      <h3 class="text-slate-800 font-bold mx-2">Service Agreements</h3>
-      <Role roles={["serviceagreement.modify"]}>
-        <button
-          class="text-xs text-indigo-600 hover:underline text-left mx-2"
-          on:click={() => showServiceAgreement(service_agreement)}
-        >
-          <PlusIcon class="w-4 h-4 inline" /> Add Service Agreement
-        </button>
-      </Role>
-    </div>
+    <div class="flex sm:flex-row flex-col sm:items-center"></div>
     {#if hasInactiveAgreements}
       <div class="flex items-center mx-2">
         <input

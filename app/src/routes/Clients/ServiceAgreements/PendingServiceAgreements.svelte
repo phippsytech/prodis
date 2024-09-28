@@ -12,10 +12,10 @@
   import createStore from "@shared/createStore";
 
   import ServiceAgreementSupportItem from "./ServiceAgreementSupportItem.svelte";
-//   import ServiceCombo from "@app/routes/Service/ServiceCombo.svelte";
-//   import FloatingInput from "@shared/PhippsyTech/svelte-ui/forms/FloatingInput.svelte";
-//   import FloatingDate from "@shared/PhippsyTech/svelte-ui/forms/FloatingDate.svelte";
-//   import PlanManagerCombo from "@app/routes/Accounts/PlanManagers/PlanManagerCombo.svelte";
+  //   import ServiceCombo from "@app/routes/Service/ServiceCombo.svelte";
+  //   import FloatingInput from "@shared/PhippsyTech/svelte-ui/forms/FloatingInput.svelte";
+  //   import FloatingDate from "@shared/PhippsyTech/svelte-ui/forms/FloatingDate.svelte";
+  //   import PlanManagerCombo from "@app/routes/Accounts/PlanManagers/PlanManagerCombo.svelte";
 
   export let client_id;
 
@@ -94,41 +94,28 @@
 </script>
 
 <div class="mb-2">
-  <div class="flex justify-between sm:items-center mt-6 mb-1">
+  <!-- <div class="flex justify-between sm:items-center mt-6 mb-1">
     <div class="flex sm:flex-row flex-col sm:items-center">
-      <h3 class="text-slate-800 font-bold mx-2">Pending Service Agreements</h3>
+      <h3 class="text-slate-800 font-bold mx-2">New Service Agreement</h3>
       <Role roles={["serviceagreement.modify"]}>
         <button
           class="text-xs text-indigo-600 hover:underline text-left mx-2"
           on:click={() => showServiceAgreement(service_agreement)}
         >
-          <PlusIcon class="w-4 h-4 inline" /> Add Service Agreement
         </button>
       </Role>
     </div>
+  </div> -->
 
-    
-
+  <div class="flex justify-between sm:items-center mt-6 mb-1">
+    <div class="flex sm:flex-row flex-col sm:items-center">
+      <h3 class="text-slate-800 font-bold mx-2">Service Agreements</h3>
+    </div>
   </div>
 
+  <ServiceAgreementSupportItem />
 
-
-
-<ServiceAgreementSupportItem />
-
-
-
-
-
-
-
-
-
-
-
-
-
-  {#each $ServiceAgreementStore as agreement, index (agreement.id)}
+  <!-- {#each $ServiceAgreementStore as agreement, index (agreement.id)}
     <div
       animate:flip={{ duration: 350 }}
       in:slide={{ duration: 200 }}
@@ -141,5 +128,5 @@
         />
       {/if}
     </div>
-  {/each}
+  {/each} -->
 </div>

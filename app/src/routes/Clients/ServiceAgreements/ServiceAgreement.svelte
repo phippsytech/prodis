@@ -44,12 +44,12 @@
 
 <ul
   class="bg-white border-b border-x rounded-md w-full text-slate-900 mb-2 {service_agreement.is_active
-    ? ' border-indigo-600 '
+    ? ' '
     : '  border-indigo-100 '}"
 >
   <li
     class="px-2 py-1 w-full cursor-default text-sm border-t rounded-t-md {service_agreement.is_active
-      ? 'bg-indigo-600 text-white  border-indigo-600'
+      ? 'bg-indigo-900 text-white  border-indigo-900'
       : 'bg-slate-100 text-slate-400  border-indigo-100'}"
   >
     <div class="flex justify-between items-center">
