@@ -11,8 +11,6 @@
   import Container from "@shared/Container.svelte";
   import ClientServiceAgreements from "@app/routes/Clients/ServiceAgreements/ServiceAgreements.svelte";
 
-  import PendingServiceAgreements from "@app/routes/Clients/ServiceAgreements/PendingServiceAgreements.svelte";
-
   import ClientStakeholderList from "@app/routes/Clients/Stakeholders/Stakeholders.svelte";
   import FloatingInput from "@shared/PhippsyTech/svelte-ui/forms/FloatingInput.svelte";
   import FloatingTextArea from "@shared/PhippsyTech/svelte-ui/forms/FloatingTextArea.svelte";
@@ -206,8 +204,6 @@
 />
 
 <ClientReports {client_id} />
-
-<PendingServiceAgreements bind:client_id />
 
 <ClientServiceAgreements bind:client_id />
 

@@ -48,12 +48,12 @@
     : '  border-indigo-100 '}"
 >
   <li
-    class="px-2 py-1 w-full cursor-default text-sm border-t rounded-t-md {service_agreement.is_active
+    class="px-4 py-2 w-full cursor-default text-sm border-t rounded-t-md {service_agreement.is_active
       ? 'bg-indigo-900 text-white  border-indigo-900'
       : 'bg-slate-100 text-slate-400  border-indigo-100'}"
   >
     <div class="flex justify-between items-center">
-      <h3 class="flex items-center">
+      <h3 class="flex items-center font-bold">
         <DocumentTextIcon class="h-4 w-4 inline mr-2" />
         {formatDate(service_agreement.service_agreement_signed_date)} - {formatDate(
           service_agreement.service_agreement_end_date

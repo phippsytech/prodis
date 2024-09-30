@@ -10,6 +10,8 @@
   import { toastError, toastSuccess } from "@shared/toastHelper";
   import { isDate } from "@shared/validators";
   import createStore from "@shared/createStore";
+  import DraftServiceAgreement from "./DraftServiceAgreement.svelte";
+  import ServiceAgreementSupportItem from "./ServiceAgreementSupportItem.svelte";
 
   export let client_id;
 
@@ -83,10 +85,27 @@
 
     ServiceAgreementStore.add(service_agreement);
   }
+
+  let displayServiceAgreement = false;
+
+  function showGenerator() {
+    displayServiceAgreement = !displayServiceAgreement;
+  }
 </script>
 
 <div class="mb-2">
   <div class="flex justify-between sm:items-center mt-6 mb-1">
+    <div class="flex sm:flex-row flex-col sm:items-center">
+      <h3 class="text-slate-800 font-bold mx-2">Service Agreements</h3>
+      <Role roles={["admin"]}>
+        <button
+          class="text-xs text-indigo-600 hover:underline text-left mx-2"
+          on:click={() => (displayServiceAgreement = true)}
+        >
+          <PlusIcon class="w-4 h-4 inline" /> Draft Service Agreement
+        </button>
+      </Role>
+    </div>
     <div class="flex sm:flex-row flex-col sm:items-center"></div>
     {#if hasInactiveAgreements}
       <div class="flex items-center mx-2">
@@ -102,6 +121,10 @@
       </div>
     {/if}
   </div>
+
+  <DraftServiceAgreement bind:displayServiceAgreement />
+
+  <ServiceAgreementSupportItem />
 
   {#each $ServiceAgreementStore as agreement, index (agreement.id)}
     <div

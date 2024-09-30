@@ -185,17 +185,3 @@
     </Role>
   {/if}
 {/each}
-
-{#if $ServiceBookingsStore.length > 0 && service_agreement.is_active}
-  <Role roles={["serviceagreement.modify"]}>
-    <li
-      class="px-3 py-2 border-t border-indigo-100 w-full text-slate-400 cursor-default text-sm"
-    >
-      <button
-        on:click={() => showServiceBooking()}
-        class="text-indigo-600 cursor-pointer hover:underline"
-        >Add another Service</button
-      >
-    </li>
-  </Role>
-{/if}
