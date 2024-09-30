@@ -3,12 +3,12 @@
     import FloatingInput from "@shared/PhippsyTech/svelte-ui/forms/FloatingInput.svelte";
     import FloatingDate from "@shared/PhippsyTech/svelte-ui/forms/FloatingDate.svelte";
     import FloatingSelect from "@shared/PhippsyTech/svelte-ui/forms/FloatingSelect.svelte";
-    import RadioButtonGroup from "@shared/PhippsyTech/svelte-ui/forms/RadioButtonGroup.svelte";
     import StaffMultiSelector from "@shared/StaffMultiSelector.svelte";
     import { jspa } from "@shared/jspa.js";
+    import { push } from "svelte-spa-router";
     import { ActionBarStore } from "@app/Layout/BottomNav/stores.js";
     import { BreadcrumbStore } from "@shared/stores.js";
-    import { toastSuccess } from "@shared/toastHelper.js";
+    import { toastSuccess, toastError } from "@shared/toastHelper.js";
 
     export let params;
 
@@ -107,6 +107,19 @@
             });
     }
 
+
+
+    function deleteTraining() {
+        jspa("/Register/Training", "deleteTraining", { id: training.id })
+            .then((result) => {
+                push("/registers/trainings");
+                toastSuccess("Training deleted deleted");
+            })
+            .catch((error) => {
+                toastError("Error deleting training");
+            });
+    }
+
 </script>
 
 <div
@@ -150,6 +163,14 @@
             options={trainingStatusOptions}
             hideValidation={true}
         />
+        <div class="flex justify-end mt-auto">
+            <button 
+                class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                on:click="{deleteTraining}"
+            >
+                Delete
+            </button>
+        </div>
     </div>
 </div>
 
