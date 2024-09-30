@@ -163,12 +163,11 @@
             item.SupportsDeliveredFrom <= end_date);
         }
 
-        // selectedLineItems = selectedLineItems.filter(selectedItem =>
+        selectedLineItems = selectedLineItems.filter(selectedItem =>
         
-        //     filteredManaged.some(managedItem => managedItem.SessionId === selectedItem)
-        // );
+            filteredManaged.some(managedItem => managedItem.SessionId === selectedItem)
+        );
 
-        selectedLineItems = [];
 
     }
 
