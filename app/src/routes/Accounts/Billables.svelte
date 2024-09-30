@@ -158,11 +158,15 @@
             filteredManaged = filteredManaged.filter((item) => item.PlanManagerId == planmanager_id);
         }
 
-        if (start_date || end_date) {
-            filteredManaged = filteredManaged.filter((item) =>  item.SupportsDeliveredFrom >= start_date &&
-            item.SupportsDeliveredFrom <= end_date);
+        if (start_date) {
+            filteredManaged = filteredManaged.filter((item) =>  item.SupportsDeliveredFrom >= start_date);
         }
 
+        if (end_date) {
+            filteredManaged = filteredManaged.filter((item) =>  item.SupportsDeliveredFrom <= end_date);
+        }
+
+        
         selectedLineItems = selectedLineItems.filter(selectedItem =>
         
             filteredManaged.some(managedItem => managedItem.SessionId === selectedItem)
