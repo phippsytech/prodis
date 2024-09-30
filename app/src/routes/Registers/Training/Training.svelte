@@ -64,7 +64,7 @@
         if (mounted) {
             const trainingChanged = JSON.stringify(training) !== JSON.stringify(stored_training);
             const staffIdsChanged = JSON.stringify(staff_ids) !== JSON.stringify(stored_staff_ids);
-
+            
             ActionBarStore.set({
                 can_delete: false,
                 show: trainingChanged || staffIdsChanged, // Trigger the action bar on changes
@@ -86,27 +86,39 @@
         }
     }
 
+    $: if (training.date && training.completion_date && new Date(training.date) > new Date(training.completion_date)) {
+        toastError("The training start date should not be greater than the completion date.");
+        mounted = false;
+    }
+
     function undo() {
         training = Object.assign({}, stored_training);
         staff_ids = [...stored_staff_ids];
     }
 
     function save() {
-        jspa("/Register/Training", "updateTraining", { ...training, staff_ids })
-            .then((result) => {
-                training = result.result || { staff_ids: [] };
-                stored_training = Object.assign({}, training);
-                return jspa("/Register/TrainingAssignees", "getTrainingAssignees", { training_id: training.id });
-            })
-            .then((result) => {
-                toastSuccess("Training updated successfully!");toastSuccess
-                staff_ids = (result.result || []).map(id => parseInt(id, 10));
-                stored_staff_ids = [...staff_ids];
-            })
-            .catch((error) => {
-                console.error("Error updating training:", error);
-            });
+        if (training.date && training.completion_date && new Date(training.date) <= new Date(training.completion_date)) {
+            jspa("/Register/Training", "updateTraining", { ...training, staff_ids })
+                .then((result) => {
+                    training = result.result || { staff_ids: [] };
+                    stored_training = Object.assign({}, training);
+
+                    return jspa("/Register/TrainingAssignees", "getTrainingAssignees", { training_id: training.id });
+                })
+                .then((result) => {
+                    staff_ids = (result.result || []).map(id => parseInt(id, 10));
+                    stored_staff_ids = [...staff_ids];
+                    toastSuccess("Training updated successfully!");
+                })
+                .catch((error) => {
+                    console.error("Error updating training:", error);
+                    toastError("Error updating training, please try again.");
+                });
+        } else {
+            toastError("Please ensure that the training start date is not greater than the completion date.");
+        }
     }
+
 
 
 
