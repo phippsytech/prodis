@@ -7,7 +7,6 @@
     import { toastSuccess, toastError } from "@shared/toastHelper.js";
     import FloatingInput from "@shared/PhippsyTech/svelte-ui/forms/FloatingInput.svelte";
     import FloatingDate from "@shared/PhippsyTech/svelte-ui/forms/FloatingDate.svelte";
-    import FloatingSelect from "@shared/PhippsyTech/svelte-ui/forms/FloatingSelect.svelte";
     import NewFloatingSelect from "@shared/PhippsyTech/svelte-ui/forms/NewFloatingSelect.svelte";
     import StaffMultiSelector from "@shared/StaffMultiSelector.svelte";
     import Role from "@shared/Role.svelte";
@@ -166,25 +165,16 @@
     <div class="flex-1">
         <FloatingDate label="Training completion date" bind:value={training.completion_date} />
     </div>
-    <div class="flex-1">
-        <NewFloatingSelect
-            on:change
-            bind:value={training.status}
-            label="Status"
-            instruction="Training status"
-            options={trainingStatusOptions}
-            hideValidation={true}
-        />
-        <Role roles={["admin"]}>
-            <div class="flex justify-end mt-auto">
-                <button 
-                    class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                    on:click="{deleteTraining}"
-                >
-                    Delete
-                </button>
-            </div>
-        </Role>    
-    </div>
 </div>
+<Role roles={["admin"]}>
+    <div class="flex justify-between">
+        <span></span>
+        <button 
+            class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+            on:click="{deleteTraining}"
+            >
+            Delete
+        </button>
+    </div>
+</Role>   
 

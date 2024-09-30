@@ -36,7 +36,7 @@
             training.status = "in_progress"; 
         }
     }
-    
+
     $: if (training.date && training.completion_date && new Date(training.date) > new Date(training.completion_date)) {
         toastError("The training start date should not be greater than the completion date.");
     }
@@ -77,16 +77,6 @@
     </div>
     <div class="flex-1">
         <FloatingDate label="Training completion date" bind:value={training.completion_date} />
-    </div>
-    <div class="flex-1">
-        <NewFloatingSelect
-            on:change
-            bind:value={training.status}
-            label="Status"
-            instruction="Training status"
-            options={trainingStatusOptions}
-            hideValidation={true}
-        />
     </div>
 </div>
 
