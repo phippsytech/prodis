@@ -115,6 +115,7 @@ $app->post('/TimeTracking', new ControllerFactory(\NDISmate\Controllers\TimeTrac
 $app->post('/Trip', new ControllerFactory(\NDISmate\Controllers\TripController::class));
 $app->post('/Utilities', new ControllerFactory(\NDISmate\Controllers\UtilityController::class));
 $app->post('/Storage', new ControllerFactory(\NDISmate\Controllers\ObjectStorageController::class));
+$app->post('/Complaint', new ControllerFactory(\NDISmate\Controllers\ComplaintController::class));
 
 
 // CONVERSION IN PROGRESS

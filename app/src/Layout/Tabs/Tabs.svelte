@@ -316,6 +316,12 @@
             roles: ["admin"],
           },
           {
+            name: "Complaints",
+            url: "/registers/complaints",
+            active: true,
+            roles: ["admin"],
+          },
+          {
             name: "Risk",
             url: "/registers/risks",
             active: true,
