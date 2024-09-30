@@ -1,14 +1,15 @@
 <script>
     import { onMount } from "svelte";
-    import FloatingInput from "@shared/PhippsyTech/svelte-ui/forms/FloatingInput.svelte";
-    import FloatingDate from "@shared/PhippsyTech/svelte-ui/forms/FloatingDate.svelte";
-    import FloatingSelect from "@shared/PhippsyTech/svelte-ui/forms/FloatingSelect.svelte";
-    import StaffMultiSelector from "@shared/StaffMultiSelector.svelte";
     import { jspa } from "@shared/jspa.js";
     import { push } from "svelte-spa-router";
     import { ActionBarStore } from "@app/Layout/BottomNav/stores.js";
     import { BreadcrumbStore } from "@shared/stores.js";
     import { toastSuccess, toastError } from "@shared/toastHelper.js";
+    import FloatingInput from "@shared/PhippsyTech/svelte-ui/forms/FloatingInput.svelte";
+    import FloatingDate from "@shared/PhippsyTech/svelte-ui/forms/FloatingDate.svelte";
+    import FloatingSelect from "@shared/PhippsyTech/svelte-ui/forms/FloatingSelect.svelte";
+    import StaffMultiSelector from "@shared/StaffMultiSelector.svelte";
+    import Role from "@shared/Role.svelte";
 
     export let params;
 
@@ -164,6 +165,16 @@
             options={trainingStatusOptions}
             hideValidation={true}
         />
+        <Role roles={["admin"]}>
+            <div class="flex justify-end mt-auto">
+                <button 
+                    class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                    on:click="{deleteTraining}"
+                >
+                    Delete
+                </button>
+            </div>
+        </Role>    
     </div>
 </div>
 
