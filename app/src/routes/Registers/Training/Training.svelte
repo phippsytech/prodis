@@ -65,10 +65,11 @@
             const staffIdsChanged = JSON.stringify(staff_ids) !== JSON.stringify(stored_staff_ids);
 
             ActionBarStore.set({
-                can_delete: false,
+                can_delete: true,
                 show: trainingChanged || staffIdsChanged, // Trigger the action bar on changes
                 undo: () => undo(),
                 save: () => save(),
+                delete: () => deleteTraining(),
             });
         }
     }
@@ -163,14 +164,6 @@
             options={trainingStatusOptions}
             hideValidation={true}
         />
-        <div class="flex justify-end mt-auto">
-            <button 
-                class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                on:click="{deleteTraining}"
-            >
-                Delete
-            </button>
-        </div>
     </div>
 </div>
 
