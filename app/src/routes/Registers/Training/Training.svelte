@@ -113,7 +113,7 @@
         jspa("/Register/Training", "deleteTraining", { id: training.id })
             .then((result) => {
                 push("/registers/trainings");
-                toastSuccess("Training deleted deleted");
+                toastSuccess("Training successfully deleted");
             })
             .catch((error) => {
                 toastError("Error deleting training");
@@ -138,7 +138,7 @@
 
 <FloatingInput
     bind:value={training.course_title}
-    label="Course Title"
+    label="Course title"
     placeholder="Title of the training course"
 />
 
@@ -150,10 +150,10 @@
 
 <div class="flex space-x-4 w-full">
     <div class="flex-1"> 
-        <FloatingDate label="Training Date" bind:value={training.date} />
+        <FloatingDate label="Training start date" bind:value={training.date} />
     </div>
     <div class="flex-1">
-        <FloatingDate label="Training Completion Date" bind:value={training.completion_date} />
+        <FloatingDate label="Training completion date" bind:value={training.completion_date} />
     </div>
     <div class="flex-1">
         <FloatingSelect
