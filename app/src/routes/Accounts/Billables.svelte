@@ -167,8 +167,6 @@
         
             filteredManaged.some(managedItem => managedItem.SessionId === selectedItem)
         );
-
-
     }
 
 </script>
@@ -223,13 +221,18 @@
         </div>
 
 
-
-        <GroupedLineItems
-            bind:this={lineItemElement}
-            line_items={filteredManaged}
-            bind:selected_total
-            bind:selectedLineItems
-        />
+        {#if filteredManaged.length === 0}
+            <p class="text-center text-gray-700 uppercase mb-2">
+               No billables found.
+            </p>
+        {:else}
+            <GroupedLineItems
+                bind:this={lineItemElement}
+                line_items={filteredManaged}
+                bind:selected_total
+                bind:selectedLineItems
+            />
+        {/if}
     {:else}
         <div class="flex items-center justify-center p-4" style="height:100vh">
             <div class="w-full" style="max-width:400px;">
