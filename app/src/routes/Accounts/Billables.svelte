@@ -22,11 +22,17 @@
     let service_id = queryParams.service_id;
     let staff_id = queryParams.staff_id;
     let planmanager_id = queryParams.planmanager_id;
-    
-    $: queryParams = { client_id, service_id, staff_id, planmanager_id };
 
-    let start_date = getMonday();
-    let end_date = getDatePlus7Days(start_date);
+    // let start_date = getMonday();
+    // let end_date = getDatePlus7Days(start_date);
+
+    let start_date = queryParams.start_date;
+    let end_date =queryParams.end_date;
+
+    $: queryParams = { client_id, service_id, staff_id, planmanager_id, start_date, end_date};
+
+
+  
     let unbilled_total = 0;
     let selected_total = 0;
     let managed = [];
@@ -60,6 +66,8 @@
                 }
                 return a.ClientName > b.ClientName ? 1 : -1;
             });
+
+            console.log('managed:', managed);
         });
 
 
@@ -104,8 +112,6 @@
 
     });
 
-    
-    
 
     function generateInvoices() {
         generating_invoices = true;
@@ -122,11 +128,6 @@
             });
     }
 
-    $: {
-        if (lineItemElement && lineItemElement.handleSelectByDate) {
-            lineItemElement.handleSelectByDate(start_date, end_date);
-        }
-    }
 
     $: {
         InvoiceBarStore.set({
@@ -140,7 +141,7 @@
     function handleFilters()
     {
         filteredManaged = managed;
-        console.log('selectedItems', selectedLineItems);
+      
         if (client_id) {
             filteredManaged = filteredManaged.filter((item) => item.ClientId == client_id);
         }
@@ -157,10 +158,17 @@
             filteredManaged = filteredManaged.filter((item) => item.PlanManagerId == planmanager_id);
         }
 
-        selectedLineItems = selectedLineItems.filter(selectedItem =>
+        if (start_date || end_date) {
+            filteredManaged = filteredManaged.filter((item) =>  item.SupportsDeliveredFrom >= start_date &&
+            item.SupportsDeliveredFrom <= end_date);
+        }
+
+        // selectedLineItems = selectedLineItems.filter(selectedItem =>
         
-            filteredManaged.some(managedItem => managedItem.SessionId === selectedItem)
-        );
+        //     filteredManaged.some(managedItem => managedItem.SessionId === selectedItem)
+        // );
+
+        selectedLineItems = [];
 
     }
 
