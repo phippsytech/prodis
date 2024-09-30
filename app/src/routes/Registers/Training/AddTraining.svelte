@@ -36,17 +36,25 @@
             training.status = "in_progress"; 
         }
     }
+    
+    $: if (training.date && training.completion_date && new Date(training.date) > new Date(training.completion_date)) {
+        toastError("The training start date should not be greater than the completion date.");
+    }
 
     function addTraining() {
-        jspa("/Register/Training", "addTraining", training)
-            .then((result) => {
-                let training_id = result.result.id;
-                push("/registers/trainings");
-                toastSuccess("Training added successfully");
-            })
-            .catch((error) => {
-                toastError("Failed to add training");
-            });
+        if (training.date && training.completion_date && new Date(training.date) <= new Date(training.completion_date)) {
+            jspa("/Register/Training", "addTraining", training)
+                .then((result) => {
+                    let training_id = result.result.id;
+                    push("/registers/trainings");
+                    toastSuccess("Training added successfully");
+                })
+                .catch((error) => {
+                    toastError("Failed to add training");
+                });
+        } else {
+            toastError("Please ensure that the training start date is not greater than the completion date.");
+        }
     }
 </script>
 <StaffMultiSelector bind:staff_ids={training.staff_ids}/> 
