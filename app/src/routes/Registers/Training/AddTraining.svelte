@@ -11,6 +11,8 @@
 
     let training = {};
 
+    let clearable = true;
+
     BreadcrumbStore.set({
         path: [
             { url: "/registers", name: "Registers" },
@@ -73,10 +75,18 @@
 
 <div class="flex space-x-4 w-full">
     <div class="flex-1"> 
-        <FloatingDate label="Training start date" bind:value={training.date} />
+        <FloatingDate 
+            label="Training start date" 
+            bind:value={training.date} 
+            {clearable} 
+        />
     </div>
     <div class="flex-1">
-        <FloatingDate label="Training completion date" bind:value={training.completion_date} />
+        <FloatingDate 
+            label="Training completion date" 
+            bind:value={training.completion_date} 
+            {clearable}
+        />
     </div>
 </div>
 

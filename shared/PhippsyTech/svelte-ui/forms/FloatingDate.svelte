@@ -3,6 +3,7 @@
     export let label = "Date";
     export let value;
     export let readOnly = false;
+    export let clearable = false;
     // export let min;
     // export let max;
 
@@ -31,6 +32,10 @@
         );
         return date.toLocaleDateString("en-UK", options);
     }
+
+    function clear() {
+        value = ""; 
+    }
 </script>
 
 {#if readOnly}
@@ -44,18 +49,32 @@
     <div
         class="rounded-md px-3 pb-1 pt-2.5 shadow-sm ring-1 ring-inset ring-indigo-100 focus-within:ring-2 focus-within:ring-indigo-600 bg-white mb-2"
     >
-        <label for={inputId} class="block text-xs text-gray-900/50"
-            >{label}</label
-        >
-        <input
-            id={inputId}
-            type="date"
-            class="block w-full border-0 p-0 text-gray-900 placeholder:text-gray-400 sm:text-sm sm:leading-6 outline-none invalid"
-            bind:value
-            inputmode="numeric"
-            autocomplete="off"
-            placeholder="dd/mm/yyyy"
-            {...$$props}
-        />
+    <div class="flex justify-between items-center">
+        <label 
+            for={inputId} 
+            class="block text-xs text-gray-900/50">
+            {label}
+        </label>
+
+        {#if clearable}
+            <span
+                class="text-xs text-gray-900/50 cursor-pointer"
+                on:click={() => clear()}
+            >
+                clear
+            </span>
+        {/if}    
+    </div>
+
+    <input
+        id={inputId}
+        type="date"
+        class="block w-full border-0 p-0 text-gray-900 placeholder:text-gray-400 sm:text-sm sm:leading-6 outline-none invalid"
+        bind:value
+        inputmode="numeric"
+        autocomplete="off"
+        placeholder="dd/mm/yyyy"
+        {...$$props}
+    />
     </div>
 {/if}

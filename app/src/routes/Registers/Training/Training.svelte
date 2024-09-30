@@ -17,6 +17,8 @@
 
     let staff_ids = [];
     let stored_staff_ids = [];
+    
+    let clearable = true;
 
     let is_loaded = false;
 
@@ -107,7 +109,7 @@
                 })
                 .then((result) => {
                     staff_ids = (result.result || []).map(id => parseInt(id, 10));
-                    stored_staff_ids = [...staff_ids];
+                    stored_staff_ids = Object.assign({}, staff_ids);
                     toastSuccess("Training updated successfully!");
                 })
                 .catch((error) => {
@@ -160,10 +162,18 @@
 
 <div class="flex space-x-4 w-full">
     <div class="flex-1"> 
-        <FloatingDate label="Training start date" bind:value={training.date} />
+        <FloatingDate 
+            label="Training start date" 
+            bind:value={training.date} 
+            {clearable}
+        />
     </div>
     <div class="flex-1">
-        <FloatingDate label="Training completion date" bind:value={training.completion_date} />
+        <FloatingDate 
+            label="Training completion date" 
+            bind:value={training.completion_date} 
+            {clearable}
+        />
     </div>
 </div>
 <Role roles={["admin"]}>
