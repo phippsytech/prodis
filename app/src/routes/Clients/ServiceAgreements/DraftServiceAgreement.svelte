@@ -59,22 +59,14 @@
     class=" bg-white rounded-xl border border-b border-indigo-600 text-slate-800 mb-4"
   >
     <li
-      class=" text-sm rounded-t-md group flex justify-between items-center px-4 py-2 focus:outline-none focus:ring-0 focus:bg-indigo-600 focus:text-slate-600 transition duration-500 border-b border-indigo-100 w-full"
-    >
-      <div class="flex justify-between items-center w-full gap-x-2 font-bold">
-        <span
-          >Draft: <InlineDate
-            value={props.service_agreement_signed_date}
-          /></span
-        >
-      </div>
-    </li>
-
-    <li
       class="rounded-t-lg group items-center px-2 pt-2 focus:outline-none focus:ring-0 focus:bg-indigo-600 focus:text-slate-600 transition duration-500
   border-b border-indigo-100 w-full gap-x-2
   "
     >
+      <div class="text-indigo-600 px-2 pb-2 font-bold">
+        Draft Service Agreement
+      </div>
+
       <div class="flex flex-wrap space-x-2 items-center md:flex-no-wrap">
         <FloatingDate
           bind:value={props.service_agreement_signed_date}
@@ -85,6 +77,44 @@
           bind:value={props.service_agreement_end_date}
           label="End Date"
         />
+      </div>
+    </li>
+
+    <li
+      class="rounded-t-lg group items-center px-2 pt-2 focus:outline-none focus:ring-0 focus:bg-indigo-600 focus:text-slate-600 transition duration-500
+  border-b border-indigo-100 w-full gap-x-2
+  "
+    >
+      <div class="px-2 pb-2 text-xs">
+        Participant's Representative (Signatory)
+      </div>
+
+      <div class="flex gap-x-2 flex-wrap">
+        <div class="w-full sm:w-2/5 sm:flex-1">
+          <FloatingInput
+            bind:value={props.name}
+            label="Representative's Full Name"
+            placeholder="eg: Chris Person"
+          />
+        </div>
+        <div
+          class="flex flex-wrap xs:flex-nowrap gap-2 justify-between w-full sm:w-3/5"
+        >
+          <div class="flex-grow">
+            <FloatingInput
+              bind:value={props.ndis_plan_end_date}
+              label="Email Address"
+              placeholder="eg: chris@person.com"
+            />
+          </div>
+          <div class="flex-grow-0">
+            <FloatingInput
+              bind:value={props.ndis_plan_end_date}
+              label="Contact Number"
+              placeholder="eg: 04XX XXX XXX"
+            />
+          </div>
+        </div>
       </div>
     </li>
 

@@ -11,23 +11,20 @@
   function handleDateChange(event) {
     selectedDate = event.target.value;
   }
-
-  // Trigger the native date picker when the formatted date is clicked
-  function openDatePicker() {
-    document.getElementById("hiddenDatePicker").click();
-  }
 </script>
 
-<!-- Display the formatted date or prompt user to select a date -->
-<p on:click={openDatePicker} style="cursor: pointer;">
-  {selectedDate ? formatDate(selectedDate) : "Select a date"}
+<!-- Display the formatted date or "Set date" if no date is selected -->
+<p
+  on:click={() => document.getElementById("hiddenDatePicker").click()}
+  style="cursor: pointer;"
+>
+  {selectedDate ? formatDate(selectedDate) : "Set date"}
 </p>
 
-<!-- Hidden date input, used to trigger the native date picker -->
+<!-- Hidden native date input used to trigger the date picker -->
 <input
   type="date"
   id="hiddenDatePicker"
   bind:value={selectedDate}
   on:change={handleDateChange}
-  style="display: none;"
 />
