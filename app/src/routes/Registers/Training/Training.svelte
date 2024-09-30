@@ -8,6 +8,7 @@
     import FloatingInput from "@shared/PhippsyTech/svelte-ui/forms/FloatingInput.svelte";
     import FloatingDate from "@shared/PhippsyTech/svelte-ui/forms/FloatingDate.svelte";
     import FloatingSelect from "@shared/PhippsyTech/svelte-ui/forms/FloatingSelect.svelte";
+    import NewFloatingSelect from "@shared/PhippsyTech/svelte-ui/forms/NewFloatingSelect.svelte";
     import StaffMultiSelector from "@shared/StaffMultiSelector.svelte";
     import Role from "@shared/Role.svelte";
 
@@ -119,9 +120,6 @@
         }
     }
 
-
-
-
     function deleteTraining() {
         jspa("/Register/Training", "deleteTraining", { id: training.id })
             .then((result) => {
@@ -169,7 +167,8 @@
         <FloatingDate label="Training completion date" bind:value={training.completion_date} />
     </div>
     <div class="flex-1">
-        <FloatingSelect
+        <NewFloatingSelect
+            on:change
             bind:value={training.status}
             label="Status"
             instruction="Training status"
