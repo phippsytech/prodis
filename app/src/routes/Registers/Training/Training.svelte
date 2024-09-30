@@ -66,11 +66,10 @@
             const staffIdsChanged = JSON.stringify(staff_ids) !== JSON.stringify(stored_staff_ids);
 
             ActionBarStore.set({
-                can_delete: true,
+                can_delete: false,
                 show: trainingChanged || staffIdsChanged, // Trigger the action bar on changes
                 undo: () => undo(),
                 save: () => save(),
-                delete: () => deleteTraining(),
             });
         }
     }
