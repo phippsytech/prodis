@@ -7,7 +7,6 @@
     import { toastSuccess, toastError } from "@shared/toastHelper.js";
     import FloatingInput from "@shared/PhippsyTech/svelte-ui/forms/FloatingInput.svelte";
     import FloatingDate from "@shared/PhippsyTech/svelte-ui/forms/FloatingDate.svelte";
-    import NewFloatingSelect from "@shared/PhippsyTech/svelte-ui/forms/NewFloatingSelect.svelte";
     import StaffMultiSelector from "@shared/StaffMultiSelector.svelte";
     import Role from "@shared/Role.svelte";
 
@@ -23,11 +22,6 @@
     let is_loaded = false;
 
     let stored_training = Object.assign({}, training);
-
-    let trainingStatusOptions = [
-        { option: "Completed", value: "completed" },
-        { option: "In Progress", value: "in_progress" },
-    ];
 
     BreadcrumbStore.set({
         path: [
@@ -131,7 +125,6 @@
                 toastError("Error deleting training");
             });
     }
-
 </script>
 
 <div
