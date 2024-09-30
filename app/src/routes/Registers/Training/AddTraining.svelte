@@ -2,9 +2,10 @@
     import { push } from "svelte-spa-router";
     import { BreadcrumbStore } from "@shared/stores.js";
     import { jspa } from "@shared/jspa.js";
+    import { toastSuccess, toastError } from "@shared/toastHelper.js";
     import FloatingInput from "@shared/PhippsyTech/svelte-ui/forms/FloatingInput.svelte";
     import FloatingDate from "@shared/PhippsyTech/svelte-ui/forms/FloatingDate.svelte";
-    import FloatingSelect from "@shared/PhippsyTech/svelte-ui/forms/FloatingSelect.svelte";
+    import NewFloatingSelect from "@shared/PhippsyTech/svelte-ui/forms/NewFloatingSelect.svelte";
     import Button from "@shared/PhippsyTech/svelte-ui/Button.svelte";
     import StaffMultiSelector from "@shared/StaffMultiSelector.svelte";
 
@@ -41,8 +42,11 @@
             .then((result) => {
                 let training_id = result.result.id;
                 push("/registers/trainings");
+                toastSuccess("Training added successfully");
             })
-            .catch(() => {});
+            .catch((error) => {
+                toastError("Failed to add training");
+            });
     }
 </script>
 <StaffMultiSelector bind:staff_ids={training.staff_ids}/> 
@@ -67,7 +71,8 @@
         <FloatingDate label="Training completion date" bind:value={training.completion_date} />
     </div>
     <div class="flex-1">
-        <FloatingSelect
+        <NewFloatingSelect
+            on:change
             bind:value={training.status}
             label="Status"
             instruction="Training status"
