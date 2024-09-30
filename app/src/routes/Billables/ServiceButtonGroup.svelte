@@ -13,8 +13,6 @@
     let serviceBookings = [];
     let serviceBookingList = [];
 
-    $: console.log("Service Booking ID: " + service_booking_id);
-
     onMount(() => {
         if (client_id) {
             loadServices(client_id);
