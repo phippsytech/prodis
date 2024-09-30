@@ -61,17 +61,23 @@
         {/each}
     </div>
 {:else}
-    <div class="rounded-md shadow-sm ring-1 ring-inset ring-indigo-100 bg-white mb-0 pb-1.5 mb-2">
+    <div class="rounded-md shadow-sm ring-1 ring-inset ring-indigo-100 bg-white mb-0 pb-1.5 mb-2 floating-multi-combo-box">
         <h3 class="px-3 pt-2 text-xs text-gray-500">{label}</h3>
 
         <Select
+            containerStyles="border:none; margin:0 0.75rem; padding:0 0;width:auto; min-height: 26px;"
+            inputStyles="min-height:26px; height: auto; margin:0;"
             multiple={true}
             items={items}
             bind:value={selectedItems}
             placeholder={placeholderText}
-            containerStyles="border:none; margin:-4px 0.75rem; padding:0 0; min-height:34px;width:auto;"
             --list-position="fixed"
             on:select={updateValues}
         />
     </div>
 {/if}
+<style scoped>
+.floating-multi-combo-box :global(.svelte-select .value-container) {
+    padding: 0 !important;
+}
+</style>

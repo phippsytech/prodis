@@ -44,12 +44,13 @@
   </div>
 {:else}
   <div
-    class="rounded-md shadow-sm ring-1 ring-inset ring-indigo-100 bg-white mb-0 pb-1.5 mb-2"
+    class="rounded-md shadow-sm ring-1 ring-inset ring-indigo-100 bg-white mb-0 pb-1.5 mb-2 floating-combo-box"
   >
     <h3 class="px-3 pt-2 text-xs text-gray-500">{label}</h3>
 
     <Select
-      containerStyles="border:none; margin:-4px 0.75rem; padding:0 0; min-height:34px;width:auto;"
+      containerStyles="border:none; margin:0 0.75rem; padding:0 0;width:auto; min-height: 26px;"
+      inputStyles="min-height:26px; height: auto;"
       --list-position="fixed"
       {items}
       {value}
@@ -62,3 +63,8 @@
     </Select>
   </div>
 {/if}
+<style scoped>
+.floating-combo-box :global(.svelte-select .value-container) {
+  padding: 0 !important;
+}
+</style>
