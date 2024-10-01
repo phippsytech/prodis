@@ -25,6 +25,8 @@
         });
     }
 
+    $: console.log("Selected items:", selectedItems);
+
     // Function to set initial values based on loaded items
     async function setInitialValues() {
         try {
@@ -49,7 +51,12 @@
 
     // Function to update values when selected items change
     function updateValues() {
-        values = selectedItems.map(item => item.value);
+        if (selectedItems && selectedItems?.length > 0) {
+            values = selectedItems.map(item => item.value);
+        } else {
+            values = [];
+        }
+        console.log("updating values", values);
     }
 </script>
 
@@ -71,7 +78,7 @@
             placeholder={placeholderText}
             containerStyles="border:none; margin:-4px 0.75rem; padding:0 0; min-height:34px;width:auto;"
             --list-position="fixed"
-            on:select={updateValues}
+            on:input={updateValues}
         />
     </div>
 {/if}
