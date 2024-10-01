@@ -12,8 +12,6 @@
 
     let training = {};
 
-    let clearable = true;
-
     let evidenceOptions = [
         {
             option: "Yes",
@@ -82,15 +80,13 @@
     <div class="flex-1"> 
         <FloatingDate 
             label="Training start date" 
-            bind:value={training.date} 
-            {clearable} 
+            bind:value={training.date}
         />
     </div>
     <div class="flex-1">
         <FloatingDate 
             label="Training completion date" 
-            bind:value={training.completion_date} 
-            {clearable}
+            bind:value={training.completion_date}
         />
     </div>
 </div>
