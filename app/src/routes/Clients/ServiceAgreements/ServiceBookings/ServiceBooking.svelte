@@ -3,7 +3,7 @@
     import BudgetBar from "@shared/BudgetBar.svelte";
     import BudgetBarWeekly from "@shared/BudgetBarWeekly.svelte";
     import ExpiredServiceAgreementBudgetBar from "@shared/ExpiredServiceAgreementBudgetBar.svelte";
-    import { formatDate, timeAgo } from "@shared/utilities.js";
+    import { getDateOnlyTimestamp, formatDate, timeAgo } from "@shared/utilities.js";
 
     export let service_booking = {};
 
@@ -84,11 +84,6 @@
         const adjustedWeeklyTime = remainingMinutes / remainingWeeks;
         
         return adjustedWeeklyTime;
-    }
-
-    function getDateOnlyTimestamp(dateString) {
-        const date = new Date(dateString);
-        return new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
     }
 
     let isExpired = false;

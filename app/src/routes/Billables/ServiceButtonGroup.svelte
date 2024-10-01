@@ -1,8 +1,8 @@
 <script>
-    import { convertFieldsToBoolean } from "@shared/utilities/convertFieldsToBoolean";
     import { onMount } from "svelte";
     import RadioButtonGroup from "@shared/PhippsyTech/svelte-ui/forms/RadioButtonGroup.svelte";
     import { jspa } from "@shared/jspa.js";
+    import { getDateOnlyTimestamp, formatDate, timeAgo } from "@shared/utilities.js";
 
     export let client_id;
     export let service_booking_id = null;
@@ -33,7 +33,7 @@
                 serviceBookingList = []; // clear the servicList
                 // service_booking_id = null; // clear the selected service
                 serviceBookings = result.result;
-                console.log(serviceBookings);
+                
                 let selected = false;
 
                 serviceBookings.forEach((serviceBooking) => {
@@ -48,11 +48,17 @@
                         selected = true;
                     }
 
+                    // check if service booking is active, not archived, not expired, and agreement is active
                     if (
-                        serviceBooking.archived != 1 &&
-                        serviceBooking.is_active == 1
-                    )
+                        !serviceBooking.archived &&
+                        serviceBooking.is_active && 
+                        !isExpired(serviceBooking) &&
+                        serviceBooking.service_agreement_is_active
+                    ) {
+                        // if service booking is active, add it to the list
                         serviceBookingList.push(options);
+                    }
+                        
                 });
 
                 // if (!selected) service_id = "Choose service"; // unset the selected client_id
@@ -79,6 +85,20 @@
                 }
             })
             .catch((error) => {});
+    }
+
+    function isExpired(serviceBooking) 
+    {
+        const start = new Date(serviceBooking.service_agreement_signed_date).getTime();
+        const end = new Date(serviceBooking.service_agreement_end_date).getTime();
+        const current = getDateOnlyTimestamp(new Date());
+    
+        //Ensure the current date is within the interval
+        if (current <= start || current >= end) {
+            return true;
+        } else {
+            return false;
+        }
     }
 </script>
 

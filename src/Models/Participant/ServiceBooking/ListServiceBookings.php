@@ -17,6 +17,7 @@ class ListServiceBookings
                     servicebookings.plan_id,
                     ANY_VALUE(serviceagreements.service_agreement_signed_date) AS service_agreement_signed_date,
                     ANY_VALUE(serviceagreements.service_agreement_end_date) AS service_agreement_end_date,
+                    ANY_VALUE(serviceagreements.is_active) AS service_agreement_is_active,
                     ANY_VALUE(servicebookings.service_id) AS service_id,
                     ANY_VALUE(servicebookings.plan_manager_id) AS plan_manager_id,
                     ANY_VALUE(planmanagers.name) AS plan_manager_name,
@@ -68,7 +69,7 @@ class ListServiceBookings
             );
 
             $converter = new ConvertFieldsToBoolean();
-            $beans = $converter($beans, ['include_travel', 'is_active', 'adjust_weekly_time']);
+            $beans = $converter($beans, ['include_travel', 'is_active', 'adjust_weekly_time', 'service_agreement_is_active']);
 
             return $beans;
         } catch (RedException $e) {
