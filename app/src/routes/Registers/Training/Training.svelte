@@ -91,7 +91,6 @@
         training = Object.assign({}, stored_training);
         staff_ids = [...stored_staff_ids];
         staff_ids = [...staff_ids];
-        console.log("Undoing staff ids",staff_ids);
     }
 
     function save() {
