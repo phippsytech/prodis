@@ -83,16 +83,22 @@
     }
 
     // update status based on completion date
-    $: if (training.completion_date) {
+    $: {
         const currentDate = new Date();
-        const completionDate = new Date(training.completion_date);
 
-        if (completionDate <= currentDate) {
-            training.status = "completed"; 
+        if (training.completion_date) {
+            const completionDate = new Date(training.completion_date);
+            
+            if (completionDate <= currentDate) {
+                training.status = "completed"; 
+            } else {
+                training.status = "in_progress"; 
+            }
         } else {
-            training.status = "in_progress"; 
+            training.status = "in_progress"; // if completion date is cleared, set status as in_progress
         }
     }
+
 
     function undo() {
         training = Object.assign({}, stored_training);
@@ -105,6 +111,10 @@
         { check: () => !training.course_title, message: "Course title must be provided." },
         { check: () => !training.trainer, message: "Trainer must be provided." },
         { check: () => !training.date, message: "Training start date must be provided." },
+        { 
+            check: () => training.completion_date && new Date(training.completion_date) < new Date(training.date), 
+            message: "Completion date cannot be earlier than the start date." 
+        },
     ];
 
     function validate() {
@@ -145,14 +155,16 @@
     }
 
     function deleteTraining() {
-        jspa("/Register/Training", "deleteTraining", { id: training.id })
+        if (confirm("Are you sure you want to delete this training?")) {
+            jspa("/Register/Training", "deleteTraining", { id: training.id })
             .then((result) => {
-                push("/registers/trainings");
                 toastSuccess("Training successfully deleted");
+                push("/registers/trainings");
             })
             .catch((error) => {
                 toastError("Error deleting training");
             });
+        }
     }
 </script>
 
