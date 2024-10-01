@@ -59,8 +59,8 @@
     $: {
         if (mounted) {
             const trainingChanged = JSON.stringify(training) !== JSON.stringify(stored_training);
-            const staffIdsChanged = JSON.stringify(staff_ids) !== JSON.stringify(stored_staff_ids);
-            
+            const staffIdsChanged = JSON.stringify(staff_ids.map(id => parseInt(id, 10))) !== JSON.stringify(stored_staff_ids);
+
             ActionBarStore.set({
                 can_delete: false,
                 show: trainingChanged || staffIdsChanged, // Trigger the action bar on changes
@@ -90,6 +90,8 @@
     function undo() {
         training = Object.assign({}, stored_training);
         staff_ids = [...stored_staff_ids];
+        staff_ids = [...staff_ids];
+        console.log("Undoing staff ids",staff_ids);
     }
 
     function save() {
@@ -139,7 +141,6 @@
         bind:staff_ids={staff_ids}
     /> 
 {/if}
-
 
 <FloatingInput
     bind:value={training.course_title}
