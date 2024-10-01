@@ -76,4 +76,21 @@ class Training extends NewCustomModel
         return $bean;
     }
 
+    public function delete($data) 
+    {  
+        $trainingBean = R::load('trainings', $data['id']);
+            
+        if (!$trainingBean->id) {
+            return ['error' => 'Training not found.'];
+        }
+        $assignees = R::find('trainingassignees', 'training_id = ?', [$data['id']]);
+
+        foreach ($assignees as $assignee) {
+            R::trash($assignee);
+        }
+
+        R::trash($trainingBean);
+    }
+    
+
 }
