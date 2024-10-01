@@ -3,14 +3,16 @@
 namespace NDISmate\Controllers;
 
 use NDISmate\CORE\BaseController;
-use NDISmate\Models\Register\ListComplaint;
+use NDISmate\Models\Register\Complaint\AddComplaint;
+use NDISmate\Models\Register\Complaint\ListComplaint;
 
 class ComplaintController extends BaseController
 {
     protected function defineController()
     {
         $this->controller = [
-            'listComplaints' => [new ListComplaint, null, true, []]
+            'listComplaints' => [new ListComplaint, null, true, []],
+            'addComplaint' => [new AddComplaint, null, true, []],
         ];
     }
 }

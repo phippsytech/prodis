@@ -42,7 +42,7 @@
     </div>
     <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
         <button
-            on:click={() => push("/registers/feedbacks/add")}
+            on:click={() => push("/registers/complaints/add")}
             type="button"
             class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             >Add Complaint</button
@@ -50,9 +50,14 @@
     </div>
 </div>
 
-<h1 class="text-black text-1xl font-bold mt-0 mb-2 drop-shadow mb-2">
+
+{#if !complaints.length}
+    <div class="small-text color-indigo-100 text-center">No Complaints Found.</div>
+{/if}
+
+<!-- <h1 class="text-black text-1xl font-bold mt-0 mb-2 drop-shadow mb-2">
     Open Complaint
-</h1>
+</h1> -->
 <ul class="bg-white rounded-lg border border-gray-200 w-full text-gray-900">
     {#each complaints as complaint, index (complaint.id)}
         {#if complaint.status == "open"}
@@ -82,9 +87,9 @@
     {/each}
 </ul>
 
-<h1 class="text-black text-1xl font-bold mt-0 mb-2 drop-shadow mb-2">
+<!-- <h1 class="text-black text-1xl font-bold mt-0 mb-2 drop-shadow mb-2">
     Closed Complaint
-</h1>
+</h1> -->
 <ul class="bg-white rounded-lg border border-gray-200 w-full text-gray-900">
     {#each complaints as complaint, index (complaint.id)}
         {#if complaint.status == "closed"}

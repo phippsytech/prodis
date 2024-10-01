@@ -779,6 +779,14 @@ export default {
         asyncComponent: () => import('./routes/Registers/Registers.svelte')
     }),
 
+    '/registers/complaints': wrap({
+        asyncComponent: () => import('./routes/Registers/Complaint/Complaints.svelte')
+    }),
+
+    '/registers/complaints/add': wrap({
+        asyncComponent: () => import('./routes/Registers/Complaint/AddComplaint.svelte')
+    }),
+
     '/registers/feedbacks': wrap({
         asyncComponent: () => import('./routes/Registers/Feedback/Feedbacks.svelte')
     }),
@@ -789,10 +797,7 @@ export default {
         asyncComponent: () => import('./routes/Registers/Feedback/Feedback.svelte')
     }),
 
-    '/registers/complaints': wrap({
-        asyncComponent: () => import('./routes/Registers/Complaint/Complaints.svelte')
-    }),
-
+   
     '/registers/risks': wrap({
         asyncComponent: () => import('./routes/Registers/Risk/Risks.svelte')
     }),
