@@ -25,8 +25,6 @@
         });
     }
 
-    $: console.log("Selected items:", selectedItems);
-
     // Function to set initial values based on loaded items
     async function setInitialValues() {
         try {
@@ -56,7 +54,6 @@
         } else {
             values = [];
         }
-        console.log("updating values", values);
     }
 </script>
 
