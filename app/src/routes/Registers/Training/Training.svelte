@@ -94,45 +94,55 @@
         }
     }
 
-    $: if (training.date && training.completion_date && new Date(training.date) > new Date(training.completion_date)) {
-        toastError("The training start date should not be greater than the completion date.");
-        mounted = false;
-    }
-
     function undo() {
         training = Object.assign({}, stored_training);
         staff_ids = [...stored_staff_ids];
         staff_ids = [...staff_ids];
     }
 
-    function save() {
-        if (training.date && training.completion_date && new Date(training.date) <= new Date(training.completion_date)) {
-            jspa("/Register/Training", "updateTraining", { ...training, staff_ids })
-                .then((result) => {
-                    if (result.error) {  
-                        toastError(result.error);
-                        return;
-                    }
-                    
-                    training = result.result || { staff_ids: [] };
-                    stored_training = Object.assign({}, training);
+    const validations = [
+        { check: () => staff_ids.length === 0, message: "Please select at least one staff member." },
+        { check: () => !training.course_title, message: "Course title must be provided." },
+        { check: () => !training.trainer, message: "Trainer must be provided." },
+        { check: () => !training.date, message: "Training start date must be provided." },
+    ];
 
-                    return jspa("/Register/TrainingAssignees", "getTrainingAssignees", { training_id: training.id });
-                })
-                .then((result) => {
-                    staff_ids = (result.result || []).map(id => parseInt(id, 10));
-                    stored_staff_ids = Object.assign({}, staff_ids);
-                    toastSuccess("Training updated successfully!");
-                })
-                .catch((error) => {
-                    console.error("Error updating training:", error);
-                    toastError("Error updating training, please try again.");
-                });
-        } else {
-            toastError("Please ensure that the training start date is not greater than the completion date.");
+    function validate() {
+        for (const { check, message } of validations) {
+            if (check()) {
+                toastError(message);
+                return false;
+            }
         }
+        return true;
     }
 
+    function save() {
+        if (validate()) {
+            jspa("/Register/Training", "updateTraining", { ...training, staff_ids })
+            .then((result) => {
+                if (result.error) {  
+                    toastError(result.error);
+                    return;
+                }
+                
+                training = result.result || { staff_ids: [] };
+                stored_training = Object.assign({}, training);
+
+                return jspa("/Register/TrainingAssignees", "getTrainingAssignees", { training_id: training.id });
+            })
+            .then((result) => {
+                staff_ids = (result.result || []).map(id => parseInt(id, 10));
+                stored_staff_ids = Object.assign({}, staff_ids);
+                push("/registers/trainings");
+                toastSuccess("Training updated successfully!");
+            })
+            .catch((error) => {
+                console.error("Error updating training:", error);
+                toastError("Error updating training, please try again.");
+            });
+        }
+    }
 
     function deleteTraining() {
         jspa("/Register/Training", "deleteTraining", { id: training.id })
@@ -187,7 +197,8 @@
 </div>
 
 <Role roles={["admin"]}>
-    {#if training.status === "completed"}
+
+    <!-- {#if training.status === "completed"}
         <NewFloatingSelect
             on:change
             bind:value={training.has_evidence}
@@ -195,9 +206,9 @@
             instruction="If training has evidence of completion"
             options={evidenceOptions}
         />
-    {/if}
-    <div class="flex justify-between">
-        <span></span>
+    {/if} -->
+
+    <div class="flex">
         <button 
             class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
             on:click="{deleteTraining}"
@@ -205,5 +216,5 @@
             Delete
         </button>
     </div>
-</Role>   
+</Role> 
 

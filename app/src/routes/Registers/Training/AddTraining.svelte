@@ -32,35 +32,43 @@
     });
 
     // update status based on completion date
-    $: if (training.completion_date) {
+    $: {
         const currentDate = new Date();
-        const completionDate = new Date(training.completion_date);
-
-        if (completionDate <= currentDate) {
-            training.status = "completed"; 
+        
+        if (training.completion_date) {
+            const completionDate = new Date(training.completion_date);
+            training.status = completionDate <= currentDate ? "completed" : "in_progress"; 
         } else {
-            training.status = "in_progress"; 
+            // If completion date is null, set status to "in_progress"
+            training.status = "in_progress";
         }
     }
 
-    $: if (training.date && training.completion_date && new Date(training.date) > new Date(training.completion_date)) {
-        toastError("The training start date should not be greater than the completion date.");
-    }
+    // $: if (training.date && training.completion_date && new Date(training.date) > new Date(training.completion_date)) {
+    //     toastError("The training start date should not be greater than the completion date.");
+    // }
 
     function addTraining() {
-        if (training.date && training.completion_date && new Date(training.date) <= new Date(training.completion_date)) {
+        if (training.date) {
+            if (training.completion_date) {
+                if (new Date(training.date) > new Date(training.completion_date)) {
+                    toastError("The training start date should not be greater than the completion date.");
+                    return; 
+                }
+            }
             jspa("/Register/Training", "addTraining", training)
-                .then((result) => {
+                .then(() => {
                     push("/registers/trainings");
                     toastSuccess("Training added successfully");
                 })
-                .catch((error) => {
+                .catch(() => {
                     toastError("Failed to add training");
                 });
         } else {
-            toastError("Please ensure that the training start date is not greater than the completion date.");
+            toastError("Please enter a training start date.");
         }
     }
+
 </script>
 <StaffMultiSelector bind:staff_ids={training.staff_ids}/> 
 
@@ -91,7 +99,7 @@
     </div>
 </div>
 
-<Role roles={["admin"]}>
+<!-- <Role roles={["admin"]}>
     {#if training.status === "completed"}
         <NewFloatingSelect
         on:change
@@ -101,7 +109,7 @@
         options={evidenceOptions}
         />
     {/if}
-</Role>
+</Role> -->
 
 <div class="flex justify-between">
     <span></span>
