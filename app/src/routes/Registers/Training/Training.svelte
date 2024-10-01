@@ -8,6 +8,7 @@
     import FloatingInput from "@shared/PhippsyTech/svelte-ui/forms/FloatingInput.svelte";
     import FloatingDate from "@shared/PhippsyTech/svelte-ui/forms/FloatingDate.svelte";
     import StaffMultiSelector from "@shared/StaffMultiSelector.svelte";
+    import NewFloatingSelect from "@shared/PhippsyTech/svelte-ui/forms/NewFloatingSelect.svelte";
     import Role from "@shared/Role.svelte";
 
     export let params;
@@ -20,6 +21,17 @@
     let clearable = true;
 
     let is_loaded = false;
+
+    let evidenceOptions = [
+        {
+            option: "Yes",
+            value: "yes",
+        },
+        {
+            option: "No",
+            value: "no",
+        },
+    ];
 
     let stored_training = Object.assign({}, training);
 
@@ -97,6 +109,11 @@
         if (training.date && training.completion_date && new Date(training.date) <= new Date(training.completion_date)) {
             jspa("/Register/Training", "updateTraining", { ...training, staff_ids })
                 .then((result) => {
+                    if (result.error) {  
+                        toastError(result.error);
+                        return;
+                    }
+                    
                     training = result.result || { staff_ids: [] };
                     stored_training = Object.assign({}, training);
 
@@ -115,6 +132,7 @@
             toastError("Please ensure that the training start date is not greater than the completion date.");
         }
     }
+
 
     function deleteTraining() {
         jspa("/Register/Training", "deleteTraining", { id: training.id })
@@ -152,6 +170,16 @@
     label="Trainer"
     placeholder="John Doe"
 />
+
+{#if training.status === "completed"}
+    <NewFloatingSelect
+        on:change
+        bind:value={training.has_evidence}
+        label="Training evidence"
+        instruction="If training has evidence of completion"
+        options={evidenceOptions}
+    />
+{/if}
 
 <div class="flex space-x-4 w-full">
     <div class="flex-1"> 

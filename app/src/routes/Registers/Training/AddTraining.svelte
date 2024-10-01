@@ -13,6 +13,17 @@
 
     let clearable = true;
 
+    let evidenceOptions = [
+        {
+            option: "Yes",
+            value: "yes",
+        },
+        {
+            option: "No",
+            value: "no",
+        },
+    ];
+
     BreadcrumbStore.set({
         path: [
             { url: "/registers", name: "Registers" },
@@ -20,12 +31,6 @@
             { url: "/registers/trainings/add", name: "Add Training" },
         ]
     });
-
-
-    let trainingStatusOptions = [
-        { option: "Completed", value: "completed" },
-        { option: "In Progress", value: "in_progress" },
-    ];
 
     // update status based on completion date
     $: if (training.completion_date) {
@@ -47,7 +52,6 @@
         if (training.date && training.completion_date && new Date(training.date) <= new Date(training.completion_date)) {
             jspa("/Register/Training", "addTraining", training)
                 .then((result) => {
-                    let training_id = result.result.id;
                     push("/registers/trainings");
                     toastSuccess("Training added successfully");
                 })
@@ -71,6 +75,14 @@
     bind:value={training.trainer}
     label="Trainer"
     placeholder="John Doe"
+/>
+
+<NewFloatingSelect
+    on:change
+    bind:value={training.has_evidence}
+    label="Training evidence"
+    instruction="If training has evidence of completion"
+    options={evidenceOptions}
 />
 
 <div class="flex space-x-4 w-full">

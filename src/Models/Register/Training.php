@@ -46,6 +46,10 @@ class Training extends NewCustomModel
     {
         $bean = parent::update($data);
 
+        if ($data['has_evidence'] ==='yes' && $data['status'] !== 'completed') {
+            return ['error' => 'Evidence cannot be added for incomplete training.'];
+        }
+
         if (is_array($data['staff_ids']) && !empty($data['staff_ids'])) {
             $existingAssignees = R::find('trainingassignees', 'training_id = ?', [$bean->id]);
 
