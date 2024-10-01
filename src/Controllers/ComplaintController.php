@@ -10,7 +10,7 @@ class ComplaintController extends BaseController
     protected function defineController()
     {
         $this->controller = [
-            'listComplaints' => [new ListComplaint, null, false, []]
+            'listComplaints' => [new ListComplaint, null, true, []]
         ];
     }
 }

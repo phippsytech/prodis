@@ -7,6 +7,8 @@ class ListComplaint {
 
     function __invoke($data) {
 
-       return  R::findAll('feedbacks', 'type = ?', ['complaint']);
+       $complaints =  R::findAll('feedbacks', 'type = ?', ['complaint']);
+
+       return array_values($complaints);
     }
 }
