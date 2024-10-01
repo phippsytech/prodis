@@ -8,6 +8,7 @@
     import NewFloatingSelect from "@shared/PhippsyTech/svelte-ui/forms/NewFloatingSelect.svelte";
     import Button from "@shared/PhippsyTech/svelte-ui/Button.svelte";
     import StaffMultiSelector from "@shared/StaffMultiSelector.svelte";
+    import Role from "@shared/Role.svelte";
 
     let training = {};
 
@@ -77,14 +78,6 @@
     placeholder="John Doe"
 />
 
-<NewFloatingSelect
-    on:change
-    bind:value={training.has_evidence}
-    label="Training evidence"
-    instruction="If training has evidence of completion"
-    options={evidenceOptions}
-/>
-
 <div class="flex space-x-4 w-full">
     <div class="flex-1"> 
         <FloatingDate 
@@ -101,6 +94,18 @@
         />
     </div>
 </div>
+
+<Role roles={["admin"]}>
+    {#if training.status === "completed"}
+        <NewFloatingSelect
+        on:change
+        bind:value={training.has_evidence}
+        label="Training evidence"
+        instruction="If training has evidence of completion"
+        options={evidenceOptions}
+        />
+    {/if}
+</Role>
 
 <div class="flex justify-between">
     <span></span>

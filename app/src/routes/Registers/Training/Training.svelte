@@ -171,16 +171,6 @@
     placeholder="John Doe"
 />
 
-{#if training.status === "completed"}
-    <NewFloatingSelect
-        on:change
-        bind:value={training.has_evidence}
-        label="Training evidence"
-        instruction="If training has evidence of completion"
-        options={evidenceOptions}
-    />
-{/if}
-
 <div class="flex space-x-4 w-full">
     <div class="flex-1"> 
         <FloatingDate 
@@ -197,7 +187,17 @@
         />
     </div>
 </div>
+
 <Role roles={["admin"]}>
+    {#if training.status === "completed"}
+        <NewFloatingSelect
+            on:change
+            bind:value={training.has_evidence}
+            label="Training evidence"
+            instruction="If training has evidence of completion"
+            options={evidenceOptions}
+        />
+    {/if}
     <div class="flex justify-between">
         <span></span>
         <button 
