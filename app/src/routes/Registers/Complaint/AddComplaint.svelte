@@ -4,7 +4,7 @@
     import { jspa } from "@shared/jspa.js";
     import ComplaintForm from "./ComplaintForm.svelte";
     import Button from "@shared/PhippsyTech/svelte-ui/Button.svelte";
-
+    
     let complaint = {};
 
     complaint.status = "open";

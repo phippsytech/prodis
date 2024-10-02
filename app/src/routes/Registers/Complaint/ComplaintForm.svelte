@@ -4,12 +4,16 @@
     import FloatingSelect from '@shared/PhippsyTech/svelte-ui/forms/FloatingSelect.svelte';
     import NewFloatingSelect from '@shared/PhippsyTech/svelte-ui/forms/NewFloatingSelect.svelte';
     import { jspa } from "@shared/jspa.js";
-    
+    import FloatingCombo from "@shared/PhippsyTech/svelte-ui/forms/FloatingCombo.svelte";
+    import StaffMultiSelector from "@shared/StaffMultiSelector.svelte";
+  import { consoleLogs } from '@app/Overlays/stores';
     let feedbackStatusSelectElement = null;
 
     let staffs = [];
+    let clients = [];
 
-    let staff_id;
+    let staffIds = [];
+    let client_id = null;
 
     let complaintStatusItems = [
         {option: "Under Investigation", value: "under investigation"},
@@ -66,6 +70,20 @@
         .sort((a, b) => a.label.localeCompare(b.label));
     });
 
+    jspa("/Participant", "listClients", {}).then((result) => {
+      clients = result.result
+        .filter((item) => item.archived != 1)
+        .map((item) => ({
+          label: `${item.client_name}`,
+          value: item.id,
+        }))
+        .sort((a, b) => a.label.localeCompare(b.label));
+    });
+
+    $: {
+        console.log(staffIds);
+    }
+
 </script>
     
 <h3 class="text-slate-800 font-bold mx-2">Complaint Management Register</h3>
@@ -79,20 +97,28 @@
     />
 
 
-<FloatingInput bind:value={complaint.name} label="Name" placeholder="Name of person" {readOnly}/>
-<FloatingInput bind:value={complaint.email} label="Email" placeholder="Email address of person" {readOnly}/>
-<FloatingInput bind:value={complaint.phone} label="Phone" placeholder="Phone number of person" {readOnly}/>
+<FloatingCombo bind:value={client_id} items={clients} label="Client" placeholderText="Name of Client" {readOnly}/>
+<FloatingInput bind:value={complaint.name} label="Complainant" placeholder="Name of Complainant" {readOnly}/>
+<div class="flex flex-wrap gap-2 items-center">
+    <FloatingInput 
+      bind:value={complaint.email} 
+      label="Email" 
+      placeholder="Email address of person" 
+      {readOnly} 
+      class="flex-1 min-w-0 w-full sm:w-auto"
+    />
+    <FloatingInput 
+      bind:value={complaint.phone} 
+      label="Phone" 
+      placeholder="Phone number of person" 
+      {readOnly} 
+      class="flex-1 min-w-0 w-full sm:w-auto"
+    />
+  </div>
 <FloatingTextArea bind:value={complaint.message} label="Message" placeholder="Message" style="height:150px" {readOnly}/>
 <FloatingTextArea bind:value={complaint.resolution} label="Resolution" placeholder="List actions taken to resolve the feedback." style="height:150px" {readOnly}/>
 
 
 <h3 class="text-slate-800 font-bold mx-2">Investigate and Resolve</h3>
-<NewFloatingSelect
-    on:change
-    bind:value={staff_id}
-    label="Staff Notified of Outcome"
-    instruction="Set Staff"
-    options={staffs}
-    {readOnly}
-    />
+<StaffMultiSelector on:change staff_ids={staffIds}/>
 <FloatingTextArea bind:value={complaint.resolution} label="Investigation Result" placeholder="Investigation Result." style="height:150px" {readOnly}/>
