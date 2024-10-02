@@ -11,11 +11,11 @@
 
     BreadcrumbStore.set({ path: [{ url: "/registers", name: "Registers" }] });
 
-    function addfeedback() {
+    function addComplaint() {
         jspa("/Register/Complaint", "addComplaint", complaint)
             .then((result) => {
-                let feedback_id = result.result.id;
-                push("/registers/complaints/" + feedback_id);
+                let complaintId = result.result.id;
+                push("/registers/complaints/" + complaintId);
             })
             .catch(() => {});
     }

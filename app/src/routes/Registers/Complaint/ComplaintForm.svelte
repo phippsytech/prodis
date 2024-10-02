@@ -6,7 +6,8 @@
     import { jspa } from "@shared/jspa.js";
     import FloatingCombo from "@shared/PhippsyTech/svelte-ui/forms/FloatingCombo.svelte";
     import StaffMultiSelector from "@shared/StaffMultiSelector.svelte";
-  import { consoleLogs } from '@app/Overlays/stores';
+    import FloatingDate from "@shared/PhippsyTech/svelte-ui/forms/FloatingDate.svelte";
+    import { consoleLogs } from '@app/Overlays/stores';
     let feedbackStatusSelectElement = null;
 
     let staffs = [];
@@ -41,17 +42,41 @@
         {option: "Other", value: "other"},
     ];
 
+    let complaintNotifiedOfOutcome = [
+        {option: "Outcome Letter Sent", value: "outcome letter sent"},
+        {option: "Discussed With Complaint", value: "discussed with complaint"},
+    ];
+
     
 
     export let complaint={
-        status: "open",
-        type: "complaint",
-        name: null,
-        email: null,
-        phone: null,
-        message: null,
-        resolution: null,
+        status: "under investigation",
+        complainant_client_id: null,
+        complainant_contact_details: null,
+        department: null,
+        complainant_type: null,
+        received_by: null,
+        details: null,
+        outcome_wanted: null,
+        is_staff_notified: false,
+        notified_staffs_id: null,
+        date_actioned: null,
+        complainant_notified: false,
+        complainant_feedback: null,
+        continuous_improvement: null,
+        ndis_commission_notified: false,
+        ndis_commission_id: null,
+        recommended_actions: null,
+        archived: false
     };
+
+    let complainantSatisfaction= [
+      {option: "Very Satisfied", value: "very satisfied"},
+      {option: "Satisfied", value: "satisfied"},
+      {option: "Neautral", value: "neautral"},
+      {option: "Unsatisfied", value: "unsatisfied"},
+      {option: "Very Unsatisfied", value: "very unsatisfied"}
+    ];
 
     export let readOnly =false
 
@@ -74,15 +99,22 @@
       clients = result.result
         .filter((item) => item.archived != 1)
         .map((item) => ({
-          label: `${item.client_name}`,
-          value: item.id,
+          option: `${item.client_name}`,
+          value: item.client_id,
         }))
-        .sort((a, b) => a.label.localeCompare(b.label));
+        .sort((a, b) => a.option.localeCompare(b.option));
+
+        console.log('clients', clients);
+        
     });
 
     $: {
-        console.log(staffIds);
+      console.log(complaint);
+      
     }
+
+
+
 
 </script>
     
@@ -94,10 +126,20 @@
     instruction="Set Status"
     options={complaintStatusItems}
     {readOnly}
+    clearable
     />
 
+<NewFloatingSelect
+  on:change
+  bind:value={complaint.complainant_client_id}
+  label="Client"
+  instruction="Select Client"
+  options={clients}
+  {readOnly}
+  clearable
+  />
 
-<FloatingCombo bind:value={client_id} items={clients} label="Client" placeholderText="Name of Client" {readOnly}/>
+
 <FloatingInput bind:value={complaint.name} label="Complainant" placeholder="Name of Complainant" {readOnly}/>
 <div class="flex flex-wrap gap-2 items-center">
     <FloatingInput 
@@ -116,9 +158,32 @@
     />
   </div>
 <FloatingTextArea bind:value={complaint.message} label="Message" placeholder="Message" style="height:150px" {readOnly}/>
-<FloatingTextArea bind:value={complaint.resolution} label="Resolution" placeholder="List actions taken to resolve the feedback." style="height:150px" {readOnly}/>
+<FloatingTextArea bind:value={complaint.outcome_wanted} label="Resolution" placeholder="What outcome does complainant want?" style="height:150px" {readOnly}/>
 
 
 <h3 class="text-slate-800 font-bold mx-2">Investigate and Resolve</h3>
-<StaffMultiSelector on:change staff_ids={staffIds}/>
-<FloatingTextArea bind:value={complaint.resolution} label="Investigation Result" placeholder="Investigation Result." style="height:150px" {readOnly}/>
+<div class="flex gap-2 flex-none">
+  <FloatingDate label="Date Actioned" bind:value={complaint.date_actioned} />
+  <NewFloatingSelect
+    on:change
+    bind:value={complaint.notified_of_outcome}
+    label="Complainant Notified of Outcome"
+    instruction="Select outcome"
+    options={complaintNotifiedOfOutcome}
+    {readOnly}
+    clearable
+  />
+  <NewFloatingSelect
+    on:change
+    bind:value={complaint.notified_of_outcome}
+    label="Complainant Feedback Survey"
+    instruction="Select Satisfaction"
+    options={complainantSatisfaction}
+    {readOnly}
+    clearable
+  />
+</div>
+<StaffMultiSelector bind:staff_ids={complaint.notified_staffs_id }/>
+<FloatingTextArea bind:value={complaint.investigation_result  } label="Investigation Result" placeholder="Investigation Result." style="height:150px" {readOnly}/>
+<FloatingTextArea bind:value={complaint.continuous_improvement  } label="Continuous Improvement Listing" placeholder="Has a Resolution Required a Continuous Improvement Listing?" style="height:150px" {readOnly}/>
+<FloatingTextArea bind:value={complaint.recommended_actions  } label="Recommendations, Actions or Notes" placeholder="Recommendations, Actions or Notes." style="height:150px" {readOnly}/>

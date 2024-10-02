@@ -9,6 +9,15 @@ class AddComplaint {
 
         $complaint = R::dispense('complaints');
 
+        $notifiedStaffids = $data['notified_staffs_id'];
+        unset($data['notified_staffs_id']);
+
+
+
+        $complaintNotifiedStaffs = R::dispense('complaint_notified_staffs');
+
+      
+
         $complaint->complaint_client_id = $data['complaint_client_id'];
         $complaint->complaint_contact_details_id = $data['complaint_contact_details_id'];
         $complaint->department = $data['department'];
@@ -18,7 +27,6 @@ class AddComplaint {
         $complaint->details = $data['details'];
         $complaint->outcome_wanted = $data['outcome_wanted'];
         $complaint->is_staff_notified = $data['is_staff_notified'];
-        $complaint->notified_staffs_id = $data['notified_staffs_id'];
         $complaint->complainant_feedback = $data['complainant_feedback'];
         $complaint->continuous_improvement = $data['continuous_improvement'];
         $complaint->ndis_commission_notified = $data['nids_commission_notified'];
@@ -29,9 +37,21 @@ class AddComplaint {
         $complaint->updated = new \DateTime();
 
 
-        $id = R::store($complaint);
+        $complaintId = R::store($complaint);
 
-        return R::find('complaints', $id);
+
+        foreach ($notifiedStaffids as $notifiedStaffid) {
+
+            $complaintNotifiedStaffs->complaint_id = $complaintId;
+            $complaintNotifiedStaffs->staff_id = $notifiedStaffid;
+
+            R::store($complaintNotifiedStaffs);
+           
+        }
+
+      
+
+        return R::find('complaints', $complaintId);
         
     }
 }
