@@ -397,7 +397,9 @@
                     <RTE bind:content={timetracking.notes} />
                 </div>
             </Container>
-        {:else}
+        {/if}
+
+        {#if hasDuplicate}
             <div class="rounded-md bg-red-50 p-4">
                 <div class="flex">
                     <div class="flex-shrink-0">
