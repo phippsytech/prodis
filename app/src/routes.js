@@ -787,6 +787,10 @@ export default {
         asyncComponent: () => import('./routes/Registers/Complaint/AddComplaint.svelte')
     }),
 
+    '/registers/complaints/:id': wrap({
+        asyncComponent: () => import('./routes/Registers/Complaint/Complaint.svelte')
+    }),
+
     '/registers/feedbacks': wrap({
         asyncComponent: () => import('./routes/Registers/Feedback/Feedbacks.svelte')
     }),

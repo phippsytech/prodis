@@ -15,7 +15,8 @@
         jspa("/Register/Complaint", "addComplaint", complaint)
             .then((result) => {
                 let complaintId = result.result.id;
-                push("/registers/complaints/" + complaintId);
+                console.log("Complaint added successfully with ID: " + complaintId);
+                push("/registers/complaints/");
             })
             .catch(() => {});
     }
@@ -32,5 +33,5 @@
 
 <div class="flex justify-between">
     <span></span>
-    <Button on:click={() => addfeedback()} label="Add complaint" />
+    <Button on:click={() => addComplaint()} label="Add complaint" />
 </div>

@@ -59,16 +59,16 @@
     </div>
 {/if}
 
-<!-- <h1 class="text-black text-1xl font-bold mt-0 mb-2 drop-shadow mb-2">
-    Open Complaint
-</h1> -->
+<h1 class="text-black text-1xl font-bold mt-0 mb-2 drop-shadow mb-2">
+    Under Investigation
+</h1>
 <ul class="bg-white rounded-lg border border-gray-200 w-full text-gray-900">
     {#each complaints as complaint, index (complaint.id)}
-        {#if complaint.status == "open"}
+        {#if complaint.status == "under investigation"}
             <li
                 in:slide={{ duration: 200 }}
                 out:slide|local={{ duration: 200 }}
-                on:click={() => push("/registers/feedbacks/" + complaint.id)}
+                on:click={() => push("/registers/complaints/" + complaint.id)}
                 class="px-4 py-2 hover:bg-blue-700 hover:text-white focus:outline-none focus:ring-0 focus:bg-gray-200 focus:text-gray-600 transition duration-500 cursor-pointer {complaint.length -
                     1 ==
                 index
@@ -78,29 +78,29 @@
                     : ''}"
             >
                 <div class="justify-between flex">
-                    <span class="text-xs">{complaint.date_identified}</span>
+                    <span class="text-xs">{complaint.created}</span>
                     <span class="text-xs">#{complaint.id}</span>
                 </div>
 
                 <div>
-                    <span class="font-bold">{complaint.type}</span><br />
-                    <span class="text-sm">{complaint.message}</span>
+                    <span class="font-bold">{complaint.complaint_type}</span><br />
+                    <span class="text-sm">{complaint.details}</span>
                 </div>
             </li>
         {/if}
     {/each}
 </ul>
 
-<!-- <h1 class="text-black text-1xl font-bold mt-0 mb-2 drop-shadow mb-2">
-    Closed Complaint
-</h1> -->
+<h1 class="text-black text-1xl font-bold mt-0 mb-2 drop-shadow mb-2">
+    Unresolved
+</h1>
 <ul class="bg-white rounded-lg border border-gray-200 w-full text-gray-900">
     {#each complaints as complaint, index (complaint.id)}
-        {#if complaint.status == "closed"}
+        {#if complaint.status == "unresolved"}
             <li
                 in:slide={{ duration: 200 }}
                 out:slide|local={{ duration: 200 }}
-                on:click={() => push("/registers/feedbacks/" + complaint.id)}
+                on:click={() => push("/registers/complaints/" + complaint.id)}
                 class="px-4 py-2 hover:bg-blue-700 hover:text-white focus:outline-none focus:ring-0 focus:bg-gray-200 focus:text-gray-600 transition duration-500 cursor-pointer {complaint.length -
                     1 ==
                 index
@@ -110,12 +110,12 @@
                     : ''}"
             >
                 <div class="justify-between flex">
-                    <span class="text-xs">{complaint.date_identified}</span>
+                    <span class="text-xs">{complaint.created}</span>
                     <span class="text-xs">#{complaint.id}</span>
                 </div>
                 <div>
-                    <span class="font-bold">{complaint.type}</span><br />
-                    <span class="text-sm">{complaint.resolution}</span>
+                    <span class="font-bold">{complaint.complaint_type}</span><br />
+                    <span class="text-sm">{complaint.details}</span>
                 </div>
             </li>
         {/if}

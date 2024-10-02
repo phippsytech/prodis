@@ -54,7 +54,7 @@
         complainant_client_id: null,
         complainant_contact_details: null,
         department: null,
-        complainant_type: null,
+        complaint_type: null,
         received_by: null,
         details: null,
         outcome_wanted: null,
@@ -80,11 +80,7 @@
 
     export let readOnly =false
 
-    $: {
-        readOnly = complaint.status=="closed"
-    }
-
-
+    
     jspa("/Staff", "listStaff", {}).then((result) => {
       staffs = result.result
         .filter((item) => item.archived != 1)
@@ -119,7 +115,8 @@
 </script>
     
 <h3 class="text-slate-800 font-bold mx-2">Complaint Management Register</h3>
-<NewFloatingSelect
+<div class="flex flex-wrap gap-2 items-center">
+  <NewFloatingSelect
     on:change
     bind:value={complaint.status}
     label="Status"
@@ -127,7 +124,22 @@
     options={complaintStatusItems}
     {readOnly}
     clearable
+
+    class="flex-1 min-w-0 w-full sm:w-1/2"
     />
+  <NewFloatingSelect
+    on:change
+    bind:value={complaint.complaint_type}
+    label="Type"
+    instruction="Set Type"
+    options={complaintTypeItems}
+    {readOnly}
+    clearable
+
+    class="flex-1 min-w-0 w-full sm:w-1/2"
+    />
+</div>
+
 
 <NewFloatingSelect
   on:change
@@ -157,8 +169,8 @@
       class="flex-1 min-w-0 w-full sm:w-auto"
     />
   </div>
-<FloatingTextArea bind:value={complaint.message} label="Message" placeholder="Message" style="height:150px" {readOnly}/>
-<FloatingTextArea bind:value={complaint.outcome_wanted} label="Resolution" placeholder="What outcome does complainant want?" style="height:150px" {readOnly}/>
+<FloatingTextArea bind:value={complaint.details} label="Message" placeholder="Message" style="height:150px" {readOnly}/>
+<FloatingTextArea bind:value={complaint.outcome_wanted} label="Expected Resolution" placeholder="What outcome does complainant want?" style="height:150px" {readOnly}/>
 
 
 <h3 class="text-slate-800 font-bold mx-2">Investigate and Resolve</h3>
@@ -185,5 +197,6 @@
 </div>
 <StaffMultiSelector bind:staff_ids={complaint.notified_staffs_id }/>
 <FloatingTextArea bind:value={complaint.investigation_result  } label="Investigation Result" placeholder="Investigation Result." style="height:150px" {readOnly}/>
+<h3 class="text-slate-800 font-bold mx-2">Review</h3>
 <FloatingTextArea bind:value={complaint.continuous_improvement  } label="Continuous Improvement Listing" placeholder="Has a Resolution Required a Continuous Improvement Listing?" style="height:150px" {readOnly}/>
 <FloatingTextArea bind:value={complaint.recommended_actions  } label="Recommendations, Actions or Notes" placeholder="Recommendations, Actions or Notes." style="height:150px" {readOnly}/>
