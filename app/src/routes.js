@@ -818,6 +818,16 @@ export default {
         asyncComponent: () => import('./routes/Registers/Training/Training.svelte')
     }),
 
+    '/registers/compliments': wrap({
+        asyncComponent: () => import('./routes/Registers/Compliment/Compliments.svelte')
+    }),
+    '/registers/compliments/add': wrap({
+        asyncComponent: () => import('./routes/Registers/Compliment/AddCompliment.svelte')
+    }),
+    '/registers/compliments/:id': wrap({
+        asyncComponent: () => import('./routes/Registers/Compliment/Compliment.svelte')
+    }),
+
     '/reports': wrap({
         asyncComponent: () => import('./routes/Reports/Reports.svelte')
     }),
