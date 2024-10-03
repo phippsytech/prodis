@@ -114,7 +114,7 @@
 
 </script>
     
-<h3 class="text-slate-800 font-bold mx-2">Complaint Management Register</h3>
+<h3 class="text-slate-800 font-bold mx-2 mb-2">Complaint Management Register</h3>
 <div class="flex flex-wrap gap-2 flex-none md:flex-row flex-col w-full">
   <NewFloatingSelect
     class="flex-1 min-w-0 w-full sm:w-1/2"
@@ -172,7 +172,7 @@
 <FloatingTextArea bind:value={complaint.outcome_wanted} label="Expected Resolution" placeholder="What outcome does complainant want?" style="height:150px" {readOnly}/>
 
 
-<h3 class="text-slate-800 font-bold mx-2">Investigate and Resolve</h3>
+<h3 class="text-slate-800 font-bold mx-2 mb-2">Investigate and Resolve</h3>
 <div class="flex flex-wrap gap-2 flex-none md:flex-row flex-col w-full">
   <FloatingDate label="Date Actioned" bind:value={complaint.date_actioned} class="w-full md:w-auto" />
   <NewFloatingSelect
@@ -198,6 +198,6 @@
 </div>
 <StaffMultiSelector bind:staff_ids={complaint.notified_staffs_id }/>
 <FloatingTextArea bind:value={complaint.investigation_result  } label="Investigation Result" placeholder="Investigation Result." style="height:150px" {readOnly}/>
-<h3 class="text-slate-800 font-bold mx-2">Review</h3>
+<h3 class="text-slate-800 font-bold mx-2 mb-2">Review</h3>
 <FloatingTextArea bind:value={complaint.continuous_improvement  } label="Continuous Improvement Listing" placeholder="Has a Resolution Required a Continuous Improvement Listing?" style="height:150px" {readOnly}/>
 <FloatingTextArea bind:value={complaint.recommended_actions  } label="Recommendations, Actions or Notes" placeholder="Recommendations, Actions or Notes." style="height:150px" {readOnly}/>
