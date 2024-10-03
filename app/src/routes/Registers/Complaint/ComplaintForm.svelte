@@ -117,6 +117,7 @@
 <h3 class="text-slate-800 font-bold mx-2">Complaint Management Register</h3>
 <div class="flex flex-wrap gap-2 items-center">
   <NewFloatingSelect
+    class="flex-1 min-w-0 w-full sm:w-1/2"
     on:change
     bind:value={complaint.status}
     label="Status"
@@ -125,9 +126,9 @@
     {readOnly}
     clearable
 
-    class="flex-1 min-w-0 w-full sm:w-1/2"
+   
     />
-  <NewFloatingSelect
+  <NewFloatingSelect  class="flex-1 min-w-0 w-full sm:w-1/2"
     on:change
     bind:value={complaint.complaint_type}
     label="Type"
@@ -135,8 +136,6 @@
     options={complaintTypeItems}
     {readOnly}
     clearable
-
-    class="flex-1 min-w-0 w-full sm:w-1/2"
     />
 </div>
 
