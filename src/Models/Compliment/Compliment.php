@@ -12,7 +12,7 @@ class Compliment extends NewCustomModel
         parent::__construct($bean ?: R::dispense('compliments'));
         $this->fields = [
             'date' => [v::dateTime('Y-m-d')],
-            'name' => [v::stringType()],
+            'complimenter' => [v::stringType()],
             'description' => [v::stringType()],
             'staff_id' => [v::numericVal()],
             'action_taken' => [v::stringType()],
