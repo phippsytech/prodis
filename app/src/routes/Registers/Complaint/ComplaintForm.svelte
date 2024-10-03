@@ -67,7 +67,8 @@
         ndis_commission_notified: false,
         ndis_commission_id: null,
         recommended_actions: null,
-        archived: false
+        archived: false,
+        complaint_feedback: null
     };
 
     let complainantSatisfaction= [
@@ -183,17 +184,17 @@
     options={complaintNotifiedOfOutcome}
     {readOnly}
     clearable
-    class="w-full md:w-auto"
+
   />
   <NewFloatingSelect
     on:change
-    bind:value={complaint.notified_of_outcome}
+    bind:value={complaint.complaint_feedback}
     label="Complainant Feedback Survey"
     instruction="Select Satisfaction"
     options={complainantSatisfaction}
     {readOnly}
     clearable
-    class="w-full md:w-auto"
+
   />
 </div>
 <StaffMultiSelector bind:staff_ids={complaint.notified_staffs_id }/>
@@ -201,3 +202,11 @@
 <h3 class="text-slate-800 font-bold mx-2 mb-2">Review</h3>
 <FloatingTextArea bind:value={complaint.continuous_improvement  } label="Continuous Improvement Listing" placeholder="Has a Resolution Required a Continuous Improvement Listing?" style="height:150px" {readOnly}/>
 <FloatingTextArea bind:value={complaint.recommended_actions  } label="Recommendations, Actions or Notes" placeholder="Recommendations, Actions or Notes." style="height:150px" {readOnly}/>
+<div class="flex justify-end mt-auto">
+  <button 
+      class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+      
+  >
+      Delete
+  </button>
+</div>
