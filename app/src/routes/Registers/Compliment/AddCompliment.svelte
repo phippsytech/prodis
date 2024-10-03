@@ -19,7 +19,7 @@
 
     // add here the request from staff api bind it in the compliment.staff_id floatingcombo
     jspa("/Staff", "listStaff", {}).then((result) => {
-        staffs = result.result
+        staffer = result.result
             .filter((item) => item.archived != 1)
             .map((item) => ({
             label: `${item.staff_name}`,
@@ -41,22 +41,43 @@
 </script>
 
 <!-- date of compliment -->
-<FloatingDate bind:value={compliment.date} />
+<FloatingDate
+	bind:value={compliment.date} 
+/>
 
 <!-- name of person giving the compliment -->
-<FloatingInput bind:value={compliment.complimenter} />
+<FloatingInput 
+	bind:value={compliment.complimenter}
+/>
 
 <!-- description -->
-<RTE bind:value={compliment.description}/>
+<RTE 
+	bind:value={compliment.description}
+/>
 
 <!-- staff being complimented  -->
-<FloatingCombo bind:value={compliment.staff_id}/>
+<FloatingCombo 
+	bind:value={compliment.staff_id}
+    options={staffer}
+    label="Select Staff"
+    placeholder="Select Staff"
+/>
 
 <!-- action taken  -->
-<FloatingTextArea bind:value={compliment.action_taken}/>
+<FloatingTextArea 
+	bind:value={compliment.action_taken}
+    label="Action Taken"
+    placeholder=" Indicate action taken by staff"
+
+/>
 
 <!-- status  -->
-<NewFloatingSelect bind:value={compliment.status}/>
+<NewFloatingSelect 
+	bind:value={compliment.status}
+	options={acknowledgementStatusOptions}
+    label="Status"
+   	placeholder="Select Status"
+/>
 
 <!-- date of acknowledgement , 
  check if this is necessary 
