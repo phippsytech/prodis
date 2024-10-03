@@ -47,10 +47,16 @@
         }
     });
 
-    // Function to update values when selected items change
-    function updateValues() {
-        values = selectedItems.map(item => item.value);
+
+    $: {
+       if (Array.isArray(selectedItems) && selectedItems?.length >= 0) {
+            values = selectedItems.map(item => item.value);
+       } else {
+         values = [];  // Reset to empty array when no items are selected to maintain consistency with the form input value
+       }
     }
+
+
 </script>
 
 {#if readOnly}
@@ -71,7 +77,7 @@
             placeholder={placeholderText}
             containerStyles="border:none; margin:-4px 0.75rem; padding:0 0; min-height:34px;width:auto;"
             --list-position="fixed"
-            on:select={updateValues}
+            
         />
     </div>
 {/if}
