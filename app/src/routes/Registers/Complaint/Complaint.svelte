@@ -56,10 +56,10 @@
     }
 
     function save() {
-        jspa("/Register/Feedback", "updateFeedback", feedback)
+        jspa("/Register/Complaint", "updateComplaint", complaint)
             .then((result) => {
                 complaint = result.result;
-                storedComplaint = Object.assign({}, feedback);
+                storedComplaint = Object.assign({}, complaint);
             })
             .catch(() => {});
     }
@@ -86,7 +86,7 @@
     class="text-2xl sm:truncate sm:text-3xl sm:tracking-tight font-fredoka-one-regular mb-2"
     style="color:#220055;"
 >
-    Add Feedback
+    Add Complaint
 </div>
 
 <ComplaintForm bind:complaint bind:readOnly />

@@ -115,7 +115,7 @@
 </script>
     
 <h3 class="text-slate-800 font-bold mx-2">Complaint Management Register</h3>
-<div class="flex flex-wrap gap-2 items-center">
+<div class="flex flex-wrap gap-2 flex-none md:flex-row flex-col w-full">
   <NewFloatingSelect
     class="flex-1 min-w-0 w-full sm:w-1/2"
     on:change
@@ -173,8 +173,8 @@
 
 
 <h3 class="text-slate-800 font-bold mx-2">Investigate and Resolve</h3>
-<div class="flex gap-2 flex-none">
-  <FloatingDate label="Date Actioned" bind:value={complaint.date_actioned} />
+<div class="flex flex-wrap gap-2 flex-none md:flex-row flex-col w-full">
+  <FloatingDate label="Date Actioned" bind:value={complaint.date_actioned} class="w-full md:w-auto" />
   <NewFloatingSelect
     on:change
     bind:value={complaint.notified_of_outcome}
@@ -183,6 +183,7 @@
     options={complaintNotifiedOfOutcome}
     {readOnly}
     clearable
+    class="w-full md:w-auto"
   />
   <NewFloatingSelect
     on:change
@@ -192,6 +193,7 @@
     options={complainantSatisfaction}
     {readOnly}
     clearable
+    class="w-full md:w-auto"
   />
 </div>
 <StaffMultiSelector bind:staff_ids={complaint.notified_staffs_id }/>

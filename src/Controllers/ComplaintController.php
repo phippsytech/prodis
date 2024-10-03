@@ -6,6 +6,7 @@ use NDISmate\CORE\BaseController;
 use NDISmate\Models\Register\Complaint\AddComplaint;
 use NDISmate\Models\Register\Complaint\GetComplaint;
 use NDISmate\Models\Register\Complaint\ListComplaint;
+use NDISmate\Models\Register\Complaint\UpdateComplaint;
 
 class ComplaintController extends BaseController
 {
@@ -14,7 +15,8 @@ class ComplaintController extends BaseController
         $this->controller = [
             'listComplaints' => [new ListComplaint, null, true, []],
             'addComplaint' => [new AddComplaint, null, true, []],
-            'getComplaint' => [new GetComplaint, null, true, []]
+            'getComplaint' => [new GetComplaint, null, true, []],
+            'updateComplaint' => [new UpdateComplaint, null, true, []]
         ];
     }
 }
