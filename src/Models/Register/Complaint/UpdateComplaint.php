@@ -43,17 +43,31 @@ class UpdateComplaint {
 
         
         if (!empty($notifiedStaffids)) {
-            $complaintNotifiedStaffs = R::findAll( 'complaintnotifiedstaffs', ' complaint_id = ? ', [  $complaintId ] );
+        
+            $existingStaffs = R::find('complaintnotifiedstaffs', 'complaint_id = ?', [$complaintId]);
 
-            foreach ($complaintNotifiedStaffs as $complaintNotifiedStaff) {
-                foreach ($notifiedStaffids as $newValue) {
-                    $complaintNotifiedStaff->staff_id = $newValue;
-                    R::store($complaintNotifiedStaff);
+            $existingStaffsIds = array_map(function($staff) {
+                return $staff->staff_id;
+            }, $existingStaffs);
+            
+            foreach ($existingStaffs as $staff) {
+                if (!in_array($staff->staff_id, $notifiedStaffids)) {
+                    R::trash($staff);
+                }
+            }
+
+            foreach ($notifiedStaffids as $newStaffId) {
+                if (is_numeric($newStaffId) && !in_array($newStaffId, $existingStaffsIds)) {
+                    $complaintnotifiedstaff = R::dispense('complaintnotifiedstaffs');
+                    $complaintnotifiedstaff->complaint_id = $complaintId;
+                    $complaintnotifiedstaff->staff_id = $newStaffId;
+                    R::store($complaintnotifiedstaff); 
                 }
             }
             
-    
         }
+
+        
 
 
         return $complaintId;
