@@ -8,13 +8,17 @@ class ListCompliment
 {
     public function __invoke($filters = [])
     {
-        // Example of applying filters if needed
-        $query = 'SELECT * FROM compliments WHERE 1=1';
+        // Base query with join to get staff name
+        $query = '
+            SELECT compliments.*, staff.name AS staff_name 
+            FROM compliments 
+            JOIN staff ON compliments.staff_id = staff.id 
+            WHERE 1=1';
         $params = [];
 
         // Apply any filtering logic (optional)
         if (isset($filters['staff_id'])) {
-            $query .= ' AND staff_id = ?';
+            $query .= ' AND compliments.staff_id = ?';
             $params[] = $filters['staff_id'];
         }
 
