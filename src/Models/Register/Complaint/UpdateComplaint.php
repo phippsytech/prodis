@@ -17,8 +17,10 @@ class UpdateComplaint {
         $notifiedStaffids = $data['notified_staffs_id'];
         unset($data['notified_staffs_id']);
 
+        $contactDetails = $data['complainant_contact_details'];
+        unset($data['complainant_contact_details']);
+
         $complaint->complainant_client_id = $data['complainant_client_id'];
-        $complaint->complainant_contact_details_id = $data['complainant_contact_details'];
         $complaint->department = $data['department'];
         $complaint->complaint_type = $data['complaint_type'];
         $complaint->received_via = $data['received_via'];
@@ -66,10 +68,25 @@ class UpdateComplaint {
             }
             
         }
+        $existingContact = R::find('complainantcontactdetails', 'complaint_id = ?', [$complaintId]);
 
-        
+        if (!empty($contactDetails) && $existingContact) {
 
+            $existingContact->name = $contactDetails['name'];
+            $existingContact->email = $contactDetails['email'];
+            $existingContact->phone = $contactDetails['phone'];
+            $existingContact->complaint_id = $contactDetails['complaint_id'];
 
+            R::store($existingContact); 
+            
+
+        }
+
+        if (empty($contactDetails) && !$existingContact) {
+            R::trash($existingContact);
+        }
+
+    
         return $complaintId;
     }
 }
