@@ -10,7 +10,9 @@
     import FloatingTextArea from '@shared/PhippsyTech/svelte-ui/forms/FloatingTextArea.svelte';
     import FloatingDate from "@shared/PhippsyTech/svelte-ui/forms/FloatingDate.svelte";
     import StaffMultiSelector from "@shared/StaffMultiSelector.svelte";
-
+    import { toastSuccess, toastError } from "@shared/toastHelper.js";
+    import { push } from "svelte-spa-router";
+    
     export let params;
 
     let complaintStatusItems = [
@@ -131,20 +133,22 @@
                     toastError(result.error);
                     return;
                 }
-
-
                 let updatedId = result.result;
 
                 getComplaint(updatedId);
-                push("/registers/complaints");
-                toastSuccess("Complaint updated successfully.");
+              
                 // storedComplaint = Object.assign({}, complaint);
             })
             .then((result) => {
-                push("/registers/complaints");
                 toastSuccess("Complaint updated successfully.");
+                push("/registers/complaints");
+                
             })
-            .catch(() => {});
+            .catch((error) => {
+                console.log('err', error);
+                
+                toastError("Error updating complaint, please try again.");
+            });
     }
 
     $: {
@@ -250,7 +254,7 @@
   />
   <NewFloatingSelect
     on:change
-    bind:value={complaint.complaint_feedback}
+    bind:value={complaint.complainant_feedback}
     label="Complainant Feedback Survey"
     instruction="Select Satisfaction"
     options={complainantSatisfaction}
