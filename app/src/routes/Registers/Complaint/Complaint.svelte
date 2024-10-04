@@ -87,7 +87,26 @@
 
     onMount(() => {
         if (params.id != "add") {
-            jspa("/Register/Complaint", "getComplaint", { id: params.id })
+           getComplaint(params.id);
+        }
+        mounted = true;
+    });
+
+    jspa("/Participant", "listClients", {}).then((result) => {
+      clients = result.result
+        .filter((item) => item.archived != 1)
+        .map((item) => ({
+          option: `${item.client_name}`,
+          value: item.client_id,
+        }))
+        .sort((a, b) => a.option.localeCompare(b.option));
+
+        console.log('clients', clients);
+        
+    });
+
+    function getComplaint(id) {
+        jspa("/Register/Complaint", "getComplaint", { id: id })
                 .then((result) => {
                     complaint = result.result;
                     
@@ -97,9 +116,7 @@
                     // Make a copy of the object
                     storedComplaint = Object.assign({}, complaint);
                 });
-        }
-        mounted = true;
-    });
+    }
 
     function undo() {
         complaint = Object.assign({}, storedComplaint);
@@ -110,8 +127,22 @@
         
         jspa("/Register/Complaint", "updateComplaint", complaint)
             .then((result) => {
-                complaint = result.result;
-                storedComplaint = Object.assign({}, complaint);
+                if (result.error) {  
+                    toastError(result.error);
+                    return;
+                }
+
+
+                let updatedId = result.result;
+
+                getComplaint(updatedId);
+                push("/registers/complaints");
+                toastSuccess("Complaint updated successfully.");
+                // storedComplaint = Object.assign({}, complaint);
+            })
+            .then((result) => {
+                push("/registers/complaints");
+                toastSuccess("Complaint updated successfully.");
             })
             .catch(() => {});
     }
