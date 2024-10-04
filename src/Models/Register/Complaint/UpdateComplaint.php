@@ -7,8 +7,9 @@ class UpdateComplaint {
 
     function __invoke($data) {
 
-        $complaint = R::load('complaints', $data['id']);
-
+        $id = $data['id'];
+        $complaint = R::findOne('complaints', 'id = ?', [$id]);
+        
         if (!$complaint) {
             throw new \Exception('Complaint Not Found', 404);
         }
@@ -42,16 +43,15 @@ class UpdateComplaint {
 
         
         if (!empty($notifiedStaffids)) {
+            $complaintNotifiedStaffs = R::findAll( 'complaintnotifiedstaffs', ' complaint_id = ? ', [  $complaintId ] );
 
-            foreach ($notifiedStaffids as $notifiedStaffid) {
-                $complaintNotifiedStaffs = R::dispense('complaintnotifiedstaffs');
-
-                $complaintNotifiedStaffs->complaint_id = $complaintId;
-                $complaintNotifiedStaffs->staff_id = $notifiedStaffid;
-    
-                R::store($complaintNotifiedStaffs);
-               
+            foreach ($complaintNotifiedStaffs as $complaintNotifiedStaff) {
+                foreach ($notifiedStaffids as $newValue) {
+                    $complaintNotifiedStaff->staff_id = $newValue;
+                    R::store($complaintNotifiedStaff);
+                }
             }
+            
     
         }
 

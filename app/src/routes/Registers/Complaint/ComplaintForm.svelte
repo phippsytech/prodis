@@ -8,6 +8,8 @@
     import StaffMultiSelector from "@shared/StaffMultiSelector.svelte";
     import FloatingDate from "@shared/PhippsyTech/svelte-ui/forms/FloatingDate.svelte";
     import { consoleLogs } from '@app/Overlays/stores';
+    import { onMount, afterUpdate } from "svelte";
+
     let feedbackStatusSelectElement = null;
 
     let staffs = [];
@@ -59,7 +61,7 @@
         details: null,
         outcome_wanted: null,
         is_staff_notified: false,
-        notified_staffs_id: null,
+        notified_staffs_id: [],
         date_actioned: null,
         complainant_notified: false,
         complainant_feedback: null,
@@ -80,6 +82,16 @@
     ];
 
     export let readOnly =false
+
+
+    onMount(() => {
+      if (complaint.notified_staffs_id) {
+        console.log('staffs', complaint.notified_staffs_id);
+
+      }
+      
+    });
+
 
     
     jspa("/Staff", "listStaff", {}).then((result) => {
@@ -105,14 +117,7 @@
         
     });
 
-    $: {
-      console.log(complaint);
-      
-    }
-
-
-
-
+  
 </script>
     
 <h3 class="text-slate-800 font-bold mx-2 mb-2">Complaint Management Register</h3>
@@ -197,7 +202,8 @@
 
   />
 </div>
-<StaffMultiSelector bind:staff_ids={complaint.notified_staffs_id }/>
+<!-- <StaffMultiSelector bind:staff_ids={complaint.notified_staffs_id}/> -->
+
 <FloatingTextArea bind:value={complaint.investigation_result  } label="Investigation Result" placeholder="Investigation Result." style="height:150px" {readOnly}/>
 <h3 class="text-slate-800 font-bold mx-2 mb-2">Review</h3>
 <FloatingTextArea bind:value={complaint.continuous_improvement  } label="Continuous Improvement Listing" placeholder="Has a Resolution Required a Continuous Improvement Listing?" style="height:150px" {readOnly}/>
