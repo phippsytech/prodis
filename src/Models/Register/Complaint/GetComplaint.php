@@ -15,9 +15,13 @@ class GetComplaint {
         $record = R::getRow(
             "SELECT 
                 complaints.*,
-                GROUP_CONCAT(cns.staff_id) as notified_staffs_id
+                GROUP_CONCAT(cns.staff_id) as notified_staffs_id,
+                MAX(ccd.name) AS name,
+                MAX(ccd.email) AS email,
+                MAX(ccd.phone) AS phone
             FROM complaints 
             LEFT JOIN complaintnotifiedstaffs cns ON complaints.id = cns.complaint_id
+            LEFT JOIN complainantcontactdetails ccd ON complaints.id = ccd.complaint_id
             WHERE complaints.id = :id
             GROUP BY complaints.id",
             [

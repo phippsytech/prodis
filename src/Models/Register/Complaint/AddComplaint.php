@@ -13,10 +13,7 @@ class AddComplaint {
             $notifiedStaffids = $data['notified_staffs_id'];
             unset($data['notified_staffs_id']);
 
-                
-            $contactDetails = $data['complainant_contact_details'];
-            unset($data['complainant_contact_details']);
-         
+                  
             $complaint->complainant_client_id = $data['complainant_client_id'];
             $complaint->department = $data['department'];
             $complaint->complaint_type = $data['complaint_type'];
@@ -55,17 +52,16 @@ class AddComplaint {
         
             }
 
-            if (!empty($contactDetails)) {
+            $contactDetails = R::dispense('complainantcontactdetails');
 
-                $contactDetails = R::dispense('complainantcontactdetails');
-
-                $contactDetails->name = $contactDetails['name'];
-                $contactDetails->email = $contactDetails['email'];
-                $contactDetails->phone = $contactDetails['phone'];
-                $contactDetails->complaint_id = $contactDetails['complaint_id'];
-    
-                R::store($contactDetails);  
-            }
+            $contactDetails->name = $data['name'];
+            $contactDetails->email = $data['email'];
+            $contactDetails->phone = $data['phone'];
+            $contactDetails->complaint_id = $complaintId;
+            $contactDetails->created = new \DateTime();
+            $contactDetails->updated = new \DateTime();
+            
+            R::store($contactDetails);  
 
 
 
