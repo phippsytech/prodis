@@ -34,7 +34,6 @@ class UpdateComplaint {
         $complaint->recommended_actions = $data['recommended_actions'];
         $complaint->recommended_actions = $data['recommended_actions'];
         $complaint->status = $data['status'];
-        $complaint->created = new \DateTime();
         $complaint->updated = new \DateTime();
 
 
@@ -44,9 +43,8 @@ class UpdateComplaint {
         
         if (!empty($notifiedStaffids)) {
 
-            $complaintNotifiedStaffs = R::dispense('complaint_notified_staffs');
-
             foreach ($notifiedStaffids as $notifiedStaffid) {
+                $complaintNotifiedStaffs = R::dispense('complaintnotifiedstaffs');
 
                 $complaintNotifiedStaffs->complaint_id = $complaintId;
                 $complaintNotifiedStaffs->staff_id = $notifiedStaffid;

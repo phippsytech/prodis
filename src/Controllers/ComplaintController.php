@@ -16,7 +16,7 @@ class ComplaintController extends BaseController
             'listComplaints' => [new ListComplaint, null, true, []],
             'addComplaint' => [new AddComplaint, null, true, []],
             'getComplaint' => [new GetComplaint, null, true, []],
-            'updateComplaint' => [new UpdateComplaint, true, true, []]
+            'updateComplaint' => [new UpdateComplaint, null, true, []]
         ];
     }
 }
