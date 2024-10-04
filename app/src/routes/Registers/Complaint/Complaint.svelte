@@ -26,7 +26,8 @@
         ndis_commission_notified: false,
         ndis_commission_id: null,
         recommended_actions: null,
-        archived: false
+        archived: false,
+        complaint_feedback: null
     };
 
 

@@ -12,10 +12,10 @@ class GetComplaint {
 
         // return $complaint;
 
-        return R::getAll(
+        $record = R::getRow(
             "SELECT 
-            complaints.id,
-            cns.staff_id as notified_staff_id 
+                complaints.*,
+                GROUP_CONCAT(cns.staff_id) as notified_staffs_id
             FROM complaints 
             LEFT JOIN complaintnotifiedstaffs cns ON complaints.id = cns.complaint_id
             WHERE complaints.id = :id
@@ -23,6 +23,12 @@ class GetComplaint {
             [
                 ':id' => $data['id']
             ]
-            );
+        );
+
+        if ($record) {
+            $record['notified_staffs_id'] = $record['notified_staffs_id'] ? explode(',', $record['notified_staffs_id']) : [];
+        }
+
+        return $record;
     }
 }
