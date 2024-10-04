@@ -68,23 +68,23 @@ class UpdateComplaint {
             }
             
         }
-        $existingContact = R::find('complainantcontactdetails', 'complaint_id = ?', [$complaintId]);
+        // $existingContact = R::find('complainantcontactdetails', 'complaint_id = ?', [$complaintId]);
 
-        if (!empty($contactDetails) && $existingContact) {
+        // if (!empty($contactDetails) && $existingContact) {
 
-            $existingContact->name = $contactDetails['name'];
-            $existingContact->email = $contactDetails['email'];
-            $existingContact->phone = $contactDetails['phone'];
-            $existingContact->complaint_id = $contactDetails['complaint_id'];
+        //     $existingContact->name = $contactDetails['name'];
+        //     $existingContact->email = $contactDetails['email'];
+        //     $existingContact->phone = $contactDetails['phone'];
+        //     $existingContact->complaint_id = $contactDetails['complaint_id'];
 
-            R::store($existingContact); 
+        //     R::store($existingContact); 
             
 
-        }
+        // }
 
-        if (empty($contactDetails) && !$existingContact) {
-            R::trash($existingContact);
-        }
+        // if (empty($contactDetails) && !$existingContact) {
+        //     R::trash($existingContact);
+        // }
 
     
         return $complaintId;

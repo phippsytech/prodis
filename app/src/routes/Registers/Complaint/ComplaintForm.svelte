@@ -193,7 +193,7 @@
   />
   <NewFloatingSelect
     on:change
-    bind:value={complaint.complaint_feedback}
+    bind:value={complaint.complainant_feedback}
     label="Complainant Feedback Survey"
     instruction="Select Satisfaction"
     options={complainantSatisfaction}
@@ -202,7 +202,7 @@
 
   />
 </div>
-<!-- <StaffMultiSelector bind:staff_ids={complaint.notified_staffs_id}/> -->
+<StaffMultiSelector bind:staff_ids={complaint.notified_staffs_id}/>
 
 <FloatingTextArea bind:value={complaint.investigation_result  } label="Investigation Result" placeholder="Investigation Result." style="height:150px" {readOnly}/>
 <h3 class="text-slate-800 font-bold mx-2 mb-2">Review</h3>
