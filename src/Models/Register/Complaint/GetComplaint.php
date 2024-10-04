@@ -15,10 +15,11 @@ class GetComplaint {
         return R::getAll(
             "SELECT 
             complaints.id,
-            complaint_notified_staffs.staff_id
+            cns.staff_id as notified_staff_id 
             FROM complaints 
-            LEFT JOIN complaint_notified_staffs cn on (complaint_id = complaints.id )
-            WHERE complaints.id = :id",
+            LEFT JOIN complaintnotifiedstaffs cns ON complaints.id = cns.complaint_id
+            WHERE complaints.id = :id
+            GROUP BY complaints.id",
             [
                 ':id' => $data['id']
             ]

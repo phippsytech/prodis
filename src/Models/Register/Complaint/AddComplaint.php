@@ -12,7 +12,7 @@ class AddComplaint {
 
             $notifiedStaffids = $data['notified_staffs_id'];
             unset($data['notified_staffs_id']);
-
+         
             $complaint->complainant_client_id = $data['complainant_client_id'];
             $complaint->complainant_contact_details_id = $data['complainant_contact_details'];
             $complaint->department = $data['department'];
@@ -37,23 +37,20 @@ class AddComplaint {
 
             $complaintId = R::store($complaint);
 
-
-            
-            if (!empty($notifiedStaffids)) {
-
-                $complaintNotifiedStaffs = R::dispense('complaint_notified_staffs');
-
+            if (is_array($notifiedStaffids) && !empty($notifiedStaffids)) {
+               
                 foreach ($notifiedStaffids as $notifiedStaffid) {
-                    
-                    $complaintNotifiedStaffs->complaint_id = (int)$complaintId;
+                    $complaintNotifiedStaffs = R::dispense('complaintnotifiedstaffs');
+
+                    $complaintNotifiedStaffs->complaint_id = $complaintId;
                     $complaintNotifiedStaffs->staff_id = (int) $notifiedStaffid;
+                 
         
                     R::store($complaintNotifiedStaffs);
                 
                 }
         
             }
-
 
             return $complaintId;
        } catch (\Exception $e) {
