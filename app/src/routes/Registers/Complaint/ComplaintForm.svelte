@@ -7,7 +7,8 @@
     import FloatingDate from "@shared/PhippsyTech/svelte-ui/forms/FloatingDate.svelte";
     import { onMount  } from "svelte";
     import Role from "@shared/Role.svelte";
-    
+    import { toastSuccess, toastError } from "@shared/toastHelper.js";
+    import { push } from "svelte-spa-router";
 
     let staffs = [];
     let clients = [];
@@ -114,6 +115,17 @@
         
     });
 
+    function deleteComplaint() {
+        jspa("/Register/Complaint", "deleteComplaint", { id: complaint.id })
+           .then((result) => {
+                toastSuccess("Complaint deleted successfully.");
+                push("/registers/complaints");
+            })
+           .catch((error) => {
+                toastError("Error deleting complaint, please try again.");
+            });
+    }
+
   
 </script>
     
@@ -212,8 +224,8 @@
     <div class="flex">
       <button 
           class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-          
-      >
+          on:click="{deleteComplaint}"      
+          >
           Delete
       </button>
     </div>

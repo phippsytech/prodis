@@ -8,6 +8,7 @@ use NDISmate\Models\Register\Complaint\GetComplaint;
 use NDISmate\Models\Register\Complaint\ListComplaint;
 use NDISmate\Models\Register\Complaint\UpdateComplaint;
 use NDISmate\Models\Register\Complaint\GetComplaintNotifiedStaffs;
+use NDISmate\Models\Register\Complaint\DeleteComplaint;
 
 class ComplaintController extends BaseController
 {
@@ -18,7 +19,8 @@ class ComplaintController extends BaseController
             'addComplaint' => [new AddComplaint, null, true, []],
             'getComplaint' => [new GetComplaint, null, true, []],
             'updateComplaint' => [new UpdateComplaint, null, true, []],
-            'getComplaintNotifiedStaffs' => [new GetComplaintNotifiedStaffs, null, true, []]
+            'getComplaintNotifiedStaffs' => [new GetComplaintNotifiedStaffs, null, true, []],
+            'deleteComplaint' => [new DeleteComplaint, null, true, []],
         ];
     }
 }
