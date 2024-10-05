@@ -331,30 +331,6 @@
       },
     },
     {
-      "/registers/complaints": (params) => {
-        tabs = [
-          {
-            name: "Complaint",
-            url: "/registers/complaints",
-            active: true,
-            roles: ["admin"],
-          },
-          {
-            name: "Investigate and Resolve",
-            url: "/registers/complaints/investigate",
-            active: true,
-            roles: ["admin"],
-          },
-          {
-            name: "Review",
-            url: "/registers/complaints/review",
-            active: true,
-            roles: ["admin"],
-          },
-        ];
-      },
-    },
-    {
       "/registers/risks": (params) => {
         tabs = [
           {
