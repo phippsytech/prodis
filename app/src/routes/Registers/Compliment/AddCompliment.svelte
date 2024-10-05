@@ -6,20 +6,11 @@
     import FloatingTextArea from '@shared/PhippsyTech/svelte-ui/forms/FloatingTextArea.svelte';
     import Button from "@shared/PhippsyTech/svelte-ui/Button.svelte";
     import { toastSuccess, toastError } from "@shared/toastHelper.js";
-    import { push } from "svelte-spa-router";
     import { jspa } from "@shared/jspa.js";
     import { BreadcrumbStore } from "@shared/stores.js";
 
     let compliment = {};
 
-    //compliment.date = new Date();
-    compliment.complimenter = "John Doe";
-    compliment.description = "test description";
-    compliment.staff_id = 170; // selected staff_id from the combobox
-    compliment.action_taken = "Completed action";
-    compliment.acknowledgement_date = null;
-    compliment.status = "not_acknowledged";
-    
     let staffer = [];
 
     BreadcrumbStore.set({
@@ -44,10 +35,10 @@
         jspa("/Register/Compliment", "addCompliment", compliment)
             .then((result) => {
                 toastSuccess("Compliment added successfully");
-                // push("/registers/compliments/" + compliment_id);
             })
-            .catch(() => {
+            .catch((error) => {
                 toastError("Failed to add compliment");
+                console.log(error.response);
             });
     }
 </script>
@@ -63,9 +54,6 @@
     bind:value={compliment.date}
     label="Date of compliment"
 />
-
-<!-- 
-
 
 <div class="flex space-x-4">
     <div class="flex-1">
@@ -90,11 +78,13 @@
     bind:content={compliment.description}
 />
 
-<FloatingTextArea 
+<div class="mt-2">
+    <FloatingTextArea 
     bind:value={compliment.action_taken}
     label="Action Taken"
     placeholder=" Indicate action taken by staff"
-/> -->
+/> 
+</div>
 
 <div class="flex justify-between">
     <span></span>
