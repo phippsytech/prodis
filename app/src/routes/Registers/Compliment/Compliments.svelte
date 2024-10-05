@@ -4,7 +4,7 @@
     import { slide } from "svelte/transition";
     import { jspa } from "@shared/jspa.js";
     import { BreadcrumbStore } from "@shared/stores.js";
-    import { formatPrettyName } from "@shared/utilities.js";
+    import { formatPrettyName, formatDate } from "@shared/utilities.js";
 
     let compliments = [];
 
@@ -63,7 +63,7 @@
                 class="px-4 py-2 hover:bg-blue-700 hover:text-white focus:outline-none focus:ring-0 focus:bg-gray-200 focus:text-gray-600 transition duration-500 cursor-pointer {compliments.length - 1 == index ? 'rounded-b-lg' : ''} border-b border-gray-200 w-full"
             >
                 <div class="justify-between flex">
-                    <span class="text-xs">{compliment.date}</span>
+                    <span class="text-xs">{formatDate(compliment.date)}</span>
                 </div>
                 <div>
                     <span class="font-bold">From:</span> {compliment.complimenter}<br />
@@ -87,7 +87,7 @@
                 class="px-4 py-2 hover:bg-blue-700 hover:text-white focus:outline-none focus:ring-0 focus:bg-gray-200 focus:text-gray-600 transition duration-500 cursor-pointer {compliments.length - 1 == index ? 'rounded-b-lg' : ''} border-b border-gray-200 w-full"
             >
                 <div class="justify-between flex">
-                    <span class="text-xs">{compliment.date}</span>
+                    <span class="text-xs">{formatDate(compliment.date)}</span>
                 </div>
                 <div>
                     <span class="font-bold">From:</span> {compliment.complimenter}<br />

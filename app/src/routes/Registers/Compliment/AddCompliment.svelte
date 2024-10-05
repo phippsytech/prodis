@@ -47,6 +47,10 @@
     });
 
     function addCompliment() {
+        if (compliment.action_taken) {
+            compliment.status = "acknowledged";
+        }
+        
         jspa("/Register/Compliment", "addCompliment", compliment)
                 .then(() => {
                 push("/registers/compliments");
