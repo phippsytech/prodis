@@ -8,8 +8,23 @@
     import { toastSuccess, toastError } from "@shared/toastHelper.js";
     import { jspa } from "@shared/jspa.js";
     import { BreadcrumbStore } from "@shared/stores.js";
+    import { push } from "svelte-spa-router";
 
     let compliment = {};
+
+    compliment.acknowledgement_date = null;
+    compliment.status = "not_acknowledged";
+
+    // let compliment = {
+    //     date: "2024-10-05",
+    //     complimenter: "Eva Snow",
+    //     description: "Excellent service and support provided by the staff.",
+    //     staffs_id: 66,  // Ensure this matches the model
+    //     action_taken: "The staff member was recognized in the monthly meeting.",
+    //     acknowledgement_date: null,
+    //     status: "not_acknowledged"
+    // };
+
 
     let staffer = [];
 
@@ -33,12 +48,12 @@
 
     function addCompliment() {
         jspa("/Register/Compliment", "addCompliment", compliment)
-            .then((result) => {
+                .then(() => {
+                push("/registers/compliments");
                 toastSuccess("Compliment added successfully");
             })
-            .catch((error) => {
+            .catch(() => {
                 toastError("Failed to add compliment");
-                console.log(error.response);
             });
     }
 </script>
@@ -66,7 +81,7 @@
 
     <div class="flex-1">
         <FloatingCombo 
-            bind:value={compliment.staff_id}
+            bind:value={compliment.staffs_id}
             items={staffer}
             label="Select Staff"
             placeholderText="Select or type staff name"
@@ -86,7 +101,8 @@
 /> 
 </div>
 
+
 <div class="flex justify-between">
     <span></span>
     <Button on:click={() => addCompliment()} label="Add Compliment" />
-</div>
+</div> 
