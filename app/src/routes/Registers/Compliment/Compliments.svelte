@@ -56,21 +56,19 @@
 </h1>
 <ul class="bg-white rounded-lg border border-gray-200 w-full text-gray-900">
     {#each compliments as compliment, index (compliment.id)}
-        {#if compliment.status == "in_progress"}
+        {#if compliment.status == "acknowledged"}
             <li
                 in:slide={{ duration: 200 }}
                 out:slide|local={{ duration: 200 }}
-                on:click={() => push("/registers/compliments/" + compliment.id)}
-                class="px-4 py-2 hover:bg-blue-700 hover:text-white focus:outline-none focus:ring-0 focus:bg-gray-200 focus:text-gray-600 transition duration-500 cursor-pointer {compliment.length - 1 == index ? 'rounded-b-lg' : ''} border-b border-gray-200 w-full {compliment.archived == 1 ? 'text-gray-400 cursor-default' : ''}"
+                class="px-4 py-2 hover:bg-blue-700 hover:text-white focus:outline-none focus:ring-0 focus:bg-gray-200 focus:text-gray-600 transition duration-500 cursor-pointer {compliments.length - 1 == index ? 'rounded-b-lg' : ''} border-b border-gray-200 w-full"
             >
-                <!-- <div class="justify-between flex">
-                    <span class="text-xs">{compliment.date_identified}</span>
-                    <span class="text-xs">#{compliment.id}</span>
-                </div> -->
+                <div class="justify-between flex">
+                    <span class="text-xs">{compliment.date}</span>
+                </div>
                 <div>
-                    <span class="font-bold">{compliment.course_title}</span><br />
-                    <span class="text-sm">Trainer: {compliment.trainer}</span><br />
-                    <span class="text-sm">{formatPrettyName(compliment.status)}</span>
+                    <span class="font-bold">From:</span> {compliment.complimenter}<br />
+                    <span class="font-bold">To:</span> {compliment.staff_name}<br />
+                    <div class="mt-2">{compliment.description}</div>
                 </div>
             </li>
         {/if}
@@ -82,21 +80,19 @@
 </h1>
 <ul class="bg-white rounded-lg border border-gray-200 w-full text-gray-900">
     {#each compliments as compliment, index (compliment.id)}
-        {#if compliment.status == "completed"}
+        {#if compliment.status == "not_acknowledged"}
             <li
                 in:slide={{ duration: 200 }}
                 out:slide|local={{ duration: 200 }}
-                on:click={() => push("/registers/compliments/" + compliment.id)}
-                class="px-4 py-2 hover:bg-blue-700 hover:text-white focus:outline-none focus:ring-0 focus:bg-gray-200 focus:text-gray-600 transition duration-500 cursor-pointer {compliment.length - 1 == index ? 'rounded-b-lg' : ''} border-b border-gray-200 w-full {compliment.archived == 1 ? 'text-gray-400 cursor-default' : ''}"
+                class="px-4 py-2 hover:bg-blue-700 hover:text-white focus:outline-none focus:ring-0 focus:bg-gray-200 focus:text-gray-600 transition duration-500 cursor-pointer {compliments.length - 1 == index ? 'rounded-b-lg' : ''} border-b border-gray-200 w-full"
             >
-                <!-- <div class="justify-between flex">
-                    <span class="text-xs">{compliment.date_identified}</span>
-                    <span class="text-xs">#{compliment.id}</span>
-                </div> -->
+                <div class="justify-between flex">
+                    <span class="text-xs">{compliment.date}</span>
+                </div>
                 <div>
-                    <span class="font-bold">{compliment.course_title}</span><br />
-                    <span class="text-sm">Trainer: {compliment.trainer}</span><br />
-                    <span class="text-sm">Completion Date: {compliment.completion_date ? compliment.completion_date : 'N/A'}</span><br />
+                    <span class="font-bold">From:</span> {compliment.complimenter}<br />
+                    <span class="font-bold">To:</span> {compliment.staff_name}<br />
+                    <div class="mt-2">{compliment.description}</div>
                 </div>
             </li>
         {/if}

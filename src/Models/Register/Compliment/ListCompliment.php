@@ -7,33 +7,34 @@ class ListCompliment
 {
     public function __invoke($data)
     {
-            // Initialize an empty array for the result
-            $result = [];
+        // Initialize an empty array for the result
+        $result = [];
 
-            // Basic SQL query to select all from the trainings table
-            $sql = "SELECT * FROM compliments";
-            
-            $params = [];
-            $conditions = [];
+        // SQL query to select compliments along with staff names
+        $sql = "SELECT c.*, s.name AS staff_name 
+                FROM compliments c 
+                LEFT JOIN staffs s ON c.staffs_id = s.id"; // Join to get staff names
+        
+        $params = [];
+        $conditions = [];
 
-            // Build conditions based on provided data if needed (optional)
-            // For example, if you want to filter by status or other fields
-            if (isset($data['status'])) {
-                $conditions[] = 'status = ?';
-                $params[] = $data['status'];
-            }
+        // Build conditions based on provided data if needed (optional)
+        if (isset($data['status'])) {
+            $conditions[] = 'c.status = ?';
+            $params[] = $data['status'];
+        }
 
-            // Append conditions to SQL query if there are any
-            if (!empty($conditions)) {
-                $sql .= ' WHERE ' . implode(' AND ', $conditions);
-            }
+        // Append conditions to SQL query if there are any
+        if (!empty($conditions)) {
+            $sql .= ' WHERE ' . implode(' AND ', $conditions);
+        }
 
-            // Append order by clause (optional)
-            $sql .= ' ORDER BY date DESC';
+        // Append order by clause (optional)
+        $sql .= ' ORDER BY c.date DESC';
 
-            // Execute the query using RedBeanPHP
-            $result = R::getAll($sql, $params);
+        // Execute the query using RedBeanPHP
+        $result = R::getAll($sql, $params);
 
-            return $result;
+        return $result;
     }
 }
