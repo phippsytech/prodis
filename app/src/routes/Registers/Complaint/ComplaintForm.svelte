@@ -18,7 +18,7 @@
     let complaintStatusItems = [
         {option: "Under Investigation", value: "under investigation"},
         {option: "Escelated Internally", value: "escelated internally"},
-        {option: "Resoultion Proposed", value: "resoultion Proposed"},
+        {option: "Resoultion Proposed", value: "resoultion proposed"},
         {option: "Resolved", value: "resolved"},
         {option: "Unresolved", value: "unresolved"},
     ];

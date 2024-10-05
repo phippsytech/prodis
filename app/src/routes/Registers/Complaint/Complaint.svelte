@@ -151,6 +151,17 @@
             });
     }
 
+    function deleteComplaint() {
+        jspa("/Register/Complaint", "deleteComplaint", { id: params.id })
+           .then((result) => {
+                toastSuccess("Complaint deleted successfully.");
+                push("/registers/complaints");
+            })
+           .catch((error) => {
+                toastError("Error deleting complaint, please try again.");
+            });
+    }
+
     $: {
         if (mounted) {
             ActionBarStore.set({
@@ -177,6 +188,7 @@
 <div
     class="text-2xl sm:truncate sm:text-3xl sm:tracking-tight font-fredoka-one-regular mb-2"
     style="color:#220055;"
+    on:click={deleteComplaint}
 >
     Add Complaint.
 </div>
