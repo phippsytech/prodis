@@ -29,7 +29,7 @@ class AddComplaint {
             $complaint->ndis_commission_notified = $data['nids_commission_notified'];
             $complaint->ndis_commission_id = $data['ndis_commission_id'];
             $complaint->recommended_actions = $data['recommended_actions'];
-            $complaint->recommended_actions = $data['recommended_actions'];
+            $complaint->investigation_result = $data['investigation_result'];
             $complaint->status = $data['status'];
             $complaint->created = new \DateTime();
             $complaint->updated = new \DateTime();
