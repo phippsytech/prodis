@@ -1,16 +1,13 @@
 <script>
     import FloatingInput from '@shared/PhippsyTech/svelte-ui/forms/FloatingInput.svelte';
     import FloatingTextArea from '@shared/PhippsyTech/svelte-ui/forms/FloatingTextArea.svelte';
-    import FloatingSelect from '@shared/PhippsyTech/svelte-ui/forms/FloatingSelect.svelte';
     import NewFloatingSelect from '@shared/PhippsyTech/svelte-ui/forms/NewFloatingSelect.svelte';
     import { jspa } from "@shared/jspa.js";
-    import FloatingCombo from "@shared/PhippsyTech/svelte-ui/forms/FloatingCombo.svelte";
     import StaffMultiSelector from "@shared/StaffMultiSelector.svelte";
     import FloatingDate from "@shared/PhippsyTech/svelte-ui/forms/FloatingDate.svelte";
-    import { consoleLogs } from '@app/Overlays/stores';
-    import { onMount, afterUpdate } from "svelte";
-
-    let feedbackStatusSelectElement = null;
+    import { onMount  } from "svelte";
+    import Role from "@shared/Role.svelte";
+    
 
     let staffs = [];
     let clients = [];
@@ -49,7 +46,7 @@
         {option: "Discussed With Complaint", value: "discussed with complaint"},
     ];
 
-    
+        
 
     export let complaint={
         status: "under investigation",
@@ -208,11 +205,20 @@
 <h3 class="text-slate-800 font-bold mx-2 mb-2">Review</h3>
 <FloatingTextArea bind:value={complaint.continuous_improvement  } label="Continuous Improvement Listing" placeholder="Has a Resolution Required a Continuous Improvement Listing?" style="height:150px" {readOnly}/>
 <FloatingTextArea bind:value={complaint.recommended_actions  } label="Recommendations, Actions or Notes" placeholder="Recommendations, Actions or Notes." style="height:150px" {readOnly}/>
-<div class="flex justify-end mt-auto">
-  <button 
-      class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-      
-  >
-      Delete
-  </button>
-</div>
+
+{#if complaint.id}
+  <Role roles={["admin"]}>
+    
+    <div class="flex">
+      <button 
+          class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+          
+      >
+          Delete
+      </button>
+    </div>
+
+  </Role>
+
+{/if}
+
