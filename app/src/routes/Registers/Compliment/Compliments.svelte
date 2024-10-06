@@ -51,31 +51,6 @@
     </div>
 </div>
 
-<h1 class="text-black text-1xl font-bold mt-0 mb-2 drop-shadow mb-2">
-    Acknowledged compliments
-</h1>
-<ul class="bg-white rounded-lg border border-gray-200 w-full text-gray-900">
-    {#each compliments as compliment, index (compliment.id)}
-        {#if compliment.status == "acknowledged"}
-            <li
-                in:slide={{ duration: 200 }}
-                on:click={() => push("/registers/compliments/" + compliment.id)}
-                out:slide|local={{ duration: 200 }}
-                class="px-4 py-2 hover:bg-blue-700 hover:text-white focus:outline-none focus:ring-0 focus:bg-gray-200 focus:text-gray-600 transition duration-500 cursor-pointer border-b border-gray-200 w-full {compliments.length - 1 == index ? 'rounded-b-lg' : ''}"
-            >
-                <div class="justify-between flex">
-                    <span class="text-xs">{formatDate(compliment.date)}</span>
-                </div>
-                <div>
-                    <span class="font-bold">From:</span> {compliment.complimenter}<br />
-                    <span class="font-bold">To:</span> {compliment.staff_name}<br />
-                    <div class="mt-2">{compliment.description}</div>
-                </div>
-            </li>
-        {/if}
-    {/each}
-</ul>
-
 <h1 class="text-black text-1xl font-bold mt-0 mb-2 drop-shadow mb-2 mt-5">
     Open compliments
 </h1>
@@ -92,9 +67,53 @@
                     <span class="text-xs">{formatDate(compliment.date)}</span>
                 </div>
                 <div>
-                    <span class="font-bold">From:</span> {compliment.complimenter}<br />
-                    <span class="font-bold">To:</span> {compliment.staff_name}<br />
-                    <div class="mt-2">{compliment.description}</div>
+                    <span class="font-bold text-xs">From: {compliment.complimenter} </span><br />
+                    <span class="font-bold text-xs">To: {compliment.staff_name} </span><br />
+                    
+                    <div class="mt-2">
+                        <span class="font-bold text-xs">Compliment</span><br />
+                        <blockquote class="text-xs italic font-semibold">
+                            <p>{compliment.description}</p>
+                        </blockquote>
+                    </div>
+                </div>
+            </li>
+        {/if}
+    {/each}
+</ul>
+
+<h1 class="text-black text-1xl font-bold mt-0 mb-2 drop-shadow mb-2">
+    Acknowledged compliments
+</h1>
+<ul class="bg-white rounded-lg border border-gray-200 w-full text-gray-900">
+    {#each compliments as compliment, index (compliment.id)}
+        {#if compliment.status == "acknowledged"}
+            <li
+                in:slide={{ duration: 200 }}
+                on:click={() => push("/registers/compliments/" + compliment.id)}
+                out:slide|local={{ duration: 200 }}
+                class="px-4 py-2 hover:bg-blue-700 hover:text-white focus:outline-none focus:ring-0 focus:bg-gray-200 focus:text-gray-600 transition duration-500 cursor-pointer border-b border-gray-200 w-full {compliments.length - 1 == index ? 'rounded-b-lg' : ''}"
+            >
+                <div class="justify-between flex">
+                    <span class="text-xs">{formatDate(compliment.date)}</span>
+                </div>
+                <div>
+                    <span class="font-bold text-xs">From: {compliment.complimenter} </span><br />
+                    <span class="font-bold text-xs">To: {compliment.staff_name} </span><br />
+                    
+                    <div class="mt-2">
+                        <span class="font-bold text-xs">Compliment</span><br />
+                        <blockquote class="text-xs italic font-semibold">
+                            <p>{compliment.description}</p>
+                        </blockquote>
+                    </div>
+                    
+                    <div class="mt-2">
+                        <span class="font-bold text-xs">Action Taken:</span><br />
+                        <blockquote class="text-xs italic font-semibold">
+                            {compliment.action_taken}
+                        </blockquote>    
+                    </div>
                 </div>
             </li>
         {/if}
