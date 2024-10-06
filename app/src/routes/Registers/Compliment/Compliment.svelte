@@ -105,6 +105,13 @@
 
     function save() {
         if (validate()) {
+            if (compliment.action_taken && compliment.staffs_id) {
+                compliment.status = "acknowledged";
+                
+                const today = new Date();
+                compliment.acknowledgement_date = today.toISOString().split('T')[0];
+            }
+
             jspa("/Register/Compliment", "updateCompliment", { ...compliment })
             .then((result) => {
                 if (result.error) {
@@ -171,24 +178,25 @@
     </label>
 </div>
 
-{#if showActionFields}
-    <div class="mt-2">
-        <FloatingTextArea 
-        bind:value={compliment.action_taken}
-        label="Action Taken"
-        placeholder=" Indicate action taken by staff"
-        /> 
-
-        <FloatingCombo 
-                bind:value={compliment.staffs_id}
-                items={staffer}
-                label="Acknowledging Staff"
-                placeholderText="Select or type staff name"
-        />
-    </div>
-{/if}    
-
 <Role roles={["admin"]}>
+    {#if showActionFields}
+        <div class="mt-2">
+            <FloatingTextArea 
+            bind:value={compliment.action_taken}
+            label="Action Taken"
+            placeholder=" Indicate action taken by staff"
+            /> 
+
+            <FloatingCombo 
+                    bind:value={compliment.staffs_id}
+                    items={staffer}
+                    label="Acknowledging Staff"
+                    placeholderText="Select or type staff name"
+            />
+        </div>
+    {/if}    
+
+
     <div class="flex">
         <button 
             class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"

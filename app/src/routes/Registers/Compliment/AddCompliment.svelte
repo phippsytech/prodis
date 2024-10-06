@@ -69,7 +69,7 @@
                 const today = new Date();
                 compliment.acknowledgement_date = today.toISOString().split('T')[0];
             }
-
+            
             jspa("/Register/Compliment", "addCompliment", compliment)
                     .then(() => {
                     push("/registers/compliments");
@@ -80,7 +80,7 @@
                 });
         }
     }
-    
+
 </script>
 
 <div
