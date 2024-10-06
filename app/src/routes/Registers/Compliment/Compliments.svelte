@@ -68,7 +68,6 @@
                 </div>
                 <div>
                     <span class="font-bold text-xs">From: {compliment.complimenter} </span><br />
-                    <span class="font-bold text-xs">To: {compliment.staff_name} </span><br />
                     
                     <div class="mt-2">
                         <span class="font-bold text-xs">Compliment</span><br />
@@ -99,7 +98,7 @@
                 </div>
                 <div>
                     <span class="font-bold text-xs">From: {compliment.complimenter} </span><br />
-                    <span class="font-bold text-xs">To: {compliment.staff_name} </span><br />
+                    <span class="font-bold text-xs">Acknowledged by: {compliment.staff_name} </span><br />
                     
                     <div class="mt-2">
                         <span class="font-bold text-xs">Compliment</span><br />

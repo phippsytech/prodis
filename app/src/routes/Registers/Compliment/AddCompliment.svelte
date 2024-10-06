@@ -12,6 +12,8 @@
 
     let compliment = {};
 
+    let showActionFields = false;
+
     compliment.acknowledgement_date = null;
     compliment.status = "not_acknowledged";
 
@@ -35,23 +37,50 @@
             .sort((a, b) => a.label.localeCompare(b.label));
     });
 
-    function addCompliment() {
-        if (compliment.action_taken) {
-            compliment.status = "acknowledged";
-            
-            const today = new Date();
-            compliment.acknowledgement_date = today.toISOString().split('T')[0];
+    const validations = [
+        { check: () => !compliment.date, message: "Date of compliment must be provided." },
+        { check: () => !compliment.complimenter, message: "Complimenter name must be provided." },
+        { check: () => !compliment.description, message: "Description must be provided." },
+        {
+            check: () => {
+                const currentDate = new Date();
+                const complimentDate = new Date(compliment.date);
+                return complimentDate > currentDate;
+            },
+            message: "Compliment date cannot be in the future."
         }
+    ];
 
-        jspa("/Register/Compliment", "addCompliment", compliment)
-                .then(() => {
-                push("/registers/compliments");
-                toastSuccess("Compliment added successfully");
-            })
-            .catch(() => {
-                toastError("Failed to add compliment");
-            });
+    function validate() {
+        for (const { check, message } of validations) {
+            if (check()) {
+                toastError(message);
+                return false;
+            }
+        }
+        return true;
     }
+
+    function addCompliment() {
+        if (validate()) {
+            if (compliment.action_taken && compliment.staffs_id) {
+                compliment.status = "acknowledged";
+                
+                const today = new Date();
+                compliment.acknowledgement_date = today.toISOString().split('T')[0];
+            }
+
+            jspa("/Register/Compliment", "addCompliment", compliment)
+                    .then(() => {
+                    push("/registers/compliments");
+                    toastSuccess("Compliment added successfully");
+                })
+                .catch(() => {
+                    toastError("Failed to add compliment");
+                });
+        }
+    }
+    
 </script>
 
 <div
@@ -60,11 +89,6 @@
 >
     Add Compliment
 </div>
-
-<FloatingDate
-    bind:value={compliment.date}
-    label="Date of compliment"
-/>
 
 <div class="flex space-x-4">
     <div class="flex-1">
@@ -76,26 +100,41 @@
     </div>
 
     <div class="flex-1">
-        <FloatingCombo 
-            bind:value={compliment.staffs_id}
-            items={staffer}
-            label="Select Staff"
-            placeholderText="Select or type staff name"
+        <FloatingDate
+            bind:value={compliment.date}
+            label="Date of compliment"
         />
     </div>
 </div>
 
+<span class="ml-2 text-xs text-gray-900/50">Compliment</span>
 <RTE 
     bind:content={compliment.description}
 />
 
 <div class="mt-2">
-    <FloatingTextArea 
-    bind:value={compliment.action_taken}
-    label="Action Taken"
-    placeholder=" Indicate action taken by staff"
-/> 
+    <label class="inline-flex items-center">
+        <input type="checkbox" bind:checked={showActionFields} class="form-checkbox" />
+        <span class="ml-2 text-xs">Action was taken for this compliment</span>
+    </label>
 </div>
+
+{#if showActionFields}
+    <div class="mt-2">
+        <FloatingTextArea 
+        bind:value={compliment.action_taken}
+        label="Action Taken"
+        placeholder=" Indicate action taken by staff"
+        /> 
+
+        <FloatingCombo 
+                bind:value={compliment.staffs_id}
+                items={staffer}
+                label="Acknowledging Staff"
+                placeholderText="Select or type staff name"
+        />
+    </div>
+{/if}    
 
 
 <div class="flex justify-between">

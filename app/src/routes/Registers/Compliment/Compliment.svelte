@@ -18,6 +18,8 @@
     let compliment = {};
     let stored_compliment = {};
 
+    let showActionFields = false;
+
     let staffer = [];
 
     let mounted = false;
@@ -36,6 +38,10 @@
                 .then((result) => {
                     compliment = result.result;
                     stored_compliment = Object.assign({}, compliment);;
+                    if(compliment.action_taken && compliment.staffs_id){
+                        showActionFields = true;
+                    }
+                }).finally(() => {
                 })
                 .catch(() => {
                     toastError("Failed to load compliment.");
@@ -76,7 +82,6 @@
     const validations = [
         { check: () => !compliment.date, message: "Date of compliment must be provided." },
         { check: () => !compliment.complimenter, message: "Complimenter name must be provided." },
-        { check: () => !compliment.staffs_id, message: "Please select a staff member." },
         { check: () => !compliment.description, message: "Description must be provided." },
         {
             check: () => {
@@ -137,11 +142,6 @@
     Compliment Details
 </div>
 
-<FloatingDate
-    bind:value={compliment.date}
-    label="Date of compliment"
-/>
-
 <div class="flex space-x-4">
     <div class="flex-1">
         <FloatingInput 
@@ -152,26 +152,41 @@
     </div>
 
     <div class="flex-1">
-        <FloatingCombo 
-            bind:value={compliment.staffs_id}
-            items={staffer}
-            label="Select Staff"
-            placeholderText="Select or type staff name"
+        <FloatingDate
+            bind:value={compliment.date}
+            label="Date of compliment"
         />
     </div>
 </div>
 
+<span class="ml-2 text-xs text-gray-900/50">Compliment</span>
 <RTE 
     bind:content={compliment.description}
 />
 
 <div class="mt-2">
-    <FloatingTextArea 
-    bind:value={compliment.action_taken}
-    label="Action Taken"
-    placeholder=" Indicate action taken by staff"
-/> 
+    <label class="inline-flex items-center">
+        <input type="checkbox" bind:checked={showActionFields} class="form-checkbox" />
+        <span class="ml-2 text-xs">Action was taken for this compliment</span>
+    </label>
 </div>
+
+{#if showActionFields}
+    <div class="mt-2">
+        <FloatingTextArea 
+        bind:value={compliment.action_taken}
+        label="Action Taken"
+        placeholder=" Indicate action taken by staff"
+        /> 
+
+        <FloatingCombo 
+                bind:value={compliment.staffs_id}
+                items={staffer}
+                label="Acknowledging Staff"
+                placeholderText="Select or type staff name"
+        />
+    </div>
+{/if}    
 
 <Role roles={["admin"]}>
     <div class="flex">
