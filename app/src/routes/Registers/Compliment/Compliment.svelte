@@ -64,6 +64,16 @@
         }
     }
 
+    $: {
+        if (!showActionFields) {
+            compliment.status = "not_acknowledged";
+            compliment.staffs_id = null;
+            compliment.acknowledgement_date = null;
+            console.log("status", compliment.status);
+            console.log("status", compliment.acknowledgement_date);
+        }
+    }
+
     jspa("/Staff", "listStaff", {}).then((result) => {
         staffer = result.result
             .filter((item) => item.archived !== "1")
