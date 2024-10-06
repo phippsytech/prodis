@@ -23,6 +23,7 @@ class AddComplaint {
             $complaint->outcome_wanted = $data['outcome_wanted'];
             $complaint->is_staff_notified = $data['is_staff_notified'];
             $complaint->complainant_feedback = $data['complainant_feedback'];
+            $complaint->complainant_name = $data['complainant_name'];
             $complaint->continuous_improvement = $data['continuous_improvement'];
             $complaint->date_actioned = $data['date_actioned'];
             $complaint->notified_of_outcome = $data['notified_of_outcome'];
@@ -31,7 +32,11 @@ class AddComplaint {
             $complaint->recommended_actions = $data['recommended_actions'];
             $complaint->investigation_result = $data['investigation_result'];
             $complaint->status = $data['status'];
+            $complaint->description = $data['description'];
+            $complaint->actions_taken = $data['actions_taken'];
             $complaint->created = new \DateTime();
+            $complaint->date_complaint =  $data['date_complaint'];
+            $complaint->resolution_date =  $data['resolution_date'];
             $complaint->updated = new \DateTime();
 
 

@@ -5,6 +5,7 @@
     import { slide } from "svelte/transition";
     import { jspa } from "@shared/jspa.js";
     import { BreadcrumbStore } from "@shared/stores.js";
+    import RTEView from "@shared/RTE/RTEView.svelte";
 
     let complaints = [];
 
@@ -59,44 +60,13 @@
     </div>
 {/if}
 
-<h1 class="text-black text-1xl font-bold mt-0 mb-2 drop-shadow mb-2">
-    Under Investigation
-</h1>
-<ul class="bg-white rounded-lg border border-gray-200 w-full text-gray-900">
-    {#each complaints as complaint, index (complaint.id)}
-        {#if complaint.status == "under investigation"}
-            <li
-                in:slide={{ duration: 200 }}
-                out:slide|local={{ duration: 200 }}
-                on:click={() => push("/registers/complaints/" + complaint.id)}
-                class="px-4 py-2 hover:bg-blue-700 hover:text-white focus:outline-none focus:ring-0 focus:bg-gray-200 focus:text-gray-600 transition duration-500 cursor-pointer {complaint.length -
-                    1 ==
-                index
-                    ? 'rounded-b-lg'
-                    : ''}border-b border-gray-200 w-full {complaint.archived == 1
-                    ? 'text-gray-400 cursor-default'
-                    : ''}"
-            >
-                <div class="justify-between flex">
-                    <span class="text-xs">{complaint.created}</span>
-                    <span class="text-xs">#{complaint.id}</span>
-                </div>
-
-                <div>
-                    <span class="font-bold">{complaint.complaint_type}</span><br />
-                    <span class="text-sm">{complaint.details}</span>
-                </div>
-            </li>
-        {/if}
-    {/each}
-</ul>
 
 <h1 class="text-black text-1xl font-bold mt-0 mb-2 drop-shadow mb-2">
-    Unresolved
+    Open
 </h1>
 <ul class="bg-white rounded-lg border border-gray-200 w-full text-gray-900">
     {#each complaints as complaint, index (complaint.id)}
-        {#if complaint.status == "unresolved"}
+        {#if complaint.status == "open"}
             <li
                 in:slide={{ duration: 200 }}
                 out:slide|local={{ duration: 200 }}
@@ -115,78 +85,18 @@
                 </div>
                 <div>
                     <span class="font-bold">{complaint.complaint_type}</span><br />
-                    <span class="text-sm">{complaint.details}</span>
+                    <RTEView bind:content={complaint.details} />
                 </div>
             </li>
         {/if}
     {/each}
 </ul>
 <h1 class="text-black text-1xl font-bold mt-0 mb-2 drop-shadow mb-2">
-    Under Investigation
+    Closed
 </h1>
 <ul class="bg-white rounded-lg border border-gray-200 w-full text-gray-900">
     {#each complaints as complaint, index (complaint.id)}
-        {#if complaint.status == "under investigation"}
-            <li
-                in:slide={{ duration: 200 }}
-                out:slide|local={{ duration: 200 }}
-                on:click={() => push("/registers/complaints/" + complaint.id)}
-                class="px-4 py-2 hover:bg-blue-700 hover:text-white focus:outline-none focus:ring-0 focus:bg-gray-200 focus:text-gray-600 transition duration-500 cursor-pointer {complaint.length -
-                    1 ==
-                index
-                    ? 'rounded-b-lg'
-                    : ''}border-b border-gray-200 w-full {complaint.archived == 1
-                    ? 'text-gray-400 cursor-default'
-                    : ''}"
-            >
-                <div class="justify-between flex">
-                    <span class="text-xs">{complaint.created}</span>
-                    <span class="text-xs">#{complaint.id}</span>
-                </div>
-                <div>
-                    <span class="font-bold">{complaint.complaint_type}</span><br />
-                    <span class="text-sm">{complaint.details}</span>
-                </div>
-            </li>
-        {/if}
-    {/each}
-</ul>
-<h1 class="text-black text-1xl font-bold mt-0 mb-2 drop-shadow mb-2">
-    Escelated Internally
-</h1>
-<ul class="bg-white rounded-lg border border-gray-200 w-full text-gray-900">
-    {#each complaints as complaint, index (complaint.id)}
-        {#if complaint.status == "escelated internally"}
-            <li
-                in:slide={{ duration: 200 }}
-                out:slide|local={{ duration: 200 }}
-                on:click={() => push("/registers/complaints/" + complaint.id)}
-                class="px-4 py-2 hover:bg-blue-700 hover:text-white focus:outline-none focus:ring-0 focus:bg-gray-200 focus:text-gray-600 transition duration-500 cursor-pointer {complaint.length -
-                    1 ==
-                index
-                    ? 'rounded-b-lg'
-                    : ''}border-b border-gray-200 w-full {complaint.archived == 1
-                    ? 'text-gray-400 cursor-default'
-                    : ''}"
-            >
-                <div class="justify-between flex">
-                    <span class="text-xs">{complaint.created}</span>
-                    <span class="text-xs">#{complaint.id}</span>
-                </div>
-                <div>
-                    <span class="font-bold">{complaint.complaint_type}</span><br />
-                    <span class="text-sm">{complaint.details}</span>
-                </div>
-            </li>
-        {/if}
-    {/each}
-</ul>
-<h1 class="text-black text-1xl font-bold mt-0 mb-2 drop-shadow mb-2">
-    Resolution Proposed
-</h1>
-<ul class="bg-white rounded-lg border border-gray-200 w-full text-gray-900">
-    {#each complaints as complaint, index (complaint.id)}
-        {#if complaint.status == "resoultion proposed"}
+        {#if complaint.status == "closed"}
             <li
                 in:slide={{ duration: 200 }}
                 out:slide|local={{ duration: 200 }}

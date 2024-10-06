@@ -9,6 +9,7 @@
     import Role from "@shared/Role.svelte";
     import { toastSuccess, toastError } from "@shared/toastHelper.js";
     import { push } from "svelte-spa-router";
+    import RTE from "@shared/RTE/RTE.svelte";
 
     let staffs = [];
     let clients = [];
@@ -17,11 +18,8 @@
     let client_id = null;
 
     let complaintStatusItems = [
-        {option: "Under Investigation", value: "under investigation"},
-        {option: "Escelated Internally", value: "escelated internally"},
-        {option: "Resoultion Proposed", value: "resoultion proposed"},
-        {option: "Resolved", value: "resolved"},
-        {option: "Unresolved", value: "unresolved"},
+        {option: "Open", value: "open"},
+        {option: "Closed", value: "closed"},
     ];
 
     let complaintTypeItems = [
@@ -46,6 +44,13 @@
         {option: "Outcome Letter Sent", value: "outcome letter sent"},
         {option: "Discussed With Complaint", value: "discussed with complaint"},
     ];
+
+    let complaintActionsTaken = [
+        {option: "Reviewed service delivery", value: "reviewed service delivery"},
+        {option: "Issued an apology", value: "issued an apology"},
+        {option: "Provided a follow-up appointment", value: "provided a follow-up appointment"}
+    ];
+
 
         
 
@@ -130,7 +135,9 @@
 </script>
     
 <h3 class="text-slate-800 font-bold mx-2 mb-2">Complaint Management Register</h3>
+
 <div class="flex flex-wrap gap-2 flex-none md:flex-row flex-col w-full">
+  <FloatingDate label="Date of Complaint" bind:value={complaint.date_complaint} class="w-full md:w-auto" />
   <NewFloatingSelect
     class="flex-1 min-w-0 w-full sm:w-1/2"
     on:change
@@ -166,8 +173,8 @@
   />
 
 
-<FloatingInput bind:value={complaint.name} label="Complainant" placeholder="Name of Complainant" {readOnly}/>
-<div class="flex flex-wrap gap-2 items-center">
+<FloatingInput bind:value={complaint.complainant_name} label="Complainant" placeholder="Name of Complainant" {readOnly}/>
+<!-- <div class="flex flex-wrap gap-2 items-center">
     <FloatingInput 
       bind:value={complaint.email} 
       label="Email" 
@@ -182,15 +189,26 @@
       {readOnly} 
       class="flex-1 min-w-0 w-full sm:w-auto"
     />
-  </div>
-<FloatingTextArea bind:value={complaint.details} label="Message" placeholder="Message" style="height:150px" {readOnly}/>
-<FloatingTextArea bind:value={complaint.outcome_wanted} label="Expected Resolution" placeholder="What outcome does complainant want?" style="height:150px" {readOnly}/>
+  </div> -->
+<!-- <FloatingTextArea bind:details={complaint.details} label="Message" placeholder="Message" style="height:150px" {readOnly}/> -->
+<RTE bind:content={complaint.details} />
+<!-- <FloatingTextArea bind:value={complaint.outcome_wanted} label="Expected Resolution" placeholder="What outcome does complainant want?" style="height:150px" {readOnly}/> -->
 
 
 <h3 class="text-slate-800 font-bold mx-2 mb-2">Investigate and Resolve</h3>
 <div class="flex flex-wrap gap-2 flex-none md:flex-row flex-col w-full">
-  <FloatingDate label="Date Actioned" bind:value={complaint.date_actioned} class="w-full md:w-auto" />
+  <FloatingDate label="Resolution Date" bind:value={complaint.resolution_date} class="w-full md:w-auto" />
   <NewFloatingSelect
+  on:change
+  bind:value={complaint.notified_of_outcome}
+  label="Complainant Notified of Outcome"
+  instruction="Actions Taken"
+  options={complaintActionsTaken}
+  {readOnly}
+  clearable
+
+/>
+  <!-- <NewFloatingSelect
     on:change
     bind:value={complaint.notified_of_outcome}
     label="Complainant Notified of Outcome"
@@ -209,14 +227,14 @@
     {readOnly}
     clearable
 
-  />
+  /> -->
 </div>
-<StaffMultiSelector bind:staff_ids={complaint.notified_staffs_id}/>
+<!-- <StaffMultiSelector bind:staff_ids={complaint.notified_staffs_id}/> -->
 
-<FloatingTextArea bind:value={complaint.investigation_result  } label="Investigation Result" placeholder="Investigation Result." style="height:150px" {readOnly}/>
+<!-- <FloatingTextArea bind:value={complaint.investigation_result  } label="Investigation Result" placeholder="Investigation Result." style="height:150px" {readOnly}/>
 <h3 class="text-slate-800 font-bold mx-2 mb-2">Review</h3>
 <FloatingTextArea bind:value={complaint.continuous_improvement  } label="Continuous Improvement Listing" placeholder="Has a Resolution Required a Continuous Improvement Listing?" style="height:150px" {readOnly}/>
-<FloatingTextArea bind:value={complaint.recommended_actions  } label="Recommendations, Actions or Notes" placeholder="Recommendations, Actions or Notes." style="height:150px" {readOnly}/>
+<FloatingTextArea bind:value={complaint.recommended_actions  } label="Recommendations, Actions or Notes" placeholder="Recommendations, Actions or Notes." style="height:150px" {readOnly}/> -->
 
 {#if complaint.id}
   <Role roles={["admin"]}>

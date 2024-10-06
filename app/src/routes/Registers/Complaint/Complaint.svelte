@@ -57,7 +57,7 @@
         department: null,
         complaint_type: null,
         received_by: null,
-        details: null,
+        description: null,
         outcome_wanted: null,
         is_staff_notified: false,
         notified_staffs_id: [],

@@ -27,6 +27,7 @@ class UpdateComplaint {
             $complaint->received_via = $data['received_via'];
             $complaint->received_by = $data['received_by'];
             $complaint->details = $data['details'];
+            $complaint->complainant_name = $data['complainant_name'];
             $complaint->outcome_wanted = $data['outcome_wanted'];
             $complaint->is_staff_notified = $data['is_staff_notified'];
             $complaint->complainant_feedback = $data['complainant_feedback'];
@@ -38,6 +39,9 @@ class UpdateComplaint {
             $complaint->recommended_actions = $data['recommended_actions'];
             $complaint->investigation_result = $data['investigation_result'];
             $complaint->status = $data['status'];
+            $complaint->date_complaint =  $data['date_complaint'];
+            $complaint->resolution_date =  $data['resolution_date'];
+            $complaint->actions_taken = $data['actions_taken'];
             $complaint->updated = new \DateTime();
 
 
