@@ -1,4 +1,5 @@
 <?php
+
 namespace NDISmate\Services\TimeTrackingService;
 
 use NDISmate\Models\Client\CaseNote;
@@ -10,17 +11,17 @@ class UpdateTimeTracking
     public function __invoke($data)
     {
         if ($data['service_booking_id']) {
+
             $client_plan_service = R::getRow(
                 'SELECT 
-                plan_manager_id,
                 service_id
             FROM servicebookings
             WHERE id = :service_booking_id',
                 [':service_booking_id' => $data['service_booking_id']]
             );
 
-            $data['planmanager_id'] = $client_plan_service['plan_manager_id'];
             $data['service_id'] = $client_plan_service['service_id'];
+
 
             $data['rate'] = R::getCell(
                 'SELECT 

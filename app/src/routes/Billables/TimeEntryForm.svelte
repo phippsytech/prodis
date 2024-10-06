@@ -66,15 +66,6 @@
             service_booking_id: timetracking.service_booking_id,
         })
             .then((result) => {
-                console.log(
-                    "test timetracking: " + timetracking.service_booking_id,
-                );
-
-                console.log("store service id: " + stored_service_id);
-                console.log(
-                    "timetracking service id: " +
-                        timetracking.service_booking_id,
-                );
                 available_session_duration =
                     result.result.available_session_duration;
 
@@ -120,7 +111,6 @@
     }
 
     function checkIfHasActiveServiceAgreement(service_agreement) {
-        console.log("Checking for active agreements...", service_agreement); // Debug log
         return (
             service_agreement?.some((agreement) => agreement.is_active) || false
         );
