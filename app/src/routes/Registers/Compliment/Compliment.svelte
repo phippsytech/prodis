@@ -69,6 +69,7 @@
             compliment.status = "not_acknowledged";
             compliment.staffs_id = null;
             compliment.acknowledgement_date = null;
+            compliment.action_taken = null;
             console.log("status", compliment.status);
             console.log("status", compliment.acknowledgement_date);
         }
@@ -87,6 +88,8 @@
 
     function undo() {
         compliment = Object.assign({}, stored_compliment);
+        showActionFields = compliment.action_taken && compliment.staffs_id ? true : false;
+
     }
 
     const validations = [
