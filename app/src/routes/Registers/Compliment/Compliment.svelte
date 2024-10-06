@@ -1,16 +1,17 @@
 <script>
-    import RTE from "@shared/RTE/RTE.svelte";
-    import FloatingDate from "@shared/PhippsyTech/svelte-ui/forms/FloatingDate.svelte";
-    import FloatingInput from "@shared/PhippsyTech/svelte-ui/forms/FloatingInput.svelte";
-    import FloatingCombo from "@shared/PhippsyTech/svelte-ui/forms/FloatingCombo.svelte";
-    import FloatingTextArea from '@shared/PhippsyTech/svelte-ui/forms/FloatingTextArea.svelte';
-    import Button from "@shared/PhippsyTech/svelte-ui/Button.svelte";
+    
     import { onMount } from "svelte";
     import { jspa } from "@shared/jspa.js";
     import { push } from "svelte-spa-router";
     import { toastSuccess, toastError } from "@shared/toastHelper.js";
     import { BreadcrumbStore } from "@shared/stores.js";
     import { ActionBarStore } from "@app/Layout/BottomNav/stores.js";
+    import Role from "@shared/Role.svelte";
+    import RTE from "@shared/RTE/RTE.svelte";
+    import FloatingDate from "@shared/PhippsyTech/svelte-ui/forms/FloatingDate.svelte";
+    import FloatingInput from "@shared/PhippsyTech/svelte-ui/forms/FloatingInput.svelte";
+    import FloatingCombo from "@shared/PhippsyTech/svelte-ui/forms/FloatingCombo.svelte";
+    import FloatingTextArea from '@shared/PhippsyTech/svelte-ui/forms/FloatingTextArea.svelte';
     
     export let params;
 
@@ -72,22 +73,46 @@
         compliment = Object.assign({}, stored_compliment);
     }
 
+    const validations = [
+        { check: () => !compliment.date, message: "Date of compliment must be provided." },
+        { check: () => !compliment.complimenter, message: "Complimenter name must be provided." },
+        { check: () => !compliment.staffs_id, message: "Please select a staff member." },
+        { check: () => !compliment.description, message: "Description must be provided." },
+        {
+            check: () => {
+                const currentDate = new Date();
+                const complimentDate = new Date(compliment.date);
+                return complimentDate > currentDate;
+            },
+            message: "Compliment date cannot be in the future."
+        }
+    ];
+
+    function validate() {
+        for (const { check, message } of validations) {
+            if (check()) {
+                toastError(message);
+                return false;
+            }
+        }
+        return true;
+    }
+
     function save() {
-        jspa("/Register/Compliment", "updateCompliment", { ...compliment })
+        if (validate()) {
+            jspa("/Register/Compliment", "updateCompliment", { ...compliment })
             .then((result) => {
-                if (result.error) {  
+                if (result.error) {
                     toastError(result.error);
                     return;
                 }
-            })
-            .then((result) => {
                 push("/registers/compliments");
                 toastSuccess("Compliment updated successfully!");
             })
-            .catch((error) => {
-                console.error("Error updating compliment:", error);
+            .catch(() => {
                 toastError("Error updating compliment, please try again.");
             });
+        }
     }
 
     function deleteCompliment() {
@@ -148,11 +173,13 @@
 /> 
 </div>
 
-<div class="flex">
-    <button 
-        class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-        on:click="{deleteCompliment}"
-        >
-        Delete
-    </button>
-</div>
+<Role roles={["admin"]}>
+    <div class="flex">
+        <button 
+            class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+            on:click="{deleteCompliment}"
+            >
+            Delete
+        </button>
+    </div>
+</Role> 
