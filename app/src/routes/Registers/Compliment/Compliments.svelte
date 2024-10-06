@@ -59,8 +59,9 @@
         {#if compliment.status == "acknowledged"}
             <li
                 in:slide={{ duration: 200 }}
+                on:click={() => push("/registers/compliments/" + compliment.id)}
                 out:slide|local={{ duration: 200 }}
-                class="px-4 py-2 hover:bg-blue-700 hover:text-white focus:outline-none focus:ring-0 focus:bg-gray-200 focus:text-gray-600 transition duration-500 cursor-pointer {compliments.length - 1 == index ? 'rounded-b-lg' : ''} border-b border-gray-200 w-full"
+                class="px-4 py-2 hover:bg-blue-700 hover:text-white focus:outline-none focus:ring-0 focus:bg-gray-200 focus:text-gray-600 transition duration-500 cursor-pointer border-b border-gray-200 w-full {compliments.length - 1 == index ? 'rounded-b-lg' : ''}"
             >
                 <div class="justify-between flex">
                     <span class="text-xs">{formatDate(compliment.date)}</span>
@@ -84,6 +85,7 @@
             <li
                 in:slide={{ duration: 200 }}
                 out:slide|local={{ duration: 200 }}
+                on:click={() => push("/registers/compliments/" + compliment.id)}
                 class="px-4 py-2 hover:bg-blue-700 hover:text-white focus:outline-none focus:ring-0 focus:bg-gray-200 focus:text-gray-600 transition duration-500 cursor-pointer {compliments.length - 1 == index ? 'rounded-b-lg' : ''} border-b border-gray-200 w-full"
             >
                 <div class="justify-between flex">

@@ -15,17 +15,6 @@
     compliment.acknowledgement_date = null;
     compliment.status = "not_acknowledged";
 
-    // let compliment = {
-    //     date: "2024-10-05",
-    //     complimenter: "Eva Snow",
-    //     description: "Excellent service and support provided by the staff.",
-    //     staffs_id: 66,  // Ensure this matches the model
-    //     action_taken: "The staff member was recognized in the monthly meeting.",
-    //     acknowledgement_date: null,
-    //     status: "not_acknowledged"
-    // };
-
-
     let staffer = [];
 
     BreadcrumbStore.set({
@@ -49,8 +38,11 @@
     function addCompliment() {
         if (compliment.action_taken) {
             compliment.status = "acknowledged";
+            
+            const today = new Date();
+            compliment.acknowledgement_date = today.toISOString().split('T')[0];
         }
-        
+
         jspa("/Register/Compliment", "addCompliment", compliment)
                 .then(() => {
                 push("/registers/compliments");
