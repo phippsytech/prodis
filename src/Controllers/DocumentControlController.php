@@ -15,7 +15,7 @@ final class DocumentControlController extends BaseController
             'updateDocumentControl' => [new DocumentControl, 'update', true, []],
             'deleteDocumentControl' => [new DocumentControl, 'delete', true, []],
             'getDocumentControl' => [new GetDocumentControl, null, true, []],
-            'listDocumentControl' => [new ListDocumentControl, null, true, []],
+            'listDocumentControls' => [new ListDocumentControl, null, true, []],
         ];
     }
 }

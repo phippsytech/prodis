@@ -835,6 +835,16 @@ export default {
         asyncComponent: () => import('./routes/Registers/Training/Training.svelte')
     }),
 
+    '/registers/documentcontrol': wrap({
+        asyncComponent: () => import('./routes/Registers/DocumentControl/DocumentControls.svelte')
+    }),
+    // '/registers/documentcontrol/add': wrap({
+    //     asyncComponent: () => import('./routes/Registers/DocumentControl/AddDocumentControl.svelte')
+    // }),
+    // '/registers/documentcontrol/:id': wrap({
+    //     asyncComponent: () => import('./routes/Registers/DocumentControl/DocumentControl.svelte')
+    // }),
+
     '/reports': wrap({
         asyncComponent: () => import('./routes/Reports/Reports.svelte')
     }),
