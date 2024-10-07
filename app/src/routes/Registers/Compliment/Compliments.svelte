@@ -1,18 +1,11 @@
 <script>
     import { push } from "svelte-spa-router";
-    import { PlusIcon } from "heroicons-svelte/24/outline";
     import { slide } from "svelte/transition";
     import { jspa } from "@shared/jspa.js";
     import { BreadcrumbStore } from "@shared/stores.js";
-    import { formatPrettyName, formatDate } from "@shared/utilities.js";
+    import { formatDate } from "@shared/utilities.js";
 
     let compliments = [];
-
-    let breadcrumbs_path = [];
-    let breadcrumbs_action = {
-        icon: PlusIcon,
-        event: () => push("/registers/compliments/add"),
-    };
 
     jspa("/Register/Compliment", "listCompliments", {}).then((result) => {
         compliments = result.result;
@@ -66,22 +59,23 @@
                 <div class="justify-between flex">
                     <span class="text-xs">{formatDate(compliment.date)}</span>
                 </div>
+
                 <div>
-                    <span class="font-bold text-xs">From: {compliment.complimenter} </span><br />
-                    
                     <div class="mt-2">
                         <span class="font-bold text-xs">Compliment</span><br />
-                        <blockquote class="text-xs italic font-semibold">
-                            <p>{compliment.description}</p>
-                        </blockquote>
+                        <p class="mb-0 mt-0 text-xs font-light leading-relaxed">{compliment.description}</p>
+                        <footer class="block text-xs text-neutral-600">
+                            - {compliment.complimenter}
+                        </footer>
                     </div>
                 </div>
+
             </li>
         {/if}
     {/each}
 </ul>
 
-<h1 class="text-black text-1xl font-bold mt-0 mb-2 drop-shadow mb-2">
+<h1 class="text-black text-1xl font-bold mt-0 mb-2 drop-shadow mb-2 mt-2">
     Acknowledged compliments
 </h1>
 <ul class="bg-white rounded-lg border border-gray-200 w-full text-gray-900">
@@ -97,21 +91,19 @@
                     <span class="text-xs">{formatDate(compliment.date)}</span>
                 </div>
                 <div>
-                    <span class="font-bold text-xs">From: {compliment.complimenter} </span><br />
                     <span class="font-bold text-xs">Acknowledged by: {compliment.staff_name} </span><br />
                     
                     <div class="mt-2">
                         <span class="font-bold text-xs">Compliment</span><br />
-                        <blockquote class="text-xs italic font-semibold">
-                            <p>{compliment.description}</p>
-                        </blockquote>
+                        <p class="mb-0 mt-0 text-xs font-light leading-relaxed">{compliment.description}</p>
+                        <footer class="block text-xs text-neutral-600">
+                            - {compliment.complimenter}
+                        </footer>
                     </div>
                     
                     <div class="mt-2">
                         <span class="font-bold text-xs">Action Taken:</span><br />
-                        <blockquote class="text-xs italic font-semibold">
-                            {compliment.action_taken}
-                        </blockquote>    
+                        <p class="mb-0 mt-0 text-xs font-light leading-relaxed">{compliment.action_taken}</p>
                     </div>
                 </div>
             </li>
