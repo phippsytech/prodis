@@ -1,25 +1,33 @@
 <?php 
 namespace NDISmate\Models\Register\DocumentControl;
 
-
 use \RedBeanPHP\R as R;
 
 class ListDocumentControl
 {
     public function __invoke($data)
     {
-       // Initialize an empty array for the result
+        // Initialize an empty array for the result
         $result = [];
 
-        // Basic SQL query to select all from the documentcontrols table
-        $sql = "SELECT * FROM documentcontrols";
-        
+        // SQL query to select document controls along with staff names
+        $sql = "SELECT dc.*, s.name AS staff_name 
+                FROM documentcontrols dc 
+                LEFT JOIN staffs s ON dc.staffs_id = s.id"; // Join to get staff names
+
+        // Optional parameters array for filtering
         $params = [];
         $conditions = [];
 
+        // Example: Filtering by 'archived' status if provided
+        if (isset($data['archived'])) {
+            $conditions[] = 'dc.archived = ?';
+            $params[] = $data['archived'];
+        }
+
         // Example: Filtering by document owner (staffs_id) if provided
         if (isset($data['staffs_id'])) {
-            $conditions[] = 'staffs_id = ?';
+            $conditions[] = 'dc.staffs_id = ?';
             $params[] = $data['staffs_id'];
         }
 
@@ -29,7 +37,7 @@ class ListDocumentControl
         }
 
         // Optionally order by revision_date (or any other field)
-        $sql .= ' ORDER BY revision_date DESC';
+        $sql .= ' ORDER BY dc.revision_date DESC';
 
         // Execute the query using RedBeanPHP
         $result = R::getAll($sql, $params);
