@@ -7,11 +7,8 @@
     import { BreadcrumbStore } from "@shared/stores.js";
     import { ActionBarStore } from "@app/Layout/BottomNav/stores.js";
     import Role from "@shared/Role.svelte";
-    import RTE from "@shared/RTE/RTE.svelte";
-    import FloatingDate from "@shared/PhippsyTech/svelte-ui/forms/FloatingDate.svelte";
-    import FloatingInput from "@shared/PhippsyTech/svelte-ui/forms/FloatingInput.svelte";
-    import FloatingCombo from "@shared/PhippsyTech/svelte-ui/forms/FloatingCombo.svelte";
-    import FloatingTextArea from '@shared/PhippsyTech/svelte-ui/forms/FloatingTextArea.svelte';
+    import ComplimentForm from "./ComplimentForm.svelte";
+  
     
     export let params;
 
@@ -70,8 +67,6 @@
             compliment.staffs_id = null;
             compliment.acknowledgement_date = null;
             compliment.action_taken = null;
-            console.log("status", compliment.status);
-            console.log("status", compliment.acknowledgement_date);
         }
     }
 
@@ -155,61 +150,13 @@
 
 </script>
 
-<div
-    class="text-2xl sm:truncate sm:text-3xl sm:tracking-tight font-fredoka-one-regular mb-2 mt-2"
-    style="color:#220055;"
->
-    Compliment Details
-</div>
-
-<div class="flex space-x-4">
-    <div class="flex-1">
-        <FloatingInput 
-            bind:value={compliment.complimenter}
-            label="Name of complimenter"
-            placeholder="eg: Eva Snow"
-        />
-    </div>
-
-    <div class="flex-1">
-        <FloatingDate
-            bind:value={compliment.date}
-            label="Date of compliment"
-        />
-    </div>
-</div>
-
-<span class="ml-2 text-xs text-gray-900/50">Compliment</span>
-<RTE 
-    bind:content={compliment.description}
+<ComplimentForm 
+    bind:compliment={compliment}
+    staffer={staffer}
+    bind:showActionFields
 />
 
-<div class="mt-2">
-    <label class="inline-flex items-center">
-        <input type="checkbox" bind:checked={showActionFields} class="form-checkbox" />
-        <span class="ml-2 text-xs">Action was taken for this compliment</span>
-    </label>
-</div>
-
 <Role roles={["admin"]}>
-    {#if showActionFields}
-        <div class="mt-2">
-            <FloatingTextArea 
-            bind:value={compliment.action_taken}
-            label="Action Taken"
-            placeholder=" Indicate action taken by staff"
-            /> 
-
-            <FloatingCombo 
-                    bind:value={compliment.staffs_id}
-                    items={staffer}
-                    label="Acknowledging Staff"
-                    placeholderText="Select or type staff name"
-            />
-        </div>
-    {/if}    
-
-
     <div class="flex">
         <button 
             class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
