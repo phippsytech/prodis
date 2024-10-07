@@ -16,6 +16,7 @@
     let stored_compliment = {};
 
     let showActionFields = false;
+    let readOnly = false;
 
     let staffer = [];
 
@@ -68,6 +69,12 @@
             compliment.acknowledgement_date = null;
             compliment.action_taken = null;
         }
+    }
+
+    $: {
+        if (compliment.action_taken && compliment.staffs_id) {
+            readOnly = true;
+        } 
     }
 
     jspa("/Staff", "listStaff", {}).then((result) => {
@@ -154,6 +161,7 @@
     bind:compliment={compliment}
     staffer={staffer}
     bind:showActionFields
+    {readOnly}
 />
 
 <Role roles={["admin"]}>

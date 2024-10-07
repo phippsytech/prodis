@@ -1,5 +1,6 @@
 <script>
     import RTE from "@shared/RTE/RTE.svelte";
+    import RTEView from "@shared/RTE/RTE.svelte";
     import FloatingDate from "@shared/PhippsyTech/svelte-ui/forms/FloatingDate.svelte";
     import FloatingInput from "@shared/PhippsyTech/svelte-ui/forms/FloatingInput.svelte";
     import FloatingCombo from "@shared/PhippsyTech/svelte-ui/forms/FloatingCombo.svelte";
@@ -9,6 +10,7 @@
     export let compliment;
     export let staffer = [];
     export let showActionFields = false;
+    export let readOnly = false;
 
 </script>
 
@@ -18,6 +20,7 @@
             bind:value={compliment.complimenter}
             label="Name of complimenter"
             placeholder="eg: Eva Snow"
+            {readOnly}
         />
     </div>
 
@@ -25,14 +28,21 @@
         <FloatingDate
             bind:value={compliment.date}
             label="Date of compliment"
+            {readOnly}
         />
     </div>
 </div>
 
 <span class="ml-2 text-xs text-gray-900/50">Compliment</span>
-<RTE 
-    bind:content={compliment.description}
-/>
+{#if readOnly}
+    <RTE 
+        bind:content={compliment.description}
+    />
+{:else}
+    <RTEView
+        bind:content={compliment.description}
+    />
+{/if}
 
 <Role roles={["admin"]}>
     <div class="mt-2">
@@ -48,6 +58,7 @@
                 bind:value={compliment.action_taken}
                 label="Action Taken"
                 placeholder="Indicate action taken by staff"
+                {readOnly}
             /> 
 
             <FloatingCombo 
@@ -55,6 +66,7 @@
                 items={staffer}
                 label="Acknowledging Staff"
                 placeholderText="Select or type staff name"
+                {readOnly}
             />
         </div>
     {/if}
