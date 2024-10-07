@@ -3,6 +3,8 @@ namespace NDISmate\Controllers;
 
 use NDISmate\CORE\BaseController;
 use NDISmate\Models\Register\DocumentControl;
+use NDISmate\Models\Register\DocumentControl\GetDocumentControl;
+use NDISmate\Models\Register\DocumentControl\ListDocumentControl;
 
 final class DocumentControlController extends BaseController
 {
@@ -12,6 +14,8 @@ final class DocumentControlController extends BaseController
             'addDocumentControl' => [new DocumentControl, 'create', true, []],
             'updateDocumentControl' => [new DocumentControl, 'update', true, []],
             'deleteDocumentControl' => [new DocumentControl, 'delete', true, []],
+            'getDocumentControl' => [new GetDocumentControl, null, true, []],
+            'listDocumentControl' => [new ListDocumentControl, null, true, []],
         ];
     }
 }
