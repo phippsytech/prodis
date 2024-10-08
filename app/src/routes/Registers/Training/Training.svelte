@@ -99,6 +99,7 @@
         }
     }
 
+    $: training.completion_date = training.completion_date === "" ? null : training.completion_date; //set completion date to null when it is cleared
 
     function undo() {
         training = Object.assign({}, stored_training);
