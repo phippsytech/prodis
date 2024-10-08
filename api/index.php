@@ -116,6 +116,8 @@ $app->post('/Trip', new ControllerFactory(\NDISmate\Controllers\TripController::
 $app->post('/Utilities', new ControllerFactory(\NDISmate\Controllers\UtilityController::class));
 $app->post('/Storage', new ControllerFactory(\NDISmate\Controllers\ObjectStorageController::class));
 
+$app->post('/Register/ContinuousImprovement', new ControllerFactory(\NDISmate\Controllers\ContinuousImprovementController::class));
+
 
 // CONVERSION IN PROGRESS
 $app->post('/User', new ControllerFactory(\NDISmate\Controllers\UserController::class));
