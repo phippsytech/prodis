@@ -10,6 +10,7 @@
     import { toastSuccess, toastError } from "@shared/toastHelper.js";
     import { push } from "svelte-spa-router";
     import RTE from "@shared/RTE/RTE.svelte";
+    import FloatingCombo from "@shared/PhippsyTech/svelte-ui/forms/FloatingCombo.svelte";
 
     let staffs = [];
     let clients = [];
@@ -110,13 +111,12 @@
       clients = result.result
         .filter((item) => item.archived != 1)
         .map((item) => ({
-          option: `${item.client_name}`,
+          label: `${item.client_name}`,
           value: item.client_id,
         }))
-        .sort((a, b) => a.option.localeCompare(b.option));
+        .sort((a, b) => a.label.localeCompare(b.label));
 
-        console.log('clients', clients);
-        
+      
     });
 
 
@@ -161,15 +161,11 @@
     />
 </div>
 
-
-<NewFloatingSelect
-  on:change
-  bind:value={complaint.complainant_client_id}
-  label="Client"
-  instruction="Select Client"
-  options={clients}
-  {readOnly}
-  clearable
+  <FloatingCombo
+    label="Clients"
+    items={clients}
+    bind:value={complaint.complainant_client_id}
+    placeholderText="Select or type client name ..."
   />
 
 
