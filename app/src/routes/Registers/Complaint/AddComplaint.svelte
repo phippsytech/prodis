@@ -17,8 +17,8 @@
         { check: () => !complaint.complainant_client_id || complaint.complainant_client_id.length === 0, message: "Please select a client." },
         { check: () => !complaint.complainant_name, message: "Complainant's name must be provided." },
         { check: () => !complaint.details, message: "Details must be provided." },
-        { check: () =>  complaint.date_complaint > complaint.resolution_date , message: "Resolution date must not be before the complaint date provided." },
-        { check: () => !complaint.notified_of_outcome , message: "Actions taken must be provided." },
+        { check: () =>  (!complaint.resolution_date && complaint.date_complaint > complaint.resolution_date) , message: "Resolution date must not be before the complaint date provided." },
+        { check: () => (!complaint.resolution_date && !complaint.notified_of_outcome) , message: "Actions taken must be provided." },
         
     ];
 
