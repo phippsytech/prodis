@@ -51,8 +51,7 @@
         {option: "Provided a follow-up appointment", value: "provided a follow-up appointment"}
     ];
 
-
-        
+      
 
     export let complaint={
         status: "under investigation",
@@ -119,6 +118,7 @@
         console.log('clients', clients);
         
     });
+
 
     function deleteComplaint() {
         jspa("/Register/Complaint", "deleteComplaint", { id: complaint.id })
@@ -201,8 +201,8 @@
   <NewFloatingSelect
   on:change
   bind:value={complaint.notified_of_outcome}
-  label="Complainant Notified of Outcome"
-  instruction="Actions Taken"
+  label="Actions Taken"
+  instruction="Set Actions Taken"
   options={complaintActionsTaken}
   {readOnly}
   clearable

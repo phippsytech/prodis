@@ -81,6 +81,18 @@
     ];
 
 
+    const validations = [
+        { check: () => !complaint.date_complaint, message: "Complaint date must be provided." },
+        { check: () => !complaint.complaint_type, message: "Complaint type must be provided." },
+        { check: () => !complaint.status, message: "Complaint status must be provided." },
+        { check: () => !complaint.complainant_client_id || complaint.complainant_client_id.length === 0, message: "Please select a client." },
+        { check: () => !complaint.complainant_name, message: "Complainant's name must be provided." },
+        { check: () => !complaint.details, message: "Details must be provided." },
+        { check: () =>  complaint.date_complaint > complaint.resolution_date , message: "Resolution date must not be before the complaint date provided." },
+        { check: () => !complaint.notified_of_outcome , message: "Actions taken must be provided." },
+        
+    ];
+
     let storedComplaint = Object.assign({}, complaint);
     let mounted = false;
     let readOnly = false;
@@ -107,6 +119,17 @@
         
     });
 
+    
+    function validate() {
+        for (const { check, message } of validations) {
+            if (check()) {
+                toastError(message);
+                return false;
+            }
+        }
+        return true;
+    }
+
     function getComplaint(id) {
         jspa("/Register/Complaint", "getComplaint", { id: id })
                 .then((result) => {
@@ -125,7 +148,9 @@
     }
 
     function save() {
-        console.log('saving', complaint);
+        if (!validate()) {
+            return; 
+        }
         
         jspa("/Register/Complaint", "updateComplaint", complaint)
             .then((result) => {
