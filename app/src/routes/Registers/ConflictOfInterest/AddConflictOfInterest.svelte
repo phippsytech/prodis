@@ -4,7 +4,8 @@
     import { jspa } from "@shared/jspa.js";
     import Button from "@shared/PhippsyTech/svelte-ui/Button.svelte";
     import ConflictOfInterestForm from "./ConflictOfInterestForm.svelte";
-
+    import { toastSuccess, toastError } from "@shared/toastHelper.js";
+    
     let conflictofinterest = {};
     conflictofinterest.status = "open";
 
@@ -27,7 +28,8 @@
         )
             .then((result) => {
                 let conflictofinterest_id = result.result.id;
-                push("/registers/conflictofinterests/" + conflictofinterest_id);
+                toastSuccess("Conflict of Interest added successfully.");
+                push("/registers/conflictofinterests");
             })
             .catch(() => {});
     }

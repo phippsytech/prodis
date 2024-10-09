@@ -6,7 +6,7 @@
     import { BreadcrumbStore } from "@shared/stores.js";
     import { toastSuccess, toastError } from "@shared/toastHelper.js";
     import { push } from "svelte-spa-router";
-    
+
     export let params;
 
     let conflictofinterest = {
@@ -56,7 +56,7 @@
                 );
                 // let result = result.result.id;
 
-                toastSuccess("Conflict of Interest added successfully.");
+                toastSuccess("Conflict of Interest updated successfully.");
                 push("/registers/conflictofinterests");
             })
             .catch(() => {});
