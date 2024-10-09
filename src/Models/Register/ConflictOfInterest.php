@@ -18,8 +18,9 @@ class ConflictOfInterest extends BaseModel {
             'date_identified' => [v::stringType()],
             'date_resolved' => [v::stringType()],
             'submitted_by' => [v::stringType()],
-            
+            'parties_involved' => [v::stringType()],
             'description' => [v::stringType()],
+            'type' => [v::stringType()],
             'resolution' => [v::stringType()],
             
             'status' => [v::stringType()], // open, closed

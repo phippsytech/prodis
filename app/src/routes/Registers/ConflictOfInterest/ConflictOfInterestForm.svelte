@@ -50,7 +50,7 @@
 <div class="flex flex-wrap gap-2 items-center">
     <div class="flex flex-wrap gap-2 w-full md:w-auto">
         <div class="w-full md:w-auto">
-            <FloatingDate label="Conflict Date" bind:value={conflictofinterest.conflict_date} />
+            <FloatingDate label="Conflict Date" bind:value={conflictofinterest.date_identified} />
         </div>
         <div class="w-full md:w-auto">
             <NewFloatingSelect
@@ -74,7 +74,7 @@
         </div>
     </div>
 </div>
-
+<h3 class="text-slate-800 font-bold mx-2 mt-2 mb-2">Details</h3>
 <div class="w-full">
     <NewFloatingSelect 
         on:change
@@ -96,13 +96,19 @@
     />
 </div>
 
-<h3 class="text-slate-800 font-bold mx-2">Details</h3>
+
 
 <div class="w-full">
     <RTE bind:content={conflictofinterest.description} />
 </div>
+<h3 class="text-slate-800 font-bold mx-2 mt-2 mb-2">Resolution</h3>
+<div class="flex flex-wrap gap-2 w-full md:w-auto">
+    <div class="w-full md:w-auto">
+        <FloatingDate label="Resolution Date" bind:value={conflictofinterest.date_resolved} />
+    </div>
+</div>
 
-<div class="w-full mt-2">
+<div class="w-full">
     <FloatingTextArea
         bind:value={conflictofinterest.resolution}
         label="Actions Taken"

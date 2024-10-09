@@ -43,11 +43,11 @@
 </div>
 
 <h1 class="text-black text-1xl font-bold mt-0 mb-2 drop-shadow mb-2">
-    Open Conflict Of Interests
+    Unresolved Conflict of Interests
 </h1>
 <ul class="bg-white rounded-lg border border-gray-200 w-full text-gray-900">
     {#each conflictofinterests as conflictofinterest, index (conflictofinterest.id)}
-        {#if conflictofinterest.status == "open"}
+        {#if conflictofinterest.status == "unresolved"}
             <li
                 in:slide={{ duration: 200 }}
                 out:slide|local={{ duration: 200 }}
@@ -86,11 +86,11 @@
 </ul>
 
 <h1 class="text-black text-1xl font-bold mt-0 mb-2 drop-shadow mb-2">
-    Closed Conflict Of Interests
+    Resolved Conflict of Interests
 </h1>
 <ul class="bg-white rounded-lg border border-gray-200 w-full text-gray-900">
     {#each conflictofinterests as conflictofinterest, index (conflictofinterest.id)}
-        {#if conflictofinterest.status == "closed"}
+        {#if conflictofinterest.status == "resolved"}
             <li
                 in:slide={{ duration: 200 }}
                 out:slide|local={{ duration: 200 }}
