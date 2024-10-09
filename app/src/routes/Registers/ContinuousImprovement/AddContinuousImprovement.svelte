@@ -61,6 +61,10 @@
     }
 </script>
 
+<div class="text-2xl sm:truncate sm:text-3xl sm:tracking-tight font-fredoka-one-regular mb-2" style="color: rgb(34, 0, 85);">
+    Add Continuous Improvement
+</div>
+
 <ContinuousImprovementForm 
     bind:continuous_improvement={continuous_improvement}
     bind:staffer={staffer}
