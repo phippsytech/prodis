@@ -107,19 +107,6 @@
       </Role>
     </div>
     <div class="flex sm:flex-row flex-col sm:items-center"></div>
-    {#if hasInactiveAgreements}
-      <div class="flex items-center mx-2">
-        <input
-          type="checkbox"
-          id="seeInactive"
-          bind:checked={show_inactive_service_agreements}
-          class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-        />
-        <label for="seeInactive" class="ml-2 text-xs font-medium text-gray-900"
-          >See Inactive</label
-        >
-      </div>
-    {/if}
   </div>
 
   <DraftServiceAgreement bind:displayServiceAgreement />
@@ -141,3 +128,12 @@
     </div>
   {/each}
 </div>
+
+{#if hasInactiveAgreements}
+  <div class="flex justify-between sm:items-center mt-6 mb-1">
+    <div class="flex sm:flex-row flex-col sm:items-center">
+      <h3 class="text-slate-800 font-bold mx-2">Inactive Service Agreements</h3>
+    </div>
+    <div class="flex sm:flex-row flex-col sm:items-center"></div>
+  </div>
+{/if}
