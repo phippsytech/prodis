@@ -16,6 +16,17 @@
     let readOnly = false;
     let mounted = false;
 
+
+    const validations = [
+        { check: () => !conflictofinterest.date_identified, message: "Conflict of Interest date must be provided." },
+        { check: () => !conflictofinterest.type, message: "Conflict of Interest type must be provided." },
+        { check: () => !conflictofinterest.status, message: "Conflict of Interest status must be provided." },
+        { check: () => !conflictofinterest.staff_id , message: "Please select a staff." },
+        { check: () => !conflictofinterest.parties_involved, message: "Parties Involved name must be provided." },
+        { check: () => !conflictofinterest.description, message: "Details must be provided." },
+        { check: () => (conflictofinterest.date_identified > conflictofinterest.date_resolved), message: "Resolution date date must no be before the conflict date." },    
+    ];
+
     BreadcrumbStore.set({ path: [{ url: "/registers", name: "Registers" }] });
 
     onMount(() => {
