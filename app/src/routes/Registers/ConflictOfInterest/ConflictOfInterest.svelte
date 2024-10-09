@@ -4,11 +4,13 @@
     import { jspa } from "@shared/jspa.js";
     import { ActionBarStore } from "@app/Layout/BottomNav/stores.js";
     import { BreadcrumbStore } from "@shared/stores.js";
-
+    import { toastSuccess, toastError } from "@shared/toastHelper.js";
+    import { push } from "svelte-spa-router";
+    
     export let params;
 
     let conflictofinterest = {
-        status: "open",
+        status: "unresolved",
     };
     let stored_conflictofinterest = Object.assign({}, conflictofinterest);
     let readOnly = false;
@@ -53,6 +55,9 @@
                     conflictofinterest,
                 );
                 // let result = result.result.id;
+
+                toastSuccess("Conflict of Interest added successfully.");
+                push("/registers/conflictofinterests");
             })
             .catch(() => {});
     }

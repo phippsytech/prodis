@@ -6,7 +6,9 @@
     import FloatingDate from "@shared/PhippsyTech/svelte-ui/forms/FloatingDate.svelte";
     import NewFloatingSelect from "@shared/PhippsyTech/svelte-ui/forms/NewFloatingSelect.svelte";
     import RTE from "@shared/RTE/RTE.svelte";
-    
+    import { toastSuccess, toastError } from "@shared/toastHelper.js";
+    import { push } from "svelte-spa-router";
+    import Role from "@shared/Role.svelte";
     
     export let conflictofinterest = {
         status: "unresolved",
@@ -45,6 +47,17 @@
 
     $: {
         readOnly = conflictofinterest.status == "resolved";
+    }
+
+    function deleteConflictOfInterest() {
+        jspa("/Register/ConflictOfInterest", "deleteConflictOfInterest", { id: conflictofinterest.id })
+           .then((result) => {
+                toastSuccess("Complaint deleted successfully.");
+                push("/registers/conflictofinterests");
+            })
+           .catch((error) => {
+                toastError("Error deleting complaint, please try again.");
+            });
     }
 </script>
 <div class="flex flex-wrap gap-2 items-center">
@@ -117,3 +130,19 @@
         {readOnly}
     />
 </div>
+
+{#if conflictofinterest.id}
+  <Role roles={["admin"]}>
+    
+    <div class="flex">
+      <button 
+          class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+          on:click="{deleteConflictOfInterest}"      
+          >
+          Delete
+      </button>
+    </div>
+
+  </Role>
+
+{/if}
