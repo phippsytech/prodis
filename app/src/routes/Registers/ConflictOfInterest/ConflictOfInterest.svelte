@@ -24,8 +24,11 @@
         { check: () => !conflictofinterest.staff_id , message: "Please select a staff." },
         { check: () => !conflictofinterest.parties_involved, message: "Parties Involved name must be provided." },
         { check: () => !conflictofinterest.description, message: "Details must be provided." },
-        { check: () => (conflictofinterest.date_identified > conflictofinterest.date_resolved), message: "Resolution date date must no be before the conflict date." },    
+        { check: () => conflictofinterest.date_identified > conflictofinterest.date_resolved, message: "Resolution date must not be before the conflict date." },
+        { check: () => (conflictofinterest.date_resolved && !conflictofinterest.resolution) , message: "Resolution taken must be provided." },
     ];
+
+    
 
     BreadcrumbStore.set({ path: [{ url: "/registers", name: "Registers" }] });
 
@@ -49,11 +52,26 @@
         mounted = true;
     });
 
+
+    function validate() {
+        for (const { check, message } of validations) {
+            if (check()) {
+                toastError(message);
+                return false;
+            }
+        }
+        return true;
+    }
+
+
     function undo() {
         conflictofinterest = Object.assign({}, stored_conflictofinterest);
     }
 
     function save() {
+        if (!validate()) {
+            return; 
+        }
         jspa(
             "/Register/ConflictOfInterest",
             "updateConflictOfInterest",
