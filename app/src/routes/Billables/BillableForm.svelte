@@ -8,18 +8,19 @@
     import { jspa } from "@shared/jspa.js";
     import ServiceButtonGroup from "./ServiceButtonGroup.svelte";
     import NewTimeEntryForm from "./NewTimeEntryForm.svelte";
-    import { getQueryParams } from "@shared/utilities.js";
+    import { getQueryParams, haveCommonElements } from "@shared/utilities.js";
+    import { RolesStore } from "@shared/stores.js";
 
     export let timetracking = {};
     export let budget_exceeded = false;
     export let available_session_duration = null;
     export let mode = "add";
 
-    export let params;
+    $: rolesStore = $RolesStore;
 
     // flags
     let hasDuplicate;
-    let invalidClientId = false;
+    let hasNoPermission = false;
     let readOnly = false;
     let client_on_hold = false;
 
@@ -60,6 +61,10 @@
     $: if (timetracking.service_booking_id && timetracking.service_booking_id != stored_service_id) {
         getAvailableSessionDuration();
         stored_service_id = timetracking.service_booking_id;
+    }
+    
+    $: if (timetracking.staff_id && timetracking.staff_id != null && queryParams.hasOwnProperty('participant_id') && timetracking.client_id != null) {
+        checkAvailableClients(timetracking.staff_id);
     }
 
     $: if (
@@ -148,9 +153,23 @@
 
                         if (!isExpired(serviceBooking)) {
                             serviceBookingList.push(options);
+
+                            if (serviceIdCount[serviceBooking.service_id]) {
+                                serviceIdCount[serviceBooking.service_id]++;
+                            } else {
+                                serviceIdCount[serviceBooking.service_id] = 1;
+                            }
                         }
                     }
                 });
+
+                // Check for duplicates
+                for (let service_id in serviceIdCount) {
+                    if (serviceIdCount[service_id] > 1) {
+                        hasDuplicate = true;
+                        break;
+                    }
+                }
 
                 // Sort the service bookings by name
                 serviceBookingList.sort((a, b) =>
@@ -160,6 +179,8 @@
                 if (serviceBookingList.length === 1 && !timetracking.service_booking_id) {
                     timetracking.service_booking_id = serviceBookingList[0].value;
                 }
+
+
             })
             .catch((error) => {
                 console.error("Error loading services:", error);
@@ -173,6 +194,32 @@
 
         // Ensure the current date is outside the interval (before start or after end)
         return current < start || current > end;
+    }
+
+    // clients checker
+    function checkAvailableClients(staff_id) {
+        
+        let action = "listStaffClientsByStaffId";
+        let endpoint = "/Client/Staff";
+        if (haveCommonElements(rolesStore, ["accounts", "admin"])) {
+            action = "listClients";
+            endpoint = "/Client";
+        }
+        
+        jspa(endpoint, action, { staff_id: staff_id })
+            .then((result) => {
+                const clients = result.result; // clients is an object, not an array
+        
+                // Convert the object to an array of values and check for matching client_id
+                hasNoPermission = !Object.values(clients).some(client => client.client_id === timetracking.client_id);
+
+                if (hasNoPermission) {
+                    console.log("Invalid client ID:", hasNoPermission);
+                } else {
+                    console.log("Valid client ID:", client_id);
+                }
+            })
+            .catch((error) => {});
     }
 </script>
 
@@ -260,7 +307,7 @@
 {/if}
 
 <!-- catch invalid url -->
-{#if invalidClientId && queryParams.hasOwnProperty('participant_id')}
+{#if hasNoPermission && queryParams.hasOwnProperty('participant_id')}
     <div class="rounded-md bg-red-50 p-4 mb-4">
         <div class="flex">
             <div class="flex-shrink-0">
@@ -304,7 +351,6 @@
             <ClientSelector
                 bind:client_id={timetracking.client_id}
                 bind:on_hold={client_on_hold}
-                bind:is_not_valid={invalidClientId}
                 {readOnly}
             />
         </div>
