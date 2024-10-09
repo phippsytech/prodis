@@ -6,6 +6,7 @@
     import FloatingDate from "@shared/PhippsyTech/svelte-ui/forms/FloatingDate.svelte";
     import NewFloatingSelect from "@shared/PhippsyTech/svelte-ui/forms/NewFloatingSelect.svelte";
     import RTE from "@shared/RTE/RTE.svelte";
+    import StaffMultiSelector from "@shared/StaffMultiSelector.svelte";
     
     export let conflictofinterest = {
         status: "Unresolved",
@@ -17,7 +18,7 @@
     let conflictofinterestStatusOptions = [
         { option: "Resolved", value: "resolved" },
         { option: "Ongoing", value: "ongoing" },
-        { option: "Unresolved", value: "unresolved" },
+        { option: "Unresolved", value: "unresolved" },git branch --contains staging
     ];
 
     let typeList = [
