@@ -18,8 +18,8 @@ class ContinuousImprovement extends NewCustomModel
             'status' => [v::stringType()],
             'review_date' => [v::optional(v::dateTime('Y-m-d'))],
             'implementation_date' => [v::optional(v::dateTime('Y-m-d'))],
-            'impact_analysis' => [v::stringType()],
-            'implementing_staffs_id' => [v::numericVal()], //implementing staff id
+            'impact_analysis' => [v::optional(v::stringType())],
+            'implementing_staffs_id' => [v::optional(v::numericVal())], //implementing staff id
             'completion_date' => [v::optional(v::dateTime('Y-m-d'))],
             
         ];

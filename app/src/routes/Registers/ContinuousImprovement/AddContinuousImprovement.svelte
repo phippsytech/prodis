@@ -1,0 +1,72 @@
+<script>
+    import { push } from "svelte-spa-router";
+    import { BreadcrumbStore } from "@shared/stores.js";
+    import { jspa } from "@shared/jspa.js";
+    import { toastSuccess, toastError } from "@shared/toastHelper.js";
+    import ContinuousImprovementForm from './ContinuousImprovementForm.svelte';
+    import Button from "@shared/PhippsyTech/svelte-ui/Button.svelte";
+
+    let continuous_improvement = {};
+    let staffer = [];
+
+    BreadcrumbStore.set({
+        path: [
+            { url: "/registers", name: "Registers" },
+            { url: "/registers/continuousimprovements/", name: "Continuous Improvement" },
+            { url: "/registers/continuousimprovements/add", name: "Add Continuous Improvement" },
+        ]
+    });
+
+    const validations = [
+        { check: () => !continuous_improvement.involved_staffs_id || continuous_improvement.involved_staffs_id.length === 0, message: "Please select at least one involved staff member." },
+        { check: () => !continuous_improvement.involved_staffs_id || continuous_improvement.involved_staffs_id.length === 0, message: "Please select at least one involved staff member." },
+        { check: () => !continuous_improvement.date_of_suggestion, message: "Suggestion date must be provided." },
+        { check: () => !continuous_improvement.suggestion_details, message: "Suggestion details must be provided." },
+    ];
+
+    function validate(){
+        for (const { check, message } of validations) {
+            if (check()) {
+                toastError(message);
+                return false;
+            }
+        }
+        return true;
+    }
+
+    jspa("/Staff", "listStaff", {}).then((result) => {
+        staffer = result.result
+            .filter((item) => item.archived !== "1")
+            .map((item) => ({
+                label: `${item.staff_name}`, 
+                value: item.id,
+            }))
+            .sort((a, b) => a.label.localeCompare(b.label));
+    });
+
+
+    // add create function
+    function addContinuousImprovement() {
+        if (validate()) {
+            continuous_improvement.status = "in_progress";
+            jspa("/Register/ContinuousImprovement", "addContinuousImprovement", continuous_improvement)
+                    .then(() => {
+                    push("/registers/continuousimprovements");
+                    toastSuccess("Continuous improvement added successfully");
+                })
+                .catch(() => {
+                    toastError("Failed to add continuous improvement");
+            });
+        }
+    }
+</script>
+
+<ContinuousImprovementForm 
+    bind:continuous_improvement={continuous_improvement}
+    bind:staffer={staffer}
+/>
+
+<div class="flex justify-between">
+    <span></span>
+    <Button on:click={addContinuousImprovement} label="Add continuous improvement" />
+</div>
