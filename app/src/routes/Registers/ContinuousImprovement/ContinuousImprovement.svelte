@@ -95,7 +95,27 @@
     }
 
     function save() {
+        if (validate()) {
+            const today = new Date();
+            const current_date = today.toISOString().split('T')[0]; 
+            
+            continuous_improvement.status = (continuous_improvement.implementation_date === current_date) 
+            ? "implemented" 
+            : "in_progress";
 
+            jspa("/Register/ContinuousImprovement", "updateContinuousImprovement", { ...continuous_improvement })
+            .then((result) => {
+                if (result.error) {
+                    toastError(result.error);
+                    return;
+                }
+                push("/registers/continuousimprovements");
+                toastSuccess("Continuous improvement updated successfully!");
+            })
+            .catch(() => {
+                toastError("Error updating continuous improvement, please try again.");
+            });
+        }
     }
 
     function deleteContinuousImprovement() {
