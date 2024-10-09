@@ -99,7 +99,16 @@
     }
 
     function deleteContinuousImprovement() {
-
+        if (confirm("Are you sure you want to delete this continuous improvement?")) {
+            jspa("/Register/ContinuousImprovement", "deleteContinuousImprovement", { id:  continuous_improvement.id })
+            .then((result) => {
+                toastSuccess("Continuous improvement successfully deleted");
+                push("/registers/continuousimprovements");
+            })
+            .catch((error) => {
+                toastError("Error deleting  continuous improvement");
+            });
+        }
     }
 
 </script>
