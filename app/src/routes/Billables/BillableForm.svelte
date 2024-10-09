@@ -2,18 +2,24 @@
     
     import FloatingDate from "@shared/PhippsyTech/svelte-ui/forms/FloatingDate.svelte";
     import StaffSelector from "./StaffSelector.svelte";
-    import ClientSelector from "./ClientSelector.svelte";
+    import ClientSelector from "@shared/ClientSelector.svelte";
     import Role from "@shared/Role.svelte";
     import { onMount } from "svelte";
     import { jspa } from "@shared/jspa.js";
     import ServiceButtonGroup from "./ServiceButtonGroup.svelte";
     import NewTimeEntryForm from "./NewTimeEntryForm.svelte";
+    import { getQueryParams } from "@shared/utilities.js";
 
     export let timetracking = {};
     export let budget_exceeded = false;
     export let available_session_duration = null;
     export let mode = "add";
-    
+
+    export let params;
+
+    // flags
+    let hasDuplicate;
+    let invalidClientId = false;
     let readOnly = false;
     let client_on_hold = false;
 
@@ -29,7 +35,12 @@
     let stored_client_id = null;
     let stored_session_date = null;
     let stored_service_id;
-    let hasDuplicate;
+
+    let queryParams = getQueryParams();
+  
+    if (queryParams.hasOwnProperty('participant_id')) {
+        timetracking.client_id = queryParams['participant_id'];
+    }
 
     if (timetracking.invoice_batch) {
         readOnly = true;
@@ -90,7 +101,6 @@
             (timetracking.client_id && timetracking.client_id != stored_client_id) ||
             (timetracking.session_date && timetracking.session_date != stored_session_date)
         ) {
-            timetracking.service_booking_id = null; // reset service_booking_id
             loadServices(timetracking);
         }
     }
@@ -98,7 +108,11 @@
     function loadServices(timetracking) {
         stored_client_id = timetracking.client_id;
         stored_session_date = timetracking.session_date;
-        
+        serviceBookingList = [];
+        activeServiceBookings = [];
+        timetracking.service_booking_id = null; // reset service_booking_id
+        hasDuplicate = false;
+
         jspa("/Participant/ServiceBooking", "listServiceBookings", {
             participant_id: timetracking.client_id,
         })
@@ -111,28 +125,6 @@
 
                 // Map to track the occurrence of each service_id
                 let serviceIdCount = {};
-
-                // First pass to count occurrences of each service_id
-                serviceBookings.forEach((serviceBooking) => {
-                    if (!serviceBooking.archived &&
-                        serviceBooking.is_active &&
-                        !isExpired(serviceBooking) &&
-                        serviceBooking.service_agreement_is_active) {
-                        if (serviceIdCount[serviceBooking.service_id]) {
-                            serviceIdCount[serviceBooking.service_id]++;
-                        } else {
-                            serviceIdCount[serviceBooking.service_id] = 1;
-                        }
-                    }
-                });
-
-                // Check for duplicates
-                for (let service_id in serviceIdCount) {
-                    if (serviceIdCount[service_id] > 1) {
-                        hasDuplicate = true;
-                        break;
-                    }
-                }
 
                 // Second pass to populate serviceBookingList
                 serviceBookings.forEach((serviceBooking) => {
@@ -164,9 +156,8 @@
                 serviceBookingList.sort((a, b) =>
                     a.option.localeCompare(b.option)
                 );
-                
-                // // Automatically select a service if only one active service exists
-                if (serviceBookingList.length === 1) {
+
+                if (serviceBookingList.length === 1 && !timetracking.service_booking_id) {
                     timetracking.service_booking_id = serviceBookingList[0].value;
                 }
             })
@@ -268,94 +259,8 @@
     </div>
 {/if}
 
-<Role roles={["accounts", "admin"]}>
-    <div class="flex-1 md:flex-none md:w-100">
-        <StaffSelector bind:staff_id={timetracking.staff_id} />
-    </div>
-</Role>
-
-<div class="flex flex-col md:flex-row gap-x-2">
-    <div class="flex-1 md:flex-none md:w-50">
-        <FloatingDate
-            bind:value={timetracking.session_date}
-            label="Date"
-            {readOnly}
-        />
-    </div>
-
-    <div class="flex-1">
-        <ClientSelector
-            bind:client_id={timetracking.client_id}
-            bind:on_hold={client_on_hold}
-            {readOnly}
-        />
-    </div>
-</div>
-
-{#if client_on_hold}
-    <div class="rounded-md bg-red-50 p-4">
-        <div class="flex">
-            <div class="flex-shrink-0">
-                <svg
-                    class="h-5 w-5 text-red-400"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                    aria-hidden="true"
-                >
-                    <path
-                        fill-rule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z"
-                        clip-rule="evenodd"
-                    />
-                </svg>
-            </div>
-            <div class="ml-3">
-                <h3 class="text-sm font-medium text-red-800">
-                    This client is on hold so billing is unavailable.
-                </h3>
-            </div>
-        </div>
-    </div>
-{:else if hasDuplicate}
-    <div class="rounded-md bg-red-50 p-4">
-        <div class="flex">
-            <div class="flex-shrink-0">
-                <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd" />
-                </svg>
-            </div>
-            <div class="ml-3">
-                <h3 class="text-sm font-semibold text-red-800">Service setup error detected:</h3>
-                <p class="text-sm text-red-800">Duplicate support items found. Please ask your manager to correct the support items for this participant to proceed with billing.</p>
-            </div>
-        </div>
-    </div>
-{:else if activeServiceBookings.length > 0 && serviceBookingList.length === 0} 
-    <!-- has active services but session date is outside the service agreement period. -->
-    <div class="rounded-md bg-red-50 p-4">
-        <div class="flex">
-            <div class="flex-shrink-0">
-                <svg
-                    class="h-5 w-5 text-red-400"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                    aria-hidden="true"
-                >
-                    <path
-                        fill-rule="evenodd"
-                        d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z"
-                        clip-rule="evenodd"
-                    />
-                </svg>
-            </div>
-            <div class="ml-3">
-                <h3 class="text-sm font-medium text-red-800">
-                    The date is outside of the service agreement period.
-                </h3>
-            </div>
-        </div>
-    </div>
-{:else if activeServiceBookings.length === 0 && serviceBookingList.length === 0 && timetracking.client_id}
+<!-- catch invalid url -->
+{#if invalidClientId && queryParams.hasOwnProperty('participant_id')}
     <div class="rounded-md bg-red-50 p-4 mb-4">
         <div class="flex">
             <div class="flex-shrink-0">
@@ -374,23 +279,137 @@
             </div>
             <div class="ml-3">
                 <h3 class="text-sm font-medium text-red-800">
-                    There are no active services for this participant.
+                    Your current permission level prevents you from doing this
                 </h3>
             </div>
         </div>
     </div>
 {:else}
-    <ServiceButtonGroup
-        bind:service_booking_id={timetracking.service_booking_id}
-        bind:serviceBookingList={serviceBookingList}
-        {readOnly}
-    />
+    <Role roles={["accounts", "admin"]}>
+        <div class="flex-1 md:flex-none md:w-100">
+            <StaffSelector bind:staff_id={timetracking.staff_id} />
+        </div>
+    </Role>
 
-    <!-- time entry form -->
-    <NewTimeEntryForm 
-        bind:mode={mode}
-        bind:budget_exceeded={budget_exceeded}
-        bind:available_session_duration={available_session_duration}
-        bind:timetracking={timetracking}
-        {readOnly}/>
+    <div class="flex flex-col md:flex-row gap-x-2">
+        <div class="flex-1 md:flex-none md:w-50">
+            <FloatingDate
+                bind:value={timetracking.session_date}
+                label="Date"
+                {readOnly}
+            />
+        </div>
+
+        <div class="flex-1">
+            <ClientSelector
+                bind:client_id={timetracking.client_id}
+                bind:on_hold={client_on_hold}
+                bind:is_not_valid={invalidClientId}
+                {readOnly}
+            />
+        </div>
+    </div>
+
+    {#if client_on_hold}
+        <div class="rounded-md bg-red-50 p-4">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <svg
+                        class="h-5 w-5 text-red-400"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                        aria-hidden="true"
+                    >
+                        <path
+                            fill-rule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z"
+                            clip-rule="evenodd"
+                        />
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <h3 class="text-sm font-medium text-red-800">
+                        This client is on hold so billing is unavailable.
+                    </h3>
+                </div>
+            </div>
+        </div>
+    {:else if hasDuplicate}
+        <div class="rounded-md bg-red-50 p-4">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <h3 class="text-sm font-semibold text-red-800">Service setup error detected:</h3>
+                    <p class="text-sm text-red-800">Duplicate support items found. Please ask your manager to correct the support items for this participant to proceed with billing.</p>
+                </div>
+            </div>
+        </div>
+    {:else if activeServiceBookings.length > 0 && serviceBookingList.length === 0} 
+        <!-- has active services but session date is outside the service agreement period. -->
+        <div class="rounded-md bg-red-50 p-4">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <svg
+                        class="h-5 w-5 text-red-400"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                        aria-hidden="true"
+                    >
+                        <path
+                            fill-rule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z"
+                            clip-rule="evenodd"
+                        />
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <h3 class="text-sm font-medium text-red-800">
+                        The date is outside of the service agreement period.
+                    </h3>
+                </div>
+            </div>
+        </div>
+    {:else if activeServiceBookings.length === 0 && serviceBookingList.length === 0 && timetracking.client_id}
+        <div class="rounded-md bg-red-50 p-4 mb-4">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <svg
+                        class="h-5 w-5 text-red-400"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                        aria-hidden="true"
+                    >
+                        <path
+                            fill-rule="evenodd"
+                            d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z"
+                            clip-rule="evenodd"
+                        />
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <h3 class="text-sm font-medium text-red-800">
+                        There are no active services for this participant.
+                    </h3>
+                </div>
+            </div>
+        </div>
+    {:else}
+        <ServiceButtonGroup
+            bind:service_booking_id={timetracking.service_booking_id}
+            bind:serviceBookingList={serviceBookingList}
+            {readOnly}
+        />
+
+        <!-- time entry form -->
+        <NewTimeEntryForm 
+            bind:mode={mode}
+            bind:budget_exceeded={budget_exceeded}
+            bind:available_session_duration={available_session_duration}
+            bind:timetracking={timetracking}
+            {readOnly}/>
+    {/if}
 {/if}

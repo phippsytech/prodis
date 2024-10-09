@@ -10,6 +10,7 @@
     export let staff_id = null;
     export let readOnly = false;
     export let clearable = false;
+    export let is_not_valid = tru; // Flag to check if client_id is valid
 
     let clients = [];
     let clientList = [];
@@ -49,7 +50,7 @@
 
         jspa(endpoint, action, { staff_id: staff_id })
             .then((result) => {
-                clientList = []; 
+                clientList = [];
                 clients = result.result;
 
                 clients.forEach((client) => {
@@ -62,6 +63,7 @@
                 });
 
                 clientList.sort((a, b) => a.label.localeCompare(b.label));
+                validateClientId(client_id); // Revalidate after loading clients
             })
             .catch((error) => {});
     }
@@ -77,8 +79,11 @@
             on_hold = client.on_hold == "1";
         }
     }
-</script>
 
+    function validateClientId(client_id) {
+        is_not_valid = !clientList.some((client) => client.value == client_id);
+    }
+</script>
 
 <FloatingCombo
     label="Client"
