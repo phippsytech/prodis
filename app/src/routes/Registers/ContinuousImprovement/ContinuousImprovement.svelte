@@ -11,7 +11,6 @@
 
     let continuous_improvement = {};
     let stored_value = {};
-    let showActionFields = false;
 
     let staffer = [];
 
@@ -31,7 +30,6 @@
                 .then((result) => {
                     continuous_improvement = result.result;
                     stored_value = Object.assign({}, continuous_improvement);
-                    showActionFields = !!continuous_improvement.action_taken;
                 }).finally(() => {
                 })
                 .catch((error) => {
@@ -85,6 +83,14 @@
         { check: () => !continuous_improvement.involved_staffs_id || continuous_improvement.involved_staffs_id.length === 0, message: "Please select at least one involved staff member." },
         { check: () => !continuous_improvement.date_of_suggestion, message: "Suggestion date must be provided." },
         { check: () => !continuous_improvement.suggestion_details, message: "Suggestion details must be provided." },
+        { 
+            check: () => continuous_improvement.review_date && !continuous_improvement.implementing_staffs_id, 
+            message: "Reviewer is required when review date is provided." 
+        },
+        { 
+            check: () => continuous_improvement.implementing_staffs_id && !continuous_improvement.review_date, 
+            message: "Review date is required when there is a reviewer." 
+        }
     ];
 
     function validate(){
@@ -99,7 +105,13 @@
 
     function undo() {
         continuous_improvement = Object.assign({}, stored_value);
-        showActionFields = continuous_improvement.action_taken  ? true : false;
+    }
+
+    $: 
+    {
+        if (continuous_improvement.implementing_staffs_id == null) {
+            continuous_improvement.implementing_staffs_id = null;
+        }
     }
 
     function save() {
@@ -109,7 +121,7 @@
             
             continuous_improvement.status = 
                 (continuous_improvement.action_taken && continuous_improvement.implementing_staffs_id)
-                ? (continuous_improvement.implementation_date = continuous_improvement.implementation_date || current_date, "implemented")
+                ? (continuous_improvement.implementation_date = continuous_improvement.implementation_date || current_date, "for_review")
                 : "in_progress";
 
             continuous_improvement.status = 
