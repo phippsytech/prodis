@@ -91,16 +91,27 @@
             .catch(() => {});
     }
 
+    function deleteConflictOfInterest() {
+        if (confirm("Are you sure you want to delete this conflict of interest?")) {
+            jspa("/Register/ConflictOfInterest", "deleteConflictOfInterest", { id: conflictofinterest.id })
+           .then((result) => {
+                toastSuccess("Complaint deleted successfully.");
+                push("/registers/conflictofinterests");
+            })
+           .catch((error) => {
+                toastError("Error deleting complaint, please try again.");
+            });
+        }
+    }
+
     $: {
         if (mounted) {
             ActionBarStore.set({
-                can_delete: false,
-                show: !(
-                    JSON.stringify(conflictofinterest) ===
-                    JSON.stringify(stored_conflictofinterest)
-                ),
+                can_delete: true,
+                show: true,
                 undo: () => undo(),
                 save: () => save(),
+                delete: () => deleteConflictOfInterest()
             });
         }
     }
@@ -111,5 +122,6 @@
     style="color:#220055;"
 >
     Add Conflict of Interest
+    
 </div>
 <ConflictOfInterestForm bind:conflictofinterest />

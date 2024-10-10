@@ -54,17 +54,6 @@
         conflictofinterest.status = "unresolved";
     }   
 
-
-    function deleteConflictOfInterest() {
-        jspa("/Register/ConflictOfInterest", "deleteConflictOfInterest", { id: conflictofinterest.id })
-           .then((result) => {
-                toastSuccess("Complaint deleted successfully.");
-                push("/registers/conflictofinterests");
-            })
-           .catch((error) => {
-                toastError("Error deleting complaint, please try again.");
-            });
-    }
 </script>
 
 <Container>
@@ -136,19 +125,3 @@
         {readOnly}
     />
 </div>
-
-{#if conflictofinterest.id}
-  <Role roles={["admin"]}>
-    
-    <div class="flex">
-      <button 
-          class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-          on:click="{deleteConflictOfInterest}"      
-          >
-          Delete
-      </button>
-    </div>
-
-  </Role>
-
-{/if}
