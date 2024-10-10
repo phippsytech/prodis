@@ -5,7 +5,6 @@
     import { toastSuccess, toastError } from "@shared/toastHelper.js";
     import { BreadcrumbStore } from "@shared/stores.js";
     import { ActionBarStore } from "@app/Layout/BottomNav/stores.js";
-    import Role from "@shared/Role.svelte";
     import ContinuousImprovementForm from './ContinuousImprovementForm.svelte';
 
     export let params; 
@@ -41,26 +40,27 @@
             const valueChanged = JSON.stringify(continuous_improvement) !== JSON.stringify(stored_value);
 
             ActionBarStore.set({
-                can_delete: false,
-                show: valueChanged,  // Trigger the action bar on changes
+                can_delete: true,
+                show: true,  // Trigger the action bar on changes
                 undo: () => undo(),
                 save: () => save(),
+                delete: () => deleteContinuousImprovement()
             });
         }
     }
 
-    $: {
-        if (!showActionFields) {
-            // implementation_date implementing_staffs_id action_taken review_date completion_date impact_analysis
-            continuous_improvement.implementation_date = null;
-            continuous_improvement.implementing_staffs_id = null;
-            continuous_improvement.action_taken = null;
-            continuous_improvement.review_date = null;
-            continuous_improvement.completion_date = null;
-            continuous_improvement.impact_analysis = null;
-            continuous_improvement.status = "in_progress";
-        }
-    }
+    // $: {
+    //     if (!showActionFields) {
+    //         // implementation_date implementing_staffs_id action_taken review_date completion_date impact_analysis
+    //         continuous_improvement.implementation_date = null;
+    //         continuous_improvement.implementing_staffs_id = null;
+    //         continuous_improvement.action_taken = null;
+    //         continuous_improvement.review_date = null;
+    //         continuous_improvement.completion_date = null;
+    //         continuous_improvement.impact_analysis = null;
+    //         continuous_improvement.status = "in_progress";
+    //     }
+    // }
 
     jspa("/Staff", "listStaff", {}).then((result) => {
         staffer = result.result
@@ -99,9 +99,15 @@
             const today = new Date();
             const current_date = today.toISOString().split('T')[0]; 
             
-            continuous_improvement.status = (continuous_improvement.implementation_date === current_date) 
-            ? "implemented" 
-            : "in_progress";
+            continuous_improvement.status = 
+                (continuous_improvement.action_taken && continuous_improvement.implementing_staffs_id)
+                ? (continuous_improvement.implementation_date = continuous_improvement.implementation_date || current_date, "implemented")
+                : "in_progress";
+
+            continuous_improvement.status = 
+                (continuous_improvement.review_date && continuous_improvement.impact_analysis)
+                ? (continuous_improvement.completion_date = continuous_improvement.completion_date || current_date, "completed")
+                : continuous_improvement.status;
 
             jspa("/Register/ContinuousImprovement", "updateContinuousImprovement", { ...continuous_improvement })
             .then((result) => {
@@ -125,11 +131,25 @@
                 toastSuccess("Continuous improvement successfully deleted");
                 push("/registers/continuousimprovements");
             })
-            .catch((error) => {
+            .catch(() => {
                 toastError("Error deleting  continuous improvement");
             });
         }
     }
+
+    //TODO: how can we change the status for this register
+    //actions taken, implementation date, implementing staff = "implemented status"?
+    //if there is actions taken or done and implementing staff, we should set the implementation date to where we added the action taken
+    //so we dont need the implementation date field in the form
+    //implementation date should not be less than the date of suggestion as it should be in the future
+
+    //review date, impact analysis, completion date = "completed status" ?
+    //if the action taken is reviewed and the impact analysis is done, then we set the completion date to the current date in which 
+    //those 2(review date and impact analysis) are saved in the database
+    //review date should not be greater than the completion date
+
+    //maybe we should put another checkbox in the action fields area
+    //if we check the action taken was reviewed check box, then we display the other portion of the input fields?
 
 </script>
 <div class="text-2xl sm:truncate sm:text-3xl sm:tracking-tight font-fredoka-one-regular mb-2" style="color: rgb(34, 0, 85);">
@@ -141,7 +161,7 @@
     bind:staffer={staffer}
     bind:showActionFields={showActionFields}
 />
-
+<!-- 
 <Role roles={["admin"]}>
     <div class="flex">
         <button 
@@ -151,4 +171,4 @@
             Delete
         </button>
     </div>
-</Role> 
+</Role>  -->
