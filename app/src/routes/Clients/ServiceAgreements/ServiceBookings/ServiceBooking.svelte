@@ -29,15 +29,15 @@
     )
       return service_booking.budget;
 
-    const remainingKmBudget = Math.max(
-      service_booking.kilometer_budget - service_booking.spent_km,
-      0
-    );
-    const kmRatePerUnit = 1; // service_booking.rate / 60; // Assuming the rate is per hour, adjust accordingly
-    const kmDeduction = remainingKmBudget * kmRatePerUnit;
+    // const remainingKmBudget = Math.max(
+    //   service_booking.kilometer_budget - service_booking.spent_km,
+    //   0
+    // );
+    // const kmRatePerUnit = 1; // service_booking.rate / 60; // Assuming the rate is per hour, adjust accordingly
+    // const kmDeduction = remainingKmBudget * kmRatePerUnit;
 
     // Return the adjusted budget
-    return service_booking.budget - kmDeduction;
+    return service_booking.budget - service_booking.kilometer_budget;
   }
 
   // Helper functions for calculating weekly hours and remaining weeks
