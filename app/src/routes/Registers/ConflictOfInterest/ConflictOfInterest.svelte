@@ -24,7 +24,7 @@
         { check: () => !conflictofinterest.staff_id , message: "Please select a staff." },
         { check: () => !conflictofinterest.parties_involved, message: "Parties Involved name must be provided." },
         { check: () => !conflictofinterest.description, message: "Details must be provided." },
-        { check: () => conflictofinterest.date_identified > conflictofinterest.date_resolved, message: "Resolution date must not be before the conflict date." },
+        { check: () => (conflictofinterest.date_identified > conflictofinterest.date_resolved) && conflictofinterest.resolution.trim() !== "", message: "Resolution date must not be before the conflict date." },
         { check: () => (conflictofinterest.date_resolved && !conflictofinterest.resolution) , message: "Resolution taken must be provided." },
     ];
 
