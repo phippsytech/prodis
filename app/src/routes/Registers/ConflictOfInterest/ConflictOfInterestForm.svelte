@@ -9,7 +9,9 @@
     import { toastSuccess, toastError } from "@shared/toastHelper.js";
     import { push } from "svelte-spa-router";
     import Role from "@shared/Role.svelte";
-    
+    import RadioButtonGroup from "@shared/PhippsyTech/svelte-ui/forms/RadioButtonGroup.svelte";
+    import Container from "@shared/Container.svelte";
+
     export let conflictofinterest = {
         status: "unresolved",
     };
@@ -74,46 +76,42 @@
                 hideValidation={true}
             />
         </div>
-        <div class="w-full md:w-auto">
-            <NewFloatingSelect 
-                on:change
-                bind:value={conflictofinterest.type}
-                label="Type"
-                instruction="Select type"
-                options={typeList}
-                {readOnly}
-                clearable
-            />
-        </div>
     </div>
 </div>
+<Container>
+    <div class="text-xs opacity-50 mb-2">Conflict Type</div> 
+    <RadioButtonGroup options={typeList} bind:value={conflictofinterest.type}></RadioButtonGroup>
+</Container>
 <h3 class="text-slate-800 font-bold mx-2 mt-2 mb-2">Details</h3>
-<div class="w-full">
-    <NewFloatingSelect 
-        on:change
-        bind:value={conflictofinterest.staff_id}
-        label="Who reported this conflict of interest"
-        instruction="Choose staffer"
-        options={staffList}
-        {readOnly}
-        clearable
-    />
-</div>
+<Container> 
+    <div class="w-full">
+        <NewFloatingSelect 
+            on:change
+            bind:value={conflictofinterest.staff_id}
+            label="Who reported this conflict of interest"
+            instruction="Choose staffer"
+            options={staffList}
+            {readOnly}
+            clearable
+        />
+    </div>
+    
+    <div class="w-full">
+        <FloatingInput 
+            bind:value={conflictofinterest.parties_involved} 
+            label="Parties Involved" 
+            placeholder="Name of the parties involved." 
+            {readOnly}
+        />
+    </div>
+    
+    
+    
+    <div class="w-full">
+        <RTE bind:content={conflictofinterest.description} />
+    </div>
+</Container>
 
-<div class="w-full">
-    <FloatingInput 
-        bind:value={conflictofinterest.parties_involved} 
-        label="Parties Involved" 
-        placeholder="Name of the parties involved." 
-        {readOnly}
-    />
-</div>
-
-
-
-<div class="w-full">
-    <RTE bind:content={conflictofinterest.description} />
-</div>
 <h3 class="text-slate-800 font-bold mx-2 mt-2 mb-2">Resolution</h3>
 <div class="flex flex-wrap gap-2 w-full md:w-auto">
     <div class="w-full md:w-auto">
