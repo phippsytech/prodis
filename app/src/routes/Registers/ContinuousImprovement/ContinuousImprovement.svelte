@@ -55,19 +55,6 @@
         }
     }
 
-    // $: {
-    //     if (!showActionFields) {
-    //         // implementation_date implementing_staffs_id action_taken review_date completion_date impact_analysis
-    //         continuous_improvement.implementation_date = null;
-    //         continuous_improvement.implementing_staffs_id = null;
-    //         continuous_improvement.action_taken = null;
-    //         continuous_improvement.review_date = null;
-    //         continuous_improvement.completion_date = null;
-    //         continuous_improvement.impact_analysis = null;
-    //         continuous_improvement.status = "in_progress";
-    //     }
-    // }
-
     jspa("/Staff", "listStaff", {}).then((result) => {
         staffer = result.result
             .filter((item) => item.archived !== "1")
