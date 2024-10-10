@@ -13,7 +13,7 @@
     import Container from "@shared/Container.svelte";
 
     export let conflictofinterest = {
-        status: "unresolved",
+        status: "Unresolved",
     };
     export let readOnly = false;
 
@@ -21,7 +21,6 @@
 
     let conflictofinterestStatusOptions = [
         { option: "Resolved", value: "resolved" },
-        { option: "Ongoing", value: "ongoing" },
         { option: "Unresolved", value: "unresolved" }
     ];
 
@@ -51,6 +50,11 @@
         readOnly = conflictofinterest.status == "resolved";
     }
 
+    $: if (!conflictofinterest.status) {
+        conflictofinterest.status = "unresolved";
+    }   
+
+
     function deleteConflictOfInterest() {
         jspa("/Register/ConflictOfInterest", "deleteConflictOfInterest", { id: conflictofinterest.id })
            .then((result) => {
@@ -62,12 +66,13 @@
             });
     }
 </script>
-<div class="flex flex-wrap gap-2 items-center">
-    <div class="flex flex-wrap gap-2 w-full md:w-auto">
-        <div class="w-full md:w-auto">
+
+<Container>
+    <div class="flex space-x-4 w-full mt-2">
+        <div class="flex-1">
             <FloatingDate label="Conflict Date" bind:value={conflictofinterest.date_identified} />
         </div>
-        <div class="w-full md:w-auto">
+        <div class="flex-1">
             <NewFloatingSelect
                 bind:value={conflictofinterest.status}
                 label="Status"
@@ -77,12 +82,15 @@
             />
         </div>
     </div>
-</div>
+</Container>
 <Container>
     <div class="text-xs opacity-50 mb-2">Conflict Type</div> 
-    <RadioButtonGroup options={typeList} bind:value={conflictofinterest.type}></RadioButtonGroup>
+    <div class="flex space-x-4 w-full mt-2">
+        <div class="flex-1">
+        <RadioButtonGroup options={typeList} bind:value={conflictofinterest.type}></RadioButtonGroup>
+    </div> 
 </Container>
-<h3 class="text-slate-800 font-bold mx-2 mt-2 mb-2">Details</h3>
+<h3 class="text-base font-fredoka-one-regular leading-6 text-gray-900 px-3" style="color: rgb(34, 0, 85);">Details</h3>
 <Container> 
     <div class="w-full">
         <NewFloatingSelect 
@@ -112,7 +120,7 @@
     </div>
 </Container>
 
-<h3 class="text-slate-800 font-bold mx-2 mt-2 mb-2">Resolution</h3>
+<h3 class="text-base font-fredoka-one-regular leading-6 text-gray-900 px-3" style="color: rgb(34, 0, 85);">Resolution</h3>
 <div class="flex flex-wrap gap-2 w-full md:w-auto">
     <div class="w-full md:w-auto">
         <FloatingDate label="Resolution Date" bind:value={conflictofinterest.date_resolved} />
