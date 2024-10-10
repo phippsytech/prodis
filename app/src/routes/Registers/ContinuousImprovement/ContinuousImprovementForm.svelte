@@ -3,13 +3,11 @@
     import RTE from "@shared/RTE/RTE.svelte";
     import Role from "@shared/Role.svelte";
     import FloatingDate from "@shared/PhippsyTech/svelte-ui/forms/FloatingDate.svelte";
-    import FloatingInput from "@shared/PhippsyTech/svelte-ui/forms/FloatingInput.svelte";
     import FloatingCombo from "@shared/PhippsyTech/svelte-ui/forms/FloatingCombo.svelte";
     import FloatingTextArea from '@shared/PhippsyTech/svelte-ui/forms/FloatingTextArea.svelte';
 
     export let continuous_improvement;
     export let staffer = [];
-    export let showActionFields = false;
     export let readOnly = false;
 
 </script>

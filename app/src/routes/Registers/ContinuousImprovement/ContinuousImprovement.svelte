@@ -17,6 +17,14 @@
 
     let mounted = false; 
 
+    
+    BreadcrumbStore.set({
+        path: [
+            { url: "/registers", name: "Registers" },
+            { url: "/registers/continuousimprovements/", name: "Continuous Improvement" },
+        ]
+    });
+
     onMount(() => {
         if (params.id != "add") {
             jspa("/Register/ContinuousImprovement", "getContinuousImprovement", { id: params.id })
@@ -137,20 +145,6 @@
         }
     }
 
-    //TODO: how can we change the status for this register
-    //actions taken, implementation date, implementing staff = "implemented status"?
-    //if there is actions taken or done and implementing staff, we should set the implementation date to where we added the action taken
-    //so we dont need the implementation date field in the form
-    //implementation date should not be less than the date of suggestion as it should be in the future
-
-    //review date, impact analysis, completion date = "completed status" ?
-    //if the action taken is reviewed and the impact analysis is done, then we set the completion date to the current date in which 
-    //those 2(review date and impact analysis) are saved in the database
-    //review date should not be greater than the completion date
-
-    //maybe we should put another checkbox in the action fields area
-    //if we check the action taken was reviewed check box, then we display the other portion of the input fields?
-
 </script>
 <div class="text-2xl sm:truncate sm:text-3xl sm:tracking-tight font-fredoka-one-regular mb-2" style="color: rgb(34, 0, 85);">
     Continuous Improvement Details
@@ -159,16 +153,4 @@
 <ContinuousImprovementForm 
     bind:continuous_improvement={continuous_improvement}
     bind:staffer={staffer}
-    bind:showActionFields={showActionFields}
 />
-<!-- 
-<Role roles={["admin"]}>
-    <div class="flex">
-        <button 
-            class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-            on:click="{deleteContinuousImprovement}"
-            >
-            Delete
-        </button>
-    </div>
-</Role>  -->
