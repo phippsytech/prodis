@@ -6,11 +6,14 @@
   import PlanManagerCombo from "@app/routes/Accounts/PlanManagers/PlanManagerCombo.svelte";
   import Container from "@shared/Container.svelte";
   import { slide } from "svelte/transition";
-  import { PlusIcon, XMarkIcon } from "heroicons-svelte/24/outline";
+
   import Role from "@shared/Role.svelte";
 
   import IconMenu from "@shared/PhippsyTech/svelte-iconmenu/IconMenu.svelte";
   import {
+    PlusIcon,
+    XMarkIcon,
+    CloudArrowUpIcon,
     EnvelopeIcon,
     ArchiveBoxIcon,
     DocumentTextIcon,
@@ -21,32 +24,36 @@
 
   import FileSignatureIcon from "@shared/PhippsyTech/svelte-ui/icons/FileSignature.svelte";
   import FileContractIcon from "@shared/PhippsyTech/svelte-ui/icons/FileContract.svelte";
-  import { CloudArrowUpIcon } from "heroicons-svelte/24/outline";
+
   import FileUploader from "@shared/FileUploader.svelte";
+  import { formatCurrency } from "@shared/utilities.js";
 
   export let displayServiceAgreement = false;
 
   export let props = {};
 
   let addedRows = [
-    // {
-    //   service_name: "SBIS",
-    //   rate: 244.22,
-    //   budget: 20000,
-    //   plan_manager_name: "National Disability Insurance Agency",
-    // },
-    // {
-    //   service_name: "SBIS",
-    //   rate: 244.22,
-    //   budget: 20000,
-    //   plan_manager_name: "National Disability Insurance Agency",
-    // },
-    // {
-    //   service_name: "SBIS",
-    //   rate: 244.22,
-    //   budget: 20000,
-    //   plan_manager_name: "National Disability Insurance Agency",
-    // },
+    {
+      service_name: "BMP",
+      rate: 244.22,
+      budget: 20000,
+      km_budget: null,
+      plan_manager_name: "National Disability Insurance Agency",
+    },
+    {
+      service_name: "SBIS",
+      rate: 244.22,
+      budget: 20000,
+      km_budget: 1000,
+      plan_manager_name: "National Disability Insurance Agency",
+    },
+    {
+      service_name: "IDL OT",
+      rate: 193.99,
+      budget: 20000,
+      km_budget: 1000,
+      plan_manager_name: "National Disability Insurance Agency",
+    },
   ];
 
   function hideGenerator() {
@@ -102,14 +109,14 @@
         >
           <div class="flex-grow">
             <FloatingInput
-              bind:value={props.ndis_plan_end_date}
+              bind:value={props.email}
               label="Email Address"
               placeholder="eg: chris@person.com"
             />
           </div>
           <div class="flex-grow-0">
             <FloatingInput
-              bind:value={props.ndis_plan_end_date}
+              bind:value={props.phone}
               label="Contact Number"
               placeholder="eg: 04XX XXX XXX"
             />
@@ -118,25 +125,58 @@
       </div>
     </li>
 
+    <li
+      class="bg-white flex justify-between items-center px-2 py-2 border-b border-indigo-100 w-full gap-x-2"
+    >
+      <div class="flex-grow">
+        <div
+          class="grid grid-cols-12 gap-x-2 items-center w-full text-xs text-slate-400 font-semibold"
+        >
+          <div class="col-span-2 px-2">
+            Service Name
+            <span class="text-xs">(Rate)</span>
+          </div>
+          <div class="col-span-2 px-2">Budget</div>
+          <div class="col-span-2 px-2">
+            KM Budget <span class="text-xs">: Cap</span>
+          </div>
+
+          <div class="col-span-6 px-2">Payer</div>
+        </div>
+      </div>
+
+      <div class="flex-shrink">
+        <a class="flex p-1">
+          <div class="h-4 w-4 inline m-0 p-0" />
+        </a>
+      </div>
+    </li>
+
     {#each addedRows as row, index (index)}
       <li
-        in:slide={{ duration: 200 }}
-        out:slide={{ duration: 200 }}
         class="bg-white group flex justify-between items-center hover:bg-indigo-50 px-2 py-2 focus:outline-none focus:ring-0 focus:bg-indigo-600 focus:text-slate-600 transition duration-500 border-b border-indigo-100 w-full
     gap-x-2"
       >
         <div class="flex-grow">
           <div class="grid grid-cols-12 gap-x-2 items-center w-full">
-            <div class="col-span-3 px-2">
+            <div class="col-span-2 px-2">
               {row.service_name}
+              <span class="text-xs text-gray-400"
+                >({formatCurrency(row.rate)})</span
+              >
             </div>
             <div class="col-span-2 px-2">
-              {row.rate}
+              {formatCurrency(row.budget)}
             </div>
             <div class="col-span-2 px-2">
-              {row.budget}
+              {#if row.km_budget != null}{row.km_budget}{/if}<span
+                class="text-sm text-gray-400"
+                >{#if row.km_budget != null}
+                  km : 30m{:else}&mdash;{/if}</span
+              >
             </div>
-            <div class="col-span-5 px-2">
+
+            <div class="col-span-6 px-2">
               {row.plan_manager_name}
             </div>
           </div>
