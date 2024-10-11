@@ -114,6 +114,10 @@
                 delete: () => deleteConflictOfInterest()
             });
         }
+
+        if (stored_conflictofinterest.date_resolved && stored_conflictofinterest.resolution.trim() != "") {
+            conflictofinterest.status = 'resolved';     
+        }
     }
 </script>
 
@@ -124,4 +128,4 @@
     Add Conflict of Interest
     
 </div>
-<ConflictOfInterestForm bind:conflictofinterest />
+<ConflictOfInterestForm bind:conflictofinterest/>

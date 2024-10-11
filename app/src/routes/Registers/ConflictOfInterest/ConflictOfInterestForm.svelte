@@ -88,7 +88,7 @@
             label="Who reported this conflict of interest"
             instruction="Choose staffer"
             options={staffList}
-            {readOnly}
+           
             clearable
         />
     </div>
@@ -98,14 +98,14 @@
             bind:value={conflictofinterest.parties_involved} 
             label="Parties Involved" 
             placeholder="Name of the parties involved." 
-            {readOnly}
+           
         />
     </div>
     
     
     
     <div class="w-full">
-        <RTE bind:content={conflictofinterest.description} />
+        <RTE bind:content={conflictofinterest.description}  />
     </div>
 </Container>
 
@@ -122,6 +122,5 @@
         label="Actions Taken"
         placeholder="List actions taken to mitigate the conflict of interest."
         style="height:150px"
-        {readOnly}
     />
 </div>
