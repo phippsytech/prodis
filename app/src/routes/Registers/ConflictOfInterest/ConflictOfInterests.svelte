@@ -13,6 +13,7 @@
     $: slideoverStore = $SlideOverStore;
 
     let conflictofinterests = [];
+    let storedOfConflictOfInterests = {};
     let show_filter = false;
     let filters = [];
 
@@ -26,7 +27,7 @@
 
             totalItems = conflictofinterests.length;
 
-            console.log('total', totalItems);
+            storedOfConflictOfInterests = conflictofinterests;
             
             // sort the conflictofinterests reverse chronologically
             conflictofinterests.sort(function (a, b) {
@@ -46,14 +47,16 @@
 
     
   function applyFilter(filter) {
-    if (filter.conflict_date) {
+    if (filter.date_identified) {
         conflictofinterests = conflictofinterests.filter(
-        (conflict) => Date.parse(conflict.date_identified) >= Date.parse(filter.date_resoloved)
+        (conflict) => Date.parse(conflict.date_identified) >= Date.parse(filter.date_resolved)
       );
     }
   }
   function clearFilter(filter) {
     filter = {};
+    conflictofinterests = storedOfConflictOfInterests;
+    
   }
 
     function showFilter() {
