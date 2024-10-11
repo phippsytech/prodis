@@ -21,7 +21,7 @@
 
     let filter = {};
 
-    jspa("/Register/ConflictOfInterest", "listConflictOfInterests", {}).then(
+    jspa("/Register/ConflictOfInterests", "getConflictOfInterestsList", {}).then(
         (result) => {
             conflictofinterests = result.result;
 
@@ -162,7 +162,7 @@
               {conflict.parties_involved ? conflict.parties_involved : 'N/A'}
             </td>
             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-              {conflict.parties_involved ? conflict.parties_involved : 'N/A'}
+              {conflict.parties_involved ? conflict.staff_name : 'N/A'}
             </td>
             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
               {formatDate(conflict.date_identified)}
