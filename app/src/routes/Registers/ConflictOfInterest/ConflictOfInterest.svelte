@@ -72,6 +72,14 @@
         if (!validate()) {
             return; 
         }
+
+        
+        if (conflictofinterest.date_resolved && conflictofinterest.resolution.trim() != "") {
+            conflictofinterest.status = 'resolved';     
+        } else {
+            conflictofinterest.status = 'unresolved';   
+        }
+
         jspa(
             "/Register/ConflictOfInterest",
             "updateConflictOfInterest",
