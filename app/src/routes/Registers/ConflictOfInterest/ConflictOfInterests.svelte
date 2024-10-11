@@ -13,7 +13,7 @@
     $: slideoverStore = $SlideOverStore;
 
     let conflictofinterests = [];
-    let storedOfConflictOfInterests = {};
+    let storedOfConflictOfInterests = [];
     let show_filter = false;
     let filters = [];
 
@@ -59,7 +59,36 @@
         
       );
       
+      
     }
+    if (filter.status) {
+       
+        conflictofinterests = conflictofinterests.filter(
+        (conflict) => conflict.status == filter.status
+        
+      );
+      
+      
+    }
+
+    if (filter.staff_id) {
+       
+       conflictofinterests = conflictofinterests.filter(
+       (conflict) => conflict.staff_id == filter.staff_id
+       
+     );
+   }
+
+   if (filter.type) {
+       console.log('type', filter);
+       
+       conflictofinterests = conflictofinterests.filter(
+       (conflict) => conflict.type == filter.type
+       
+     );
+     
+     }
+
     
   }
   function clearFilter(filter) {
@@ -69,14 +98,14 @@
   }
 
     function showFilter() {
-    SlideOverStore.set({
-      label: "Filter",
-      show: true,
-      props: filter,
-      component: ConflictOfInterestFilter,
-      action_label: "Apply",
-      action: () => applyFilter(filter),
-      delete: () => clearFilter(filter),
+        SlideOverStore.set({
+            label: "Filter",
+            show: true,
+            props: filter,
+            component: ConflictOfInterestFilter,
+            action_label: "Apply",
+            action: () => applyFilter(filter),
+            delete: () => clearFilter(filter),
     });
   }
 </script>
@@ -100,15 +129,16 @@
     </div>
 </div>
 <nav
-  class="bg-white text-slate-300 rounded-lg flex justify-between space-x-2 items-center px-2 py-1 mt-4 mx-6 lg:mx-8 mb-2"
-  aria-label="Toolbar"
+class="bg-white text-slate-300 rounded-lg flex justify-between space-x-2 items-center px-2 py-1 mt-4 mx-2 mb-2"
+aria-label="Toolbar"
 >
-  <div class="flex space-x-2 items-center">
+<div class="flex space-x-2 items-center">
     <button
       on:click={() => showFilter()}
       class="w-8 h-8 relative inline-flex justify-center items-center rounded-lg hover:bg-indigo-600 hover:text-white"
     >
       <span class="sr-only">Filter</span>
+
       <svg
         data-slot="icon"
         height="1em"
@@ -126,64 +156,84 @@
         ></path>
       </svg>
     </button>
-  </div>
-  <div class="flex space-x-2 items-center">
-    <MiniJSON2CSV
-      filename="conflict-of-interest-register.csv"
-      bind:json_data={conflictofinterests}
-    />
-  </div>
-</nav>
-
-<div class="mx-6 lg:mx-8 -my-2 overflow-x-auto">
-  <div class="inline-block min-w-full py-2 align-middle">
-    <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
-      <table class="min-w-full divide-y divide-gray-300">
-        <thead class="bg-gray-50">
-          <tr>
-            <th scope="col" class="py-2 px-4 text-left text-xs font-medium text-slate-500">Conflicts</th>
-            <th scope="col" class="py-2 px-4 text-left text-xs font-medium text-slate-500">Parties Involved</th>
-            <th scope="col" class="py-2 px-4 text-left text-xs font-medium text-slate-500">Implementing Staff</th>
-            <th scope="col" class="py-2 px-4 text-left text-xs font-medium text-slate-500">Conflict Date</th>
-            <th scope="col" class="py-2 px-4 text-left text-xs font-medium text-slate-500">Resolution Date</th>
-            <th scope="col" class="py-2 px-4 text-left text-xs font-medium text-slate-500">Status</th>
-            <th scope="col" class="relative py-3.5 pl-3 pr-4 xs:pr-6">
-              <span class="sr-only">Edit</span>
-            </th>
-          </tr>
-        </thead>
-        <tbody class="divide-y divide-gray-200 bg-white">
-          {#each conflictofinterests as conflict}
-          <tr>
-            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
-              {conflict.description.length > 50 ? conflict.description.slice(0, 50) + '...' : conflict.description}
-            </td>
-            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-              {conflict.parties_involved ? conflict.parties_involved : 'N/A'}
-            </td>
-            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-              {conflict.parties_involved ? conflict.staff_name : 'N/A'}
-            </td>
-            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-              {formatDate(conflict.date_identified)}
-            </td>
-            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-              {formatDate(conflict.date_resolved) ? formatDate(conflict.date_resolved) : 'N/A'}
-            </td>
-            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-              {formatPrettyName(conflict.status)}
-            </td>
-            <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
-              <a href="/#/registers/conflictofinterests/{conflict.id}" class="text-indigo-600 hover:text-indigo-900">
-                Edit<span class="sr-only">, {conflict.resolution}</span>
-              </a>
-            </td>
-          </tr>
-          {/each}
-        </tbody>
-      </table>
+</div>
+   <div class="flex space-x-2 items-center">
+      <MiniJSON2CSV
+        filename="conflict-of-interest-register.csv"
+        bind:json_data={conflictofinterests}
+      />
     </div>
-  </div>
+</nav>
+<div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+    <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+        <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
+            <table class="min-w-full divide-y divide-gray-300">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th scope="col" class="py-2 px-4 text-left text-xs font-medium text-slate-500">
+                            Conflicts
+                        </th>
+                        <th scope="col" class="py-2 px-4 text-left text-xs font-medium text-slate-500">
+                            Parties Involved 
+                        </th>
+                        <th scope="col" class="py-2 px-4 text-left text-xs font-medium text-slate-500">
+                            Implementing Staff
+                        </th>
+                        <th scope="col" class="py-2 px-4 text-left text-xs font-medium text-slate-500">
+                            Conflict Date
+                        </th>
+                        <th scope="col" class="py-2 px-4 text-left text-xs font-medium text-slate-500">
+                            Resolution Date
+                        </th>
+                        <th scope="col" class="py-2 px-4 text-left text-xs font-medium text-slate-500">
+                            Status
+                        </th>
+                        <th scope="col" class="py-2 px-4 text-left text-xs font-medium text-slate-500">
+                            Type
+                        </th>
+                        <th scope="col" class="relative py-3.5 pl-3 pr-4 xs:pr-6">
+                            <span class="sr-only">Edit</span>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200 bg-white">
+                    {#each conflictofinterests as conflict}
+                        <tr>
+                            <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
+                                {conflict.description.length > 50 
+                                    ? conflict.description.slice(0, 50) + '...' 
+                                    : conflict.description}
+                            </td>
+                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                {conflict.parties_involved ? conflict.parties_involved : 'N/A'}
+                            </td>
+                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                {conflict.staff_name ? conflict.staff_name : 'N/A'}
+                            </td>
+                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                {formatDate(conflict.date_identified)}
+                            </td>
+                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                {formatDate(conflict.date_resolved) ? formatDate(conflict.date_resolved) : 'N/A'}
+                            </td>
+                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                {formatPrettyName(conflict.status)}
+                            </td>
+                            <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                                {formatPrettyName(conflict.type)}
+                            </td>
+                            <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                                <a href="/#/registers/conflictofinterests/{conflict.id}" class="text-indigo-600 hover:text-indigo-900">
+                                    Edit
+                                    <span class="sr-only">, {conflict.resolution}</span>
+                                </a>
+                            </td>
+                        </tr>
+                    {/each}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 
 <!-- <Pager totalResults={totalItems} /> -->
