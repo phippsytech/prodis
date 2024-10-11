@@ -46,9 +46,9 @@
 
     
   function applyFilter(filter) {
-    if (filter.start_date) {
-      trainings = trainings.filter(
-        (training) => Date.parse(training.date) >= Date.parse(filter.start_date)
+    if (filter.conflict_date) {
+        conflictofinterests = conflictofinterests.filter(
+        (conflict) => Date.parse(conflict.date_identified) >= Date.parse(filter.date_resoloved)
       );
     }
   }

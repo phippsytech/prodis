@@ -10,8 +10,8 @@
   <div class="flex justify-between items-center">
     <div class="flex flex-wrap gap-2 items-center">
       <div class="flex gap-2 flex-none">
-        <FloatingDate label="Start Date" bind:value={props.start_date} />
-        <FloatingDate label="End Date" bind:value={props.end_date} />
+        <FloatingDate label="Conflict Date" bind:value={props.conflict_date} />
+        <FloatingDate label="Resolution Date" bind:value={props.resolution_date} />
       </div>
       <div class="sm:flex-none w-full sm:w-auto min-w-[200px]">
         <FloatingCombo
