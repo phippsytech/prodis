@@ -9,6 +9,7 @@
     import MiniJSON2CSV from "@shared/MiniJSON2CSV.svelte";
     import Pager from "@shared/PhippsyTech/svelte-ui/Pager.svelte";
     import Filter from "@shared/PhippsyTech/svelte-ui/Filter.svelte";
+    // import ConflictOfInterestFilter from 
     $: slideoverStore = $SlideOverStore;
 
     let conflictofinterests = [];
