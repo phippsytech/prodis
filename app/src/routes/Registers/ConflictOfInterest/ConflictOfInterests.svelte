@@ -49,9 +49,18 @@
   function applyFilter(filter) {
     if (filter.date_identified) {
         conflictofinterests = conflictofinterests.filter(
-        (conflict) => Date.parse(conflict.date_identified) >= Date.parse(filter.date_resolved)
+        (conflict) => Date.parse(conflict.date_identified) >= Date.parse(filter.date_identified)
+        
       );
     }
+    if (filter.date_resolved) {
+        conflictofinterests = conflictofinterests.filter(
+        (conflict) => Date.parse(conflict.date_identified) >= Date.parse(filter.date_identified)
+        
+      );
+      
+    }
+    
   }
   function clearFilter(filter) {
     filter = {};
