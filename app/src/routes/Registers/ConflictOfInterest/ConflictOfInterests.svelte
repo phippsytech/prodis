@@ -5,10 +5,18 @@
     import { jspa } from "@shared/jspa.js";
     import { BreadcrumbStore } from "@shared/stores.js";
     import { formatDate, formatPrettyName } from "@shared/utilities.js";
+    import { ModalStore, SlideOverStore } from "@app/Overlays/stores.js";
+    import MiniJSON2CSV from "@shared/MiniJSON2CSV.svelte";
+    import Pager from "@shared/PhippsyTech/svelte-ui/Pager.svelte";
+    import Filter from "@shared/PhippsyTech/svelte-ui/Filter.svelte";
+    $: slideoverStore = $SlideOverStore;
 
     let conflictofinterests = [];
     let show_filter = false;
-    
+    let filters = [];
+
+    let filter = {};
+
     jspa("/Register/ConflictOfInterest", "listConflictOfInterests", {}).then(
         (result) => {
             conflictofinterests = result.result;
@@ -21,13 +29,36 @@
         },
     );
 
-    BreadcrumbStore.set({ path: [{ url: "/registers", name: "Registers" },
-    { url: "/registers/conflictofinterests", name: "Conflict of Interests" },
-    ] });
+    BreadcrumbStore.set({
+        path: [
+            { url: "/registers", name: "Registers" },
+            { url: "/registers/conflictofinterests", name: "Conflict of Interests" },
+        ] 
+    });
+
+    
+  function applyFilter(filter) {
+    if (filter.start_date) {
+      trainings = trainings.filter(
+        (training) => Date.parse(training.date) >= Date.parse(filter.start_date)
+      );
+    }
+  }
+  function clearFilter(filter) {
+    filter = {};
+  }
 
     function showFilter() {
-        show_filter = true;
-    }
+    SlideOverStore.set({
+      label: "Filter",
+      show: true,
+      props: filter,
+    //   component: TrainingFilter,
+      action_label: "Apply",
+      action: () => applyFilter(filter),
+      delete: () => clearFilter(filter),
+    });
+  }
 </script>
 
 <div class="sm:flex sm:items-center mb-4">
@@ -73,7 +104,12 @@
       </svg>
     </button>
 </div>
-
+   <div class="flex space-x-2 items-center">
+      <MiniJSON2CSV
+        filename="conflict-of-interest-register.csv"
+        bind:json_data={conflictofinterests}
+      />
+    </div>
 <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
     <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
         <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
@@ -112,7 +148,7 @@
                                     : conflict.description}
                             </td>
                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                {conflict.involved_staff_name}
+                                {conflict.parties_involved ? conflict.parties_involved : 'N/A'}
                             </td>
                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                 {conflict.parties_involved ? conflict.parties_involved : 'N/A'}
@@ -139,3 +175,4 @@
         </div>
     </div>
 </div>
+<Pager totalResults="130" />
