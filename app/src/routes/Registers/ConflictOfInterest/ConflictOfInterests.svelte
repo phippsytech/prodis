@@ -7,20 +7,27 @@
     import { formatDate, formatPrettyName } from "@shared/utilities.js";
     import { ModalStore, SlideOverStore } from "@app/Overlays/stores.js";
     import MiniJSON2CSV from "@shared/MiniJSON2CSV.svelte";
-    import Pager from "@shared/PhippsyTech/svelte-ui/Pager.svelte";
+    // import Pager from "@shared/PhippsyTech/svelte-ui/Pager.svelte";
     import Filter from "@shared/PhippsyTech/svelte-ui/Filter.svelte";
-    // import ConflictOfInterestFilter from 
+    import ConflictOfInterestFilter from "./ConflictOfInterestFilter.svelte";
     $: slideoverStore = $SlideOverStore;
 
     let conflictofinterests = [];
     let show_filter = false;
     let filters = [];
 
+    let totalItems = 0;
+
     let filter = {};
 
     jspa("/Register/ConflictOfInterest", "listConflictOfInterests", {}).then(
         (result) => {
             conflictofinterests = result.result;
+
+            totalItems = conflictofinterests.length;
+
+            console.log('total', totalItems);
+            
             // sort the conflictofinterests reverse chronologically
             conflictofinterests.sort(function (a, b) {
                 let aDateTime = Date.parse(a.date_identified);
@@ -54,7 +61,7 @@
       label: "Filter",
       show: true,
       props: filter,
-    //   component: TrainingFilter,
+      component: ConflictOfInterestFilter,
       action_label: "Apply",
       action: () => applyFilter(filter),
       delete: () => clearFilter(filter),
@@ -176,4 +183,4 @@
         </div>
     </div>
 </div>
-<Pager totalResults="130" />
+<!-- <Pager totalResults={totalItems} /> -->
