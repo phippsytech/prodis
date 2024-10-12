@@ -55,6 +55,8 @@
         }
     }
 
+    $: continuous_improvement.implementing_staffs_id = continuous_improvement.implementing_staffs_id ?? null;
+
     jspa("/Staff", "listStaff", {}).then((result) => {
         staffer = result.result
             .filter((item) => item.archived !== "1")
@@ -94,17 +96,15 @@
         continuous_improvement = Object.assign({}, stored_value);
     }
 
-    $: 
-    {
-        if (continuous_improvement.implementing_staffs_id == null) {
-            continuous_improvement.implementing_staffs_id = null;
-        }
-    }
-
     function save() {
         if (validate()) {
             const today = new Date();
             const current_date = today.toISOString().split('T')[0]; 
+
+            continuous_improvement.implementation_date = 
+                (continuous_improvement.action_taken && continuous_improvement.review_date && continuous_improvement.implementing_staffs_id) 
+                ? (continuous_improvement.implementation_date || current_date) 
+                : null;
             
             continuous_improvement.status = 
                 (continuous_improvement.action_taken && continuous_improvement.implementing_staffs_id)

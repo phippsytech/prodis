@@ -4,8 +4,18 @@
     import { jspa } from "@shared/jspa.js";
     import { formatDate, formatPrettyName } from "@shared/utilities.js";
     import { BreadcrumbStore } from "@shared/stores.js";
+    import { SlideOverStore } from "@app/Overlays/stores.js";
+    import ContinuousImprovementFilter from "./ContinuousImprovementFilter.svelte";
+    import MiniJSON2CSV from "@shared/MiniJSON2CSV.svelte";
 
     let continuous_improvements = [];
+
+    let filters = [];
+    
+    let staff;
+    let reviewer;
+    let implementation_date;
+    let completion_date;
 
     jspa("/Register/ContinuousImprovement", "listContinuousImprovement", {})
         .then((result)=> {
@@ -16,12 +26,41 @@
             return bDateTime - aDateTime;
         });
         });
+
+    $: slideoverStore = $SlideOverStore;
+
     BreadcrumbStore.set({ path: [
         { url: "/registers", name: "Registers" },
         { url: "/registers/continuousimprovements", name: "Continuous Improvements" },
     ] });
     
+    let filter = {};
 
+    function applyFilter(filter) {
+        if (filter.implementation_date) {
+            continuous_improvements = continuous_improvements.filter(
+                (continuous_improvements) => Date.parse(continuous_improvements.implementation_date) >= Date.parse(filter.implementation_date)
+            );
+            console.log("from apply",filter.implementation_date);
+        }
+    }
+
+
+    function clearFilter(filter) {
+        filter = {};
+    }
+
+    function showFilter() {
+        SlideOverStore.set({
+        label: "Filter",
+        show: true,
+        props: filter,
+        component: ContinuousImprovementFilter,
+        action_label: "Apply",
+        action: () => applyFilter(filter),
+        delete: () => clearFilter(filter),
+        });
+    }
 </script>
 
 <div class="sm:flex sm:items-center mb-4 mt-4">
@@ -40,7 +79,45 @@
             class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
         >Add continuous improvements</button>
     </div>
-</div>
+</div>  
+<nav
+    class="bg-white text-slate-300 rounded-lg flex justify-between space-x-2 items-center px-2 py-1 mt-4 mx-2"
+    aria-label="Toolbar"
+>
+    <div class="flex space-x-2 items-center">
+        <button
+        on:click={() => showFilter()}
+        class="w-8 h-8 relative inline-flex justify-center items-center rounded-lg hover:bg-indigo-600 hover:text-white"
+        >
+        <span class="sr-only">Filter</span>
+
+        <svg
+            data-slot="icon"
+            height="1em"
+            fill="none"
+            stroke-width="1.5"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+        >
+            <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z"
+            ></path>
+        </svg>
+        </button>
+    </div>
+    <div class="flex space-x-2 items-center">
+        <MiniJSON2CSV
+          filename="continuous-improvements-register.csv"
+          bind:json_data={continuous_improvements}
+        />
+    </div>
+</nav>
+
+
 
 <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
     <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">

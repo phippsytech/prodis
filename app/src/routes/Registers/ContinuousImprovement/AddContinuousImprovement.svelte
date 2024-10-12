@@ -48,7 +48,19 @@
     // add create function
     function addContinuousImprovement() {
         if (validate()) {
-            continuous_improvement.status = "in_progress";
+            const today = new Date();
+            const current_date = today.toISOString().split('T')[0]; 
+            
+            continuous_improvement.status = 
+                (continuous_improvement.action_taken && continuous_improvement.implementing_staffs_id)
+                ? (continuous_improvement.implementation_date = continuous_improvement.implementation_date || current_date, "for_review")
+                : "in_progress";
+
+            continuous_improvement.status = 
+                (continuous_improvement.review_date && continuous_improvement.impact_analysis)
+                ? (continuous_improvement.completion_date = continuous_improvement.completion_date || current_date, "completed")
+                : continuous_improvement.status;
+                
             jspa("/Register/ContinuousImprovement", "addContinuousImprovement", continuous_improvement)
                     .then(() => {
                     push("/registers/continuousimprovements");
