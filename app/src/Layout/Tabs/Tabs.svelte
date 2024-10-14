@@ -330,7 +330,6 @@
         ];
       },
     },
-
     {
       "/registers/risks": (params) => {
         tabs = [
