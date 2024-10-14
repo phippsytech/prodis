@@ -32,7 +32,7 @@
     function applyFilter(filter) {
         if (filter.implementation_date) {
             continuous_improvements = continuous_improvements.filter(
-                (continuous_improvements) => Date.parse(continuous_improvements.implementation_date) >= Date.parse(filter.implementation_date)
+                (continuous_improvements) => Date.parse(continuous_improvements.implementation_date) === Date.parse(filter.implementation_date)
             );
         }
 
