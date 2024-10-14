@@ -31,11 +31,6 @@ class UploadParticipantDocumentFile
             // get the client name
             $clientName = R::getCell('SELECT name FROM clients WHERE id=:client_id', [":client_id" => $data['participant_id']]);
             
-            // get the document type name
-            // $documentTypeName = R::getCell('SELECT name FROM documenttypes WHERE id=:id', [":id" => $data['documenttype_id']]);
-
-
-
 
             // Split the string at the first comma
             $parts = explode(',', $data['base64_file']);
