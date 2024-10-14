@@ -1,6 +1,6 @@
 <?php
 
-namespace NDISmate\Models\Staff\Credential;
+namespace NDISmate\Models\Participant\Document;
 
 use \NDISmate\CORE\JsonResponse;
 use \NDISmate\CORE\CRUD;
@@ -9,20 +9,20 @@ use \NDISmate\CORE\KeyValue;
 use \RedBeanPHP\R as R;
 
 
-class ListStaffByCredentialId
+class ListParticipantByDocumentId
 {
 
     function __invoke($data)
     {
-
+        
         $bean = R::getAll(
             'SELECT 
                 *
-            FROM staffcredentials 
-            WHERE credential_id=:credential_id
+            FROM participantdocuments 
+            WHERE document_id=:document_id
             ',
             [
-                ":credential_id" => $data["credential_id"]
+                ":document_id" => $data["document_id"]
 
             ]
         );

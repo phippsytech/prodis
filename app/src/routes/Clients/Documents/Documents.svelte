@@ -29,7 +29,7 @@
     client = await getClient(client_id);
 
     jspa("/Participant/Document", "listDocumentsByParticipantId", {
-      client_id: client_id,
+      participant_id: client_id,
     }).then((result) => {
       documents = result.result;
 
@@ -73,7 +73,7 @@
         >
           <ParticipantDocumentCard
             {document}
-            {client_id}
+            {participant_id}
             required={document.required}
           />
         </div>
@@ -91,7 +91,7 @@
         >
           <ParticipantDocumentCard
             {document}
-            {client_id}
+            {participant_id}
             required={document.required}
           />
         </div>

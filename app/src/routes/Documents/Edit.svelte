@@ -36,7 +36,7 @@
         stored_document = Object.assign({}, document);
       });
 
-    jspa("/Staff/Document", "listStaffByDocumentId", {
+    jspa("/Participant/Document", "listParticipantByDocumentId", {
       document_id: document_id,
     }).then((result) => {
       staff = result.result;

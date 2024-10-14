@@ -1,22 +1,22 @@
 <?php
 
-namespace NDISmate\Models\Staff;
+namespace NDISmate\Models\Participant\Document;
 
 use NDISmate\CORE\NewCustomModel;
 use Respect\Validation\Validator as v;
 use \RedBeanPHP\R as R;
 
-class Credential extends NewCustomModel
+class Document extends NewCustomModel
 {
     public function __construct($bean = null)
     {
-        parent::__construct($bean ?: R::dispense('staffcredentials'));
+        parent::__construct($bean ?: R::dispense('participantdocuments'));
         $this->fields = [
-            'staff_id' => [v::numericVal()],
-            'credential_id' => [v::numericVal()],
+            'participant_id' => [v::numericVal()],
+            'document_id' => [v::numericVal()],
             'details' => [v::optional(v::stringType())],
             'vultr_storage_ref' => [v::optional(v::stringType())],
-            'credential_date' => [v::optional(v::stringType())]
+            'document_date' => [v::optional(v::stringType())]
         ];
     }
 }

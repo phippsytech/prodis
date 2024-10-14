@@ -8,11 +8,11 @@ use \NDISmate\CORE\BaseModel;
 use \NDISmate\CORE\CRUD;
 use \RedBeanPHP\R as R;
 
-class Credential extends BaseModel
+class Document extends BaseModel
 {
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, array $args): ResponseInterface
     {
-        $this->CRUD = new CRUD('credential', [
+        $this->CRUD = new CRUD('document', [
             'id' => [v::numericVal()],
             'name' => [v::stringType()],  // eg Behaviour Management Plan
             'description' => [v::stringType()],  // eg BMP
@@ -25,12 +25,12 @@ class Credential extends BaseModel
 
         // action, class method, guard, roles
         $this->actions = [
-            ['addCredential', 'create', true, ['admin']],
-            ['listCredentials', 'getAll', true, []],
-            ['listCredentialsByStaffIds', 'listCredentialsByStaffIds', true, []],
-            ['getCredential', 'getOne', true, []],
-            ['updateCredential', 'update', true, ['admin']],
-            ['deleteCredential', 'deleteCredential', true, ['admin']],
+            ['addDocument', 'create', true, ['admin']],
+            ['listDocuments', 'getAll', true, []],
+            ['listDocumentsByParticipantIds', 'listDocumentsByParticipantIds', true, []],
+            ['getDocument', 'getOne', true, []],
+            ['updateDocument', 'update', true, ['admin']],
+            ['deleteDocument', 'deleteDocument', true, ['admin']],
         ];
 
         return $this->invoke($request, $response, $args, $this);
@@ -38,12 +38,12 @@ class Credential extends BaseModel
 
     // Additional Methods and overrides here:
 
-    function listCredentialsByStaffIds($data)
+    function listDocumentsByParticipantIds($data)
     {
-        return (new \NDISmate\Models\Credential\ListCredentialsByStaffIds)($data);
+        return (new \NDISmate\Models\Document\ListDocumentsByParticipantIds)($data);
     }
 
-    function deleteCredential($data, $fields, $guard)
+    function deleteDocument($data, $fields, $guard)
     {
         $user_roles = $guard->roles;
         // check if the user_role is a super user.
@@ -52,22 +52,22 @@ class Credential extends BaseModel
             $is_super = true;
         }
 
-        // Check if credential is in use by a staff member
-        $result = R::getAll('SELECT * FROM staffcredentials WHERE credential_id=:credential_id',
-            [':credential_id' => $data['id']]);
+        // Check if document is in use by a participant member
+        $result = R::getAll('SELECT * FROM participantdocuments WHERE document_id=:document_id',
+            [':document_id' => $data['id']]);
 
         if (count($result) !== 0) {
             if (!$is_super) {
-                return ['http_code' => 400, 'error_message' => 'Credential is in use by a staff member'];
+                return ['http_code' => 400, 'error_message' => 'Document is in use by a participant member'];
             } else {
-                // Only super user has premission to delete credentials that are in use by staff
-                // delete the staff credentials
-                $result = R::exec('DELETE FROM staffcredentials WHERE credential_id=:credential_id',
-                    [':credential_id' => $data['id']]);
+                // Only super user has premission to delete documents that are in use by participant
+                // delete the participant documents
+                $result = R::exec('DELETE FROM participantdocuments WHERE document_id=:document_id',
+                    [':document_id' => $data['id']]);
             }
         }
 
-        // Delete the credential
+        // Delete the document
         $result = $this->delete($data);
         $result = $result['result'];
         return ['http_code' => 200];

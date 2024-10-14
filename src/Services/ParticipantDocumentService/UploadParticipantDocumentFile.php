@@ -14,7 +14,6 @@ class UploadParticipantDocumentFile
         try {
             if (empty($data['base64_file'])) throw new \Exception('A file must be uploaded');
             if (empty($data['participant_id'])) throw new \Exception('A participant id must be provided');
-            if (empty($data['documenttype_id'])) throw new \Exception('A document type id must be provided');
             if (empty($data['file_extension'])) throw new \Exception('A file extension must be provided');
 
             print("doing the upload");
@@ -28,12 +27,12 @@ class UploadParticipantDocumentFile
                     'secret' => VULTR_SECRET_KEY,
                 ]
             ]);
-
+            
             // get the client name
-            $clientName = R::getCell('SELECT name FROM clients WHERE id=:client_id', [":client_id" => $data['client_id']]);
-
+            $clientName = R::getCell('SELECT name FROM clients WHERE id=:client_id', [":client_id" => $data['participant_id']]);
+            
             // get the document type name
-            $documentTypeName = R::getCell('SELECT name FROM documenttypes WHERE id=:id', [":id" => $data['documenttype_id']]);
+            // $documentTypeName = R::getCell('SELECT name FROM documenttypes WHERE id=:id', [":id" => $data['documenttype_id']]);
 
 
 
@@ -46,7 +45,7 @@ class UploadParticipantDocumentFile
 
 
             $fileContent = base64_decode($base64String);
-            $fileName = date("Y-m-d") . "_" . $clientName . "_" . $documentTypeName;
+            $fileName = date("Y-m-d") . "_" . $clientName ;
 
             if ($data['file_extension']) {
                 $fileName .= "." . $data['file_extension'];
@@ -64,7 +63,7 @@ class UploadParticipantDocumentFile
             return $fileName;
         } catch (\Exception $e) {
             // Handle other exceptions
-            throw $e;
+            return $e;
         }
     }
 }

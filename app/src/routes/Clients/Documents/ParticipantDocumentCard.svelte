@@ -10,20 +10,21 @@
   $: modal = $ModalStore;
 
   export let document = {};
-  export let staff_id;
+  export let participant_id;
   export let required = false;
 
-  let staff_document = {};
+  let participantDocument = {};
+  
   let loaded = false;
 
   onMount(async () => {
     jspa("/Participant/Document", "getDocument", {
-      staff_id: staff_id,
+      participant_id: participant_id,
       document_id: document.id,
     })
       .then((result) => {
-        staff_document = result.result;
-        // if(result.result.length > 0) staff_document = result.result;//[0];
+        participantDocument = result.result;
+        // if(result.result.length > 0) participantDocument = result.result;//[0];
       })
       .finally(() => {
         loaded = true;
@@ -35,22 +36,25 @@
     let data = Object.assign({}, modal.props);
 
     data.document_id = document.id;
-    data.staff_id = staff_id;
+    data.participant_id = participant_id;
 
     if (!data.id) {
+
+      console.log('document', document);
+      
       SpinnerStore.set({ show: true, message: "Adding Document" });
-      jspa("/Participant/Document", "addDocument", data)
+      jspa("/Participant/Document", "addParticipantDocument", data)
         .then((result) => {
-          staff_document = result.result;
+          participantDocument = result.result;
         })
         .finally(() => {
           SpinnerStore.set({ show: false });
         });
     } else {
       SpinnerStore.set({ show: true, message: "Updating Document" });
-      jspa("/Participant/Document", "updateDocument", data)
+      jspa("/Participant/Document", "updateParticipantDocument", data)
         .then((result) => {
-          staff_document = result.result;
+          participantDocument = result.result;
         })
         .finally(() => {
           SpinnerStore.set({ show: false });
@@ -60,11 +64,11 @@
 
   function deleteDocument() {
     SpinnerStore.set({ show: true, message: "Deleting Document" });
-    jspa("/Participant/Document", "deleteDocument", {
-      id: staff_document.id,
+    jspa("/Participant/Document", "deleteParticipantDocument", {
+      id: participantDocument.id,
     })
       .then((result) => {
-        staff_document = {};
+        participantDocument = {};
       })
       .catch((error) => {
         toastError(error.message);
@@ -75,12 +79,12 @@
   }
 
   function editDocument() {
-    (staff_document.date_collection_option = document.date_collection_option),
+    (participantDocument.date_collection_option = document.date_collection_option),
       ModalStore.set({
         label: document.name,
         description: document.description,
         show: true,
-        props: staff_document,
+        props: participantDocument,
         component: Document,
         action_label: "Update",
         action: () => updateDocument(),
@@ -91,18 +95,18 @@
   $: valid = () => isValid();
 
   function isValid() {
-    if (staff_document) {
-      if (Object.keys(staff_document).length == 0) {
+    if (participantDocument) {
+      if (Object.keys(participantDocument).length == 0) {
         return false;
       }
 
-      if (staff_document.id == null) {
+      if (participantDocument.id == null) {
         return false;
       }
 
-      if (staff_document.document_date == null) return false;
+      if (participantDocument.document_date == null) return false;
 
-      let document_expires = new Date(staff_document.document_date);
+      let document_expires = new Date(participantDocument.document_date);
 
       if (document.date_collection_option == "issued") {
         const expiry_year =
@@ -114,7 +118,7 @@
       }
 
       if (document.date_collection_option == "expires") {
-        if (!staff_document.document_date) return false;
+        if (!participantDocument.document_date) return false;
         if (document_expires < new Date()) return false;
       }
 
@@ -130,7 +134,7 @@
     on:click={() => editDocument()}
     class="relative flex items-center space-x-3 rounded-lg border {valid()
       ? 'border-green-300 bg-green-50'
-      : required || staff_document.document_date
+      : required || participantDocument.document_date
         ? 'border-red-300 bg-red-50'
         : 'border-gray-300 bg-white'} px-4 py-3 shadow-sm hover:bg-indigo-600 hover:text-white group"
   >
@@ -151,7 +155,7 @@
             d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
           ></path>
         </svg>
-      {:else if required || staff_document.document_date}
+      {:else if required || participantDocument.document_date}
         <svg
           class="h-6 w-6 text-red-600"
           fill="none"
@@ -194,7 +198,7 @@
         >
           {document.name}
 
-          {#if staff_document.vultr_storage_ref}
+          {#if participantDocument.vultr_storage_ref}
             <svg
               class="h-4 w-4 inline"
               fill="none"
@@ -219,21 +223,21 @@
           </p>
         {/if}
 
-        {#if staff_document && Object.keys(staff_document).length > 0}
-          {#if staff_document.details}
+        {#if participantDocument && Object.keys(participantDocument).length > 0}
+          {#if participantDocument.details}
             <div class="text-sm">
-              {staff_document.details}
+              {participantDocument.details}
             </div>{/if}
 
-          {#if document.date_collection_option == "expires" && staff_document.document_date}
+          {#if document.date_collection_option == "expires" && participantDocument.document_date}
             <div class="text-xs font-light">
-              Expires: {formatDate(staff_document.document_date)}
+              Expires: {formatDate(participantDocument.document_date)}
             </div>
           {/if}
 
-          {#if document.date_collection_option == "issued" && staff_document.document_date}
+          {#if document.date_collection_option == "issued" && participantDocument.document_date}
             <div class="text-xs font-light">
-              Issued: {formatDate(staff_document.document_date)}
+              Issued: {formatDate(participantDocument.document_date)}
             </div>
           {/if}
         {:else}{/if}

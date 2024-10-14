@@ -129,7 +129,7 @@ $app->post('/Billing', new ControllerFactory(\NDISmate\Models\Billing::class));
 
 
 $app->post('/Credential', new ControllerFactory(\NDISmate\Models\Credential::class));
-
+$app->post('/Document', new ControllerFactory(\NDISmate\Models\Document::class));
 $app->post('/Invoice', new ControllerFactory(\NDISmate\Models\Invoice::class));
 $app->post('/Invoice/NDIA/PaymentRequestStatus', new ControllerFactory(\NDISmate\Models\Invoice\NDIA\PaymentRequestStatus::class));
 $app->post('/Invoice/NDIA/Remittance', new ControllerFactory(\NDISmate\Models\Invoice\NDIA\Remittance::class));

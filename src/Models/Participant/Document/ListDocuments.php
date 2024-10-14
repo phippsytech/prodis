@@ -1,6 +1,6 @@
 <?php
 
-namespace NDISmate\Models\Staff\Credential;
+namespace NDISmate\Models\Participant\Document;
 
 use \RedBeanPHP\R as R;
 
@@ -13,24 +13,24 @@ class ListCredentials
         $beans = R::getAll(
 
             'SELECT 
-                staffcredentials.id as id,
-                staffs.id as staff_id,
-                staffs.name as name, 
-                staffs.groups as staff_groups,
-                staffcredentials.credential_date,
-                credentials.name as credential, 
-                credentials.collect_from_therapist,
-                credentials.collect_from_sil,
-                credentials.date_collection_option,
-                credentials.years_until_expiry
-            FROM staffcredentials
-            JOIN credentials ON (staffcredentials.credential_id = credentials.id)
-            JOIN staffs ON (staffs.id = staffcredentials.staff_id)
+                clients.id as id,
+                clients.id as staff_id,
+                clients.name as name, 
+                clients.groups as participant_groups,
+                participantdocuments.document_date,
+                documents.name as credential, 
+                documents.collect_from_therapist,
+                documents.collect_from_sil,
+                documents.date_collection_option,
+                documents.years_until_expiry
+            FROM participantdocuments
+            JOIN documents ON (participantdocuments.document_id = documents.id)
+            JOIN clients ON (staffs.id = participantdocuments.participant_id)
             '
         );
 
         foreach ($beans as $key => $bean) {
-            $beans[$key]['staff_groups'] = json_decode($bean['staff_groups']);
+            $beans[$key]['participant_groups'] = json_decode($bean['participant_groups']);
         }
 
         return $beans;
