@@ -7,11 +7,33 @@
 
   let pathname = window.location.hash.slice(1);
 
+  let hideTabs = false;
+
   const updateHashValue = () => {
     // hashValue = window.location.hash.substring(1);
     // pathname = window.location.hash.substring(1);
     pathname = window.location.hash.slice(1);
+    checkExcludedRoutes();
   };
+
+  const excludedRoutes = [
+    '/registers/trainings/add',
+    /^\/registers\/trainings\/\d+$/,
+    '/registers/complaints/add',
+    /^\/registers\/complaints\/\d+$/,
+    '/registers/conflictofinterests/add',
+    /^\/registers\/conflictofinterests\/\d+$/,
+    '/registers/continuousimprovements/add',
+    /^\/registers\/continuousimprovements\/\d+$/,
+    '/registers/compliments/add',
+    /^\/registers\/compliments\/\d+$/,
+  ];
+
+  function checkExcludedRoutes() {
+    hideTabs = excludedRoutes.some(route => 
+      typeof route === 'string' ? pathname === route : route.test(pathname)
+    );
+  }
 
   onMount(() => {
     updateHashValue();
@@ -840,7 +862,7 @@
   }
 </script>
 
-{#if tabs.length > 0}
+{#if !hideTabs && tabs.length > 0}
   <div class="print:hidden h-12"></div>
 
   <!-- in:fly|global={{ y: -100, duration: 300 }} -->
