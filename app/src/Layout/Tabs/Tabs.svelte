@@ -328,6 +328,13 @@
             roles: ["admin"],
           },
           {
+
+            name: "Continuous Improvement",
+            url: "/registers/continuousimprovements",
+            active: true,
+            roles: ["admin"],
+          },
+          {
             name: "Compliments",
             url: "/registers/compliments",
             active: true,
@@ -354,6 +361,12 @@
           {
             name: "Conflict Of Interest",
             url: "/registers/conflictofinterests",
+            active: true,
+            roles: ["admin"],
+          },
+          {
+            name: "Continuous Improvement",
+            url: "/registers/continuousimprovements",
             active: true,
             roles: ["admin"],
           },
@@ -508,6 +521,42 @@
           {
             name: "Conflict Of Interest",
             url: "/registers/conflictofinterests",
+            active: true,
+            roles: ["admin"],
+          },
+          {
+            name: "Continuous Improvement",
+            url: "/registers/continuousimprovements",
+            active: true,
+            roles: ["admin"],
+          },
+        ];
+      },
+    },
+    {
+      "/registers/continuousimprovements": (params) => {
+        tabs = [
+          {
+            name: "Feedback",
+            url: "/registers/feedbacks",
+            active: true,
+            roles: ["admin"],
+          },
+          {
+            name: "Risk",
+            url: "/registers/risks",
+            active: true,
+            roles: ["admin"],
+          },
+          {
+            name: "Conflict Of Interest",
+            url: "/registers/conflictofinterests",
+            active: true,
+            roles: ["admin"],
+          },
+          {
+            name: "Continuous Improvement",
+            url: "/registers/continuousimprovements",
             active: true,
             roles: ["admin"],
           },

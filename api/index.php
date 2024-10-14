@@ -118,6 +118,8 @@ $app->post('/Utilities', new ControllerFactory(\NDISmate\Controllers\UtilityCont
 $app->post('/Register/Complaint', new ControllerFactory(\NDISmate\Controllers\ComplaintController::class));
 $app->post('/Storage', new ControllerFactory(\NDISmate\Controllers\ObjectStorageController::class));
 
+$app->post('/Register/ContinuousImprovement', new ControllerFactory(\NDISmate\Controllers\ContinuousImprovementController::class));
+
 
 
 // CONVERSION IN PROGRESS

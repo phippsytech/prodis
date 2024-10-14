@@ -2,9 +2,7 @@
 
     import Container from '@shared/Container.svelte';
     import IconMenu from '@shared/PhippsyTech/svelte-iconmenu/IconMenu.svelte';
-    
-    import {AcademicCapIcon, ChatBubbleLeftEllipsisIcon, FireIcon, ExclamationCircleIcon, BookOpenIcon} from 'heroicons-svelte/24/outline'
-    
+    import {AcademicCapIcon, ChatBubbleLeftEllipsisIcon, FireIcon, ExclamationCircleIcon, PlusIcon, BookOpenIcon} from 'heroicons-svelte/24/outline';
     import { BreadcrumbStore, RolesStore } from '@shared/stores.js';
 
 
@@ -14,6 +12,7 @@
         {url:"/registers/risks", name:"Risk Register", icon:  FireIcon, role:["admin"]},
         {url:"/registers/conflictofinterests", name:"Conflict Of Interest Register", icon:  ExclamationCircleIcon, role:["admin"]},
         {url:"/registers/trainings", name:"Training Register", icon:  AcademicCapIcon, role:["admin"]},
+        {url:"/registers/continuousimprovements", name:"Continuous Improvement", icon:  PlusIcon, role:["admin"]},
         {url:"/registers/compliments", name:"Compliment Register", icon:  BookOpenIcon, role:["admin"]},
     ]
     

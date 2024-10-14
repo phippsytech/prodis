@@ -821,6 +821,17 @@ export default {
         asyncComponent: () => import('./routes/Registers/ConflictOfInterest/ConflictOfInterest.svelte')
     }),
 
+
+    '/registers/continuousimprovements': wrap({
+        asyncComponent: () => import('./routes/Registers/ContinuousImprovement/ContinuousImprovements.svelte')
+    }),
+    '/registers/continuousimprovements/add': wrap({
+        asyncComponent: () => import('./routes/Registers/ContinuousImprovement/AddContinuousImprovement.svelte')
+    }),
+    '/registers/continuousimprovements/:id': wrap({
+        asyncComponent: () => import('./routes/Registers/ContinuousImprovement/ContinuousImprovement.svelte')
+    }),
+
     '/registers/trainings': wrap({
         asyncComponent: () => import('./routes/Registers/Training/Trainings.svelte')
     }),
