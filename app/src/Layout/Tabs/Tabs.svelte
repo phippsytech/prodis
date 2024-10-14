@@ -306,215 +306,121 @@
       },
     },
 
-    {
-      "/registers/feedbacks": (params) => {
-        tabs = [
-          {
-            name: "Feedback",
-            url: "/registers/feedbacks",
-            active: true,
-            roles: ["admin"],
-          },
-          {
-            name: "Risk",
-            url: "/registers/risks",
-            active: true,
-            roles: ["admin"],
-          },
-          {
-            name: "Conflict Of Interest",
-            url: "/registers/conflictofinterests",
-            active: true,
-            roles: ["admin"],
-          },
-          {
-
-            name: "Continuous Improvement",
-            url: "/registers/continuousimprovements",
-            active: true,
-            roles: ["admin"],
-          },
-          {
-            name: "Compliments",
-            url: "/registers/compliments",
-            active: true,
-            roles: ["admin"],
-          },
-        ];
-      },
-    },
-    {
-      "/registers/risks": (params) => {
-        tabs = [
-          {
-            name: "Feedback",
-            url: "/registers/feedbacks",
-            active: true,
-            roles: ["admin"],
-          },
-          {
-            name: "Risk",
-            url: "/registers/risks",
-            active: true,
-            roles: ["admin"],
-          },
-          {
-            name: "Conflict Of Interest",
-            url: "/registers/conflictofinterests",
-            active: true,
-            roles: ["admin"],
-          },
-          {
-            name: "Continuous Improvement",
-            url: "/registers/continuousimprovements",
-            active: true,
-            roles: ["admin"],
-          },
-          {
-            name: "Compliments",
-            url: "/registers/compliments",
-            active: true,
-            roles: ["admin"],
-          },
-        ];
-      },
-    },
-
-        {
-            "/registers/feedbacks": (params) => {
-                tabs = [
-                    {
-                        name: "Trainings",
-                        url: "/registers/trainings",
-                        active: true,
-                        roles: ["admin"],
-                    },
-                    {
-                        name: "Feedback",
-                        url: "/registers/feedbacks",
-                        active: true,
-                        roles: ["admin"],
-                    },
-                    {
-                        name: "Risk",
-                        url: "/registers/risks",
-                        active: true,
-                        roles: ["admin"],
-                    },
-                    {
-                        name: "Conflict Of Interest",
-                        url: "/registers/conflictofinterests",
-                        active: true,
-                        roles: ["admin"],
-                    },
-                ];
-            },
-        },
-
-        {
-            "/registers/risks": (params) => {
-                tabs = [
-                    {
-                        name: "Trainings",
-                        url: "/registers/trainings",
-                        active: true,
-                        roles: ["admin"],
-                    },
-                    {
-                        name: "Feedback",
-                        url: "/registers/feedbacks",
-                        active: true,
-                        roles: ["admin"],
-                    },
-                    {
-                        name: "Risk",
-                        url: "/registers/risks",
-                        active: true,
-                        roles: ["admin"],
-                    },
-                    {
-                        name: "Conflict Of Interest",
-                        url: "/registers/conflictofinterests",
-                        active: true,
-                        roles: ["admin"],
-                    },
-                ];
-            },
-        },
-
+    // {
+    //   "/registers/risks": (params) => {
+    //     tabs = [
+    //       {
+    //         name: "Complaints",
+    //         url: "/registers/complaints",
+    //         active: true,
+    //         roles: ["admin"],
+    //       },
+    //       {
+    //         name: "Conflict Of Interest",
+    //         url: "/registers/conflictofinterests",
+    //         active: true,
+    //         roles: ["admin"],
+    //       },
+    //       {
+    //         name: "Continuous Improvement",
+    //         url: "/registers/continuousimprovements",
+    //         active: true,
+    //         roles: ["admin"],
+    //       },
+    //       {
+    //         name: "Compliments",
+    //         url: "/registers/compliments",
+    //         active: true,
+    //         roles: ["admin"],
+    //       },
+    //       {
+    //         name: "Trainings",
+    //         url: "/registers/trainings",
+    //         active: true,
+    //         roles: ["admin"],
+    //       },
+    //     ];
+    //   },
+    // },
         {
             "/registers/conflictofinterests": (params) => {
-                tabs = [
-                    {
-                        name: "Trainings",
-                        url: "/registers/trainings",
-                        active: true,
-                        roles: ["admin"],
-                    },
-                    {
-                        name: "Feedback",
-                        url: "/registers/feedbacks",
-                        active: true,
-                        roles: ["admin"],
-                    },
-                    {
-                        name: "Risk",
-                        url: "/registers/risks",
-                        active: true,
-                        roles: ["admin"],
-                    },
-                    {
-                        name: "Conflict Of Interest",
-                        url: "/registers/conflictofinterests",
-                        active: true,
-                        roles: ["admin"],
-                    },
-                ];
+              tabs = [
+                {
+                  name: "Complaints",
+                  url: "/registers/complaints",
+                  active: true,
+                  roles: ["admin"],
+                },
+                {
+                  name: "Conflict Of Interest",
+                  url: "/registers/conflictofinterests",
+                  active: true,
+                  roles: ["admin"],
+                },
+                {
+                  name: "Continuous Improvement",
+                  url: "/registers/continuousimprovements",
+                  active: true,
+                  roles: ["admin"],
+                },
+                {
+                  name: "Compliments",
+                  url: "/registers/compliments",
+                  active: true,
+                  roles: ["admin"],
+                },
+                {
+                  name: "Trainings",
+                  url: "/registers/trainings",
+                  active: true,
+                  roles: ["admin"],
+                },
+              ];
             },
         },
 
         {
             "/registers/trainings": (params) => {
-                tabs = [
-                    {
-                        name: "Trainings",
-                        url: "/registers/trainings",
-                        active: true,
-                        roles: ["admin"],
-                    },
-                    {
-                        name: "Feedback",
-                        url: "/registers/feedbacks",
-                        active: true,
-                        roles: ["admin"],
-                    },
-                    {
-                        name: "Risk",
-                        url: "/registers/risks",
-                        active: true,
-                        roles: ["admin"],
-                    },
-                    {
-                        name: "Conflict Of Interest",
-                        url: "/registers/conflictofinterests",
-                        active: true,
-                        roles: ["admin"],
-                    },
-                ];
+              tabs = [
+                {
+                  name: "Complaints",
+                  url: "/registers/complaints",
+                  active: true,
+                  roles: ["admin"],
+                },
+                {
+                  name: "Conflict Of Interest",
+                  url: "/registers/conflictofinterests",
+                  active: true,
+                  roles: ["admin"],
+                },
+                {
+                  name: "Continuous Improvement",
+                  url: "/registers/continuousimprovements",
+                  active: true,
+                  roles: ["admin"],
+                },
+                {
+                  name: "Compliments",
+                  url: "/registers/compliments",
+                  active: true,
+                  roles: ["admin"],
+                },
+                {
+                  name: "Trainings",
+                  url: "/registers/trainings",
+                  active: true,
+                  roles: ["admin"],
+                },
+              ];
             },
         },
     {
       "/registers/conflictofinterests": (params) => {
         tabs = [
           {
-            name: "Feedback",
-            url: "/registers/feedbacks",
-            active: true,
-            roles: ["admin"],
-          },
-          {
-            name: "Risk",
-            url: "/registers/risks",
+            name: "Complaints",
+            url: "/registers/complaints",
             active: true,
             roles: ["admin"],
           },
@@ -527,6 +433,18 @@
           {
             name: "Continuous Improvement",
             url: "/registers/continuousimprovements",
+            active: true,
+            roles: ["admin"],
+          },
+          {
+            name: "Compliments",
+            url: "/registers/compliments",
+            active: true,
+            roles: ["admin"],
+          },
+          {
+            name: "Trainings",
+            url: "/registers/trainings",
             active: true,
             roles: ["admin"],
           },
@@ -537,14 +455,8 @@
       "/registers/continuousimprovements": (params) => {
         tabs = [
           {
-            name: "Feedback",
-            url: "/registers/feedbacks",
-            active: true,
-            roles: ["admin"],
-          },
-          {
-            name: "Risk",
-            url: "/registers/risks",
+            name: "Complaints",
+            url: "/registers/complaints",
             active: true,
             roles: ["admin"],
           },
@@ -563,6 +475,84 @@
           {
             name: "Compliments",
             url: "/registers/compliments",
+            active: true,
+            roles: ["admin"],
+          },
+          {
+            name: "Trainings",
+            url: "/registers/trainings",
+            active: true,
+            roles: ["admin"],
+          },
+        ];
+      },
+    },
+    {
+      "/registers/complaints": (params) => {
+        tabs = [
+          {
+            name: "Complaints",
+            url: "/registers/complaints",
+            active: true,
+            roles: ["admin"],
+          },
+          {
+            name: "Conflict Of Interest",
+            url: "/registers/conflictofinterests",
+            active: true,
+            roles: ["admin"],
+          },
+          {
+            name: "Continuous Improvement",
+            url: "/registers/continuousimprovements",
+            active: true,
+            roles: ["admin"],
+          },
+          {
+            name: "Compliments",
+            url: "/registers/compliments",
+            active: true,
+            roles: ["admin"],
+          },
+          {
+            name: "Trainings",
+            url: "/registers/trainings",
+            active: true,
+            roles: ["admin"],
+          },
+        ];
+      },
+    },
+    {
+      "/registers/compliments": (params) => {
+        tabs = [
+          {
+            name: "Complaints",
+            url: "/registers/complaints",
+            active: true,
+            roles: ["admin"],
+          },
+          {
+            name: "Conflict Of Interest",
+            url: "/registers/conflictofinterests",
+            active: true,
+            roles: ["admin"],
+          },
+          {
+            name: "Continuous Improvement",
+            url: "/registers/continuousimprovements",
+            active: true,
+            roles: ["admin"],
+          },
+          {
+            name: "Compliments",
+            url: "/registers/compliments",
+            active: true,
+            roles: ["admin"],
+          },
+          {
+            name: "Trainings",
+            url: "/registers/trainings",
             active: true,
             roles: ["admin"],
           },
