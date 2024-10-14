@@ -10,7 +10,7 @@
 
   export let jsonData = [];
   let documentsData = []; // JSON data
-  let staffNames = [];
+  let participantNames = [];
   let documentNames = [];
 
   // Parse JSON data and extract unique staff names and document names
@@ -19,7 +19,7 @@
     documentsData = jsonData;
 
     // Extract unique staff names
-    staffNames = [...new Set(documentsData.map((item) => item.staff_name))];
+    participantNames = [...new Set(documentsData.map((item) => item.participant_name))];
 
     // Extract unique document names
     documentNames = [
@@ -28,10 +28,10 @@
   }
 
   // Function to determine status indicator for a document
-  function getStatus(staffName, documentName) {
+  function getStatus(participantName, documentName) {
     const document = documentsData.find(
       (item) =>
-        item.staff_name === staffName && item.document_name === documentName
+        item.participant_name === participantName && item.document_name === documentName
     );
     if (document.document_status === "Missing") return "?"; // Document missing
     if (!document.expiry_date) return "✓"; // No expiry date means current document
@@ -61,29 +61,29 @@
     </tr>
   </thead>
   <tbody class="divide-y divide-slate-200">
-    {#each staffNames as staffName, index}
+    {#each participantNames as participantName, index}
       <tr
         class="divide-x divide-y divide-slate-200 {index % 2 === 0
           ? 'bg-slate-100'
           : 'bg-white'} "
       >
-        <td class="font-bold text-right p-2">{staffName}</td>
+        <td class="font-bold text-right p-2">{participantName}</td>
         {#each documentNames as documentName}
           <td class="text-center p-2">
-            {#if getStatus(staffName, documentName) === "?"}
+            {#if getStatus(participantName, documentName) === "?"}
               <QuestionMarkCircleIcon
                 class="text-slate-400 w-5 h-5 inline-block"
               />
             {/if}
-            {#if getStatus(staffName, documentName) === "!"}
+            {#if getStatus(participantName, documentName) === "!"}
               <ExclamationTriangleIcon
                 class="text-yellow-600 w-5 h-5 inline-block"
               />
             {/if}
-            {#if getStatus(staffName, documentName) === "✓"}
+            {#if getStatus(participantName, documentName) === "✓"}
               <CheckIcon class="text-green-600 w-5 h-5 inline-block" />
             {/if}
-            {#if getStatus(staffName, documentName) === "X"}
+            {#if getStatus(participantName, documentName) === "X"}
               <XMarkIcon class="text-red-600 w-5 h-5 inline-block" />
             {/if}
           </td>
