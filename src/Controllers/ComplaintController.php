@@ -1,0 +1,26 @@
+<?php
+
+namespace NDISmate\Controllers;
+
+use NDISmate\CORE\BaseController;
+use NDISmate\Models\Register\Complaint\AddComplaint;
+use NDISmate\Models\Register\Complaint\GetComplaint;
+use NDISmate\Models\Register\Complaint\ListComplaint;
+use NDISmate\Models\Register\Complaint\UpdateComplaint;
+use NDISmate\Models\Register\Complaint\GetComplaintNotifiedStaffs;
+use NDISmate\Models\Register\Complaint\DeleteComplaint;
+
+class ComplaintController extends BaseController
+{
+    protected function defineController()
+    {
+        $this->controller = [
+            'listComplaints' => [new ListComplaint, null, true, []],
+            'addComplaint' => [new AddComplaint, null, true, []],
+            'getComplaint' => [new GetComplaint, null, true, []],
+            'updateComplaint' => [new UpdateComplaint, null, true, []],
+            'getComplaintNotifiedStaffs' => [new GetComplaintNotifiedStaffs, null, true, []],
+            'deleteComplaint' => [new DeleteComplaint, null, true, []],
+        ];
+    }
+}
