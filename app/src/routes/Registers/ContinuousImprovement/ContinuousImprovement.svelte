@@ -160,8 +160,12 @@
     }
 
 </script>
-<div class="text-2xl sm:truncate sm:text-3xl sm:tracking-tight font-fredoka-one-regular mb-2" style="color: rgb(34, 0, 85);">
-    Continuous Improvement Details
+<div class="mb-2 mt-2" style="color: rgb(34, 0, 85);">
+    <h1
+        class="text-2xl text-indigo-700 tracking-tight font-fredoka-one-regular"
+    >
+        Continuous Improvement Details
+    </h1>
 </div>
 
 <ContinuousImprovementForm 
