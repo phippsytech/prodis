@@ -60,6 +60,12 @@
             roles: ["stakeholder", "house", "therapist", "admin"],
           },
           {
+            name: "Documents",
+            url: "/clients/" + params.client_id + "/documents",
+            active: true,
+            roles: ["house", "therapist", "admin"],
+          },
+          {
             name: "Case Notes",
             url: "/clients/" + params.client_id + "/casenotes",
             active: true,
