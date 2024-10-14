@@ -18,8 +18,7 @@
     BreadcrumbStore.set({
         path: [
             { url: "/registers", name: "Registers" },
-            { url: "/registers/trainings/", name: "Training" },
-            { url: "/registers/trainings/add", name: "Add Training" },
+            { url: "/registers/trainings/", name: "Trainings" },
         ]
     });
 
@@ -77,6 +76,14 @@
         }
     }
 </script>
+
+<div class="mb-2 mt-2" style="color: rgb(34, 0, 85);">
+    <h1
+        class="text-2xl text-indigo-700 tracking-tight font-fredoka-one-regular"
+    >
+        Add Training
+    </h1>
+</div>
 
 <StaffMultiSelector bind:staff_ids={training.staff_ids} /> 
 

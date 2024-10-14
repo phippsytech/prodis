@@ -12,8 +12,7 @@
     BreadcrumbStore.set({
         path: [
             { url: "/registers", name: "Registers" },
-            { url: "/registers/continuousimprovements/", name: "Continuous Improvement" },
-            { url: "/registers/continuousimprovements/add", name: "Add Continuous Improvement" },
+            { url: "/registers/continuousimprovements/", name: "Continuous Improvements" },
         ]
     });
 
@@ -84,8 +83,12 @@
     }
 </script>
 
-<div class="text-2xl sm:truncate sm:text-3xl sm:tracking-tight font-fredoka-one-regular mb-2" style="color: rgb(34, 0, 85);">
-    Add Continuous Improvement
+<div class="mb-2 mt-2" style="color: rgb(34, 0, 85);">
+    <h1
+        class="text-2xl text-indigo-700 tracking-tight font-fredoka-one-regular"
+    >
+        Add Continuous Improvement
+    </h1>
 </div>
 
 <ContinuousImprovementForm 

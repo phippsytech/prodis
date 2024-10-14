@@ -25,7 +25,6 @@
 
     BreadcrumbStore.set({ path: [
         { url: "/registers", name: "Registers" },
-        { url: "/registers/continuousimprovements", name: "Continuous Improvements" },
     ] });
     
     let filter = {};
@@ -74,14 +73,13 @@
     }
 </script>
 
-<div class="sm:flex sm:items-center mb-4 mt-4">
+<div class="sm:flex sm:items-center mb-4">
     <div class="sm:flex-auto">
-        <div
-            class="text-2xl sm:truncate sm:text-3xl sm:tracking-tight font-fredoka-one-regular"
-            style="color:#220055;"
+        <h1
+          class="text-2xl text-indigo-700 tracking-tight font-fredoka-one-regular"
         >
-            Continuous Improvements Register
-        </div>
+          Continuous Improvement Register
+        </h1>
     </div>
     <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none">
         <button

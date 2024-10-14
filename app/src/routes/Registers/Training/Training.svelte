@@ -170,7 +170,7 @@
 </script>
 
 <div
-    class="text-2xl sm:truncate sm:text-3xl sm:tracking-tight font-fredoka-one-regular mb-2"
+    class="text-2xl sm:truncate sm:text-3xl sm:tracking-tight font-fredoka-one-regular mb-2 mt-2"
     style="color:#220055;"
 >
     Training Details

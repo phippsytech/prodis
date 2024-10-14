@@ -51,7 +51,6 @@
   BreadcrumbStore.set({
     path: [
       { url: "/registers", name: "Registers" },
-      { url: "/registers/trainings", name: "Trainings" },
     ],
   });
 
@@ -82,7 +81,7 @@
 </script>
 
 <div>
-  <div class="sm:flex sm:items-center">
+  <div class="sm:flex sm:items-center mb-4">
     <div class="sm:flex-auto">
       <h1
         class="text-2xl text-indigo-700 tracking-tight font-fredoka-one-regular"

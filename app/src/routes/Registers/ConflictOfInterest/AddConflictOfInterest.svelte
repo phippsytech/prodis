@@ -9,7 +9,12 @@
     let conflictofinterest = {};
     
 
-    BreadcrumbStore.set({ path: [{ url: "/registers", name: "Registers" }] });
+    BreadcrumbStore.set({
+        path: [
+            { url: "/registers", name: "Registers" },
+            { url: "/registers/conflictofinterests/", name: "Conflict of Interests" },
+        ]
+    });
 
     conflictofinterest.staff_id = null;
 
@@ -60,12 +65,12 @@
             .catch(() => {});
     }
 </script>
-<div
-    class="text-2xl sm:truncate sm:text-3xl sm:tracking-tight font-fredoka-one-regular mb-2"
-    style="color:#220055;"
->
-    Add Conflict of Interest
-    
+<div class="mb-2 mt-2" style="color: rgb(34, 0, 85);">
+    <h1
+        class="text-2xl text-indigo-700 tracking-tight font-fredoka-one-regular"
+    >
+        Add Conflict of Interest
+    </h1>
 </div>
 
 <ConflictOfInterestForm bind:conflictofinterest />

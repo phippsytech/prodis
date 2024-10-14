@@ -25,7 +25,6 @@
         path: [
             { url: "/registers", name: "Registers" },
             { url: "/registers/compliments/", name: "Compliments" },
-            { url: "/registers/compliments/add", name: "Add Compliment" },
         ]
     });
 
@@ -85,11 +84,12 @@
 
 </script>
 
-<div
-    class="text-2xl sm:truncate sm:text-3xl sm:tracking-tight font-fredoka-one-regular mb-2 mt-2"
-    style="color:#220055;"
->
-    Add Compliment
+<div class="mb-2 mt-2" style="color: rgb(34, 0, 85);">
+    <h1
+        class="text-2xl text-indigo-700 tracking-tight font-fredoka-one-regular"
+    >
+        Add Compliment
+    </h1>
 </div>
 
 <ComplimentForm 

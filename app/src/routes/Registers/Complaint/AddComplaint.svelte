@@ -22,7 +22,13 @@
         
     ];
 
-    BreadcrumbStore.set({ path: [{ url: "/registers", name: "Registers" }] });
+    BreadcrumbStore.set({
+        path: [
+            { url: "/registers", name: "Registers" },
+            { url: "/registers/complaints/", name: "Complaints" },
+        ]
+    });
+
 
     function validate() {
         for (const { check, message } of validations) {
@@ -49,11 +55,12 @@
     }
 </script>
 
-<div
-    class="text-2xl sm:truncate sm:text-3xl sm:tracking-tight font-fredoka-one-regular mb-2"
-    style="color:#220055;"
->
-    Add Complaint
+<div class="mb-2 mt-2" style="color: rgb(34, 0, 85);">
+    <h1
+        class="text-2xl text-indigo-700 tracking-tight font-fredoka-one-regular"
+    >
+        Add Complaint
+    </h1>
 </div>
 
 <ComplaintForm bind:complaint />

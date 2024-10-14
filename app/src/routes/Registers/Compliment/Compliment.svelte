@@ -157,6 +157,14 @@
 
 </script>
 
+<div class="mb-2 mt-2" style="color: rgb(34, 0, 85);">
+    <h1
+        class="text-2xl text-indigo-700 tracking-tight font-fredoka-one-regular"
+    >
+    Compliment Details
+    </h1>
+</div>
+
 <ComplimentForm 
     bind:compliment={compliment}
     staffer={staffer}
