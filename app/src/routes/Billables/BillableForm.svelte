@@ -15,6 +15,7 @@
     export let budget_exceeded = false;
     export let available_session_duration = null;
     export let mode = "add";
+    export let stored_edit_timetracking = {};
 
     $: rolesStore = $RolesStore;
 
@@ -35,7 +36,7 @@
     // stored variables
     let stored_client_id = null;
     let stored_session_date = null;
-    let stored_service_id;
+    let stored_service_booking_id;
 
     let queryParams = getQueryParams();
   
@@ -51,16 +52,16 @@
         if (timetracking.service_booking_id) {
             getAvailableSessionDuration();
         }
-        stored_service_id = timetracking.service_booking_id;
+        stored_service_booking_id = timetracking.service_booking_id;
         
         if (timetracking.client_id) {
             loadServices(timetracking);
         }
     });
 
-    $: if (timetracking.service_booking_id && timetracking.service_booking_id != stored_service_id) {
+    $: if (timetracking.service_booking_id && timetracking.service_booking_id != stored_service_booking_id) {
         getAvailableSessionDuration();
-        stored_service_id = timetracking.service_booking_id;
+        stored_service_booking_id = timetracking.service_booking_id;
     }
     
     $: if (timetracking.staff_id && timetracking.staff_id != null && queryParams.hasOwnProperty('participant_id') && timetracking.client_id != null) {
@@ -76,17 +77,26 @@
         budget_exceeded = false;
     }
 
+    $: {
+        console.log('timetracking', timetracking);
+        console.log('timetracking edit', stored_edit_timetracking);
+    }
+
     function getAvailableSessionDuration() {
         jspa("/Participant/ServiceBooking", "getAvailableSessionDuration", {
             service_booking_id: timetracking.service_booking_id,
         })
             .then((result) => {
-                available_session_duration =
-                    result.result.available_session_duration;
+                available_session_duration = result.result.available_session_duration;
 
-                available_session_duration =
-                    available_session_duration +
-                    (timetracking.session_duration || 0);
+                if (
+                    stored_edit_timetracking.service_booking_id === timetracking.service_booking_id &&
+                    mode === 'edit'
+                ) {
+                available_session_duration = available_session_duration + 
+                    parseInt(stored_edit_timetracking.session_duration || '0', 10);
+                }
+
 
                 plan_manager_id = result.result.plan_manager_id;
                 record_travelled_kilometers =
@@ -115,8 +125,11 @@
         stored_session_date = timetracking.session_date;
         serviceBookingList = [];
         activeServiceBookings = [];
-        timetracking.service_booking_id = null; // reset service_booking_id
         hasDuplicate = false;
+
+        if (mode != "edit") {
+            timetracking.service_booking_id = null; // reset service_booking_id
+        }
 
         jspa("/Participant/ServiceBooking", "listServiceBookings", {
             participant_id: timetracking.client_id,
@@ -180,6 +193,9 @@
                     timetracking.service_booking_id = serviceBookingList[0].value;
                 }
 
+                if (mode === "edit") {
+                    timetracking.service_booking_id = stored_service_booking_id;
+                }
 
             })
             .catch((error) => {
@@ -212,12 +228,6 @@
         
                 // Convert the object to an array of values and check for matching client_id
                 hasNoPermission = !Object.values(clients).some(client => client.client_id === timetracking.client_id);
-
-                if (hasNoPermission) {
-                    console.log("Invalid client ID:", hasNoPermission);
-                } else {
-                    console.log("Valid client ID:", client_id);
-                }
             })
             .catch((error) => {});
     }

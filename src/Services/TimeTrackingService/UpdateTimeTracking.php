@@ -25,14 +25,14 @@ class UpdateTimeTracking
 
             $data['rate'] = R::getCell(
                 'SELECT 
-                services.rate
+                servicebookings.rate
             FROM servicebookings
             JOIN services ON services.id = servicebookings.service_id
             WHERE servicebookings.id = :service_booking_id',
                 [':service_booking_id' => $data['service_booking_id']]
             );
         }
-
+ 
         // Update Time Tracking
         $timetracking = new TimeTracking();
         $timetracking->update($data);

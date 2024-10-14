@@ -23,7 +23,6 @@
             />
         </Role>
     {/if}
-
     {#if available_session_duration > 0}
         <ClaimSelector
             bind:claim_type={timetracking.claim_type}
@@ -36,6 +35,7 @@
             bind:value={timetracking.session_duration}
             {readOnly}
         />
+
         {#if budget_exceeded}
             <div class="text-center text-red-500 font-bold">
                 This will take you over budget. There is only {@html convertMinutesToHoursAndMinutes(
