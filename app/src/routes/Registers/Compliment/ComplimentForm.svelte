@@ -20,7 +20,6 @@
             bind:value={compliment.complimenter}
             label="Name of complimenter"
             placeholder="eg: Eva Snow"
-            {readOnly}
         />
     </div>
 
@@ -28,7 +27,6 @@
         <FloatingDate
             bind:value={compliment.date}
             label="Date of compliment"
-            {readOnly}
         />
     </div>
 </div>
@@ -56,7 +54,6 @@
             bind:value={compliment.action_taken}
             label="Action Taken"
             placeholder="Indicate action taken by staff"
-            {readOnly}
         /> 
     </div>
 </Role>
