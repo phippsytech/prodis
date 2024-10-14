@@ -9,10 +9,6 @@
 
     export let compliment;
     export let staffer = [];
-    export let readOnly = false;
-
-
-    console.log(readOnly)
 </script>
 <div class="mt-4 mb-2">
     <h3 class="text-base font-fredoka-one-regular leading-6 text-gray-900 px-3" style="color: rgb(34, 0, 85);">Compliment</h3>

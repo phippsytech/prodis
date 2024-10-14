@@ -153,7 +153,6 @@
 <ComplimentForm 
     bind:compliment={compliment}
     staffer={staffer}
-    {readOnly}
 />
 
 <Role roles={["admin"]}>
