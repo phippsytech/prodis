@@ -18,7 +18,7 @@
         vultr_storage_ref: null,
 
         date_collection_option: "do_not_collect",
-        credential_date: null,
+        expired_at: null,
     };
 
     let isReplacing = false;
@@ -136,8 +136,8 @@
 {/if} -->
 
 {#if props.date_collection_option == "issued"}
-    <FloatingDate label="Issued" bind:value={props.credential_date} />
+    <FloatingDate label="Issued" bind:value={props.document_date} />
 {/if}
 {#if props.date_collection_option == "expires"}
-    <FloatingDate label="Expires" bind:value={props.credential_date} />
+    <FloatingDate label="Expires" bind:value={props.expired_at} />
 {/if}

@@ -16,7 +16,9 @@ class Document extends NewCustomModel
             'document_id' => [v::numericVal()],
             'details' => [v::optional(v::stringType())],
             'vultr_storage_ref' => [v::optional(v::stringType())],
-            'document_date' => [v::optional(v::stringType())]
+            'document_date' => [v::optional(v::stringType())],
+            'expired_at' =>  [v::optional(v::stringType())],
+            
         ];
     }
 }

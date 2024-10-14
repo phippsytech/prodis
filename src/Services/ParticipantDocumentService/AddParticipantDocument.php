@@ -21,7 +21,9 @@ class AddParticipantDocument
                 $vultrStorageRef = (new UploadParticipantDocumentFile)([
                     'base64_file' => $data['base64_file'],
                     'participant_id' => $data['participant_id'],
-                    'file_extension' => $data['file_extension']
+                    'file_extension' => $data['file_extension'],
+                    'document_date' => $data['document_date'],
+                    'expired_at' => $data['expired_at']
                 ]);
 
                 $data['vultr_storage_ref'] = $vultrStorageRef;
