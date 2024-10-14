@@ -1,9 +1,11 @@
 <?php
+
 namespace NDISmate\Models\Participant\ServiceBooking;
 
 use RedBeanPHP\R as R;
 use RedBeanPHP\RedException;
 use NDISmate\Utilities\ConvertFieldsToBoolean;
+use NDISmate\Services\TripService\Utilities;
 
 class ListServiceBookings
 {
@@ -27,6 +29,7 @@ class ListServiceBookings
                     ANY_VALUE(services.budget_display) AS budget_display,
                     ANY_VALUE(services.billing_code) AS billing_code,
                     ANY_VALUE(services.billing_unit) AS billing_unit,
+                    ANY_VALUE(servicebookings.kilometer_budget) AS kilometer_budget,
                     SUM(timetrackings.session_duration) AS session_duration,
                     MAX(timetrackings.session_date) AS last_session_date,
                     ANY_VALUE(servicebookings.rate) AS rate,
@@ -67,8 +70,35 @@ class ListServiceBookings
                 ]
             );
 
+
+
+
+
+
             $converter = new ConvertFieldsToBoolean();
             $beans = $converter($beans, ['include_travel', 'is_active', 'adjust_weekly_time']);
+
+
+
+            foreach ($beans as &$bean) {
+
+                // calculate spent km for each service booking
+                $km_query = "
+                SELECT SUM(COALESCE(timetrackings.session_duration, 0) * timetrackings.rate) as spent_km
+                FROM timetrackings 
+                WHERE service_booking_id = :service_booking_id AND service_id = :service_id";
+
+                $spent_km = R::getCell(
+                    $km_query,
+                    [
+                        'service_booking_id' => $bean['id'],
+                        'service_id' => Utilities::getProviderTravelServiceId($bean['service_id'])
+                    ]
+                );
+
+                $bean['spent_km'] = $spent_km;
+            }
+
 
             return $beans;
         } catch (RedException $e) {

@@ -70,5 +70,9 @@ EXPOSE 443
 #CMD ["supervisord"]
 
 
+# Start supervisord, which will also start cron
+CMD ["supervisord", "-c", "/etc/supervisor/conf.d/prodis.conf"]
+
+
 # Start cron service and supervisord
-CMD ["sh", "-c", "cron && supervisord -c /etc/supervisor/conf.d/prodis.conf"]
+# CMD ["sh", "-c", "cron && supervisord -c /etc/supervisor/conf.d/prodis.conf"]
