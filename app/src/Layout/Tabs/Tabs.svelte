@@ -327,6 +327,12 @@
             active: true,
             roles: ["admin"],
           },
+          {
+            name: "Compliments",
+            url: "/registers/compliments",
+            active: true,
+            roles: ["admin"],
+          },
         ];
       },
     },
@@ -348,6 +354,12 @@
           {
             name: "Conflict Of Interest",
             url: "/registers/conflictofinterests",
+            active: true,
+            roles: ["admin"],
+          },
+          {
+            name: "Compliments",
+            url: "/registers/compliments",
             active: true,
             roles: ["admin"],
           },
@@ -496,6 +508,12 @@
           {
             name: "Conflict Of Interest",
             url: "/registers/conflictofinterests",
+            active: true,
+            roles: ["admin"],
+          },
+          {
+            name: "Compliments",
+            url: "/registers/compliments",
             active: true,
             roles: ["admin"],
           },
