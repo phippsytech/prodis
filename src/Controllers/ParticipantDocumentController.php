@@ -11,6 +11,7 @@ use NDISmate\Services\ParticipantDocumentService\AddParticipantDocument;
 use  NDISmate\Models\Participant\Document\ListParticipantByDocumentId;
 use NDISmate\Models\Participant\Document\ListDueDocuments;
 use NDISmate\Models\Participant\Document\ListExpiredDocuments;
+use NDISmate\Models\Participant\Document\ListMissingDocuments;
 
 final class ParticipantDocumentController extends BaseController
 {
@@ -25,6 +26,7 @@ final class ParticipantDocumentController extends BaseController
             'listParticipantByDocumentId' => [new ListParticipantByDocumentId, null, true, []],
             'listDueDocuments' => [new ListDueDocuments, null, true, ["admin"]],
             'listExpiredDocuments' => [new ListExpiredDocuments, null, true, ["admin"]],
+            'listMissingDocuments' => [new ListMissingDocuments, null, true, ["admin"]],
 
         ];
     }

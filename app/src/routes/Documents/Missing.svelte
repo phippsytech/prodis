@@ -5,7 +5,7 @@
 
   let missingList = [];
 
-  jspa("/Staff/Document", "listMissingDocuments", {}).then((result) => {
+  jspa("/Participant/Document", "listMissingDocuments", {}).then((result) => {
     missingList = result.result;
 
     // documents.sort(function(a, b) {
@@ -33,7 +33,7 @@
 <table class="min-w-full divide-y divide-gray-300">
   <thead class=" text-xs">
     <tr>
-      <th class="p-2 text-left font-medium">Staff Name</th>
+      <th class="p-2 text-left font-medium">Participant Name</th>
       <th class="p-2 text-left font-medium">Document</th>
       <!-- <th class="p-2 text-left  font-medium">Date Missing</th> -->
       <!-- <th class="p-2 text-right  font-medium" >Action</th> -->
@@ -44,7 +44,7 @@
       <tr
         in:slide={{ duration: 200 }}
         out:slide={{ duration: 200 }}
-        on:click={() => push("/staff/" + missing.staff_id + "/documents")}
+        on:click={() => push("/staff/" + missing.participant_id + "/documents")}
         class="px-6 py-2 hover:bg-indigo-600 hover:text-white focus:outline-none focus:ring-0 focus:bg-gray-200 focus:text-gray-600 cursor-pointer {missingList.length -
           1 ==
         index

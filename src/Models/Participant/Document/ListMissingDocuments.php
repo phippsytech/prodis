@@ -4,13 +4,10 @@ namespace NDISmate\Models\Participant\Document;
 
 use \RedBeanPHP\R as R;
 
-
 class ListMissingDocuments
 {
-
     function __invoke($data)
     {
-
         $query = <<<HEREDOC
 SELECT 
     s.id as participant_id,
@@ -25,8 +22,7 @@ WHERE NOT EXISTS (
     WHERE sc.participant_id = s.id AND sc.document_id = c.id
 )
 AND (
-    (c.collect_from_therapist = 'required' AND JSON_CONTAINS(s.groups, '["therapist"]'))
-    OR (c.collect_from_sil = 'required' AND JSON_CONTAINS(s.groups, '["sil"]'))
+    c.collect_from_therapist = 'required'
 )
 AND s.archived IS NOT TRUE
 HEREDOC;
