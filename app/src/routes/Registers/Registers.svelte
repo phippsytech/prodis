@@ -8,7 +8,7 @@
 
     let icons = [
         // {url:"/registers/feedbacks", name:"Feedback Register", icon:  ChatBubbleLeftEllipsisIcon, role:["admin"]},
-        // {url:"/registers/risks", name:"Risk Register", icon:  FireIcon, role:["admin"]},
+        {url:"/registers/risks", name:"Risk Register", icon:  FireIcon, role:["admin"]},
         {url:"/registers/complaints", name:"Complaint Register", icon: FireIcon, role:["admin"]},
         {url:"/registers/compliments", name:"Compliment Register", icon: BookOpenIcon, role:["admin"]},
         {url:"/registers/conflictofinterests", name:"Conflict Of Interest Register", icon: ExclamationCircleIcon, role:["admin"]},

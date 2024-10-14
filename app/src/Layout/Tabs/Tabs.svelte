@@ -27,6 +27,8 @@
     /^\/registers\/continuousimprovements\/\d+$/,
     '/registers/compliments/add',
     /^\/registers\/compliments\/\d+$/,
+    '/registers/risks/add',
+    /^\/registers\/risks\/\d+$/,
   ];
 
   function checkExcludedRoutes() {
@@ -328,42 +330,48 @@
       },
     },
 
-    // {
-    //   "/registers/risks": (params) => {
-    //     tabs = [
-    //       {
-    //         name: "Complaints",
-    //         url: "/registers/complaints",
-    //         active: true,
-    //         roles: ["admin"],
-    //       },
-    //       {
-    //         name: "Conflict Of Interest",
-    //         url: "/registers/conflictofinterests",
-    //         active: true,
-    //         roles: ["admin"],
-    //       },
-    //       {
-    //         name: "Continuous Improvement",
-    //         url: "/registers/continuousimprovements",
-    //         active: true,
-    //         roles: ["admin"],
-    //       },
-    //       {
-    //         name: "Compliments",
-    //         url: "/registers/compliments",
-    //         active: true,
-    //         roles: ["admin"],
-    //       },
-    //       {
-    //         name: "Trainings",
-    //         url: "/registers/trainings",
-    //         active: true,
-    //         roles: ["admin"],
-    //       },
-    //     ];
-    //   },
-    // },
+    {
+      "/registers/risks": (params) => {
+        tabs = [
+          {
+            name: "Complaints",
+            url: "/registers/complaints",
+            active: true,
+            roles: ["admin"],
+          },
+          {
+            name: "Conflict Of Interest",
+            url: "/registers/conflictofinterests",
+            active: true,
+            roles: ["admin"],
+          },
+          {
+            name: "Continuous Improvement",
+            url: "/registers/continuousimprovements",
+            active: true,
+            roles: ["admin"],
+          },
+          {
+            name: "Compliments",
+            url: "/registers/compliments",
+            active: true,
+            roles: ["admin"],
+          },
+          {
+            name: "Trainings",
+            url: "/registers/trainings",
+            active: true,
+            roles: ["admin"],
+          },
+          {
+            name: "Risks",
+            url: "/registers/risks",
+            active: true,
+            roles: ["admin"],
+          },
+        ];
+      },
+    },
         {
             "/registers/conflictofinterests": (params) => {
               tabs = [
