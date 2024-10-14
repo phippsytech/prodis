@@ -1,6 +1,5 @@
 <script>
     import { push } from "svelte-spa-router";
-    import { slide } from "svelte/transition";
     import { jspa } from "@shared/jspa.js";
     import { formatDate, formatPrettyName } from "@shared/utilities.js";
     import { BreadcrumbStore } from "@shared/stores.js";
@@ -9,17 +8,12 @@
     import MiniJSON2CSV from "@shared/MiniJSON2CSV.svelte";
 
     let continuous_improvements = [];
-
-    let filters = [];
-    
-    let staff;
-    let reviewer;
-    let implementation_date;
-    let completion_date;
-
+    let stored_continuous_improvements;
+ 
     jspa("/Register/ContinuousImprovement", "listContinuousImprovement", {})
         .then((result)=> {
             continuous_improvements = result.result;
+            stored_continuous_improvements = [...continuous_improvements];
             continuous_improvements.sort(function (a, b) {
             let aDateTime = Date.parse(a.date);
             let bDateTime = Date.parse(b.date);
@@ -41,13 +35,30 @@
             continuous_improvements = continuous_improvements.filter(
                 (continuous_improvements) => Date.parse(continuous_improvements.implementation_date) >= Date.parse(filter.implementation_date)
             );
-            console.log("from apply",filter.implementation_date);
+        }
+
+        if (filter.date_of_suggestion) {
+            continuous_improvements = continuous_improvements.filter(
+                (continuous_improvements) => Date.parse(continuous_improvements.date_of_suggestion) === Date.parse(filter.date_of_suggestion)
+            );
+        }
+
+        if (filter.staff) {
+            continuous_improvements = continuous_improvements.filter(
+                (continuous_improvements) => continuous_improvements.involved_staffs_id === filter.staff
+            );
+        }
+
+        if (filter.reviewer) {
+            continuous_improvements = continuous_improvements.filter(
+                (continuous_improvements) => continuous_improvements.implementing_staffs_id === filter.reviewer
+            );
         }
     }
 
-
     function clearFilter(filter) {
         filter = {};
+        continuous_improvements = [...stored_continuous_improvements];
     }
 
     function showFilter() {
@@ -129,10 +140,10 @@
                             Suggestions
                         </th>
                         <th scope="col" class="py-2 px-4 text-left text-xs font-medium text-slate-500">
-                            Involved Staff 
+                            Staff 
                         </th>
                         <th scope="col" class="py-2 px-4 text-left text-xs font-medium text-slate-500">
-                            Implementing Staff
+                            Reviewer
                         </th>
                         <th scope="col" class="py-2 px-4 text-left text-xs font-medium text-slate-500">
                             Suggestion Date
