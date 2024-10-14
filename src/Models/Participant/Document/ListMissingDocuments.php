@@ -1,11 +1,11 @@
 <?php
 
-namespace NDISmate\Models\Participant\Document;
+namespace NDISmate\Models\Staff\Credential;
 
 use \RedBeanPHP\R as R;
 
 
-class ListMissingDocuments
+class ListMissingCredentials
 {
 
     function __invoke($data)
@@ -13,16 +13,16 @@ class ListMissingDocuments
 
         $query = <<<HEREDOC
 SELECT 
-    s.id as participant_id,
-    c.id as document_id,
+    s.id as staff_id,
+    c.id as credential_id,
     s.name as name,
-    c.name as document
-FROM participants s
-CROSS JOIN documents c
+    c.name as credential
+FROM staffs s
+CROSS JOIN credentials c
 WHERE NOT EXISTS (
     SELECT 1
-    FROM participantdocuments sc
-    WHERE sc.participant_id = s.id AND sc.document_id = c.id
+    FROM staffcredentials sc
+    WHERE sc.staff_id = s.id AND sc.credential_id = c.id
 )
 AND (
     (c.collect_from_therapist = 'required' AND JSON_CONTAINS(s.groups, '["therapist"]'))

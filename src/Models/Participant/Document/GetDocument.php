@@ -1,11 +1,11 @@
 <?php
 
-namespace NDISmate\Models\Participant\Document;
+namespace NDISmate\Models\Staff\Credential;
 
 use \RedBeanPHP\R as R;
 
 
-class GetDocument
+class GetCredential
 {
 
     function __invoke($data)
@@ -16,14 +16,14 @@ class GetDocument
                 id,
                 details,
                 vultr_storage_ref,
-                document_date
-            FROM participantdocuments 
-            WHERE participant_id=:participant_id
-                AND document_id=:document_id
+                credential_date
+            FROM staffcredentials 
+            WHERE staff_id=:staff_id
+                AND credential_id=:credential_id
             ',
             [
-                ":participant_id" => $data['participant_id'],
-                ":document_id" => $data["document_id"]
+                ":staff_id" => $data['staff_id'],
+                ":credential_id" => $data["credential_id"]
             ]
         );
 

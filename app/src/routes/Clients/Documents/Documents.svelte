@@ -44,7 +44,7 @@
 
     BreadcrumbStore.set({
       path: [
-        { url: "/staff", name: "Staff" },
+        { url: "/clients", name: "Client" },
         { url: null, name: client.name },
       ],
     });

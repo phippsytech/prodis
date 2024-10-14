@@ -1,43 +1,119 @@
 <?php
 
-namespace NDISmate\Models\Participant\Document;
+namespace NDISmate\Models\Staff\Credential;
 
 use \RedBeanPHP\R as R;
-use NDISmate\Utilities\ConvertFieldsToBoolean;
 
-class ListDocumentsByParticipantId
+
+class ListCredentialsByStaffId
 {
 
     function __invoke($data)
     {
 
-        // if participant_id exists, use it or throw an exception
-        $participant_id = $data['participant_id'] ??  throw new Exception('Neither participant_id nor client_id exists in $data.');
+        // collect_from_therapist,
+        // collect_from_sil,
 
+        // required, optional, do_not_collect
 
+        $staffer = R::load("staffs", $data['staff_id']);
+        $staff_groups = json_decode($staffer->groups, true);
 
+        if ($staff_groups == null  || $staff_groups == []) {
+            return ["http_code" => 200, "result" => []];
+        }
 
-        $query = 
-            "SELECT
-                documenttypes.id,
-                documenttypes.name,
-                documenttypes.description,
-                documenttypes.is_required
-            FROM documenttypes
-            LEFT JOIN participantdocuments 
-                ON documenttypes.id = participantdocuments.documenttype_id 
-                AND participantdocuments.participant_id = :participant_id
-            ORDER BY documenttypes.is_required DESC, documenttypes.name";
+        $therapist_query = <<<HEREDOC
+select 
+        credentials.id,
+        credentials.name,
+        credentials.description,
+        credentials.date_collection_option,
+        credentials.years_until_expiry,
+        IF(
+            credentials.collect_from_therapist = 'required',
+            TRUE,
+            FALSE
+        ) AS required
+        from credentials
+        left join staffcredentials on (credentials.id = staffcredentials.credential_id AND staffcredentials.staff_id = :staff_id)
+    where 
+    (credentials.collect_from_therapist in ('required', 'optional') and :set_member_therapist = 1)
+    
+    ORDER BY required desc, credentials.name
+HEREDOC;
+
+        $sil_query = <<<HEREDOC
+select 
+        credentials.id,
+        credentials.name,
+        credentials.description,
+        credentials.date_collection_option,
+        credentials.years_until_expiry,
+        IF(
+            credentials.collect_from_sil = 'required',
+            TRUE,
+            FALSE
+        ) AS required
+        from credentials
+        left join staffcredentials on (credentials.id = staffcredentials.credential_id AND staffcredentials.staff_id = :staff_id)
+    where 
+    (credentials.collect_from_sil in ('required', 'optional') and :set_member_sil = 1)
+    
+    ORDER BY required desc, credentials.name
+HEREDOC;
+
+        $both_query = <<<HEREDOC
+select 
+    credentials.id,
+    credentials.name,
+    credentials.description,
+    credentials.date_collection_option,
+    credentials.years_until_expiry,
+    IF(
+        credentials.collect_from_sil = 'required' OR credentials.collect_from_therapist = 'required',
+        TRUE,
+        FALSE
+    ) AS required
+from credentials
+left join staffcredentials on credentials.id = staffcredentials.credential_id AND staffcredentials.staff_id = :staff_id
+where 
+    (credentials.collect_from_sil in ('required', 'optional') and :set_member_sil = 1)
+    OR (credentials.collect_from_therapist in ('required', 'optional') and :set_member_therapist = 1)
+    
+ORDER BY required desc, credentials.name
+HEREDOC;
+
 
         $params = [
-            ":participant_id" => $participant_id,
+            ":staff_id" => $data['staff_id'],
+
         ];
 
+        switch (true) {
+            case (in_array("sil", $staff_groups) && !in_array("therapist", $staff_groups)):
+                $params[":set_member_sil"] = in_array("sil", $staff_groups) ? 1 : 0;
+                $query = $sil_query;
+                break;
+            case (!in_array("sil", $staff_groups) && in_array("therapist", $staff_groups)):
+                $params[":set_member_therapist"] = in_array("therapist", $staff_groups) ? 1 : 0;
+                $query = $therapist_query;
+                break;
+            case (in_array("sil", $staff_groups) && in_array("therapist", $staff_groups)):
+                $params[":set_member_sil"] = in_array("sil", $staff_groups) ? 1 : 0;
+                $params[":set_member_therapist"] = in_array("therapist", $staff_groups) ? 1 : 0;
+                $query = $both_query;
+                break;
+        }
 
-        $beans = R::getAll($query, $params);
 
-        $beans = (new ConvertFieldsToBoolean)($beans, ['is_required']);
 
-        return $beans;
+        $bean = R::getAll($query, $params);
+
+        foreach ($bean as &$row) {
+            $row['required'] = ($row['required'] == 1) ? true : false;
+        }
+
+        return $bean;
     }
 }
