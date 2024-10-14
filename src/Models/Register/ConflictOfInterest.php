@@ -18,8 +18,9 @@ class ConflictOfInterest extends BaseModel {
             'date_identified' => [v::stringType()],
             'date_resolved' => [v::stringType()],
             'submitted_by' => [v::stringType()],
-            
+            'parties_involved' => [v::stringType()],
             'description' => [v::stringType()],
+            'type' => [v::stringType()],
             'resolution' => [v::stringType()],
             
             'status' => [v::stringType()], // open, closed
@@ -31,6 +32,7 @@ class ConflictOfInterest extends BaseModel {
             ["listConflictOfInterests", "getAll", true, []],
             ["getConflictOfInterest", "getOne", true, []],
             ["updateConflictOfInterest", "update", true, ["admin"]],
+            ["deleteConflictOfInterest", "delete", true, ["admin"]],
         ];
 
         return $this->invoke($request, $response, $args, $this);
@@ -50,9 +52,9 @@ class ConflictOfInterest extends BaseModel {
         // this prevents us from updating a closed conflict of interest unless we are opening it
         
         $original = $this->CRUD->getOne($data['id']);
-        if($original['result']['status'] == "closed"){
+        if($original['result']['status'] == "resolved"){
 
-            if($data['status'] == "open"){
+            if($data['status'] == "unresolved" || $data['status'] == 'ongoing'){
                 return $this->CRUD->update($data);
             }
 
@@ -60,7 +62,7 @@ class ConflictOfInterest extends BaseModel {
 
         }
 
-        if($data['status'] == "closed"){
+        if($data['status'] == "resolved"){
             $data['date_resolved'] = date("Y-m-d");
         }
             
@@ -68,6 +70,13 @@ class ConflictOfInterest extends BaseModel {
 
     }
 
+    function delete($data) {
 
+        $original = $this->CRUD->getOne($data['id']);
+
+        if (isset($original['result'])) {
+           return  $this->CRUD->delete($data['id']);
+        }
+    }
 
 }
