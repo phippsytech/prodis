@@ -8,51 +8,52 @@
   import DocumentGrid from "./DocumentGrid.svelte";
   import { SpinnerStore } from "@app/Overlays/stores.js";
 
-  let staff = [];
-  let staffList = [];
-  let selectedStaff = [];
+  let clients = [];
+  let participantList = [];
+  let selectedParticipant = [];
 
-  jspa("/Staff", "listStaff", {}).then((result) => {
-    staff = result.result;
+  jspa("/Participant", "listClients", {}).then((result) => {
+    clients = result.result;
 
-    staff.forEach((staffer) => {
-      if (staffer.archived != 1)
-        staffList.push({
-          option: staffer.first_name + " " + staffer.last_name,
-          value: staffer.id,
+    clients.forEach((client) => {
+      if (client.archived != 1)
+        participantList.push({
+          option: client.client_name,
+          value: client.client_id,
         });
     });
 
-    staffList.sort((a, b) => a.option.localeCompare(b.option));
+    participantList.sort((a, b) => a.option.localeCompare(b.option));
 
-    staffList = staffList;
+    participantList = participantList;
+    
   });
 
   let documents = [];
   let requestCounter = 0;
 
-  function loadDocuments(selectedStaff) {
+  function loadDocuments(selectedParticipant) {
     const currentRequest = ++requestCounter; // Increment counter on each call
-    if (selectedStaff.length === 0) {
+    if (selectedParticipant.length === 0) {
       documents = []; // Immediately clear documents if no staff selected
       return;
     }
 
-    jspa("/Document", "listDocumentsByStaffIds", {
-      staff_ids: selectedStaff,
+    jspa("/Document", "listDocumentsByParticipantIds", {
+      participant_ids: selectedParticipant,
     }).then((result) => {
       if (currentRequest === requestCounter) {
         // Check if this is the latest request
-        //documents = result.result;
+        documents = result.result;
 
         // this will sort the documents by expiry date
-        documents = result.result.sort((a, b) => {
-          if (!a.expiry_date) return 1; // Place documents without expiry date at the end
-          if (!b.expiry_date) return -1; // Place documents without expiry date at the end
-          const dateA = new Date(a.expiry_date);
-          const dateB = new Date(b.expiry_date);
-          return dateA - dateB;
-        });
+        // documents = result.result.sort((a, b) => {
+        //   if (!a.expiry_date) return 1; // Place documents without expiry date at the end
+        //   if (!b.expiry_date) return -1; // Place documents without expiry date at the end
+        //   const dateA = new Date(a.expiry_date);
+        //   const dateB = new Date(b.expiry_date);
+        //   return dateA - dateB;
+        // });
       }
     });
   }
@@ -76,7 +77,7 @@
   const debouncedLoadDocuments = debounce(loadDocuments, 50);
 
   // Reactive statement to call the debounced function
-  $: selectedStaff, debouncedLoadDocuments(selectedStaff);
+  $: selectedParticipant, debouncedLoadDocuments(selectedParticipant);
 
   const currentDate = new Date();
   const options = {
@@ -151,7 +152,7 @@
       </p>
     </div>
 
-    <CheckboxButtonGroup options={staffList} bind:values={selectedStaff} />
+    <CheckboxButtonGroup options={participantList} bind:values={selectedParticipant} />
   </div>
 </div>
 {#if documents.length > 0}
@@ -195,7 +196,7 @@
           out:slide={{ duration: 200 }}
           class={document.document_status === "Missing" ? "text-gray-400" : ""}
         >
-          <td class="p-2 text-left font-medium">{document.staff_name}</td>
+          <td class="p-2 text-left font-medium">{document.participant_name}</td>
           <td class="p-2 text-left font-medium">
             <div class="flex justify-between items-center">
               <div>
