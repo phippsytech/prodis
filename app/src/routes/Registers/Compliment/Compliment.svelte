@@ -15,7 +15,6 @@
     let compliment = {};
     let stored_compliment = {};
 
-    let showActionFields = false;
     let readOnly = false;
 
     let staffer = [];
@@ -35,10 +34,7 @@
             jspa("/Register/Compliment", "getCompliment", { id: params.id })
                 .then((result) => {
                     compliment = result.result;
-                    stored_compliment = Object.assign({}, compliment);;
-                    if(compliment.action_taken && compliment.staffs_id){
-                        showActionFields = true;
-                    }
+                    stored_compliment = Object.assign({}, compliment);
                 }).finally(() => {
                 })
                 .catch(() => {
@@ -63,15 +59,6 @@
     }
 
     $: {
-        if (!showActionFields) {
-            compliment.status = "not_acknowledged";
-            compliment.staffs_id = null;
-            compliment.acknowledgement_date = null;
-            compliment.action_taken = null;
-        }
-    }
-
-    $: {
         if (compliment.action_taken && compliment.staffs_id) {
             readOnly = true;
         } 
@@ -90,8 +77,6 @@
 
     function undo() {
         compliment = Object.assign({}, stored_compliment);
-        showActionFields = compliment.action_taken && compliment.staffs_id ? true : false;
-
     }
 
     const validations = [
@@ -168,7 +153,6 @@
 <ComplimentForm 
     bind:compliment={compliment}
     staffer={staffer}
-    bind:showActionFields
     {readOnly}
 />
 

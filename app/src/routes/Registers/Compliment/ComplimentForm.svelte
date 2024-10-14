@@ -9,10 +9,14 @@
 
     export let compliment;
     export let staffer = [];
-    export let showActionFields = false;
     export let readOnly = false;
 
+
+    console.log(readOnly)
 </script>
+<div class="mt-4 mb-2">
+    <h3 class="text-base font-fredoka-one-regular leading-6 text-gray-900 px-3" style="color: rgb(34, 0, 85);">Compliment</h3>
+</div>
 
 <div class="flex space-x-4">
     <div class="flex-1">
@@ -34,40 +38,29 @@
 </div>
 
 <span class="ml-2 text-xs text-gray-900/50">Compliment</span>
-{#if readOnly}
-    <RTE 
-        bind:content={compliment.description}
-    />
-{:else}
-    <RTEView
-        bind:content={compliment.description}
-    />
-{/if}
+
+<RTE 
+    bind:content={compliment.description}
+/>
+
 
 <Role roles={["admin"]}>
-    <div class="mt-2">
-        <label class="inline-flex items-center">
-            <input type="checkbox" bind:checked={showActionFields} class="form-checkbox" />
-            <span class="ml-2 text-xs">Action was taken for this compliment</span>
-        </label>
+    <div class="mt-4 mb-2">
+        <h3 class="text-base font-fredoka-one-regular leading-6 text-gray-900 px-3" style="color: rgb(34, 0, 85);">Action</h3>
     </div>
 
-    {#if showActionFields}
-        <div class="mt-2">
-            <FloatingTextArea 
-                bind:value={compliment.action_taken}
-                label="Action Taken"
-                placeholder="Indicate action taken by staff"
-                {readOnly}
-            /> 
-
-            <FloatingCombo 
-                bind:value={compliment.staffs_id}
-                items={staffer}
-                label="Acknowledging Staff"
-                placeholderText="Select or type staff name"
-                {readOnly}
-            />
-        </div>
-    {/if}
+    <div class="mt-2">
+        <FloatingCombo 
+            bind:value={compliment.staffs_id}
+            items={staffer}
+            label="Acknowledging Staff"
+            placeholderText="Select or type staff name"
+        />
+        <FloatingTextArea 
+            bind:value={compliment.action_taken}
+            label="Action Taken"
+            placeholder="Indicate action taken by staff"
+            {readOnly}
+        /> 
+    </div>
 </Role>
