@@ -3,6 +3,7 @@
   import { slide } from "svelte/transition";
   import { flip } from "svelte/animate";
   import { PlusIcon } from "heroicons-svelte/24/outline";
+  import Container from "@shared/Container.svelte";
   import Role from "@shared/Role.svelte";
   import { ModalStore } from "@app/Overlays/stores";
   import ServiceAgreement from "./ServiceAgreement.svelte";
@@ -10,13 +11,18 @@
   import { toastError, toastSuccess } from "@shared/toastHelper";
   import { isDate } from "@shared/validators";
   import createStore from "@shared/createStore";
-  import DraftServiceAgreement from "./DraftServiceAgreement.svelte";
+
   import ServiceAgreementSupportItem from "./ServiceAgreementSupportItem.svelte";
+
+  import Tabs from "./Tabs.svelte";
+  import Draft from "./Draft.svelte";
+  import Active from "./Active.svelte";
+  import Ended from "./Ended.svelte";
+  import Pending from "./Pending.svelte";
 
   export let client_id;
 
   let participant_id = client_id; // progressively renaming client_id to participant_id
-  let show_inactive_service_agreements = false;
 
   let service_agreement = {
     client_id: client_id, // TODO: remove this line once client_id is depricated
@@ -86,10 +92,18 @@
     ServiceAgreementStore.add(service_agreement);
   }
 
-  let displayServiceAgreement = false;
+  let selectedTab = { name: "Active" };
+  const tabs = [
+    // { name: "Active", count: 52, active: true },
 
-  function showGenerator() {
-    displayServiceAgreement = !displayServiceAgreement;
+    { name: "Draft", active: false },
+    { name: "Pending", active: false },
+    { name: "Active", active: true },
+    { name: "Ended", active: false },
+  ];
+
+  function handleTabSelected(event) {
+    selectedTab = event.detail.tab;
   }
 </script>
 
@@ -97,45 +111,27 @@
   <div class="flex justify-between sm:items-center mt-6 mb-1">
     <div class="flex sm:flex-row flex-col sm:items-center">
       <h3 class="text-slate-800 font-bold mx-2">Service Agreements</h3>
-      {#if !displayServiceAgreement}
-        <Role roles={["admin"]}>
-          <button
-            class="text-xs text-indigo-600 hover:underline text-left mx-2"
-            on:click={() => (displayServiceAgreement = true)}
-          >
-            <PlusIcon class="w-4 h-4 inline" /> Draft Service Agreement
-          </button>
-        </Role>
-      {/if}
     </div>
     <div class="flex sm:flex-row flex-col sm:items-center"></div>
   </div>
 
-  <DraftServiceAgreement bind:displayServiceAgreement />
+  <Tabs {tabs} on:tabSelected={handleTabSelected} />
 
-  <ServiceAgreementSupportItem />
-
-  {#each $ServiceAgreementStore as agreement, index (agreement.id)}
-    <div
-      animate:flip={{ duration: 350 }}
-      in:slide={{ duration: 200 }}
-      out:slide={{ duration: 200 }}
-    >
-      {#if agreement.is_active || (show_inactive_service_agreements && !agreement.is_active)}
-        <ServiceAgreement
-          service_agreement={agreement}
-          {ServiceAgreementStore}
-        />
+  <div class="bg-white rounded-md border border-slate-200">
+    {#if selectedTab}
+      {#if selectedTab.name === "Draft"}
+        <Draft {ServiceAgreementStore} {participant_id} />
       {/if}
-    </div>
-  {/each}
+      {#if selectedTab.name === "Pending"}
+        <Pending {ServiceAgreementStore} />
+      {/if}
+      {#if selectedTab.name === "Active"}
+        <Active {ServiceAgreementStore} />
+      {/if}
+
+      {#if selectedTab.name === "Ended"}
+        <Ended {ServiceAgreementStore} />
+      {/if}
+    {/if}
+  </div>
 </div>
-
-{#if hasInactiveAgreements}
-  <div class="flex justify-between sm:items-center mt-6 mb-1">
-    <div class="flex sm:flex-row flex-col sm:items-center">
-      <h3 class="text-slate-800 font-bold mx-2">Inactive Service Agreements</h3>
-    </div>
-    <div class="flex sm:flex-row flex-col sm:items-center"></div>
-  </div>
-{/if}

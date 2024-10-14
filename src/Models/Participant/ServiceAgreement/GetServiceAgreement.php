@@ -1,4 +1,5 @@
 <?php
+
 namespace NDISmate\Models\Participant\ServiceAgreement;
 
 use NDISmate\Utilities\ConvertFieldsToBoolean;
@@ -9,7 +10,7 @@ class GetServiceAgreement
     public function __invoke($data)
     {
         $bean = R::load('serviceagreements', $data['id']);
-        $bean = (new ConvertFieldsToBoolean)($bean, ['is_active']);
+        $bean = (new ConvertFieldsToBoolean)($bean, ['is_active', 'is_draft']);
         return $bean;
     }
 }

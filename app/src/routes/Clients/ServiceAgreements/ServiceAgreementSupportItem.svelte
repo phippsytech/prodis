@@ -3,7 +3,7 @@
   import { slide } from "svelte/transition";
   import { PlusIcon, XMarkIcon } from "heroicons-svelte/24/outline";
   import Role from "@shared/Role.svelte";
-  import NewServiceAgreementForm from "./NewServiceAgreementForm.svelte";
+
   import IconMenu from "@shared/PhippsyTech/svelte-iconmenu/IconMenu.svelte";
   import {
     EnvelopeIcon,
@@ -30,7 +30,7 @@
   }
 </script>
 
-<ul class=" bg-white rounded-xl border border-b w-full text-slate-800 mb-4">
+<ul class=" grid w-full text-slate-800">
   <li
     class=" group flex justify-between items-center px-4 py-2 focus:outline-none focus:ring-0 focus:bg-indigo-600 focus:text-slate-600 transition duration-500 border-b border-indigo-100 w-full
   gap-x-2"

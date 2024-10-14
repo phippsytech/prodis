@@ -1,4 +1,5 @@
 <?php
+
 namespace NDISmate\Models\Participant;
 
 use NDISmate\CORE\NewCustomModel;
@@ -26,6 +27,7 @@ class ServiceBooking extends NewCustomModel
             'xero_account_code' => [v::optional(v::stringType())],
             'is_active' => [v::boolVal()],
             'adjust_weekly_time' => [v::boolVal()],
+            'is_draft' => [v::boolVal()],
         ];
     }
 }
