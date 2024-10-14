@@ -60,7 +60,7 @@
           >{due.document}</td
         >
         <td class="whitespace-nowrap py-2 text-gray-900 text-left pl-0"
-          >{formatDate(due.expiry_date)}</td
+          >{formatDate(due.expired_at)}</td
         >
         <!-- <td class="whitespace-nowrap px-3 py-2 text-sm text-right">action</td> -->
       </tr>
