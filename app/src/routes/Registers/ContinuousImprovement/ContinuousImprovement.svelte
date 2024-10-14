@@ -68,10 +68,22 @@
     });
 
     const validations = [
-        { check: () => !continuous_improvement.involved_staffs_id || continuous_improvement.involved_staffs_id.length === 0, message: "Please select at least one involved staff member." },
-        { check: () => !continuous_improvement.involved_staffs_id || continuous_improvement.involved_staffs_id.length === 0, message: "Please select at least one involved staff member." },
-        { check: () => !continuous_improvement.date_of_suggestion, message: "Suggestion date must be provided." },
-        { check: () => !continuous_improvement.suggestion_details, message: "Suggestion details must be provided." },
+        { 
+            check: () => !continuous_improvement.involved_staffs_id || continuous_improvement.involved_staffs_id.length === 0, 
+            message: "Please select at least one involved staff member." 
+        },
+        { 
+            check: () => !continuous_improvement.involved_staffs_id || continuous_improvement.involved_staffs_id.length === 0, 
+            message: "Please select at least one involved staff member." 
+        },
+        { 
+            check: () => !continuous_improvement.date_of_suggestion, 
+            message: "Suggestion date must be provided." 
+        },
+        { 
+            check: () => !continuous_improvement.suggestion_details, 
+            message: "Suggestion details must be provided." 
+        },
         { 
             check: () => continuous_improvement.review_date && !continuous_improvement.implementing_staffs_id, 
             message: "Reviewer is required when review date is provided." 
@@ -79,6 +91,9 @@
         { 
             check: () => continuous_improvement.implementing_staffs_id && !continuous_improvement.review_date, 
             message: "Review date is required when there is a reviewer." 
+        },
+        { check: () => continuous_improvement.involved_staffs_id === continuous_improvement.implementing_staffs_id,
+            message: "Involved staff cannot be the same as implementing staff." 
         }
     ];
 
