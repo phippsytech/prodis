@@ -25,7 +25,7 @@
 </script>
 
 <FloatingMultiCombo
-    label="Staffs"
+    label="Staff"
     items={staffList}  
     bind:values={staff_ids} 
     placeholderText="Select or type staff name ..."
