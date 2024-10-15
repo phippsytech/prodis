@@ -50,10 +50,11 @@
             const complimentChanged = JSON.stringify(compliment) !== JSON.stringify(stored_compliment);
 
             ActionBarStore.set({
-                can_delete: false,
-                show: complimentChanged,  // Trigger the action bar on changes
+                can_delete: true,
+                show: true,  // display action bar by default
                 undo: () => undo(),
                 save: () => save(),
+                delete: () => deleteCompliment(),
             });
         }
     }
@@ -155,7 +156,7 @@
     staffer={staffer}
 />
 
-<Role roles={["admin"]}>
+<!-- <Role roles={["admin"]}>
     <div class="flex">
         <button 
             class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
@@ -164,4 +165,4 @@
             Delete
         </button>
     </div>
-</Role> 
+</Role>  -->
