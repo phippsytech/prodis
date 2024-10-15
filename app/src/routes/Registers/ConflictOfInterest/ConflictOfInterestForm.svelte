@@ -18,12 +18,7 @@
     export let readOnly = false;
 
     let conflictofinterestStatusSelectElement = null;
-
-    let conflictofinterestStatusOptions = [
-        { option: "Resolved", value: "resolved" },
-        { option: "Unresolved", value: "unresolved" }
-    ];
-
+    
     let typeList = [
         { option: "Organisational", value: "organisational" },
         { option: "Individual", value: "individual" },
@@ -56,6 +51,7 @@
 
 </script>
 
+<h3 class="text-base font-bold leading-6 text-gray-900 px-3 mt-4 mb-2">Details</h3>
 <Container>
     <div class="flex space-x-4 w-full mt-2">
         <div class="flex-1">
@@ -63,23 +59,16 @@
         </div>
         <div class="flex-1">
             <NewFloatingSelect
-                bind:value={conflictofinterest.status}
-                label="Status"
-                instruction="Set Status"
-                options={conflictofinterestStatusOptions}
+                bind:value={conflictofinterest.type}
+                label="Type"
+                instruction="Set conflict type"
+                options={typeList}
                 hideValidation={true}
             />
         </div>
     </div>
 </Container>
-<Container>
-    <div class="text-xs opacity-50 mb-2">Conflict Type</div> 
-    <div class="flex space-x-4 w-full mt-2">
-        <div class="flex-1">
-        <RadioButtonGroup options={typeList} bind:value={conflictofinterest.type}></RadioButtonGroup>
-    </div> 
-</Container>
-<h3 class="text-base font-fredoka-one-regular leading-6 text-gray-900 px-3" style="color: rgb(34, 0, 85);">Details</h3>
+
 <Container> 
     <div class="w-full">
         <NewFloatingSelect 
@@ -109,18 +98,8 @@
     </div>
 </Container>
 
-<h3 class="text-base font-fredoka-one-regular leading-6 text-gray-900 px-3" style="color: rgb(34, 0, 85);">Resolution</h3>
-<div class="flex flex-wrap gap-2 w-full md:w-auto">
-    <div class="w-full md:w-auto">
-        <FloatingDate label="Resolution Date" bind:value={conflictofinterest.date_resolved} />
-    </div>
-</div>
+<h3 class="text-base font-bold leading-6 text-gray-900 px-3 mt-4 mb-2">Resolution</h3>
 
 <div class="w-full">
-    <FloatingTextArea
-        bind:value={conflictofinterest.resolution}
-        label="Actions Taken"
-        placeholder="List actions taken to mitigate the conflict of interest."
-        style="height:150px"
-    />
+    <RTE bind:content={conflictofinterest.resolution }  />
 </div>

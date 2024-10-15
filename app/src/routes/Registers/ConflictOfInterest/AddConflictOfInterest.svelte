@@ -26,7 +26,6 @@
         { check: () => !conflictofinterest.staff_id , message: "Please select a staff." },
         { check: () => !conflictofinterest.parties_involved, message: "Parties Involved name must be provided." },
         { check: () => !conflictofinterest.description, message: "Details must be provided." },
-        { check: () => (conflictofinterest.date_resolved && !conflictofinterest.resolution) , message: "Resolution taken must be provided." },
         
     ];
 
@@ -47,9 +46,18 @@
         })
         .catch(() => {});
 
+
+    $: conflictofinterest.date_resolved = conflictofinterest.resolution ? new Date().toISOString().slice(0, 10) : conflictofinterest.date_resolved;
+    
     function addconflictofinterest() {
         if (!validate()) {
             return; 
+        }
+
+        if (conflictofinterest.date_resolved && conflictofinterest.resolution.trim() != "") {
+            conflictofinterest.status = 'resolved';
+        } else {
+            conflictofinterest.status = 'unresolved';   
         }
         
         jspa(
@@ -75,7 +83,7 @@
 
 <ConflictOfInterestForm bind:conflictofinterest />
 
-<div class="flex justify-between">
+<div class="flex justify-between mt-2">
     <span></span>
     <Button
         on:click={() => addconflictofinterest()}

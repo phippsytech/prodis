@@ -57,6 +57,7 @@
         mounted = true;
     });
 
+    $: conflictofinterest.date_resolved = conflictofinterest.resolution ? new Date().toISOString().slice(0, 10) : conflictofinterest.date_resolved;
 
     function validate() {
         for (const { check, message } of validations) {
@@ -77,10 +78,9 @@
         if (!validate()) {
             return; 
         }
-
         
         if (conflictofinterest.date_resolved && conflictofinterest.resolution.trim() != "") {
-            conflictofinterest.status = 'resolved';     
+            conflictofinterest.status = 'resolved';
         } else {
             conflictofinterest.status = 'unresolved';   
         }
@@ -101,7 +101,9 @@
                 toastSuccess("Conflict of Interest updated successfully.");
                 push("/registers/conflictofinterests");
             })
-            .catch(() => {});
+            .catch((error) => {
+                toastError(error.error_message);
+            });
     }
 
     function deleteConflictOfInterest() {
