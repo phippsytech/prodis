@@ -46,9 +46,6 @@
     >
     <div class="label-container flex justify-between items-center">
         <label for={inputId} class="block text-xs text-gray-900/50">{label}</label>
-        {#if value}
-            <div class="text-xs cursor-pointer" on:click={() => value = null}>clear</div>
-        {/if}
     </div>
         <input
             id={inputId}
