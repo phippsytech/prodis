@@ -66,7 +66,7 @@
   <Container>
     <div class="font-medium mb-2">Required documents</div>
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4 md:grid-cols-3">
-      {#each required_documents as document, index (index)}
+      {#each documents as document, index (index)}
         <div
           animate:flip={{ duration: 350 }}
           in:slide|global={{ duration: 50, delay: 10 * index }}
@@ -81,7 +81,7 @@
     </div>
   </Container>
 
-  <Container>
+  <!-- <Container>
     <div class="font-medium mb-2">Optional documents</div>
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4 md:grid-cols-3">
       {#each optional_documents as document, index (index)}
@@ -97,7 +97,7 @@
         </div>
       {/each}
     </div>
-  </Container>
+  </Container> -->
 {:else}
   <div class="text-gray p-4 bg-white rounded border border-gray-300">
     No documents found. The most likely cause is you have not added this staff
