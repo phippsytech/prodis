@@ -405,6 +405,12 @@
                   active: true,
                   roles: ["admin"],
                 },
+                {
+                  name: "Risks",
+                  url: "/registers/risks",
+                  active: true,
+                  roles: ["admin"],
+                },
               ];
             },
         },
@@ -439,6 +445,12 @@
                 {
                   name: "Trainings",
                   url: "/registers/trainings",
+                  active: true,
+                  roles: ["admin"],
+                },
+                {
+                  name: "Risks",
+                  url: "/registers/risks",
                   active: true,
                   roles: ["admin"],
                 },
@@ -478,6 +490,12 @@
             active: true,
             roles: ["admin"],
           },
+          {
+            name: "Risks",
+            url: "/registers/risks",
+            active: true,
+            roles: ["admin"],
+          },
         ];
       },
     },
@@ -511,6 +529,12 @@
           {
             name: "Trainings",
             url: "/registers/trainings",
+            active: true,
+            roles: ["admin"],
+          },
+          {
+            name: "Risks",
+            url: "/registers/risks",
             active: true,
             roles: ["admin"],
           },
@@ -550,6 +574,12 @@
             active: true,
             roles: ["admin"],
           },
+          {
+            name: "Risks",
+            url: "/registers/risks",
+            active: true,
+            roles: ["admin"],
+          },
         ];
       },
     },
@@ -583,6 +613,12 @@
           {
             name: "Trainings",
             url: "/registers/trainings",
+            active: true,
+            roles: ["admin"],
+          },
+          {
+            name: "Risks",
+            url: "/registers/risks",
             active: true,
             roles: ["admin"],
           },
