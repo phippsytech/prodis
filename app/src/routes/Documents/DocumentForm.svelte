@@ -2,54 +2,39 @@
   import FloatingInput from "@shared/PhippsyTech/svelte-ui/forms/FloatingInput.svelte";
   import FloatingTextArea from "@shared/PhippsyTech/svelte-ui/forms/FloatingTextArea.svelte";
   import RadioButtonGroup from "@shared/PhippsyTech/svelte-ui/forms/RadioButtonGroup.svelte";
-  import Toggle from "@shared/PhippsyTech/svelte-ui/forms/Toggle.svelte";
   import Container from "@shared/Container.svelte";
-  import { jspa } from "@shared/jspa";
   import CheckboxButtonGroup from "@shared/PhippsyTech/svelte-ui/forms/CheckboxButtonGroup.svelte";
-  import { debounce } from "lodash-es";
+  import { jspa } from "@shared/jspa";
 
   export let document;
-  export let selectedParticipant = [];
-  let participantIds = [];
-  let clients = [];
+  export let selectedParticipant = [];  // Coming from edit.svelte
   let participantList = [];
-  let requestCounter = 0;
+  let participantsLoaded = false;
+  let participantIds = [];  // To hold selected participant ids
 
-
+  // Fetch participants list (clients)
   jspa("/Participant", "listClients", {}).then((result) => {
-    clients = result.result;
-
+    let clients = result.result;
     clients.forEach((client) => {
-      if (client.archived != 1)
+      if (client.archived != 1) {
         participantList.push({
           option: client.client_name,
           value: client.client_id,
         });
+      }
     });
-
     participantList.sort((a, b) => a.option.localeCompare(b.option));
-
-    participantList = participantList;  
-    
+    participantsLoaded = true;  // Set this when participants are fully loaded
   });
 
-  $: {
-    if (participantIds.length > 0) {
-      selectedParticipant = [...participantIds];
-    }
-
-    if (selectedParticipant.length > 0) {
-      participantIds = [...selectedParticipant];
-
-      console.log('participantIds', participantIds);
-      
-    }
+  // Sync selectedParticipant with participantIds after both are available
+  $: if (participantsLoaded) {
+    selectedParticipant = [...selectedParticipant];
   }
-
-
 
 </script>
 
+<!-- Document Form Fields -->
 <FloatingInput
   label="Name"
   bind:value={document.name}
@@ -64,7 +49,6 @@
 
 <Container>
   <div class="text-sm font-medium mb-2">Collect Issuance/Expiry Date?</div>
-
   <div class="mb-2">
     <RadioButtonGroup
       options={[
@@ -82,19 +66,20 @@
         label="Years until expiry"
         bind:value={document.years_until_expiry}
         placeholder="eg: 1"
-        autofocus
       />
     </div>
   {/if}
-  <!-- <Toggle bind:value={document.collect_completion} label_on="Collect Completion Date" label_off="Collect Completion Date" />
-<Toggle bind:value={document.collect_expiry} label_on="Collect Expiry" label_off="Collect Expiry" /> -->
 </Container>
 
 <Container>
   <div class="text-sm font-medium mb-2">
     Collect this document for selected Participants?
   </div>
-  <CheckboxButtonGroup options={participantList} bind:values={participantIds} />
+
+  <!-- Render CheckboxButtonGroup only if participants are fully loaded -->
+  {#if participantsLoaded}
+    <CheckboxButtonGroup options={participantList} bind:values={selectedParticipant} />
+  {:else}
+    <p>Loading participants...</p>
+  {/if}
 </Container>
-
-

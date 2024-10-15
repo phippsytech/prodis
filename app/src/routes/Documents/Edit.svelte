@@ -43,16 +43,24 @@
       staff = result.result;
     });
 
+    // jspa("/Document/Participant", "listByDocumentId", {
+    //   document_id: document_id,
+    // }).then((result) => {
+    //   let participants = result.result;
+
+    //   selectedParticipant = participants.map(participant => participant.participant_id);
+
+    //   console.log('selectedParticipant2', selectedParticipant);
+    //   selectedParticipant = [... selectedParticipant];
+      
+    // });
+
     jspa("/Document/Participant", "listByDocumentId", {
       document_id: document_id,
     }).then((result) => {
       let participants = result.result;
-
       selectedParticipant = participants.map(participant => participant.participant_id);
-
-      console.log('selectedParticipant2', selectedParticipant);
-      selectedParticipant = [... selectedParticipant];
-      
+      selectedParticipant = [...selectedParticipant];  // Spread to trigger reactivity
     });
 
 
