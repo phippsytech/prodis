@@ -17,6 +17,7 @@
 
   let staff = [];
   let selectedParticipant = [];
+  let storedParticipant = [];
   let mounted = false;
 
 
@@ -43,17 +44,7 @@
       staff = result.result;
     });
 
-    // jspa("/Document/Participant", "listByDocumentId", {
-    //   document_id: document_id,
-    // }).then((result) => {
-    //   let participants = result.result;
-
-    //   selectedParticipant = participants.map(participant => participant.participant_id);
-
-    //   console.log('selectedParticipant2', selectedParticipant);
-    //   selectedParticipant = [... selectedParticipant];
-      
-    // });
+  
 
     jspa("/Document/Participant", "listByDocumentId", {
       document_id: document_id,
@@ -61,7 +52,10 @@
       let participants = result.result;
       selectedParticipant = participants.map(participant => participant.participant_id);
       selectedParticipant = [...selectedParticipant];  // Spread to trigger reactivity
-    });
+      
+    }).finally(()=> {
+      storedParticipant = [...selectedParticipant];  
+    })
 
 
 
@@ -74,6 +68,7 @@
 
   function undo() {
     document = Object.assign({}, stored_document);
+    selectedParticipant = [...storedParticipant];  
   }
 
   function save() {
