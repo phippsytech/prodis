@@ -22,6 +22,7 @@
   let filters = [];
 
   let trainings = [];
+  let stored_trainings = [];
 
   let staffs;
   let staff_id;
@@ -37,6 +38,7 @@
   jspa("/Register/Training", "listTrainings", {})
     .then((result) => {
       trainings = result.result;
+      stored_trainings = [...trainings];
       // sort the trainings reverse chronologically
       trainings.sort(function (a, b) {
         let aDateTime = Date.parse(a.date);
@@ -62,9 +64,16 @@
         (training) => Date.parse(training.date) >= Date.parse(filter.start_date)
       );
     }
+    if (filter.end_date) {
+      trainings = trainings.filter(
+        (training) => Date.parse(training.completion_date) >= Date.parse(filter.end_date)
+      );
+      console.log(trainings)
+    }
   }
   function clearFilter(filter) {
     filter = {};
+    trainings = [...stored_trainings];
   }
 
   function showFilter() {
