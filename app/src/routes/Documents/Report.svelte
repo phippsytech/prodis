@@ -148,7 +148,7 @@
         Required Documents Report
       </div>
       <p class=" text-sm text-gray-700">
-        Select the staff you want to view required documents for.
+        Select the Participant you want to view required documents for.
       </p>
     </div>
 
@@ -162,10 +162,10 @@
         <div
           class="text-2xl sm:truncate tracking-tight font-fredoka-one-regular text-indigo-950"
         >
-          Staff Documents
+          Participant Documents
         </div>
         <p class=" text-sm text-gray-700">
-          Here are the required documents for the selected staff as of {formattedDate}.
+          Here are the required documents for the selected Participant as of {formattedDate}.
         </p>
       </div>
 

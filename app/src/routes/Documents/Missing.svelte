@@ -26,7 +26,7 @@
     Missing Documents
   </div>
   <p class=" text-sm text-gray-700">
-    Staff who do not have documents that have been marked required.
+    Participants who do not have documents that have been available for them.
   </p>
 </div>
 
