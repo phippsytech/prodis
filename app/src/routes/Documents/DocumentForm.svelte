@@ -4,8 +4,50 @@
   import RadioButtonGroup from "@shared/PhippsyTech/svelte-ui/forms/RadioButtonGroup.svelte";
   import Toggle from "@shared/PhippsyTech/svelte-ui/forms/Toggle.svelte";
   import Container from "@shared/Container.svelte";
+  import { jspa } from "@shared/jspa";
+  import CheckboxButtonGroup from "@shared/PhippsyTech/svelte-ui/forms/CheckboxButtonGroup.svelte";
+  import { debounce } from "lodash-es";
 
   export let document;
+  export let selectedParticipant = [];
+  let participantIds = [];
+  let clients = [];
+  let participantList = [];
+  let requestCounter = 0;
+
+
+  jspa("/Participant", "listClients", {}).then((result) => {
+    clients = result.result;
+
+    clients.forEach((client) => {
+      if (client.archived != 1)
+        participantList.push({
+          option: client.client_name,
+          value: client.client_id,
+        });
+    });
+
+    participantList.sort((a, b) => a.option.localeCompare(b.option));
+
+    participantList = participantList;  
+    
+  });
+
+  $: {
+    if (participantIds.length > 0) {
+      selectedParticipant = [...participantIds];
+    }
+
+    if (selectedParticipant.length > 0) {
+      participantIds = [...selectedParticipant];
+
+      console.log('participantIds', participantIds);
+      
+    }
+  }
+
+
+
 </script>
 
 <FloatingInput
@@ -50,26 +92,9 @@
 
 <Container>
   <div class="text-sm font-medium mb-2">
-    Collect this document from Therapists?
+    Collect this document for selected Participants?
   </div>
-  <RadioButtonGroup
-    options={[
-      { value: "required", option: "Required" },
-      { value: "optional", option: "Optional" },
-      { value: "do_not_collect", option: "Do not collect" },
-    ]}
-    bind:value={document.collect_from_therapist}
-  />
+  <CheckboxButtonGroup options={participantList} bind:values={participantIds} />
 </Container>
 
-<Container>
-  <div class="text-sm font-medium mb-2">Collect this document from SIL?</div>
-  <RadioButtonGroup
-    options={[
-      { value: "required", option: "Required" },
-      { value: "optional", option: "Optional" },
-      { value: "do_not_collect", option: "Do not collect" },
-    ]}
-    bind:value={document.collect_from_sil}
-  />
-</Container>
+

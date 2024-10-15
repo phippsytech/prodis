@@ -14,6 +14,8 @@
   };
   let stored_document = {};
 
+  let selectedParticipant = [];
+
   let mounted = false;
 
   onMount(async () => {
@@ -30,6 +32,7 @@
 
   function save() {
     jspa("/Document", "addDocument", document).then((result) => {
+      console.log(selectedParticipant);
       // Make a copy of the object
       stored_document = Object.assign({}, document);
       push("/documents");
@@ -47,6 +50,7 @@
       });
     }
   }
+
 </script>
 
 <div
@@ -55,4 +59,4 @@
 >
   Add Document
 </div>
-<DocumentForm bind:document />
+<DocumentForm bind:document {selectedParticipant}  />

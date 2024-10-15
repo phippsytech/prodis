@@ -25,7 +25,7 @@
 
     participantList.sort((a, b) => a.option.localeCompare(b.option));
 
-    participantList = participantList;
+    participantList = participantList;  
     
   });
 
