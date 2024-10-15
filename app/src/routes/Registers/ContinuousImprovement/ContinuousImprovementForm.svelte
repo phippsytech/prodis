@@ -10,7 +10,7 @@
     export let staffer = [];
 </script>
 <div class="mt-4 mb-2">
-    <h3 class="text-base font-fredoka-one-regular leading-6 text-gray-900 px-3" style="color: rgb(34, 0, 85);">Suggestion</h3>
+    <h3 class="text-base font-bold leading-6 text-gray-900 px-3">Suggestion</h3>
 </div>
 <div class="flex space-x-4 w-full">
     <div class="flex-1">
@@ -36,7 +36,7 @@
 
 <div transition:slide={{ duration: 150 }}>
     <div class="mt-4 mb-2">
-        <h3 class="text-base font-fredoka-one-regular leading-6 text-gray-900 px-3" style="color: rgb(34, 0, 85);">Action</h3>
+        <h3 class="text-base font-bold leading-6 text-gray-900 px-3">Action</h3>
     </div>
 
     <FloatingTextArea 
@@ -64,7 +64,7 @@
     </div>
 
     <div class="mt-4 mb-2">
-        <h3 class="text-base font-fredoka-one-regular leading-6 text-gray-900 px-3" style="color: rgb(34, 0, 85);">Review</h3>
+        <h3 class="text-base font-bold leading-6 text-gray-900 px-3">Review</h3>
     </div>
 
     <div class="mt-2">
