@@ -28,10 +28,17 @@
 
   function undo() {
     document = Object.assign({}, stored_document);
+    selectedParticipant = [];
   }
 
   function save() {
     jspa("/Document", "addDocument", document).then((result) => {
+      let doc = result.result;
+      if (selectedParticipant.length > 0) {
+        jspa("/Document/Participant", "addDocumentParticipant", {document_id: doc.id, participant_ids: selectedParticipant} ).then((result) => {
+
+        });
+      }
       console.log(selectedParticipant);
       // Make a copy of the object
       stored_document = Object.assign({}, document);
@@ -59,4 +66,4 @@
 >
   Add Document
 </div>
-<DocumentForm bind:document {selectedParticipant}  />
+<DocumentForm bind:document bind:selectedParticipant />
