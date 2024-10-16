@@ -2,7 +2,7 @@
     import { onMount } from "svelte";
     import { jspa } from "@shared/jspa.js";
     import RiskForm from "./RiskForm.svelte";
-
+    import { toastSuccess, toastError } from "@shared/toastHelper.js";
     import { ActionBarStore } from "@app/Layout/BottomNav/stores.js";
     import { BreadcrumbStore } from "@shared/stores.js";
 
@@ -15,7 +15,12 @@
 
     let readOnly = false;
 
-    BreadcrumbStore.set({ path: [{ url: "/registers", name: "Registers" }] });
+    BreadcrumbStore.set({ 
+        path: [
+            { url: "/registers", name: "Registers" },
+            { url: "/registers/risks", name: "Risks" }
+        ] 
+    });
 
     let mounted = false;
     let show = false;
@@ -40,17 +45,23 @@
     }
 
     function save() {
+        if (risk.resolution && risk.resolution.trim() !== "") {
+            risk.date_resolved = new Date().toISOString().split('T')[0];
+            risk.status = "resolved";
+        }
         jspa("/Register/Risk", "updateRisk", risk)
-            .then((result) => {
-                risk = result.result;
-                stored_risk = Object.assign({}, risk);
-                // let result = result.result.id;
+            .then(() => {
+                push("/registers/risks/");
+                toastSuccess("Risk saved successfully");
             })
-            .catch(() => {});
+            .catch(() => {
+                toastError("Failed to save risk");
+            });
     }
 
     $: {
         if (mounted) {
+            const valueChanged = JSON.stringify(risk) !== JSON.stringify(stored_risk);
             ActionBarStore.set({
                 can_delete: false,
                 show: !(JSON.stringify(risk) === JSON.stringify(stored_risk)),

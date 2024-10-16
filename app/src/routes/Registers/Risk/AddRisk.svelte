@@ -2,14 +2,21 @@
     import { push } from "svelte-spa-router";
     import { BreadcrumbStore } from "@shared/stores.js";
     import { jspa } from "@shared/jspa.js";
+    import { toastSuccess, toastError } from "@shared/toastHelper.js";
     import Button from "@shared/PhippsyTech/svelte-ui/Button.svelte";
     import RiskForm from "./RiskForm.svelte";
 
     let risk = {};
 
     risk.status = "open";
+    risk.resolution = null;
 
-    BreadcrumbStore.set({ path: [{ url: "/registers", name: "Registers" }] });
+    BreadcrumbStore.set({ 
+        path: [
+            { url: "/registers", name: "Registers" },
+            { url: "/registers/risks", name: "Risks" },
+        ] 
+    });
 
     risk.staff_id = null;
 
@@ -20,14 +27,28 @@
         })
         .catch(() => {});
 
-    function addRisk() {
-        jspa("/Register/Risk", "addRisk", risk)
-            .then((result) => {
-                let risk_id = result.result.id;
-                push("/registers/risks/" + risk_id);
-            })
-            .catch(() => {});
-    }
+        function addRisk() {
+            if (risk.resolution && risk.resolution.trim() !== "") {
+                risk.date_resolved = new Date().toISOString().split('T')[0]; 
+                risk.status = "resolved";
+            } else {
+                risk.date_resolved = null;
+            }
+
+            if (risk.staff_id && risk.type && risk.description) {
+                risk.date_identified = new Date().toISOString().split('T')[0]; 
+                risk.status = risk.status !== "resolved" ? "open" : risk.status;
+            }
+
+            jspa("/Register/Risk", "addRisk", risk)
+                .then(() => {
+                    push("/registers/risks/");
+                    toastSuccess("Risk added successfully");
+                })
+                .catch(() => {
+                    toastError("Failed to add risk");
+                });
+        }
 </script>
 
 <div class="mb-2 mt-2" style="color: rgb(34, 0, 85);">
