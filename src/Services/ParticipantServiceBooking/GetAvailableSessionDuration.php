@@ -10,13 +10,12 @@ class GetAvailableSessionDuration
     {
         $exclude_unbilled = $data['exclude_unbilled'] ?? false;
 
-        // get the budget for the service
-
-        // validate that the service_booking_id are set
-        if (!isset($data['service_booking_id']) || !is_numeric($data['service_booking_id']) ) {
+        // validate that the service_booking_id is set
+        if (!isset($data['service_booking_id']) || !is_numeric($data['service_booking_id'])) {
             throw new \Exception('service_booking_id is required');
         }
 
+        // Fetch service booking details
         $servicebookings_bean = R::getRow(
             'SELECT 
                 serviceagreements.service_agreement_signed_date,
@@ -31,10 +30,11 @@ class GetAvailableSessionDuration
                 services.record_travelled_kilometers as record_travelled_kilometers,
                 servicebookings.budget as budget,
                 servicebookings.plan_manager_id as plan_manager_id,
-                servicebookings.kilometer_budget as kilometer_budget
+                servicebookings.kilometer_budget as kilometer_budget,
+                servicebookings.include_travel as include_travel
             FROM servicebookings 
-            JOIN services on (services.id = servicebookings.service_id) 
-            JOIN serviceagreements on (serviceagreements.id = servicebookings.plan_id)
+            JOIN services ON (services.id = servicebookings.service_id) 
+            JOIN serviceagreements ON (serviceagreements.id = servicebookings.plan_id)
             WHERE servicebookings.id=:service_booking_id',
             [
                 ':service_booking_id' => $data['service_booking_id']
@@ -45,7 +45,7 @@ class GetAvailableSessionDuration
             throw new \Exception('Service Agreement Signed Date Not Found');
         }
 
-        // now get the amount spent on the service
+        // Get the amount spent on the service excluding distance travelled
         $query =
             "SELECT 
                 ROUND(
@@ -60,7 +60,9 @@ class GetAvailableSessionDuration
             FROM timetrackings 
             JOIN services ON services.id = timetrackings.service_id
             WHERE service_booking_id = :service_booking_id
-            AND session_date >= :budget_start_date";
+            AND session_date >= :budget_start_date
+            AND unit_type IS NULL";
+
 
         $params = [
             ':service_booking_id' => $data['service_booking_id'],
@@ -72,22 +74,38 @@ class GetAvailableSessionDuration
         }
 
         $timetrackings_bean = R::getRow($query, $params);
-
+        
         $spent = $timetrackings_bean['spent'] ?? 0;
 
-        if ($servicebookings_bean['budget'] > 0) {
-            $remaining_budget = $servicebookings_bean['budget'] - $spent;
-        } else {
-            $remaining_budget = 0;
+        return [
+            'available_session_duration' => $this->calculateBudget($servicebookings_bean, $spent),
+            'plan_manager_id' => $servicebookings_bean['plan_manager_id'],
+            'record_travelled_kilometers' => $servicebookings_bean['record_travelled_kilometers'],
+        ];
+    }
+
+    // Function to adjust the budget by deducting kilometers
+    private function calculateBudget($servicebooking, $spent)
+    {
+        $adjusted_budget = $servicebooking['budget'];
+
+        // remove km budget on the budget
+        if (
+            $servicebooking['include_travel'] ||
+            $servicebooking['kilometer_budget'] != null ||
+            $servicebooking['kilometer_budget'] > 0
+          ){
+            $adjusted_budget = $servicebooking['budget'] - $servicebooking['kilometer_budget'];
+          }
+
+        // check if the adjusted budget is less than the spent
+        if ($adjusted_budget < $spent) {
+            return 0;
         }
 
-        $available_session_duration = round(($remaining_budget / $servicebookings_bean['service_rate']) * 60);
+        $adjusted_budget = $adjusted_budget - $spent;
 
-        return
-            [
-                'available_session_duration' => $available_session_duration,
-                'plan_manager_id' => $servicebookings_bean['plan_manager_id'],
-                'record_travelled_kilometers' => $servicebookings_bean['record_travelled_kilometers'],
-            ];
+        // Calculate available session duration in minutes
+        return round(($adjusted_budget / $servicebooking['service_rate']) * 60);
     }
 }
