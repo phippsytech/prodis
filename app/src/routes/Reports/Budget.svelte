@@ -59,19 +59,11 @@
             participant_id: client.client_id,
           }).then((result) => {
             // filter out inactive services
-            const filteredResult = result.result.filter(
-              (service) => {
-                return (
-                  service.is_active === true &&
-            service.service_agreement_end_date &&
-            service.service_agreement_end_date >= today
-              );
-              }
-            );
+            const servicebookings = result.result;
 
-            if (filteredResult.length > 0) {
-            clients[index].services = filteredResult;
-            client.services = filteredResult;
+            if (servicebookings.length > 0) {
+            clients[index].services = servicebookings;
+            client.services = servicebookings;
             console.log(client);
             clientList = [...clientList, client];
 
