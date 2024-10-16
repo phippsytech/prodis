@@ -33,7 +33,8 @@ class ListDocumentsByParticipantId
                     d.id, 
                     d.name, 
                     d.description,
-                    d.date_collection_option
+                    d.date_collection_option,
+                    pd.expired_at
                 FROM documents d
                 JOIN documentparticipants dp ON d.id = dp.document_id
                 LEFT JOIN participantdocuments pd ON d.id = pd.document_id AND dp.participant_id = pd.participant_id
