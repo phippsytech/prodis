@@ -23,14 +23,12 @@ class ListDueDocuments
             FROM participantdocuments
             JOIN documents ON (participantdocuments.document_id = documents.id)
             JOIN clients ON (clients.id = participantdocuments.participant_id)
-            WHERE participantdocuments.expired_at BETWEEN LAST_DAY(NOW()) + INTERVAL 1 DAY 
-                  AND LAST_DAY(NOW() + INTERVAL 1 MONTH)
+            WHERE participantdocuments.expired_at BETWEEN CURDATE() 
+                  AND CURDATE() + INTERVAL 1 MONTH
             ORDER BY clients.name'
         );
         
-
-        // if (!$bean->id) return ["http_code"=>404, "error_message"=>"Not found."];
-
+        
  
 
         return $beans;
