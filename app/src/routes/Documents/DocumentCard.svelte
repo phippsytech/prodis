@@ -23,12 +23,7 @@
       {#if document.date_collection_option == "expires"}
         <div class="text-xs">Collect Expiry Date</div>
       {/if}
-      {#if document.collect_from_therapist}<div class="text-xs">
-          Therapist: {document.collect_from_therapist}
-        </div>{/if}
-      {#if document.collect_from_sil}<div class="text-xs">
-          SIL: {document.collect_from_sil}
-        </div>{/if}
+
     </span>
   </div>
 </div>
