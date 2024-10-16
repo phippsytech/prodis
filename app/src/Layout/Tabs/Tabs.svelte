@@ -510,27 +510,21 @@
             active: true,
             roles: ["admin"],
           },
+          // {
+          //   name: "Rules",
+          //   url: "/credentials/rules",
+          //   active: true,
+          //   roles: ["admin"],
+          // },
+          // {
+          //   name: "Verify",
+          //   url: "/credentials/verify",
+          //   active: true,
+          //   roles: ["admin"],
+          // },
           {
-            name: "Rules",
-            url: "/credentials/rules",
-            active: true,
-            roles: ["admin"],
-          },
-          {
-            name: "Verify",
-            url: "/credentials/verify",
-            active: true,
-            roles: ["admin"],
-          },
-          {
-            name: "Missing",
-            url: "/credentials/missing",
-            active: true,
-            roles: ["admin"],
-          },
-          {
-            name: "Expired",
-            url: "/credentials/expired",
+            name: "Report",
+            url: "/credentials/report",
             active: true,
             roles: ["admin"],
           },
@@ -541,11 +535,17 @@
             roles: ["admin"],
           },
           {
-            name: "Report",
-            url: "/credentials/report",
+            name: "Expired",
+            url: "/credentials/expired",
             active: true,
             roles: ["admin"],
           },
+          {
+            name: "Missing",
+            url: "/credentials/missing",
+            active: true,
+            roles: ["admin"],
+          }
         ];
       },
     },
