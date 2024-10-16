@@ -16,7 +16,8 @@ class GetDocument
                 id,
                 details,
                 vultr_storage_ref,
-                document_date
+                document_date,
+                expired_at
             FROM participantdocuments 
             WHERE participant_id=:participant_id
                 AND document_id=:document_id
@@ -26,7 +27,7 @@ class GetDocument
                 ":document_id" => $data["document_id"]
             ]
         );
-
+        
         return $bean;
     }
 }

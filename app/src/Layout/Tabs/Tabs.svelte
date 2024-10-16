@@ -60,6 +60,13 @@
             roles: ["stakeholder", "house", "therapist", "admin"],
           },
           {
+            name: "Documents",
+            url: "/clients/" + params.client_id + "/documents",
+            active: true,
+            roles: ["house", "therapist", "admin"],
+            
+          },
+          {
             name: "Case Notes",
             url: "/clients/" + params.client_id + "/casenotes",
             active: true,
@@ -546,6 +553,43 @@
             active: true,
             roles: ["admin"],
           },
+        ];
+      },
+    },
+    {
+      "/documents": (params) => {
+        tabs = [
+          {
+            name: "Documents",
+            url: "/documents/list",
+            active: true,
+            roles: ["admin"],
+          },
+          {
+            name: "Reports",
+            url: "/documents/report",
+            active: true,
+            roles: ["admin"],
+          },
+          {
+            name: "Due",
+            url: "/documents/due",
+            active: true,
+            roles: ["admin"],
+          },
+          {
+            name: "Expired",
+            url: "/documents/expired",
+            active: true,
+            roles: ["admin"],
+          },
+          {
+            name: "Missing",
+            url: "/documents/missing",
+            active: true,
+            roles: ["admin"],
+          },
+
         ];
       },
     },
