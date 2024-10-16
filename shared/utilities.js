@@ -379,3 +379,8 @@ export function getQueryParams() {
 export function formatPrettyName(str) {
     return str?.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
 }
+
+export function getDateOnlyTimestamp(dateString) {
+    const date = new Date(dateString);
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
+}

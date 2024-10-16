@@ -11,7 +11,7 @@
     import Role from "@shared/Role.svelte";
     import RTE from "@shared/RTE/RTE.svelte";
     import { onMount } from "svelte";
-    import { convertMinutesToHoursAndMinutes } from "@shared/utilities";
+    import { convertMinutesToHoursAndMinutes, getDateOnlyTimestamp } from "@shared/utilities";
     import { jspa } from "@shared/jspa.js";
 
     export let timetracking = {};
@@ -24,6 +24,7 @@
     let plan_manager_id = null;
     let stored_service_id;
     let hasActiveServiceAgreement = true;
+    let hasDuplicate = false;
 
     // are these two the same thing?
     let serviceBooking = {};
@@ -32,12 +33,16 @@
     let client_on_hold = false;
 
     if (timetracking.invoice_batch) {
-        readOnly = "true";
+        readOnly = true;
     }
 
     onMount(() => {
         getAvailableSessionDuration();
         stored_service_id = timetracking.service_booking_id;
+        
+        if (timetracking.client_id) {
+            loadServices(timetracking.client_id);
+        }
     });
 
     $: console.log("Time Tracking: " + JSON.stringify(timetracking));
@@ -66,15 +71,6 @@
             service_booking_id: timetracking.service_booking_id,
         })
             .then((result) => {
-                console.log(
-                    "test timetracking: " + timetracking.service_booking_id,
-                );
-
-                console.log("store service id: " + stored_service_id);
-                console.log(
-                    "timetracking service id: " +
-                        timetracking.service_booking_id,
-                );
                 available_session_duration =
                     result.result.available_session_duration;
 
@@ -120,7 +116,6 @@
     }
 
     function checkIfHasActiveServiceAgreement(service_agreement) {
-        console.log("Checking for active agreements...", service_agreement); // Debug log
         return (
             service_agreement?.some((agreement) => agreement.is_active) || false
         );
@@ -129,6 +124,104 @@
     function formatErrorMessage(error_message, index) {
         // the error_message is a string with semicolons.  Split it into an array and return the first element
         return error_message.split(";")[index];
+    }
+
+    // load services data here
+    let stored_client_id = null;
+    let serviceBookingList = [];
+    let activeServiceBookings = [];
+
+    // Reactive block to load services when client_id changes
+    $: {
+        if (timetracking.client_id && timetracking.client_id != stored_client_id) {
+            timetracking.service_booking_id = null; // reset service_booking_id
+            loadServices(timetracking.client_id);
+        }
+    }
+
+    function loadServices(client_id) {
+        stored_client_id = client_id;
+        
+        jspa("/Participant/ServiceBooking", "listServiceBookings", {
+            participant_id: client_id,
+        })
+            .then((result) => {
+                serviceBookingList = []; // clear the service list
+                let serviceBookings = result.result;
+                activeServiceBookings = [];
+                hasDuplicate = false; // Flag to track if there's any duplicate service_id
+
+                // Map to track the occurrence of each service_id
+                let serviceIdCount = {};
+
+                // First pass to count occurrences of each service_id
+                serviceBookings.forEach((serviceBooking) => {
+                    if (!serviceBooking.archived &&
+                        serviceBooking.is_active &&
+                        !isExpired(serviceBooking) &&
+                        serviceBooking.service_agreement_is_active) {
+                        if (serviceIdCount[serviceBooking.service_id]) {
+                            serviceIdCount[serviceBooking.service_id]++;
+                        } else {
+                            serviceIdCount[serviceBooking.service_id] = 1;
+                        }
+                    }
+                });
+
+                // Check for duplicates
+                for (let service_id in serviceIdCount) {
+                    if (serviceIdCount[service_id] > 1) {
+                        hasDuplicate = true;
+                        break;
+                    }
+                }
+
+                // Second pass to populate serviceBookingList
+                serviceBookings.forEach((serviceBooking) => {
+                    let options = {
+                        option: serviceBooking.code,
+                        value: serviceBooking.id,
+                        selected: false,
+                    };
+
+                    if (serviceBooking.id == timetracking.service_booking_id) {
+                        options.selected = true;
+                    }
+
+                    // Filter valid service bookings
+                    if (
+                        !serviceBooking.archived &&
+                        serviceBooking.is_active &&
+                        !isExpired(serviceBooking) &&
+                        serviceBooking.service_agreement_is_active
+                    ) {
+                        activeServiceBookings.push(serviceBooking); // Store active service bookings
+                        serviceBookingList.push(options);
+                    }
+                });
+
+                // Sort the service bookings by name
+                serviceBookingList.sort((a, b) =>
+                    a.option.localeCompare(b.option)
+                );
+
+                // Automatically select a service if only one active service exists
+                if (activeServiceBookings.length === 1) {
+                    timetracking.service_booking_id = activeServiceBookings[0].id;
+                }
+            })
+            .catch((error) => {
+                console.error("Error loading services:", error);
+            });
+    }
+
+    function isExpired(serviceBooking) {
+        const start = new Date(serviceBooking.service_agreement_signed_date).getTime();
+        const end = new Date(serviceBooking.service_agreement_end_date).getTime();
+        const current = getDateOnlyTimestamp(new Date());
+
+        // Ensure the current date is within the interval
+        return current <= start || current >= end;
     }
 </script>
 
@@ -264,11 +357,13 @@
         </div>
     </div>
 {:else}
-    <ServiceButtonGroup
-        bind:service_booking_id={timetracking.service_booking_id}
-        bind:client_id={timetracking.client_id}
-        {readOnly}
-    />
+    {#if !hasDuplicate}
+        <ServiceButtonGroup
+            bind:service_booking_id={timetracking.service_booking_id}
+            bind:serviceBookingList={serviceBookingList}
+            {readOnly}
+        />
+    {/if}
 
     {#if timetracking?.client_id && !hasActiveServiceAgreement}
         <div class="rounded-md bg-red-50 p-4 mb-4">
@@ -295,7 +390,6 @@
             </div>
         </div>
     {/if}
-
     {#if timetracking.session_date > service_agreement.service_agreement_end_date || timetracking.session_date < service_agreement.service_agreement_signed_date}
         <div class="rounded-md bg-red-50 p-4">
             <div class="flex">
@@ -321,13 +415,8 @@
             </div>
         </div>
     {:else}
-        <!-- <ServiceSelector
-            bind:service_booking_id={timetracking.service_booking_id}
-            bind:client_id={timetracking.client_id}
-            {readOnly}
-        /> -->
 
-        {#if timetracking.staff_id && timetracking.client_id && timetracking.service_booking_id && timetracking.service_booking_id != "Choose service"}
+        {#if timetracking.staff_id && timetracking.client_id && timetracking.service_booking_id && timetracking.service_booking_id != "Choose service" && !hasDuplicate}
             <Container>
                 <ServiceBooking bind:service_booking={serviceBooking} />
             </Container>
@@ -406,5 +495,21 @@
                 </div>
             </Container>
         {/if}
+    {/if}
+
+    {#if hasDuplicate}
+        <div class="rounded-md bg-red-50 p-4">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clip-rule="evenodd" />
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <h3 class="text-sm font-semibold text-red-800">Service setup error detected:</h3>
+                    <p class="text-sm text-red-800">Duplicate support items found. Please ask your manager to correct the support items for this participant to proceed with billing.</p>
+                </div>
+            </div>
+        </div>
     {/if}
 {/if}

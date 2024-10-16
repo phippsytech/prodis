@@ -3,6 +3,7 @@
     import FloatingDate from "@shared/PhippsyTech/svelte-ui/forms/FloatingDate.svelte";
     import FileUploader from "@shared/FileUploader.svelte";
     import FloatingSelect from "@shared/PhippsyTech/svelte-ui/forms/FloatingSelect.svelte";
+    import NewFloatingSelect  from "@shared/PhippsyTech/svelte-ui/forms/NewFloatingSelect.svelte";
     // import Camera from '@shared/PhippsyTech/svelte-ui/Camera.svelte';
     import { jspa } from "@shared/jspa.js";
     import { SpinnerStore } from "@app/Overlays/stores.js";
@@ -17,14 +18,17 @@
         vultr_storage_ref: null,
 
         date_collection_option: "do_not_collect",
-        credential_date: null,
+        expired_at: null,
     };
 
     let isReplacing = false;
 
+    
+
     // if(props.expires == null && props.collect_expiry){
     //     props.expires = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`
     // }
+
 
     function openFile(vultr_storage_ref) {
         SpinnerStore.set({ show: true, message: "Getting File" });
@@ -82,6 +86,7 @@
     }
 </script>
 
+
 <FloatingInput
     label="Details"
     bind:value={props.details}
@@ -109,7 +114,7 @@
                     d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"
                 ></path>
             </svg>
-            View Credential
+            View Document
         </div>
         <button
             on:click={replaceFile}
@@ -132,8 +137,8 @@
 {/if} -->
 
 {#if props.date_collection_option == "issued"}
-    <FloatingDate label="Issued" bind:value={props.credential_date} />
+    <FloatingDate label="Issued" bind:value={props.document_date} />
 {/if}
 {#if props.date_collection_option == "expires"}
-    <FloatingDate label="Expires" bind:value={props.credential_date} />
+    <FloatingDate label="Expires" bind:value={props.expired_at} />
 {/if}

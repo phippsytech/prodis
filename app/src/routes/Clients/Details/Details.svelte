@@ -10,7 +10,6 @@
   import ClientReports from "@app/routes/Clients/Reports/ClientReports.svelte";
   import Container from "@shared/Container.svelte";
   import ClientServiceAgreements from "@app/routes/Clients/ServiceAgreements/ServiceAgreements.svelte";
-
   import ClientStakeholderList from "@app/routes/Clients/Stakeholders/Stakeholders.svelte";
   import FloatingInput from "@shared/PhippsyTech/svelte-ui/forms/FloatingInput.svelte";
   import FloatingTextArea from "@shared/PhippsyTech/svelte-ui/forms/FloatingTextArea.svelte";
@@ -153,8 +152,8 @@
   placeholder="eg: Chris Person"
   {readOnly}
 />
-<div class="flex justify-between gap-x-2">
-  <div class="flex-grow">
+<div class="flex gap-x-2 flex-wrap">
+  <div class="w-full sm:w-auto sm:flex-1">
     <FloatingInput
       bind:value={client.ndis_number}
       label="NDIS Number"
@@ -162,8 +161,17 @@
       {readOnly}
     />
   </div>
-  <div class="flex-grow-0">
+  <div
+    class="flex flex-wrap xs:flex-nowrap gap-2 justify-between w-full sm:w-auto"
+  >
     <FloatingDate
+      class="w-full sm:w-auto"
+      bind:value={client.ndis_plan_start_date}
+      label="NDIS Plan Start Date"
+      {readOnly}
+    />
+    <FloatingDate
+      class="w-full sm:w-auto"
       bind:value={client.ndis_plan_end_date}
       label="NDIS Plan End Date"
       {readOnly}

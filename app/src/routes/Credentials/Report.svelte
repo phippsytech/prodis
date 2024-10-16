@@ -7,10 +7,15 @@
     import { debounce } from "lodash-es";
     import CredentialGrid from "./CredentialGrid.svelte";
     import { SpinnerStore } from "@app/Overlays/stores.js";
+    import { BreadcrumbStore } from "@shared/stores.js";
 
     let staff = [];
     let staffList = [];
     let selectedStaff = [];
+
+    BreadcrumbStore.set({
+        path: [{ url: null, name: "Credentials" }],
+    });
 
     jspa("/Staff", "listStaff", {}).then((result) => {
         staff = result.result;

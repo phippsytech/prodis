@@ -26,7 +26,7 @@ class GetS3Object
             // Return the object content
             return base64_encode($fileContent);
         } catch (S3Exception $e) {
-            throw new Exception($e->getAwsErrorMessage() . ' ' . __FILE__ . ' ' . __LINE__);
+                throw new Exception($e->getAwsErrorMessage() . ' ' . __FILE__ . ' ' . __LINE__);
         } catch (Exception $e) {
             // Handle other exceptions
             throw $e;

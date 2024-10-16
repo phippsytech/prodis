@@ -42,11 +42,11 @@
     {/if}
 {:else}
     <div
-        class="rounded-md px-3 pb-1 pt-2.5 shadow-sm ring-1 ring-inset ring-indigo-100 focus-within:ring-2 focus-within:ring-indigo-600 bg-white mb-2"
+        class="{$$restProps.class || ''} rounded-md px-3 pb-1 pt-2.5 shadow-sm ring-1 ring-inset ring-indigo-100 focus-within:ring-2 focus-within:ring-indigo-600 bg-white mb-2"
     >
-        <label for={inputId} class="block text-xs text-gray-900/50"
-            >{label}</label
-        >
+    <div class="label-container flex justify-between items-center">
+        <label for={inputId} class="block text-xs text-gray-900/50">{label}</label>
+    </div>
         <input
             id={inputId}
             type="date"

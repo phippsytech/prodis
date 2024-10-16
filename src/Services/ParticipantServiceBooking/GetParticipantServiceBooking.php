@@ -52,6 +52,7 @@ class GetParticipantServiceBooking
                     ANY_VALUE(services.budget_display) AS budget_display,
                     ANY_VALUE(services.billing_code) AS billing_code,
                     ANY_VALUE(services.billing_unit) AS billing_unit,
+                    ANY_VALUE(servicebookings.kilometer_budget) AS kilometer_budget,
                     MAX(timetrackings.session_date) AS last_session_date,
                     COALESCE(SUM(timetrackings.session_duration), 0 ) AS session_duration,
                     ANY_VALUE(servicebookings.rate) AS rate,

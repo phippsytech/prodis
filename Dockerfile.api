@@ -52,8 +52,8 @@ COPY ./servers/ /var/www/prodis/servers/
 COPY ./templates/ /var/www/prodis/templates/
 COPY ./webhooks/ /var/www/prodis/webhooks/
 COPY ./init.php /var/www/prodis/init.php
-# COPY ./composer.json /var/www/prodis/composer.json
-# COPY ./composer.lock /var/www/prodis/composer.lock
+COPY ./composer.json /var/www/prodis/composer.json
+COPY ./composer.lock /var/www/prodis/composer.lock
 COPY ./autoload.php /var/www/prodis/autoload.php
 COPY ./env.php /var/www/prodis/env.php
 COPY ./watch_and_restart.sh /var/www/prodis/watch_and_restart.sh
@@ -79,5 +79,9 @@ EXPOSE 443
 #CMD ["supervisord"]
 
 
+# Start supervisord, which will also start cron
+CMD ["supervisord", "-c", "/etc/supervisor/conf.d/prodis.conf"]
+
+
 # Start cron service and supervisord
-CMD ["sh", "-c", "cron && supervisord -c /etc/supervisor/conf.d/prodis.conf"]
+# CMD ["sh", "-c", "cron && supervisord -c /etc/supervisor/conf.d/prodis.conf"]

@@ -11,8 +11,9 @@ class Billing
         $data['claim_type'] = 'TRAN';
         $data['unit_type'] = 'km';
 
-        if (isset($data['service_id']))
-            $data['rate'] = $this->getRate($data['service_id']);
+        if (isset($data['service_id'])) {
+            $data['rate'] = $this->getRateFromService($data['service_id']);
+        }
 
         (new TimeTracking)->create($data);
     }
@@ -20,8 +21,9 @@ class Billing
     function addDuration($data)
     {
         $data['claim_type'] = 'TRAN';
-        if (isset($data['service_id']))
-            $data['rate'] = $this->getRate($data['service_id']);
+        if (isset($data['service_booking_id'])) {
+            $data['rate'] = $this->getRate($data['service_booking_id']);
+        }
 
         (new TimeTracking)->create($data);
     }
@@ -43,8 +45,9 @@ class Billing
         $timetracking->session_date = $data['session_date'];
         $timetracking->session_duration = $data['session_duration'];
 
-        if (isset($data['service_id']))
-            $timetracking->rate = $this->getRate($data['service_id']);
+        if (isset($data['service_id'])) {
+            $data['rate'] = $this->getRateFromService($data['service_id']);
+        }
 
         R::store($timetracking);
     }
@@ -66,8 +69,9 @@ class Billing
         $timetracking->session_date = $data['session_date'];
         $timetracking->session_duration = $data['session_duration'];
 
-        if (isset($data['service_id']))
-            $timetracking->rate = $this->getRate($data['service_id']);
+        if (isset($data['service_booking_id'])) {
+            $timetracking->rate = $this->getRate($data['service_booking_id']);
+        }
 
         R::store($timetracking);
     }
@@ -78,7 +82,20 @@ class Billing
         R::hunt('timetrackings', 'trip_id=:trip_id', [':trip_id' => $trip_id]);
     }
 
-    function getRate($service_id)
+    function getRate($service_booking_id)
+    {
+        $rate = R::getCell(
+            'SELECT 
+                rate
+            FROM servicebookings
+            WHERE id = :service_booking_id',
+            [':service_booking_id' => $service_booking_id]
+        );
+
+        return $rate;
+    }
+
+    function getRateFromService($service_id)
     {
         $rate = R::getCell(
             'SELECT 

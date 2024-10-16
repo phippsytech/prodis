@@ -1,6 +1,6 @@
 <script>
     import { push } from "svelte-spa-router";
-    import TimeEntryForm from "./TimeEntryForm.svelte";
+    import BillableForm from "./BillableForm.svelte";
     import { jspa } from "@shared/jspa.js";
     import {
         StafferStore,
@@ -69,8 +69,8 @@
     Add Billable
 </div>
 
-<TimeEntryForm
+<BillableForm
     bind:timetracking
     bind:available_session_duration
     bind:budget_exceeded
-/>
+/> 

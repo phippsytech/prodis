@@ -1,4 +1,5 @@
 <?php
+
 namespace NDISmate\Models\Staff;
 
 use Respect\Validation\Validator as v;
@@ -37,7 +38,6 @@ class GetStaffer
                 staffs.postcode,
                 staffs.address_line_1,
                 staffs.groups,
-                staffs.google_folder,
                 staffs.staff_role,
                 staffs.status
             FROM staffs 
