@@ -96,6 +96,7 @@ $app->post('/Client/Report', new ControllerFactory(\NDISmate\Controllers\ClientR
 $app->post('/Client/Staff', new ControllerFactory(\NDISmate\Controllers\ClientStaffController::class));
 $app->post('/Client/Stakeholder', new ControllerFactory(\NDISmate\Controllers\ClientStakeholderController::class));
 $app->post('/DocumentType', new ControllerFactory(\NDISmate\Controllers\DocumentTypeController::class));
+$app->post('/Document/Participant', new ControllerFactory(\NDISmate\Controllers\DocumentParticipantController::class));
 $app->post('/Geo', new ControllerFactory(\NDISmate\Controllers\GeoController::class));
 $app->post('/Participant/Document', new ControllerFactory(\NDISmate\Controllers\ParticipantDocumentController::class));
 
@@ -129,7 +130,7 @@ $app->post('/Billing', new ControllerFactory(\NDISmate\Models\Billing::class));
 
 
 $app->post('/Credential', new ControllerFactory(\NDISmate\Models\Credential::class));
-
+$app->post('/Document', new ControllerFactory(\NDISmate\Models\Document::class));
 $app->post('/Invoice', new ControllerFactory(\NDISmate\Models\Invoice::class));
 $app->post('/Invoice/NDIA/PaymentRequestStatus', new ControllerFactory(\NDISmate\Models\Invoice\NDIA\PaymentRequestStatus::class));
 $app->post('/Invoice/NDIA/Remittance', new ControllerFactory(\NDISmate\Models\Invoice\NDIA\Remittance::class));

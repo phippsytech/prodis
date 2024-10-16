@@ -1,7 +1,7 @@
 <script>
     import { onMount } from "svelte";
     import { push, pop, replace } from "svelte-spa-router";
-    import TimeEntryForm from "./TimeEntryForm.svelte";
+    import BillableForm from "./BillableForm.svelte";
     import { jspa } from "@shared/jspa.js";
     import { BreadcrumbStore } from "@shared/stores.js";
     import { ActionBarStore } from "@app/Layout/BottomNav/stores.js";
@@ -11,6 +11,7 @@
     let timetracking = {};
     let stored_timetracking = {};
     let mounted = false;
+    let budget_exceeded = false;
 
     onMount(() => {
         BreadcrumbStore.set({
@@ -112,6 +113,12 @@
             );
         let can_delete = params.id != null;
 
+        if (
+            budget_exceeded
+        ) {
+            show = false;
+        }
+
         if (mounted) {
             ActionBarStore.set({
                 can_delete: can_delete,
@@ -130,14 +137,9 @@
     Edit Billable
 </div>
 {#if timetracking.id}
-    <TimeEntryForm bind:timetracking mode="edit" />
+    <BillableForm 
+        bind:timetracking={timetracking}
+        bind:stored_edit_timetracking={stored_timetracking}
+        bind:budget_exceeded
+        mode="edit" />
 {/if}
-
-<!-- <style>
-    :root {
-        --toastContainerTop: auto;
-        --toastContainerRight: auto;
-        --toastContainerBottom: 8rem;
-        --toastContainerLeft: calc(50vw - 8rem);
-    }
-</style> -->

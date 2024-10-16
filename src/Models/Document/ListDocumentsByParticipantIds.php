@@ -1,6 +1,6 @@
 <?php
 
-namespace NDISmate\Models\Participant\Document;
+namespace NDISmate\Models\Document;
 
 use Respect\Validation\Validator as v;
 use \NDISmate\CORE\CRUD;
@@ -21,16 +21,15 @@ class ListDocumentsByParticipantIds
 
         // Create the placeholders for participant IDs
         $placeholders = implode(',', array_fill(0, count($data['participant_ids']), '?'));
-
+        
         // Prepare the participant IDs as parameters for binding
         $params = $data['participant_ids'];
-
+        
         $sql = "SELECT 
         s.participant_id,
         s.participant_name,
         c.id AS document_id,
         c.name AS document_name,
-        c.years_until_expiry,
         c.collect_from_sil AS requirement_status,
         CASE 
             WHEN c.date_collection_option = 'do_not_collect' THEN 'do_not_collect'
@@ -51,7 +50,7 @@ class ListDocumentsByParticipantIds
         sc.vultr_storage_ref AS file_reference,
         IF(sc.id IS NULL AND c.collect_from_sil = 'required', 'Missing', 'Provided') AS document_status
     FROM 
-        (SELECT id as participant_id, name as participant_name FROM participants WHERE id IN ($placeholders)) s
+        (SELECT id as participant_id, name as participant_name FROM clients WHERE id IN ($placeholders)) s
     LEFT JOIN 
     documents c ON c.collect_from_sil = 'required'
         
@@ -62,7 +61,7 @@ class ListDocumentsByParticipantIds
 
         // Execute the prepared statement with the participant IDs as parameters
         $beans = R::getAll($sql, $params);
-
+        
         return ['http_code' => 200, 'result' => $beans];
     }
 }

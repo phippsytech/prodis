@@ -49,7 +49,7 @@
 
         jspa(endpoint, action, { staff_id: staff_id })
             .then((result) => {
-                clientList = []; 
+                clientList = [];
                 clients = result.result;
 
                 clients.forEach((client) => {
@@ -77,8 +77,8 @@
             on_hold = client.on_hold == "1";
         }
     }
+    
 </script>
-
 
 <FloatingCombo
     label="Client"

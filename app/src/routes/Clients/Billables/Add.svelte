@@ -1,5 +1,5 @@
 <script>
-    import TimeEntryForm from "../../Billables/TimeEntryForm.svelte";
+    import BillableForm from "./BillableForm.svelte";
     import { push } from "svelte-spa-router";
     import { onMount } from "svelte";
     import { jspa } from "@shared/jspa.js";
@@ -69,8 +69,7 @@
     Add Billable Item
 </h2>
 <!-- <div class="text-2xl sm:truncate sm:text-3xl sm:tracking-tight font-fredoka-one-regular " style="color:#220055;">Add Billable Item</div> -->
-
-<TimeEntryForm
+<BillableForm
     bind:timetracking
     bind:available_session_duration
     bind:budget_exceeded

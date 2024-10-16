@@ -421,8 +421,8 @@ export default {
 
 
 
-    '/documenttypes': wrap({
-        asyncComponent: () => import('./routes/DocumentTypes/List.svelte'),
+    '/documents': wrap({
+        asyncComponent: () => import('./routes/Documents/List.svelte'),
         conditions: [
             (detail) => {
                 replace(detail.location + '/list')
@@ -430,21 +430,34 @@ export default {
         ]
     }),
 
-    '/documenttypes/add': wrap({
-        asyncComponent: () => import('./routes/DocumentTypes/Add.svelte')
-    }),
-
-    '/documenttypes/list': wrap({
-        asyncComponent: () => import('./routes/DocumentTypes/List.svelte')
+    '/documents/add': wrap({
+        asyncComponent: () => import('./routes/Documents/Add.svelte')
     }),
 
 
-
-    '/documenttypes/:document_type_id': wrap({
-        asyncComponent: () => import('./routes/DocumentTypes/Edit.svelte')
+    '/documents/list': wrap({
+        asyncComponent: () => import('./routes/Documents/List.svelte')
     }),
 
+    '/documents/missing': wrap({
+        asyncComponent: () => import('./routes/Documents/Missing.svelte')
+    }),
 
+    '/documents/expired': wrap({
+        asyncComponent: () => import('./routes/Documents/Expired.svelte')
+    }),
+
+    '/documents/due': wrap({
+        asyncComponent: () => import('./routes/Documents/Due.svelte')
+    }),
+
+    '/documents/report': wrap({
+        asyncComponent: () => import('./routes/Documents/Report.svelte')
+    }),
+
+    '/documents/:document_id': wrap({
+        asyncComponent: () => import('./routes/Documents/Edit.svelte')
+    }),
 
 
 
@@ -666,6 +679,24 @@ export default {
     '/clients/:client_id/settings': wrap({
         asyncComponent: () => import('./routes/Clients/Settings/Settings.svelte')
     }),
+
+
+
+
+
+
+
+
+'/clients/:client_id/documents': wrap({
+        asyncComponent: () => import('./routes/Clients/Documents/Documents.svelte')
+    }),
+
+
+
+
+
+
+
 
     '/settings': wrap({
         asyncComponent: () => import('./routes/Settings/Settings.svelte')
