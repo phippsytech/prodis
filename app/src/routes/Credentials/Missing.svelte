@@ -2,8 +2,13 @@
     import { push } from "svelte-spa-router";
     import { slide } from "svelte/transition";
     import { jspa } from "@shared/jspa";
+    import { BreadcrumbStore } from "@shared/stores.js";
 
     let missingList = [];
+
+    BreadcrumbStore.set({
+        path: [{ url: null, name: "Credentials" }],
+    });
 
     jspa("/Staff/Credential", "listMissingCredentials", {}).then((result) => {
         missingList = result.result;

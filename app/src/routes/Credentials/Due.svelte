@@ -4,8 +4,13 @@
     import { slide } from "svelte/transition";
     import { jspa } from "@shared/jspa";
     import { formatDate } from "@shared/utilities.js";
-
+    import { BreadcrumbStore } from "@shared/stores.js";
+    
     let dueList = [];
+
+    BreadcrumbStore.set({
+        path: [{ url: null, name: "Credentials" }],
+    });
 
     jspa("/Staff/Credential", "listDueCredentials", {}).then((result) => {
         dueList = result.result;
@@ -42,7 +47,7 @@
         </tr>
     </thead>
     <tbody class="divide-y divide-gray-200 bg-white">
-        {#each dueList as due, index (due.id)}
+        {#each dueList as due, index (due.credential_id)}
             <tr
                 in:slide={{ duration: 200 }}
                 out:slide={{ duration: 200 }}
