@@ -31,7 +31,8 @@ class UploadParticipantDocumentFile
             // get the client name
             $clientName = R::getCell('SELECT name FROM clients WHERE id=:client_id', [":client_id" => $data['participant_id']]);
             
-
+            // get the credential name
+            $documentName = R::getCell('SELECT name FROM documents WHERE id=:id', [":id" => $data['document_id']]);
             // Split the string at the first comma
             $parts = explode(',', $data['base64_file']);
 
@@ -40,14 +41,15 @@ class UploadParticipantDocumentFile
 
 
             $fileContent = base64_decode($base64String);
-            $fileName = date("Y-m-d") . "_" . $clientName ;
+            $md5Hash = md5($fileContent);
+            $fileName = $md5Hash . '-' . date("Y-m-d") . "_" . $clientName . "_" . $documentName;
 
             if ($data['file_extension']) {
                 $fileName .= "." . $data['file_extension'];
             }
 
-            $md5Hash = md5($fileContent);
-            $fileName = $md5Hash . '-' . $fileName;
+          
+
 
             (new PutS3Object)([
                 'bucket' => VULTR_BUCKET,

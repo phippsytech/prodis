@@ -23,7 +23,8 @@ class AddParticipantDocument
                     'participant_id' => $data['participant_id'],
                     'file_extension' => $data['file_extension'],
                     'document_date' => $data['document_date'],
-                    'expired_at' => $data['expired_at']
+                    'expired_at' => $data['expired_at'],
+                    'document_id' => $data['document_id']
                 ]);
 
                 $data['vultr_storage_ref'] = $vultrStorageRef;
