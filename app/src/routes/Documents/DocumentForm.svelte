@@ -11,6 +11,7 @@
   let participantList = [];
   let participantsLoaded = false;
   let participantIds = [];  // To hold selected participant ids
+  let label = 'Select All';
 
   // Fetch participants list (clients)
   jspa("/Participant", "listClients", {}).then((result) => {
@@ -30,6 +31,24 @@
   // Sync selectedParticipant with participantIds after both are available
   $: if (participantsLoaded) {
     selectedParticipant = [...selectedParticipant];
+  }
+
+  function selectAllParticipants()
+  {
+    if (label == 'Select All') {
+      selectedParticipant = participantList.map((participant) => participant.value);
+    } else if (label == 'Deselect All') {
+      selectedParticipant = [];
+      label = "Select All";
+    }
+   
+  }
+
+
+  $: {
+    if (participantsLoaded && selectedParticipant.length === participantList.length) { 
+      label = "Deselect All";
+    }
   }
 
 </script>
@@ -72,8 +91,10 @@
 </Container>
 
 <Container>
-  <div class="text-sm font-medium mb-2">
-    Collect this document for selected Participants?
+  <div class="text-sm font-medium mb-2">Collect this document for selected Participants?</div>
+
+  <div class="flex justify-end mb-2">
+    <button on:click={selectAllParticipants} class="text-sm text-blue-700">{label}</button>
   </div>
 
   <!-- Render CheckboxButtonGroup only if participants are fully loaded -->
