@@ -45,7 +45,7 @@
         <tr
           in:slide={{ duration: 200 }}
           out:slide={{ duration: 200 }}
-          on:click={() => push("/staff/" + missing.participant_id + "/documents")}
+          on:click={() => push("/clients/" + missing.participant_id + "/documents")}
           class="px-6 py-2 hover:bg-indigo-600 hover:text-white focus:outline-none focus:ring-0 focus:bg-gray-200 focus:text-gray-600 cursor-pointer {missingList.length -
             1 ==
           index
