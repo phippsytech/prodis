@@ -1,4 +1,5 @@
 <?php
+
 namespace NDISmate\Models\Participant\ServiceBooking;
 
 use RedBeanPHP\R as R;
@@ -24,6 +25,8 @@ class ListServiceBookings
                     ANY_VALUE(servicebookings.include_travel) AS include_travel,
                     ANY_VALUE(servicebookings.budget) AS budget,
                     ANY_VALUE(servicebookings.budget_start_date) AS budget_start_date,
+                    ANY_VALUE(servicebookings.kilometer_budget) AS kilometer_budget,
+                    ANY_VALUE(servicebookings.max_claimable_travel_duration) AS max_claimable_travel_duration,
                     ANY_VALUE(services.budget_display) AS budget_display,
                     ANY_VALUE(services.billing_code) AS billing_code,
                     ANY_VALUE(services.billing_unit) AS billing_unit,

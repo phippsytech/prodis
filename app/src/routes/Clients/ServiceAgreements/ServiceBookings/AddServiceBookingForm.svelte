@@ -33,24 +33,12 @@
     }
   }
 
-  $: {
-    if (props.mode == "add") {
-      props.allocated_funding = props.budget;
-    }
-  }
+  // $: {
+  //   if (props.mode == "add") {
+  //     props.allocated_funding = props.budget;
+  //   }
+  // }
 </script>
-
-<div class="flex items-center mb-2">
-  <input
-    type="checkbox"
-    id="isActive"
-    bind:checked={props.is_active}
-    class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-  />
-  <label for="isActive" class="ml-2 text-sm font-medium text-gray-900"
-    >Active</label
-  >
-</div>
 
 <div class="flex justify-between gap-x-2">
   <div class="flex-grow">
@@ -65,13 +53,13 @@
   </div>
 </div>
 
-<!-- <FloatingInput
-    bind:value={props.allocated_funding}
-    label="Total Allocated Funding"
-    placeholder="eg: 12000.00"
-/> -->
+<FloatingInput
+  bind:value={props.allocated_funding}
+  label="Total Allocated Funding"
+  placeholder="eg: 12000.00"
+/>
 
-{#if props.mode == "update"}
+<!-- {#if props.mode == "update"}
   <div class="flex justify-between gap-x-2">
     <div class="flex-grow">
       <FloatingInput
@@ -88,7 +76,7 @@
       />
     </div>
   </div>
-{/if}
+{/if} 
 
 {#if props.mode == "add"}
   <div class="flex justify-between gap-x-2">
@@ -108,7 +96,7 @@
     </div>
   </div>
 {/if}
-
+-->
 <!-- <FloatingInput
     bind:value={props.xero_account_code}
     label="Xero Account Code"

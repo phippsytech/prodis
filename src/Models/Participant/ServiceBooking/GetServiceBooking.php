@@ -1,4 +1,5 @@
 <?php
+
 namespace NDISmate\Models\Participant\ServiceBooking;
 
 use NDISmate\Utilities\ConvertFieldsToBoolean;

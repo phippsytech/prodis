@@ -29,6 +29,7 @@
   import FileUploader from "@shared/FileUploader.svelte";
   import { formatCurrency } from "@shared/utilities.js";
   import AddServiceBookingForm from "./ServiceBookings/AddServiceBookingForm.svelte";
+  import DraftServiceBookings from "./DraftServiceBookings.svelte";
 
   import { haveCommonElements } from "@shared/utilities.js";
   import { ModalStore } from "@app/Overlays/stores";
@@ -38,17 +39,15 @@
 
   import { writable, derived } from "svelte/store";
 
-  export let service_agreement;
+  // export let service_agreement;
 
   export let ServiceAgreementStore;
 
-  $: console.log(ServiceAgreementStore);
-
   $: roles = $RolesStore;
 
-  export let displayServiceAgreement = false;
+  // export let displayServiceAgreement = false;
 
-  export let props = {};
+  // export let props = {};
 
   export let participant_id;
 
@@ -62,41 +61,22 @@
     // },
   ];
 
-  const DraftServiceBookingsStore = createStore(
-    "/Participant/DraftServiceBooking",
-    {
-      list: "listDraftServiceBookings",
-      add: "addDraftServiceBooking",
-      update: "updateDraftServiceBooking",
-      delete: "deleteDraftServiceBooking",
-    }
-  );
+  // const DraftServiceBookingsStore = createStore(
+  //   "/Participant/DraftServiceBooking",
+  //   {
+  //     list: "listDraftServiceBookings",
+  //     add: "addDraftServiceBooking",
+  //     update: "updateDraftServiceBooking",
+  //     delete: "deleteDraftServiceBooking",
+  //   }
+  // );
 
   const draftAgreement = derived(
     ServiceAgreementStore,
     ($ServiceAgreementStore) => {
-      return $ServiceAgreementStore.filter((agreement) => agreement.is_draft);
+      return $ServiceAgreementStore.find((agreement) => agreement.is_draft);
     }
   );
-
-  // const ServiceAgreementStore = createStore(
-  //   "/Participant/ServiceAgreement",
-  //   {
-  //     list: "listServiceAgreementsByParticipantId",
-  //     add: "addServiceAgreement",
-  //     update: "updateServiceAgreement",
-  //     delete: "deleteServiceAgreement",
-  //   }
-  // );
-
-  // $: $ServiceAgreementStore,
-  //   ServiceAgreementStore.set(
-  //     $ServiceAgreementStore
-  //       .slice()
-  //       .sort((a, b) =>
-  //         a.is_active === b.is_active ? 0 : a.is_active ? -1 : 1
-  //       )
-  //   );
 
   function addDraftServiceAgreement() {
     ServiceAgreementStore.add({
@@ -105,12 +85,6 @@
       is_active: false,
     });
   }
-
-  //   onMount(() => {
-  //     DraftServiceBookingsStore.load({
-  //       service_agreement_id: service_agreement.id,
-  //     });
-  //   });
 
   function validateField(field, errorMessage) {
     if (field == null || field == "") {
@@ -122,97 +96,59 @@
     return field;
   }
 
-  function validateDraftServiceBooking() {
-    service_booking.service_id = validateField(
-      service_booking.service_id,
-      "Please select a service."
-    );
+  // function validateDraftServiceBooking() {
+  //   service_booking.service_id = validateField(
+  //     service_booking.service_id,
+  //     "Please select a service."
+  //   );
 
-    service_booking.budget = validateField(
-      service_booking.budget,
-      "Please enter a valid number for the budget."
-    );
-    if (service_booking.budget === false) return false;
+  //   service_booking.budget = validateField(
+  //     service_booking.budget,
+  //     "Please enter a valid number for the budget."
+  //   );
+  //   if (service_booking.budget === false) return false;
 
-    service_booking.kilometer_budget = validateField(
-      service_booking.kilometer_budget,
-      "Please enter a valid number for the kilometer budget."
-    );
-    if (service_booking.kilometer_budget === false) return false;
+  //   service_booking.kilometer_budget = validateField(
+  //     service_booking.kilometer_budget,
+  //     "Please enter a valid number for the kilometer budget."
+  //   );
+  //   if (service_booking.kilometer_budget === false) return false;
 
-    service_booking.max_claimable_travel_duration = validateField(
-      service_booking.max_claimable_travel_duration,
-      "Please enter a valid number for the maximum claimable travel duration."
-    );
-    if (service_booking.max_claimable_travel_duration === false) return false;
-  }
+  //   service_booking.max_claimable_travel_duration = validateField(
+  //     service_booking.max_claimable_travel_duration,
+  //     "Please enter a valid number for the maximum claimable travel duration."
+  //   );
+  //   if (service_booking.max_claimable_travel_duration === false) return false;
+  // }
 
-  function showDraftServiceBooking() {
-    let service_booking = {
-      plan_id: service_agreement.id,
-      client_id: participant_id,
-      participant_id: participant_id,
-      mode: "add",
-      budget_start_date: service_agreement.service_agreement_signed_date,
-    };
+  // function addDraftServiceBooking(service_booking) {
+  //   if (validateDraftServiceBooking() == false) {
+  //     return;
+  //   }
+  //   DraftServiceBookingsStore.add(service_booking, true);
+  // }
 
-    const stored_service_booking = Object.assign({}, service_booking);
+  // function updateDraftServiceBooking(service_booking) {
+  //   if (validateDraftServiceBooking() == false) {
+  //     return;
+  //   }
 
-    ModalStore.set({
-      label: "Add Service",
-      show: true,
-      props: stored_service_booking,
-      component: EditDraftServiceBookingForm,
-      action_label: "Add",
-      action: () => addDraftServiceBooking(stored_service_booking),
-    });
-  }
+  //   DraftServiceBookingsStore.updateItem(service_booking, true).then(() => {
+  //     toastSuccess("Service updated successfully.");
+  //   });
+  // }
 
-  function editDraftServiceBooking(service_booking) {
-    if (haveCommonElements(roles, ["serviceagreement.modify"])) {
-      service_booking.mode = "update";
+  // function deleteDraftServiceBooking(service_booking) {
+  //   DraftServiceBookingsStore.remove(service_booking);
+  // }
 
-      const stored_service_booking = Object.assign({}, service_booking);
-
-      ModalStore.set({
-        label: "Update Service",
-        show: true,
-        props: stored_service_booking,
-        component: EditDraftServiceBookingForm,
-        action_label: "Update",
-        action: () => updateDraftServiceBooking(stored_service_booking),
-        delete: () => deleteDraftServiceBooking(stored_service_booking),
-      });
-    }
-  }
-
-  function addDraftServiceBooking(service_booking) {
-    if (validateDraftServiceBooking() == false) {
-      return;
-    }
-    DraftServiceBookingsStore.add(service_booking, true);
-  }
-
-  function updateDraftServiceBooking(service_booking) {
-    if (validateDraftServiceBooking() == false) {
-      return;
-    }
-
-    DraftServiceBookingsStore.updateItem(service_booking, true).then(() => {
-      toastSuccess("Service updated successfully.");
-    });
-  }
-
-  function deleteDraftServiceBooking(service_booking) {
-    DraftServiceBookingsStore.remove(service_booking);
-  }
-
-  function cancelDraftServiceAgreement(id) {
-    ServiceAgreementStore.remove({ id: id });
+  function cancelDraftServiceAgreement(draftAgreement) {
+    console.log(draftAgreement);
+    ServiceAgreementStore.remove(draftAgreement);
   }
 </script>
 
-{#if !draftAgreement}
+{#if !$draftAgreement}
   <div class="rounded-md text-slate-400 px-4 pb-2 pt-3">
     <button
       class="text-sm text-indigo-600 hover:underline text-left mx-2"
@@ -275,92 +211,8 @@
       </div>
     </li>
 
-    <li
-      class="bg-white flex justify-between items-center px-2 py-2 border-b border-indigo-100 w-full gap-x-2"
-    >
-      <div class="flex-grow">
-        <div
-          class="grid grid-cols-12 gap-x-2 items-center w-full text-xs text-slate-400 font-semibold"
-        >
-          <div class="col-span-2 px-2">
-            Service Name
-            <span class="text-xs">(Rate)</span>
-          </div>
-          <div class="col-span-2 px-2">Budget</div>
-          <div class="col-span-2 px-2">
-            KM Budget <span class="text-xs">: Cap</span>
-          </div>
+    <DraftServiceBookings {ServiceAgreementStore} />
 
-          <div class="col-span-6 px-2">Payer</div>
-        </div>
-      </div>
-
-      <div class="flex-shrink">
-        <a class="flex p-1">
-          <div class="h-4 w-4 inline m-0 p-0" />
-        </a>
-      </div>
-    </li>
-
-    {#each $DraftServiceBookingsStore as row, index (index)}
-      <li
-        class="bg-white group flex justify-between items-center hover:bg-indigo-50 px-2 py-2 focus:outline-none focus:ring-0 focus:bg-indigo-600 focus:text-slate-600 transition duration-500 border-b border-indigo-100 w-full
-      gap-x-2"
-      >
-        <div class="flex-grow">
-          <div class="grid grid-cols-12 gap-x-2 items-center w-full">
-            <div class="col-span-2 px-2">
-              {row.service_name}
-              <span class="text-xs text-gray-400"
-                >({formatCurrency(row.rate)})</span
-              >
-            </div>
-            <div class="col-span-2 px-2">
-              {formatCurrency(row.budget)}
-            </div>
-            <div class="col-span-2 px-2">
-              {#if row.km_budget != null}{formatCurrency(row.km_budget)}{/if}
-              <span class="text-sm text-gray-400">
-                {#if row.km_budget != null}
-                  : 30m{:else}&mdash;{/if}</span
-              >
-            </div>
-
-            <div class="col-span-6 px-2">
-              {row.plan_manager_name}
-            </div>
-          </div>
-        </div>
-
-        <div class="flex-shrink">
-          <a
-            class="flex p-1 text-center rounded-full text-sm font-semibold text-indigo-600 hover:bg-indigo-600 hover:text-white transition duration-300 cursor-pointer"
-            on:click={() => removeRow(row)}
-          >
-            <XMarkIcon class="h-4 w-4 inline m-0 p-0" />
-          </a>
-        </div>
-      </li>
-    {:else}
-      <li
-        class=" px-3 py-2 border-b border-gray-200 w-full text-gray-400 cursor-default text-sm"
-      >
-        No Services have been added to this draft agreement yet.
-      </li>
-    {/each}
-    <li
-      class="bg-white group flex justify-center items-center px-2 py-2 focus:outline-none focus:ring-0 focus:bg-indigo-600 focus:text-slate-600 transition duration-500 border-b border-indigo-100 w-full
-      gap-x-2"
-    >
-      <Role roles={["admin"]}>
-        <button
-          class="text-xs text-indigo-600 hover:underline text-left mx-2"
-          on:click={() => showDraftServiceBooking()}
-        >
-          Add Service
-        </button>
-      </Role>
-    </li>
     <li
       class="bg-white group flex justify-between items-center px-2 py-2 focus:outline-none focus:ring-0 focus:bg-indigo-600 focus:text-slate-600 transition duration-500 w-full
     gap-x-2"
@@ -370,17 +222,29 @@
     "
       >
         <button
-          on:click={() => cancelDraftServiceAgreement(draftAgreement.id)}
+          on:click={() => cancelDraftServiceAgreement($draftAgreement)}
           type="button"
           class="w-full sm:w-auto sm:mr-3 inline-flex justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
           >Cancel</button
         >
-        <button
-          on:click={() => addService()}
-          type="button"
-          class="w-full sm:w-auto inline-flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500"
-          >Generate</button
-        >
+        <div>
+          <button
+            on:click={() => addService()}
+            type="button"
+            class="w-full sm:w-auto inline-flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500"
+            >Save</button
+          >
+
+          <button
+            on:click={() => addService()}
+            type="button"
+            disabled
+            title="Generation unavailable until changes are saved"
+            class="w-full sm:w-auto inline-flex justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm shadow-sm
+            border-dashed border border-slate-300 bg-white text-slate-300 cursor-not-allowed
+            ">Generate</button
+          >
+        </div>
       </div>
     </li>
   </ul>

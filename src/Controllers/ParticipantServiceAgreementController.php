@@ -9,6 +9,7 @@ use NDISmate\Models\Participant\ServiceAgreement;
 use NDISmate\Services\ServiceAgreementService\ListServiceAgreementsByStaffId;
 use NDISmate\Services\ServiceAgreementService\ListServiceAgreementsToAmend;
 use NDISmate\Services\ServiceAgreementService\PDFTest;
+use NDISmate\Services\ServiceAgreementService\DeleteDraftServiceAgreement;
 
 final class ParticipantServiceAgreementController extends BaseController  // Final prevents inheritance
 {
@@ -17,7 +18,7 @@ final class ParticipantServiceAgreementController extends BaseController  // Fin
         $this->controller = [
             'addServiceAgreement' => [new ServiceAgreement, 'create', true, ['admin']],
             'updateServiceAgreement' => [new ServiceAgreement, 'update', true, ['admin']],
-            'deleteServiceAgreement' => [new ServiceAgreement, 'delete', true, ['admin']],
+            'deleteServiceAgreement' => [new DeleteDraftServiceAgreement, null, true, ['admin']],
             'getServiceAgreement' => [new GetServiceAgreement, null, true, []],
             'listServiceAgreementsByParticipantId' => [new ListServiceAgreementsByParticipantId, null, true, []],
             'listServiceAgreementsByStaffId' => [new ListServiceAgreementsByStaffId, null, true, []],
