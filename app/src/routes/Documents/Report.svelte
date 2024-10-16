@@ -7,27 +7,37 @@
   import { debounce } from "lodash-es";
   import DocumentGrid from "./DocumentGrid.svelte";
   import { SpinnerStore } from "@app/Overlays/stores.js";
+  import { onMount } from "svelte";
+  import { BreadcrumbStore } from "@shared/stores.js";
 
   let clients = [];
   let participantList = [];
   let selectedParticipant = [];
 
-  jspa("/Participant", "listClients", {}).then((result) => {
-    clients = result.result;
+  onMount(async () => {
+    jspa("/Participant", "listClients", {}).then((result) => {
+      clients = result.result;
 
-    clients.forEach((client) => {
-      if (client.archived != 1)
-        participantList.push({
-          option: client.client_name,
-          value: client.client_id,
-        });
+      clients.forEach((client) => {
+        if (client.archived != 1)
+          participantList.push({
+            option: client.client_name,
+            value: client.client_id,
+          });
+      });
+
+      participantList.sort((a, b) => a.option.localeCompare(b.option));
+
+      participantList = participantList;  
+    
     });
 
-    participantList.sort((a, b) => a.option.localeCompare(b.option));
-
-    participantList = participantList;  
-    
+    BreadcrumbStore.set({
+      path: [{ url: null, name: "Reports" }],
+    });
   });
+
+  
 
   let documents = [];
   let requestCounter = 0;

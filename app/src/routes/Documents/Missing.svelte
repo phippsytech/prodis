@@ -2,20 +2,22 @@
   import { push } from "svelte-spa-router";
   import { slide } from "svelte/transition";
   import { jspa } from "@shared/jspa";
+  import { onMount } from "svelte";
+  import { BreadcrumbStore } from "@shared/stores.js";
 
   let missingList = [];
 
-  jspa("/Participant/Document", "listMissingDocuments", {}).then((result) => {
-    missingList = result.result;  
+  onMount(async () => {
+    jspa("/Participant/Document", "listMissingDocuments", {}).then((result) => {
+      missingList = result.result;  
+    });
 
-    // documents.sort(function(a, b) {
-    //     const nameA = a.name.toUpperCase(); // ignore upper and lowercase
-    //     const nameB = b.name.toUpperCase(); // ignore upper and lowercase
-    //     if (nameA < nameB) return -1;
-    //     if (nameA > nameB) return 1;
-    //     return 0; // names must be equal
-    // });
+    BreadcrumbStore.set({
+      path: [{ url: null, name: "Missing" }],
+    });
   });
+
+ 
 </script>
 
 <div class="mb-2">

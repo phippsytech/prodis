@@ -4,20 +4,23 @@
   import { slide } from "svelte/transition";
   import { jspa } from "@shared/jspa";
   import { formatDate } from "@shared/utilities.js";
+  import { onMount } from "svelte";
+  import { BreadcrumbStore } from "@shared/stores.js";
 
   let dueList = [];
 
-  jspa("/Participant/Document", "listDueDocuments", {}).then((result) => {
-    dueList = result.result;
-    
-    // documents.sort(function(a, b) {
-    //     const nameA = a.name.toUpperCase(); // ignore upper and lowercase
-    //     const nameB = b.name.toUpperCase(); // ignore upper and lowercase
-    //     if (nameA < nameB) return -1;
-    //     if (nameA > nameB) return 1;
-    //     return 0; // names must be equal
-    // });
+  onMount(async () => {
+    jspa("/Participant/Document", "listDueDocuments", {}).then((result) => {
+      dueList = result.result;
+  
+    });
+
+    BreadcrumbStore.set({
+      path: [{ url: null, name: "Due" }],
+    });
   });
+
+
 </script>
 
 <div class="mb-2">

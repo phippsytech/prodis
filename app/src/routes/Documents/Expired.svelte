@@ -4,20 +4,21 @@
   import { slide } from "svelte/transition";
   import { jspa } from "@shared/jspa";
   import { formatDate } from "@shared/utilities.js";
-
+  import { onMount } from "svelte";
+  import { BreadcrumbStore } from "@shared/stores.js";
   let expiredList = [];
 
-  jspa("/Participant/Document", "listExpiredDocuments", {}).then((result) => {
-    expiredList = result.result;
+  onMount(async () => {
+    jspa("/Participant/Document", "listExpiredDocuments", {}).then((result) => {
+      expiredList = result.result;
+    });
 
-    // documents.sort(function(a, b) {
-    //     const nameA = a.name.toUpperCase(); // ignore upper and lowercase
-    //     const nameB = b.name.toUpperCase(); // ignore upper and lowercase
-    //     if (nameA < nameB) return -1;
-    //     if (nameA > nameB) return 1;
-    //     return 0; // names must be equal
-    // });
+    BreadcrumbStore.set({
+      path: [{ url: null, name: "Expired" }],
+    });
   });
+
+ 
 </script>
 
 <div class="mb-2">
