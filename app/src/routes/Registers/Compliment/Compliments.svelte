@@ -125,7 +125,7 @@
         </div>
         <div class="flex space-x-2 items-center">
             <MiniJSON2CSV
-            filename="continuous-improvements-register.csv"
+            filename="compliments-register.csv"
             bind:json_data={compliments}
             />
         </div>
