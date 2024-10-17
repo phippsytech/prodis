@@ -4,7 +4,9 @@
     import { formatPrettyName } from "@shared/utilities.js";
     import { jspa } from "@shared/jspa.js";
     import { BreadcrumbStore } from "@shared/stores.js";
+    import { SlideOverStore } from "@app/Overlays/stores.js";
     import MiniJSON2CSV from "@shared/MiniJSON2CSV.svelte";
+    import RiskFilter from "./RiskFilter.svelte";
 
     let risks = [];
     let stored_risks = [];
@@ -14,6 +16,10 @@
         icon: PlusIcon,
         event: () => push("/registers/risks/add"),
     };
+
+    $: slideoverStore = $SlideOverStore;
+    
+    BreadcrumbStore.set({ path: [{ url: "/registers", name: "Registers" }] });
 
     jspa("/Register/Risk", "listRisk", {})
       .then((result) => {
@@ -29,8 +35,49 @@
       .catch((error) => {
         console.log(error);
       });
+      
+    let filter = {};  
 
-    BreadcrumbStore.set({ path: [{ url: "/registers", name: "Registers" }] });
+    function applyFilter(filter) {
+        if (filter.date_identified) {
+            risks = risks.filter(
+                (risks) => Date.parse(risks.date_identified) === Date.parse(filter.date_identified)
+            );
+        }
+
+        if (filter.date_resolved) {
+            risks = risks.filter(
+                (risks) => Date.parse(risks.date_resolved) === Date.parse(filter.date_resolved)
+            );
+        }
+
+
+        if (filter.reviewer) {
+            risks = risks.filter(
+                (risks) => risks.staff_id === filter.reviewer
+            );
+            console.log(risks)
+        }
+    }
+
+    
+    function clearFilter(filter) {
+        filter = {};
+        risks = [...stored_risks];
+    }
+
+    function showFilter() {
+        SlideOverStore.set({
+        label: "Filter",
+        show: true,
+        props: filter,
+        component: RiskFilter,
+        action_label: "Apply",
+        action: () => applyFilter(filter),
+        delete: () => clearFilter(filter),
+        });
+    }
+    
 </script>
 <div>
     <div class="sm:flex sm:items-center mb-4">
@@ -139,6 +186,11 @@
                   <th
                     scope="col"
                     class="px-4 py-2 text-left text-xs font-medium text-slate-500"
+                    >Reporter</th
+                  >
+                  <th
+                    scope="col"
+                    class="px-4 py-2 text-left text-xs font-medium text-slate-500"
                     >Date Identified</th
                   >
                   <th
@@ -175,6 +227,9 @@
                     </td>
                     <td class="whitespace-nowrap px-4 py-3 text-sm text-gray-500"
                       >{risk.type}</td
+                    >
+                    <td class="whitespace-nowrap px-4 py-3 text-sm text-gray-500"
+                      >{risk.staff_name ? risk.staff_name : "N/A"}</td
                     >
                     <td class="whitespace-nowrap px-4 py-3 text-sm text-gray-500"
                       >{risk.date_identified ? risk.date_identified : "N/A"}</td
