@@ -1,12 +1,13 @@
 <script>
     import { push } from "svelte-spa-router";
     import { PlusIcon } from "heroicons-svelte/24/outline";
-    import { slide } from "svelte/transition";
+    import { formatPrettyName } from "@shared/utilities.js";
     import { jspa } from "@shared/jspa.js";
     import { BreadcrumbStore } from "@shared/stores.js";
     import MiniJSON2CSV from "@shared/MiniJSON2CSV.svelte";
 
     let risks = [];
+    let stored_risks = [];
 
     let breadcrumbs_path = [];
     let breadcrumbs_action = {
@@ -14,15 +15,20 @@
         event: () => push("/registers/risks/add"),
     };
 
-    jspa("/Register/Risk", "listRisks", {}).then((result) => {
+    jspa("/Register/Risk", "listRisk", {})
+      .then((result) => {
         risks = result.result;
+        stored_risks = [...risks];
         // sort the risks reverse chronologically
         risks.sort(function (a, b) {
-            let aDateTime = Date.parse(a.date_identified);
-            let bDateTime = Date.parse(b.date_identified);
-            return bDateTime - aDateTime;
+          let aDateTime = Date.parse(a.date);
+          let bDateTime = Date.parse(b.date);
+          return bDateTime - aDateTime;
         });
-    });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
 
     BreadcrumbStore.set({ path: [{ url: "/registers", name: "Registers" }] });
 </script>
@@ -139,7 +145,12 @@
                     scope="col"
                     class="px-4 py-2 text-left text-xs font-medium text-slate-500"
                     >Date Resolved</th
-                    >
+                  >
+                  <th
+                    scope="col"
+                    class="px-4 py-2 text-left text-xs font-medium text-slate-500"
+                    >Status</th
+                  >
                   <th scope="col" class="relative py-2 pl-3 pr-4 sm:pr-6">
                     <span class="sr-only">Edit</span>
                   </th>
@@ -170,6 +181,8 @@
                     >
                     <td class="whitespace-nowrap px-4 py-3 text-sm text-gray-500"
                       >{risk.date_resolved ? risk.date_resolved : "N/A"}</td>
+                    <td class="whitespace-nowrap px-4 py-3 text-sm text-gray-500"
+                      >{risk.status ? formatPrettyName(risk.status) : "N/A"}</td>
                     <td
                       class="relative whitespace-nowrap py-3 px-4 text-right text-sm font-medium"
                     >

@@ -3,6 +3,7 @@
     import { jspa } from "@shared/jspa.js";
     import RiskForm from "./RiskForm.svelte";
     import { toastSuccess, toastError } from "@shared/toastHelper.js";
+    import { push } from "svelte-spa-router";
     import { ActionBarStore } from "@app/Layout/BottomNav/stores.js";
     import { BreadcrumbStore } from "@shared/stores.js";
 
@@ -59,14 +60,28 @@
             });
     }
 
+    function deleteRisk() {
+        if (confirm("Are you sure you want to delete this risk?")) {
+            jspa("/Register/Risk", "deleteRisk", { id:  risk.id })
+            .then((result) => {
+                toastSuccess("Risk successfully deleted");
+                push("/registers/risks");
+            })
+            .catch(() => {
+                toastError("Error deleting  risk");
+            });
+        }
+    }
+
     $: {
         if (mounted) {
             const valueChanged = JSON.stringify(risk) !== JSON.stringify(stored_risk);
             ActionBarStore.set({
-                can_delete: false,
-                show: !(JSON.stringify(risk) === JSON.stringify(stored_risk)),
+                can_delete: true,
+                show: true,
                 undo: () => undo(),
                 save: () => save(),
+                delete: () => deleteRisk(),
             });
         }
     }
