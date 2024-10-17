@@ -175,12 +175,6 @@
                   <th
                     scope="col"
                     class="px-4 py-2 text-left text-xs font-medium text-slate-500"
-                    >Resolution</th
-                  >
-  
-                  <th
-                    scope="col"
-                    class="px-4 py-2 text-left text-xs font-medium text-slate-500"
                     >Type</th
                   >
                   <th
@@ -217,13 +211,6 @@
                         {risk.description && risk.description.length > 50
                         ? risk.description.slice(0, 50) + '...'
                         : risk.description || "N/A"}
-                    </td>
-                    <td
-                        class="whitespace-nowrap px-4 py-3 text-sm text-gray-500"
-                    >
-                        {risk.resolution && risk.resolution.length > 50
-                        ? risk.resolution.slice(0, 50) + '...'
-                        : risk.resolution || "N/A"}
                     </td>
                     <td class="whitespace-nowrap px-4 py-3 text-sm text-gray-500"
                       >{risk.type}</td
