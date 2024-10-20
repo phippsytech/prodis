@@ -95,8 +95,6 @@
       
     });
 
-
-    
     jspa("/Staff", "listStaff", {}).then((result) => {
       staffs = result.result
         .filter((item) => item.archived != 1)
@@ -115,10 +113,7 @@
           value: item.client_id,
         }))
         .sort((a, b) => a.label.localeCompare(b.label));
-
-      
     });
-
 
     function deleteComplaint() {
         jspa("/Register/Complaint", "deleteComplaint", { id: complaint.id })
@@ -131,13 +126,122 @@
             });
     }
 
-  
-</script>
-    
-<h3 class="text-slate-800 font-bold mx-2 mb-2">Complaint Management Register</h3>
+  // TODO:
+  // need to incorporate other fields from the complaint model
+  // initial multi-step form idea for this register
 
-<div class="flex flex-wrap gap-2 flex-none md:flex-row flex-col w-full">
-  <FloatingDate label="Date of Complaint" bind:value={complaint.date_complaint} class="w-full md:w-auto" />
+  // # The Complaint:
+  // Date Received
+  // Complainant
+  // Participant
+  // Complainant Email
+  // Complainant Phone
+  // Complaint Details
+  // Outcome Requested
+
+  // # Investigate
+  // Date Acknowledged (letter sent)
+  // Investigation Result
+  // Does the NDIS Commission need to be notified?
+  // NDIS Commission ID
+
+  // # Resolve
+  // Staff Notified ... hmm
+  // Notification Date... Hmm again
+  // Complainant Notified of Outcome (Date)
+  
+  // # Review
+  // Complaint Feedback Survey
+  // Continuous Improvement Required?
+  // Recommendations, Actions, Notes
+</script>
+<!-- new form -->
+<div class="mt-4 mb-2">
+  <h3 class="text-base font-bold leading-6 text-gray-900 px-3">The Complaint</h3>
+</div>
+
+<div class="flex space-x-4 w-full">
+  <div class="flex-1">
+      <FloatingDate
+          bind:value={complaint.date_complaint}
+          label="Date of complaint"
+      />
+  </div>
+  <div class="flex-1">
+      <FloatingCombo 
+      bind:value={complaint.complainant_client_id_id}
+      items={clients}
+      label="Participant"
+      placeholderText="Select or type participant name"
+    />
+  </div>
+</div>
+
+<div class="flex space-x-4 w-full">
+  <div class="flex-1">
+    <FloatingInput 
+      bind:value={complaint.complainant_name} 
+      label="Complainant" 
+      placeholder="Name of Complainant" 
+      {readOnly}
+    />
+  </div>
+  <div class="flex-1">
+    <FloatingInput
+      bind:value={complaint.email}
+      label="Complainant Email"
+      placeholder="eg: Chris Person"
+    />
+  </div>
+  <div class="flex-1">
+    <FloatingInput
+      bind:value={complaint.phone}
+      label="Complainant Phone"
+      placeholder="eg: Chris Person"
+    />
+  </div>
+</div>
+<span class="ml-2 text-xs text-gray-900/50">Outcome requested</span>
+<RTE bind:content={complaint.outcome_wanted} />
+
+<div class="mt-4 mb-2">
+  <h3 class="text-base font-bold leading-6 text-gray-900 px-3">Investigate</h3>
+</div>
+<FloatingTextArea 
+  bind:value={complaint.investigation_result} 
+  label="Investigation result" 
+  placeholder="" 
+/>
+
+<div class="mt-4 mb-2">
+  <h3 class="text-base font-bold leading-6 text-gray-900 px-3">Review</h3>
+</div>
+
+<FloatingTextArea 
+  bind:value={complaint.recommended_actions} 
+  label="Recommendations" 
+  placeholder="" 
+/>
+
+
+<!-- old form -->
+    
+<!-- <h3 class="text-slate-800 font-bold mx-2 mb-2">The Complaint</h3> -->
+
+<!-- <div class="flex flex-wrap gap-2 flex-none md:flex-row flex-col w-full">
+  <FloatingDate 
+    label="Date of Complaint" 
+    bind:value={complaint.date_complaint} 
+    class="w-full md:w-auto" 
+  />
+
+  <FloatingInput 
+    bind:value={complaint.complainant_name} 
+    label="Complainant" 
+    placeholder="Name of Complainant" 
+    {readOnly}
+  />
+
   <NewFloatingSelect
     class="flex-1 min-w-0 w-full sm:w-1/2"
     on:change
@@ -166,10 +270,10 @@
     items={clients}
     bind:value={complaint.complainant_client_id}
     placeholderText="Select or type client name ..."
-  />
+  /> -->
 
 
-<FloatingInput bind:value={complaint.complainant_name} label="Complainant" placeholder="Name of Complainant" {readOnly}/>
+
 <!-- <div class="flex flex-wrap gap-2 items-center">
     <FloatingInput 
       bind:value={complaint.email} 
@@ -187,12 +291,12 @@
     />
   </div> -->
 <!-- <FloatingTextArea bind:details={complaint.details} label="Message" placeholder="Message" style="height:150px" {readOnly}/> -->
-<RTE bind:content={complaint.details} />
+<!-- <RTE bind:content={complaint.details} /> -->
 <!-- <FloatingTextArea bind:value={complaint.outcome_wanted} label="Expected Resolution" placeholder="What outcome does complainant want?" style="height:150px" {readOnly}/> -->
 
 
-<h3 class="text-slate-800 font-bold mx-2 mb-2">Investigate and Resolve</h3>
-<div class="flex flex-wrap gap-2 flex-none md:flex-row flex-col w-full">
+<!-- <h3 class="text-slate-800 font-bold mx-2 mb-2">Investigate and Resolve</h3> -->
+<!-- <div class="flex flex-wrap gap-2 flex-none md:flex-row flex-col w-full">
   <FloatingDate label="Resolution Date" bind:value={complaint.resolution_date} class="w-full md:w-auto" />
   <NewFloatingSelect
   on:change
@@ -203,7 +307,7 @@
   {readOnly}
   clearable
 
-/>
+/> -->
   <!-- <NewFloatingSelect
     on:change
     bind:value={complaint.notified_of_outcome}
@@ -224,7 +328,7 @@
     clearable
 
   /> -->
-</div>
+<!-- </div> -->
 <!-- <StaffMultiSelector bind:staff_ids={complaint.notified_staffs_id}/> -->
 
 <!-- <FloatingTextArea bind:value={complaint.investigation_result  } label="Investigation Result" placeholder="Investigation Result." style="height:150px" {readOnly}/>
@@ -232,7 +336,7 @@
 <FloatingTextArea bind:value={complaint.continuous_improvement  } label="Continuous Improvement Listing" placeholder="Has a Resolution Required a Continuous Improvement Listing?" style="height:150px" {readOnly}/>
 <FloatingTextArea bind:value={complaint.recommended_actions  } label="Recommendations, Actions or Notes" placeholder="Recommendations, Actions or Notes." style="height:150px" {readOnly}/> -->
 
-{#if complaint.id}
+<!-- {#if complaint.id}
   <Role roles={["admin"]}>
     
     <div class="flex">
@@ -246,5 +350,5 @@
 
   </Role>
 
-{/if}
+{/if} -->
 
