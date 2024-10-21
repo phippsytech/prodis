@@ -74,10 +74,11 @@
             const staffIdsChanged = JSON.stringify(staff_ids.map(id => parseInt(id, 10))) !== JSON.stringify(stored_staff_ids);
 
             ActionBarStore.set({
-                can_delete: false,
-                show: trainingChanged || staffIdsChanged, // Trigger the action bar on changes
+                can_delete: true,
+                show: true,  //  trainingChanged || staffIdsChanged, // Trigger the action bar on changes
                 undo: () => undo(),
                 save: () => save(),
+                delete: () => deleteTraining()
             });
         }
     }
@@ -221,13 +222,13 @@
         />
     {/if} -->
 
-    <div class="flex">
+    <!-- <div class="flex">
         <button 
             class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
             on:click="{deleteTraining}"
             >
             Delete
         </button>
-    </div>
+    </div> -->
 </Role> 
 

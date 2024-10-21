@@ -241,4 +241,4 @@
   </div>
 </div>
 
-<Pager totalResults="130" />
+<!-- <Pager totalResults="130" /> -->

@@ -177,15 +177,14 @@
   </div>
 </div>
 
+<FloatingInput 
+  bind:value={complaint.complainant_name} 
+  label="Complainant" 
+  placeholder="Name of Complainant" 
+  {readOnly}
+/>
+
 <div class="flex space-x-4 w-full">
-  <div class="flex-1">
-    <FloatingInput 
-      bind:value={complaint.complainant_name} 
-      label="Complainant" 
-      placeholder="Name of Complainant" 
-      {readOnly}
-    />
-  </div>
   <div class="flex-1">
     <FloatingInput
       bind:value={complaint.email}
