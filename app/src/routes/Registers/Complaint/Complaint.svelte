@@ -185,7 +185,18 @@
             });
     }
 
- 
+    function deleteComplaint() {
+        if (confirm("Are you sure you want to delete this complaint?")) {
+            jspa("/Register/Complaint", "deleteComplaint", { id: complaint.id })
+            .then((result) => {
+                toastSuccess("Complaint successfully deleted");
+                push("/registers/complaints");
+            })
+            .catch((error) => {
+                toastError("Error deleting complaint");
+            });
+        }
+    }
 
     $: {
         if (mounted) {
@@ -194,6 +205,7 @@
                 show: true, //!(JSON.stringify(complaint) === JSON.stringify(storedComplaint)),
                 undo: () => undo(),
                 save: () => save(),
+                delete: () => deleteComplaint(),
             });
         }
     }
