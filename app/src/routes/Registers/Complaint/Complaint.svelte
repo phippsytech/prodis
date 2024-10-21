@@ -97,7 +97,14 @@
     let mounted = false;
     let readOnly = false;
 
-    BreadcrumbStore.set({ path: [{ url: "/registers", name: "Registers" }] });
+    BreadcrumbStore.set(
+        { 
+            path: [
+                { url: "/registers", name: "Registers" }, 
+                { url: "/registers/complaints", name: "Complaints" }, 
+            ],
+        }
+    );
 
     onMount(() => {
         if (params.id != "add") {
@@ -183,10 +190,8 @@
     $: {
         if (mounted) {
             ActionBarStore.set({
-                can_delete: false,
-                show: !(
-                    JSON.stringify(complaint) === JSON.stringify(storedComplaint)
-                ),
+                can_delete: true,
+                show: true, //!(JSON.stringify(complaint) === JSON.stringify(storedComplaint)),
                 undo: () => undo(),
                 save: () => save(),
             });
@@ -198,8 +203,7 @@
     }
 
     $: {
-        console.log(complaint);
-        
+        console.log(complaint.status);
     }
 </script>
 

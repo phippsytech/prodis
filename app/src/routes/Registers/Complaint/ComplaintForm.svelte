@@ -168,8 +168,30 @@
       />
   </div>
   <div class="flex-1">
-      <FloatingCombo 
-      bind:value={complaint.complainant_client_id_id}
+      <NewFloatingSelect  class="flex-1 min-w-0 w-full sm:w-1/2"
+          on:change
+          bind:value={complaint.complaint_type}
+          label="Type"
+          instruction="Set Type"
+          options={complaintTypeItems}
+          {readOnly}
+          clearable
+      />
+  </div>
+</div>
+
+<div class="flex space-x-4 w-full">
+  <div class="flex-1">
+    <FloatingInput 
+      bind:value={complaint.complainant_name} 
+      label="Complainant" 
+      placeholder="Name of Complainant" 
+      {readOnly}
+    />
+  </div>
+  <div class="flex-1">
+    <FloatingCombo 
+      bind:value={complaint.complainant_client_id}
       items={clients}
       label="Participant"
       placeholderText="Select or type participant name"
@@ -177,12 +199,6 @@
   </div>
 </div>
 
-<FloatingInput 
-  bind:value={complaint.complainant_name} 
-  label="Complainant" 
-  placeholder="Name of Complainant" 
-  {readOnly}
-/>
 
 <div class="flex space-x-4 w-full">
   <div class="flex-1">
@@ -195,11 +211,18 @@
   <div class="flex-1">
     <FloatingInput
       bind:value={complaint.phone}
-      label="Complainant Phone"
-      placeholder="eg: Chris Person"
+      label="Phone Number"
+      placeholder="eg: XXXX XXX XXX"
     />
   </div>
 </div>
+<span class="ml-2 text-xs text-gray-900/50">Complaint Details</span>
+<FloatingTextArea 
+  bind:value={complaint.details} 
+  label="Investigation result" 
+  placeholder="" 
+/>
+
 <span class="ml-2 text-xs text-gray-900/50">Outcome requested</span>
 <RTE bind:content={complaint.outcome_wanted} />
 

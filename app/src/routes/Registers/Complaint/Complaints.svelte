@@ -1,6 +1,6 @@
 <script>
     import { push } from "svelte-spa-router";
-
+    import { formatPrettyName } from "@shared/utilities.js";
     import { PlusIcon } from "heroicons-svelte/24/outline";
     import { slide } from "svelte/transition";
     import { jspa } from "@shared/jspa.js";
@@ -85,7 +85,7 @@ aria-label="Toolbar"
 </div>
 <div class="flex space-x-2 items-center">
   <MiniJSON2CSV
-    filename="training-register.csv"
+    filename="complaint-register.csv"
     bind:json_data={complaints}
   />
 
@@ -136,11 +136,6 @@ aria-label="Toolbar"
                 <th
                     scope="col"
                     class="px-4 py-2 text-left text-xs font-medium text-slate-500"
-                    >Participant</th
-                >
-                <th
-                    scope="col"
-                    class="px-4 py-2 text-left text-xs font-medium text-slate-500"
                     >Date of Complaint</th
                 >
                 <th
@@ -159,35 +154,35 @@ aria-label="Toolbar"
               </tr>
             </thead>
             <tbody class="divide-y divide-indigo-100 bg-white">
-              <!-- {#each trainings as training, index (training.id)}
+              {#each complaints as complaint, index (complaint.id)}
                 <tr class="hover:bg-indigo-50">
                   <td
                     class="whitespace-nowrap py-3 px-4 text-sm font-medium text-gray-900"
-                    >{training.course_title}</td
+                    >{complaint.details}</td
                   >
                   <td class="whitespace-nowrap px-4 py-3 text-sm text-gray-500"
-                    >{training.trainer}</td
-                  >
-
-                  <td class="whitespace-nowrap px-4 py-3 text-sm text-gray-500"
-                    >{training.date ? training.date : "N/A"}</td
+                    >{complaint.complainant_name}</td
                   >
                   <td class="whitespace-nowrap px-4 py-3 text-sm text-gray-500"
-                    >{training.completion_date
-                      ? training.completion_date
-                      : "N/A"}</td
+                    >{complaint.date_complaint ? complaint.date_complaint : "N/A"}</td
+                  >
+                  <td class="whitespace-nowrap px-4 py-3 text-sm text-gray-500"
+                    >{complaint.date_actioned === null ? "N/A" : complaint.date_actioned}
+                  </td>
+                  <td class="whitespace-nowrap px-4 py-3 text-sm text-gray-500"
+                    >{formatPrettyName(complaint.status)}</td
                   >
                   <td
                     class="relative whitespace-nowrap py-3 px-4 text-right text-sm font-medium"
                   >
                     <a
-                      href="/#/registers/trainings/{training.id}"
+                      href="/#/registers/complaints/{complaint.id}"
                       class="text-indigo-600 hover:text-indigo-900"
                       >Edit<span class="sr-only">, Lindsay Walton</span></a
                     >
                   </td>
                 </tr>
-              {/each} -->
+              {/each}
             </tbody>
           </table>
         </div>
