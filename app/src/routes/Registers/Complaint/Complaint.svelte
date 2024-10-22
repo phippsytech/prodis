@@ -83,7 +83,6 @@
 
     const validations = [
         { check: () => !complaint.date_complaint, message: "Complaint date must be provided." },
-        { check: () => !complaint.complaint_type, message: "Complaint type must be provided." },
         { check: () => !complaint.status, message: "Complaint status must be provided." },
         { check: () => !complaint.complainant_client_id || complaint.complainant_client_id.length === 0, message: "Please select a client." },
         { check: () => !complaint.complainant_name, message: "Complainant's name must be provided." },
@@ -211,12 +210,17 @@
     }
 
     $: {
-        readOnly = complaint.status == "closed";
-    }
-
-    $: {
+        complaint.status = complaint.investigation_result && complaint.recommended_actions ? 'closed' : 'open';
+        if (complaint.status === 'closed' && !complaint.date_actioned) {
+            complaint.date_actioned = new Date().toISOString();
+        }
         console.log(complaint.status);
     }
+
+    // $: {
+    //     readOnly = complaint.status == "closed";
+    // }
+
 </script>
 
 <div

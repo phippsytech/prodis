@@ -73,7 +73,8 @@
         ndis_commission_id: null,
         recommended_actions: null,
         archived: false,
-        complaint_feedback: null
+        complaint_feedback: null,
+        type: null
     };
 
     let complainantSatisfaction= [
@@ -84,7 +85,7 @@
       {option: "Very Unsatisfied", value: "very unsatisfied"}
     ];
 
-    export let readOnly =false
+    export let readOnly = false
 
 
     onMount(() => {
@@ -126,34 +127,6 @@
             });
     }
 
-  // TODO:
-  // need to incorporate other fields from the complaint model
-  // initial multi-step form idea for this register
-
-  // # The Complaint:
-  // Date Received
-  // Complainant
-  // Participant
-  // Complainant Email
-  // Complainant Phone
-  // Complaint Details
-  // Outcome Requested
-
-  // # Investigate
-  // Date Acknowledged (letter sent)
-  // Investigation Result
-  // Does the NDIS Commission need to be notified?
-  // NDIS Commission ID
-
-  // # Resolve
-  // Staff Notified ... hmm
-  // Notification Date... Hmm again
-  // Complainant Notified of Outcome (Date)
-  
-  // # Review
-  // Complaint Feedback Survey
-  // Continuous Improvement Required?
-  // Recommendations, Actions, Notes
 </script>
 <!-- new form -->
 <div class="mt-4 mb-2">
@@ -168,16 +141,23 @@
       />
   </div>
   <div class="flex-1">
+    <FloatingCombo 
+      bind:value={complaint.complainant_client_id}
+      items={clients}
+      label="Participant"
+      placeholderText="Select or type participant name"
+    />
+  </div>
+  <!-- <div class="flex-1">
       <NewFloatingSelect  class="flex-1 min-w-0 w-full sm:w-1/2"
           on:change
           bind:value={complaint.complaint_type}
           label="Type"
           instruction="Set Type"
           options={complaintTypeItems}
-          {readOnly}
           clearable
       />
-  </div>
+  </div> -->
 </div>
 
 <div class="flex space-x-4 w-full">
@@ -186,21 +166,8 @@
       bind:value={complaint.complainant_name} 
       label="Complainant" 
       placeholder="Name of Complainant" 
-      {readOnly}
     />
   </div>
-  <div class="flex-1">
-    <FloatingCombo 
-      bind:value={complaint.complainant_client_id}
-      items={clients}
-      label="Participant"
-      placeholderText="Select or type participant name"
-    />
-  </div>
-</div>
-
-
-<div class="flex space-x-4 w-full">
   <div class="flex-1">
     <FloatingInput
       bind:value={complaint.email}

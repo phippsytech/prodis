@@ -178,7 +178,7 @@ aria-label="Toolbar"
                     <a
                       href="/#/registers/complaints/{complaint.id}"
                       class="text-indigo-600 hover:text-indigo-900"
-                      >Edit<span class="sr-only">, Lindsay Walton</span></a
+                      >View</a
                     >
                   </td>
                 </tr>
