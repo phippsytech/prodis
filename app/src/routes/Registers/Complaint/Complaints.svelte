@@ -1,6 +1,6 @@
 <script>
     import { push } from "svelte-spa-router";
-    import { formatPrettyName } from "@shared/utilities.js";
+    import { formatPrettyName, formatDate } from "@shared/utilities.js";
     import { PlusIcon } from "heroicons-svelte/24/outline";
     import { slide } from "svelte/transition";
     import { jspa } from "@shared/jspa.js";
@@ -164,10 +164,10 @@ aria-label="Toolbar"
                     >{complaint.complainant_name}</td
                   >
                   <td class="whitespace-nowrap px-4 py-3 text-sm text-gray-500"
-                    >{complaint.date_complaint ? complaint.date_complaint : "N/A"}</td
+                    >{complaint.date_complaint ? formatDate(complaint.date_complaint) : "N/A"}</td
                   >
                   <td class="whitespace-nowrap px-4 py-3 text-sm text-gray-500"
-                    >{complaint.date_actioned === null ? "N/A" : complaint.date_actioned}
+                    >{complaint.date_actioned === null ? "N/A" : formatDate(complaint.date_actioned)}
                   </td>
                   <td class="whitespace-nowrap px-4 py-3 text-sm text-gray-500"
                     >{formatPrettyName(complaint.status)}</td

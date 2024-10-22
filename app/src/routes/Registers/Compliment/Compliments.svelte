@@ -192,11 +192,11 @@
                         >{compliment.staff_name ? compliment.staff_name : 'N/A'}</td
                       >
                       <td class="whitespace-nowrap px-4 py-3 text-sm text-gray-500"
-                        >{compliment.date ? compliment.date : "N/A"}</td
+                        >{compliment.date ? formatDate(compliment.date) : "N/A"}</td
                       >
                       <td class="whitespace-nowrap px-4 py-3 text-sm text-gray-500"
                         >{compliment.acknowledgement_date
-                          ? compliment.acknowledgement_date
+                          ? formatDate(compliment.acknowledgement_date)
                           : "N/A"}</td
                       >
                       <td class="whitespace-nowrap px-4 py-3 text-sm text-gray-500"

@@ -1,7 +1,7 @@
 <script>
     import { push } from "svelte-spa-router";
     import { PlusIcon } from "heroicons-svelte/24/outline";
-    import { formatPrettyName } from "@shared/utilities.js";
+    import { formatPrettyName, formatDate } from "@shared/utilities.js";
     import { jspa } from "@shared/jspa.js";
     import { BreadcrumbStore } from "@shared/stores.js";
     import { SlideOverStore } from "@app/Overlays/stores.js";
@@ -219,10 +219,10 @@
                       >{risk.staff_name ? risk.staff_name : "N/A"}</td
                     >
                     <td class="whitespace-nowrap px-4 py-3 text-sm text-gray-500"
-                      >{risk.date_identified ? risk.date_identified : "N/A"}</td
+                      >{risk.date_identified ? formatDate(risk.date_identified) : "N/A"}</td
                     >
                     <td class="whitespace-nowrap px-4 py-3 text-sm text-gray-500"
-                      >{risk.date_resolved ? risk.date_resolved : "N/A"}</td>
+                      >{risk.date_resolved ? formatDate(risk.date_resolved) : "N/A"}</td>
                     <td class="whitespace-nowrap px-4 py-3 text-sm text-gray-500"
                       >{risk.status ? formatPrettyName(risk.status) : "N/A"}</td>
                     <td

@@ -4,7 +4,7 @@
   import { slide } from "svelte/transition";
   import { jspa } from "@shared/jspa.js";
   import { BreadcrumbStore } from "@shared/stores.js";
-  import { formatPrettyName } from "@shared/utilities.js";
+  import { formatPrettyName, formatDate } from "@shared/utilities.js";
   import FloatingCombo from "@shared/PhippsyTech/svelte-ui/forms/FloatingCombo.svelte";
   import FloatingDate from "@shared/PhippsyTech/svelte-ui/forms/FloatingDate.svelte";
   import Pager from "@shared/PhippsyTech/svelte-ui/Pager.svelte";
@@ -215,11 +215,11 @@
                   >
 
                   <td class="whitespace-nowrap px-4 py-3 text-sm text-gray-500"
-                    >{training.date ? training.date : "N/A"}</td
+                    >{training.date ? formatDate(training.date) : "N/A"}</td
                   >
                   <td class="whitespace-nowrap px-4 py-3 text-sm text-gray-500"
                     >{training.completion_date
-                      ? training.completion_date
+                      ? formatDate(training.completion_date)
                       : "N/A"}</td
                   >
                   <td
