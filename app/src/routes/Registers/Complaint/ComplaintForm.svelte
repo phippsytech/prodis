@@ -216,12 +216,9 @@
     />
   </div>
 </div>
-<span class="ml-2 text-xs text-gray-900/50">Complaint Details</span>
-<FloatingTextArea 
-  bind:value={complaint.details} 
-  label="Investigation result" 
-  placeholder="" 
-/>
+
+<span class="ml-2 text-xs text-gray-900/50">Complaint details</span>
+<RTE bind:content={complaint.details} />
 
 <span class="ml-2 text-xs text-gray-900/50">Outcome requested</span>
 <RTE bind:content={complaint.outcome_wanted} />

@@ -52,51 +52,45 @@
 </script>
 
 <h3 class="text-base font-bold leading-6 text-gray-900 px-3 mt-4 mb-2">Details</h3>
-<Container>
-    <div class="flex space-x-4 w-full mt-2">
-        <div class="flex-1">
-            <FloatingDate label="Conflict Date" bind:value={conflictofinterest.date_identified} />
-        </div>
-        <div class="flex-1">
-            <NewFloatingSelect
-                bind:value={conflictofinterest.type}
-                label="Type"
-                instruction="Set conflict type"
-                options={typeList}
-                hideValidation={true}
-            />
-        </div>
+<div class="flex space-x-4 w-full mt-2">
+    <div class="flex-1">
+        <FloatingDate label="Conflict Date" bind:value={conflictofinterest.date_identified} />
     </div>
-</Container>
+    <div class="flex-1">
+        <NewFloatingSelect
+            bind:value={conflictofinterest.type}
+            label="Type"
+            instruction="Set conflict type"
+            options={typeList}
+            hideValidation={true}
+        />
+    </div>
+</div>
 
-<Container> 
-    <div class="w-full">
-        <NewFloatingSelect 
-            on:change
-            bind:value={conflictofinterest.staff_id}
-            label="Who reported this conflict of interest"
-            instruction="Choose staffer"
-            options={staffList}
-           
-            clearable
-        />
-    </div>
-    
-    <div class="w-full">
-        <FloatingInput 
-            bind:value={conflictofinterest.parties_involved} 
-            label="Parties Involved" 
-            placeholder="Name of the parties involved." 
-           
-        />
-    </div>
-    
-    
-    
-    <div class="w-full">
-        <RTE bind:content={conflictofinterest.description}  />
-    </div>
-</Container>
+<div class="w-full">
+    <NewFloatingSelect 
+        on:change
+        bind:value={conflictofinterest.staff_id}
+        label="Who reported this conflict of interest"
+        instruction="Choose staffer"
+        options={staffList}
+       
+        clearable
+    />
+</div>
+
+<div class="w-full">
+    <FloatingInput 
+        bind:value={conflictofinterest.parties_involved} 
+        label="Parties Involved" 
+        placeholder="Name of the parties involved." 
+       
+    />
+</div>
+
+<div class="w-full">
+    <RTE bind:content={conflictofinterest.description}  />
+</div>
 
 <h3 class="text-base font-bold leading-6 text-gray-900 px-3 mt-4 mb-2">Resolution</h3>
 
