@@ -198,7 +198,7 @@
                     >Status</th
                   >
                   <th scope="col" class="relative py-2 pl-3 pr-4 sm:pr-6">
-                    <span class="sr-only">Edit</span>
+                    <span class="sr-only">View</span>
                   </th>
                 </tr>
               </thead>

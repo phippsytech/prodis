@@ -228,7 +228,7 @@
                     <a
                       href="/#/registers/trainings/{training.id}"
                       class="text-indigo-600 hover:text-indigo-900"
-                      >Edit<span class="sr-only">, Lindsay Walton</span></a
+                      >View<span class="sr-only">, Lindsay Walton</span></a
                     >
                   </td>
                 </tr>

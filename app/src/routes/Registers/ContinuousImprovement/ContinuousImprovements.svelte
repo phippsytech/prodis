@@ -153,7 +153,7 @@
                             Status
                         </th>
                         <th scope="col" class="relative py-3.5 pl-3 pr-4 xs:pr-6">
-                            <span class="sr-only">Edit</span>
+                            <span class="sr-only">View</span>
                         </th>
                     </tr>
                 </thead>
