@@ -118,7 +118,7 @@ $app->post('/Storage', new ControllerFactory(\NDISmate\Controllers\ObjectStorage
 
 $app->post('/Register/Complaint', new ControllerFactory(\NDISmate\Controllers\ComplaintController::class));
 $app->post('/Register/Risk', new ControllerFactory(\NDISmate\Controllers\RiskController::class));
-$app->post('/Register/ConflictOfInterests', new ControllerFactory(\NDISmate\Controllers\ConflictOfInterestsController::class));
+$app->post('/Register/ConflictOfInterest', new ControllerFactory(\NDISmate\Controllers\ConflictOfInterestsController::class));
 $app->post('/Register/Compliment', new ControllerFactory(\NDISmate\Controllers\ComplimentController::class));
 $app->post('/Register/ContinuousImprovement', new ControllerFactory(\NDISmate\Controllers\ContinuousImprovementController::class));
 $app->post('/Register/Training', new ControllerFactory(\NDISmate\Controllers\TrainingController::class));
@@ -155,7 +155,6 @@ $app->post('/Payroll/Template/EarningsLine', new ControllerFactory(\NDISmate\Mod
 $app->post('/Payroll/Template/TaxLine', new ControllerFactory(\NDISmate\Models\Payroll\Template\TaxLine::class));
 $app->post('/PlanManager', new ControllerFactory(\NDISmate\Models\PlanManager::class));
 $app->post('/Register/Feedback', new ControllerFactory(\NDISmate\Models\Register\Feedback::class));
-$app->post('/Register/ConflictOfInterest', new ControllerFactory(\NDISmate\Models\Register\ConflictOfInterest::class));
 $app->post('/SIL/Billing', new ControllerFactory(\NDISmate\Models\SIL\Billing\Controller::class));
 $app->post('/SIL/House', new ControllerFactory(\NDISmate\Models\SIL\House::class));
 $app->post('/SIL/House/Form', new ControllerFactory(\NDISmate\Models\SIL\House\Form\Controller::class));

@@ -21,7 +21,7 @@
 
     let filter = {};
 
-    jspa("/Register/ConflictOfInterests", "getConflictOfInterestsList", {}).then(
+    jspa("/Register/ConflictOfInterest", "listConflictOfInterest", {}).then(
         (result) => {
             conflictofinterests = result.result;
 
@@ -175,7 +175,7 @@ aria-label="Toolbar"
                             Parties Involved 
                         </th>
                         <th scope="col" class="py-2 px-4 text-left text-xs font-medium text-slate-500">
-                            Implementing Staff
+                            Reporter
                         </th>
                         <th scope="col" class="py-2 px-4 text-left text-xs font-medium text-slate-500">
                             Conflict Date
@@ -206,7 +206,7 @@ aria-label="Toolbar"
                                 {conflict.parties_involved ? conflict.parties_involved : 'N/A'}
                             </td>
                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                {conflict.staff_name ? conflict.staff_name : 'N/A'}
+                                {conflict.reported_by ? conflict.reported_by : 'N/A'}
                             </td>
                             <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                 {formatDate(conflict.date_identified)}

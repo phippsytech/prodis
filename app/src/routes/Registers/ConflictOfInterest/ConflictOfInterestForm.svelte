@@ -68,7 +68,12 @@
 </div>
 
 <div class="w-full">
-    <NewFloatingSelect 
+    <FloatingInput 
+        bind:value={conflictofinterest.reported_by} 
+        label="Reporter" 
+        placeholder="Who reported this conflict of interest" 
+    />
+    <!-- <NewFloatingSelect 
         on:change
         bind:value={conflictofinterest.staff_id}
         label="Who reported this conflict of interest"
@@ -76,7 +81,7 @@
         options={staffList}
        
         clearable
-    />
+    /> -->
 </div>
 
 <div class="w-full">
@@ -84,7 +89,6 @@
         bind:value={conflictofinterest.parties_involved} 
         label="Parties Involved" 
         placeholder="Name of the parties involved." 
-       
     />
 </div>
 
