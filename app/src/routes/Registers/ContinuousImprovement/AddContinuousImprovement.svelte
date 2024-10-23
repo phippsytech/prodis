@@ -96,7 +96,7 @@
     bind:staffer={staffer}
 />
 
-<div class="flex justify-between">
+<div class="flex justify-between mt-2">
     <span></span>
-    <Button on:click={addContinuousImprovement} label="Add continuous improvement" />
+    <Button on:click={addContinuousImprovement} label="Add Continuous Improvement" />
 </div>

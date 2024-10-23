@@ -15,7 +15,7 @@
         { check: () => !complaint.date_complaint, message: "Complaint date must be provided." },
         // { check: () => !complaint.complaint_type, message: "Complaint type must be provided." },
         { check: () => !complaint.status, message: "Complaint status must be provided." },
-        { check: () => !complaint.complainant_client_id || complaint.complainant_client_id.length === 0, message: "Please select a client." },
+        // { check: () => !complaint.complainant_client_id || complaint.complainant_client_id.length === 0, message: "Please select a client." },
         { check: () => !complaint.complainant_name, message: "Complainant's name must be provided." },
         { check: () => !complaint.details, message: "Details must be provided." },
         { check: () =>  (!complaint.resolution_date && complaint.date_complaint > complaint.resolution_date) , message: "Resolution date must not be before the complaint date provided." },
@@ -57,9 +57,9 @@
 
     $: {
         complaint.status = complaint.investigation_result && complaint.recommended_actions ? 'closed' : 'open';
-
         if (complaint.status === 'closed' && !complaint.date_actioned) {
-            complaint.date_actioned = new Date().toISOString();
+            let today = new Date();
+            complaint.date_actioned = today.toISOString().split('T')[0]; 
         }
         //console.log(complaint.status);
     }
@@ -77,5 +77,5 @@
 
 <div class="flex justify-between">
     <span></span>
-    <Button on:click={() => addComplaint()} label="Add complaint" />
+    <Button on:click={() => addComplaint()} label="Add Complaint" />
 </div>

@@ -87,6 +87,6 @@
     <span></span>
     <Button
         on:click={() => addconflictofinterest()}
-        label="Add conflict of interest"
+        label="Add Conflict of Interest"
     />
 </div>

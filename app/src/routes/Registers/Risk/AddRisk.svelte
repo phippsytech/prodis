@@ -60,7 +60,7 @@
 </div>
 <RiskForm bind:risk />
 
-<div class="flex justify-between">
+<div class="flex justify-between mt-2">
     <span></span>
     <Button on:click={() => addRisk()} label="Add Risk" />
 </div>

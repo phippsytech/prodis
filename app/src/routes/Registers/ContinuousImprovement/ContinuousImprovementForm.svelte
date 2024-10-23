@@ -39,11 +39,9 @@
         <h3 class="text-base font-bold leading-6 text-gray-900 px-3">Action</h3>
     </div>
 
-    <FloatingTextArea 
-        bind:value={continuous_improvement.action_taken}
-        label="Action Taken"
-        placeholder="Indicate action taken by staff"
-    /> 
+    <RTE 
+        bind:content={continuous_improvement.action_taken}
+    />
 
     <div class="flex space-x-4 w-full mt-2">
         <div class="flex-1">
@@ -68,17 +66,12 @@
     </div>
 
     <div class="mt-2">
-        <FloatingTextArea 
-            bind:value={continuous_improvement.impact_analysis}
-            label="Impact Analysis"
-            placeholder="Indicate summary of the impact the suggestion"
-        /> 
+        <RTE 
+            bind:content={continuous_improvement.impact_analysis}
+        />
     </div>
 </div>
 
-<Role roles={["admin"]}>
-
-</Role>
 
 
 

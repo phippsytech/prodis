@@ -128,5 +128,5 @@
 
 <div class="flex justify-between">
     <span></span>
-    <Button on:click={addTraining} label="Add training" />
+    <Button on:click={addTraining} label="Add Training" />
 </div>

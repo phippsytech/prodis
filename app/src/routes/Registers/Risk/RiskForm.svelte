@@ -2,6 +2,7 @@
     import FloatingInput from "@shared/PhippsyTech/svelte-ui/forms/FloatingInput.svelte";
     import FloatingTextArea from "@shared/PhippsyTech/svelte-ui/forms/FloatingTextArea.svelte";
     import FloatingCombo from "@shared/PhippsyTech/svelte-ui/forms/FloatingCombo.svelte";
+    import RTE from "@shared/RTE/RTE.svelte";
     import { jspa } from "@shared/jspa.js";
 
     export let risk;
@@ -51,20 +52,16 @@
     hideValidation={true}
 /> -->
 
-<FloatingTextArea
-    bind:value={risk.description}
-    label="Description"
-    placeholder="Describe the risk"
-    style="height:150px"
+<span class="ml-2 text-xs text-gray-900/50">Description</span>
+<RTE 
+    bind:content={risk.description}
 />
 
 <div class="mt-4 mb-2">
     <h3 class="text-base font-bold leading-6 text-gray-900 px-3">Resolution</h3>
 </div>
 
-<FloatingTextArea
-    bind:value={risk.resolution}
-    label="Resolution"
-    placeholder="List actions taken to mitigate the risk."
-    style="height:150px"
+<RTE 
+    bind:content={risk.resolution}
 />
+

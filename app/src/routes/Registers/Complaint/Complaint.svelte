@@ -212,9 +212,10 @@
     $: {
         complaint.status = complaint.investigation_result && complaint.recommended_actions ? 'closed' : 'open';
         if (complaint.status === 'closed' && !complaint.date_actioned) {
-            complaint.date_actioned = new Date().toISOString();
+            let today = new Date();
+            complaint.date_actioned = today.toISOString().split('T')[0]; 
         }
-        console.log(complaint.status);
+        // console.log(complaint.status);
     }
 
     // $: {

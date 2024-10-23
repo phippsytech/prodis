@@ -180,7 +180,7 @@
                     <tr class="hover:bg-indigo-50">
                       <td
                         class="whitespace-nowrap py-3 px-4 text-sm font-medium text-gray-900"
-                        >{compliment.description.length > 50 
+                        >{@html compliment.description.length > 50 
                             ? compliment.description.slice(0, 50) + '...'
                             : compliment.description}
                       </td
