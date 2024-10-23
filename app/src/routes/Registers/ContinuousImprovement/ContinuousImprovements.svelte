@@ -161,7 +161,7 @@
                     {#each continuous_improvements as improvement}
                         <tr>
                             <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
-                                {improvement.suggestion_details.length > 50 
+                                {@html improvement.suggestion_details.length > 50 
                                     ? improvement.suggestion_details.slice(0, 50) + '...' 
                                     : improvement.suggestion_details}
                             </td>

@@ -198,7 +198,7 @@ aria-label="Toolbar"
                     {#each conflictofinterests as conflict}
                         <tr>
                             <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6">
-                                {conflict.description.length > 50 
+                                {@html conflict.description.length > 50 
                                     ? conflict.description.slice(0, 50) + '...' 
                                     : conflict.description}
                             </td>

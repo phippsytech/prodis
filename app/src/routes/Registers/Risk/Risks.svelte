@@ -208,7 +208,7 @@
                     <td
                         class="whitespace-nowrap py-3 px-4 text-sm font-medium text-gray-900"
                     >
-                        {risk.description && risk.description.length > 50
+                        {@html risk.description && risk.description.length > 50
                         ? risk.description.slice(0, 50) + '...'
                         : risk.description || "N/A"}
                     </td>

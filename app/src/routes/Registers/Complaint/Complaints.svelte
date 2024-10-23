@@ -158,7 +158,7 @@ aria-label="Toolbar"
                 <tr class="hover:bg-indigo-50">
                   <td
                     class="whitespace-nowrap py-3 px-4 text-sm font-medium text-gray-900"
-                    >{complaint.details.length > 50 
+                    >{@html complaint.details.length > 50 
                       ? complaint.details.slice(0, 50) + '...'
                       : complaint.details}
                       </td
