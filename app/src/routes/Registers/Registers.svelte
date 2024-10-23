@@ -6,17 +6,6 @@
     import { BreadcrumbStore, RolesStore } from '@shared/stores.js';
     import { push } from "svelte-spa-router";
     import RegisterPanel from './RegisterPanel.svelte';
-
-
-    let icons = [
-        // {url:"/registers/feedbacks", name:"Feedback Register", icon:  ChatBubbleLeftEllipsisIcon, role:["admin"]},
-        {url:"/registers/complaints", name:"Complaint Register", icon: FireIcon, role:["admin"]},
-        {url:"/registers/compliments", name:"Compliment Register", icon: BookOpenIcon, role:["admin"]},
-        {url:"/registers/conflictofinterests", name:"Conflict Of Interest Register", icon: ExclamationCircleIcon, role:["admin"]},
-        {url:"/registers/continuousimprovements", name:"Continuous Improvement", icon: PlusIcon, role:["admin"]},
-        {url:"/registers/trainings", name:"Training Register", icon: AcademicCapIcon, role:["admin"]},
-        {url:"/registers/risks", name:"Risk Register", icon:  FireIcon, role:["admin"]},
-    ]
     
     BreadcrumbStore.set({
         path: [
