@@ -1,12 +1,8 @@
 <script>
-
-    import Container from '@shared/Container.svelte';
-    import IconMenu from '@shared/PhippsyTech/svelte-iconmenu/IconMenu.svelte';
-    import {AcademicCapIcon, ChatBubbleLeftEllipsisIcon, FireIcon, ExclamationCircleIcon, PlusIcon, BookOpenIcon} from 'heroicons-svelte/24/outline';
     import { BreadcrumbStore, RolesStore } from '@shared/stores.js';
     import { push } from "svelte-spa-router";
     import RegisterPanel from './RegisterPanel.svelte';
-    
+
     BreadcrumbStore.set({
         path: [
             {url: null, name: 'Registers'},
