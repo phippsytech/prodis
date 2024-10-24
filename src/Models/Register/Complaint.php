@@ -36,6 +36,7 @@ class Complaint extends NewCustomModel
             'acknowledgement_date' => [v::optional(v::dateTime('Y-m-d'))],
             'resolution_date' => [v::optional(v::dateTime('Y-m-d'))],
             'user_id' => [v::numericVal()] // log user id on create
+        ];   
     }
     
 
