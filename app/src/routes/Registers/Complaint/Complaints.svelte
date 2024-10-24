@@ -18,15 +18,12 @@
 
     jspa("/Register/Complaint", "listComplaints", {}).then((result) => {
         complaints = result.result;
-        console.log(complaints);
         // sort the feedbacks reverse chronologically
         complaints.sort(function (a, b) {
             let aDateTime = Date.parse(a.date_identified);
             let bDateTime = Date.parse(b.date_identified);
             return bDateTime - aDateTime;
         });
-
-        console.log(complaints);
     });
 
     BreadcrumbStore.set({ path: [{ url: "/registers", name: "Registers" }] });
