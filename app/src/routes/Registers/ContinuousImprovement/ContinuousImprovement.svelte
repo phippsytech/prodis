@@ -33,7 +33,6 @@
                 }).finally(() => {
                 })
                 .catch((error) => {
-                    console.log(error);
                     toastError("Failed to load continuous improvement.");
                 })
 

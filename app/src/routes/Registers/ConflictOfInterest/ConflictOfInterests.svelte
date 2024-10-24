@@ -79,8 +79,7 @@
    }
 
    if (filter.type) {
-       console.log('type', filter);
-       
+
        conflictofinterests = conflictofinterests.filter(
        (conflict) => conflict.type == filter.type
        

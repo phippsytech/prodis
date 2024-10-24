@@ -33,7 +33,6 @@
         });
       })
       .catch((error) => {
-        console.log(error);
       });
       
     let filter = {};  
@@ -56,7 +55,6 @@
             risks = risks.filter(
                 (risks) => risks.staff_id === filter.reviewer
             );
-            console.log(risks)
         }
     }
 
