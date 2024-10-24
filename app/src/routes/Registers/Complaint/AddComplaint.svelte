@@ -10,7 +10,7 @@
 
     complaint.status = "open";
     complaint.complaint_type = null;
-    complaint.user_id = UserStore
+    complaint.user_id = $UserStore.id;
 
     const validations = [
         { check: () => !complaint.date_complaint, message: "Complaint date must be provided." },
@@ -62,9 +62,7 @@
             let today = new Date();
             complaint.date_actioned = today.toISOString().split('T')[0]; 
         }
-        //console.log(complaint.status);
     }
-    console.log($UserStore.id)
 </script>
 
 <div class="mb-2 mt-2" style="color: rgb(34, 0, 85);">
