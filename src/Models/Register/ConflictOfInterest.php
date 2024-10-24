@@ -22,6 +22,7 @@ class ConflictOfInterest extends NewCustomModel
             'type' => [v::stringType()],
             'resolution' => [v::stringType()],
             'status' => [v::stringType()],
+            'user_id' => [v::numericVal()] // log user id on create
         ];
     }
 }

@@ -1,12 +1,15 @@
 <script>
     import { push } from "svelte-spa-router";
-    import { BreadcrumbStore } from "@shared/stores.js";
+    import { BreadcrumbStore, UserStore } from "@shared/stores.js";
     import { jspa } from "@shared/jspa.js";
     import { toastSuccess, toastError } from "@shared/toastHelper.js";
     import ContinuousImprovementForm from './ContinuousImprovementForm.svelte';
     import Button from "@shared/PhippsyTech/svelte-ui/Button.svelte";
 
     let continuous_improvement = {};
+
+    continuous_improvement.user_id = $UserStore.id;
+    
     let staffer = [];
 
     BreadcrumbStore.set({

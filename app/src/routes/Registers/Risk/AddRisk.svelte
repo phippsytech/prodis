@@ -1,12 +1,14 @@
 <script>
     import { push } from "svelte-spa-router";
-    import { BreadcrumbStore } from "@shared/stores.js";
+    import { BreadcrumbStore, UserStore} from "@shared/stores.js";
     import { jspa } from "@shared/jspa.js";
     import { toastSuccess, toastError } from "@shared/toastHelper.js";
     import Button from "@shared/PhippsyTech/svelte-ui/Button.svelte";
     import RiskForm from "./RiskForm.svelte";
 
     let risk = {};
+
+    risk.user_id = $UserStore.id
 
     risk.status = "open";
     risk.resolution = null;

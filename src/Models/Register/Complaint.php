@@ -16,26 +16,26 @@ class Complaint extends NewCustomModel
             'complaint_type' => [v::optional(v::stringType())],
             'received_via' => [v::optional(v::stringType())],
             'received_by' => [v::optional(v::stringType())],
-            'details' => [v::optional(v::stringType())], // x
+            'details' => [v::optional(v::stringType())], 
             'outcome_wanted' => [v::optional(v::stringType())],
             'date_complaint' => [v::dateTime('Y-m-d')],
             'date_actioned' => [v::optional(v::dateTime('Y-m-d'))],
             'is_staff_notified' => [v::optional(v::boolVal())],
-            'complainant_feedback' => [v::optional(v::stringType())], // x
+            'complainant_feedback' => [v::optional(v::stringType())], 
             'complainant_name' => [v::optional(v::stringType())],
             'continuous_improvement' => [v::optional(v::stringType())],
             'notified_of_outcome' => [v::optional(v::boolVal())],
             'ndis_commission_notified' => [v::optional(v::boolVal())],
             'ndis_commission_id' => [v::optional(v::numericVal())],
-            'recommended_actions' => [v::optional(v::stringType())], // x
+            'recommended_actions' => [v::optional(v::stringType())], 
             'investigation_result' => [v::optional(v::stringType())],
             'status' => [v::stringType()],
-            // 'description' => [v::stringType()], // x
-            'actions_taken' => [v::optional(v::stringType())], // x
+            // 'description' => [v::stringType()], 
+            'actions_taken' => [v::optional(v::stringType())], 
             'staffs_id' => [v::optional(v::numericVal())],
             'acknowledgement_date' => [v::optional(v::dateTime('Y-m-d'))],
             'resolution_date' => [v::optional(v::dateTime('Y-m-d'))],
-        ];
+            'user_id' => [v::numericVal()] // log user id on create
     }
     
 

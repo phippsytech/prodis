@@ -1,6 +1,6 @@
 <script>
     import { push } from "svelte-spa-router";
-    import { BreadcrumbStore } from "@shared/stores.js";
+    import { BreadcrumbStore, UserStore } from "@shared/stores.js";
     import { jspa } from "@shared/jspa.js";
     import ComplaintForm from "./ComplaintForm.svelte";
     import Button from "@shared/PhippsyTech/svelte-ui/Button.svelte";
@@ -10,6 +10,7 @@
 
     complaint.status = "open";
     complaint.complaint_type = null;
+    complaint.user_id = UserStore
 
     const validations = [
         { check: () => !complaint.date_complaint, message: "Complaint date must be provided." },
@@ -63,6 +64,7 @@
         }
         //console.log(complaint.status);
     }
+    console.log($UserStore.id)
 </script>
 
 <div class="mb-2 mt-2" style="color: rgb(34, 0, 85);">

@@ -120,6 +120,8 @@
   BreadcrumbStore.set({
     path: [],
   });
+
+  console.log($UserStore.id)
 </script>
 
 <!-- <div class="pt-2 px-4">

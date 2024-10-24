@@ -1,6 +1,6 @@
 <script>
     import { push } from "svelte-spa-router";
-    import { BreadcrumbStore } from "@shared/stores.js";
+    import { BreadcrumbStore, UserStore } from "@shared/stores.js";
     import { jspa } from "@shared/jspa.js";
     import { toastSuccess, toastError } from "@shared/toastHelper.js";
     import FloatingInput from "@shared/PhippsyTech/svelte-ui/forms/FloatingInput.svelte";
@@ -9,6 +9,8 @@
     import StaffMultiSelector from "@shared/StaffMultiSelector.svelte";
 
     let training = {};
+
+    training.user_id = $UserStore.id;
 
     let evidenceOptions = [
         { option: "Yes", value: "yes" },

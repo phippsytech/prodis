@@ -1,7 +1,7 @@
 <script>
     import { toastSuccess, toastError } from "@shared/toastHelper.js";
     import { jspa } from "@shared/jspa.js";
-    import { BreadcrumbStore } from "@shared/stores.js";
+    import { BreadcrumbStore, UserStore } from "@shared/stores.js";
     import { push } from "svelte-spa-router";
     import RTE from "@shared/RTE/RTE.svelte";
     import Role from "@shared/Role.svelte";
@@ -18,6 +18,7 @@
 
     compliment.acknowledgement_date = null;
     compliment.status = "not_acknowledged";
+    compliment.user_id = $UserStore.id;
 
     let staffer = [];
 

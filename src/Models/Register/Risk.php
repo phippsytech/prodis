@@ -18,6 +18,7 @@ class Risk extends NewCustomModel
             'description' => [v::stringType()],
             'resolution' => [v::stringType()],
             'status' => [v::stringType()], // open, closed
+            'user_id' => [v::numericVal()] // log user id on create
         ];
     }
 

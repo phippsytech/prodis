@@ -17,6 +17,7 @@ class Training extends NewCustomModel
             'status' => [v::stringType()],
             'completion_date' => [v::optional(v::dateTime('Y-m-d'))],
             'has_evidence' => [v::boolVal()],
+            'user_id' => [v::numericVal()] // log user id on create
         ];
     }
 

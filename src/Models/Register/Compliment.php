@@ -19,6 +19,7 @@ class Compliment extends NewCustomModel
             'action_taken' => [v::optional(v::stringType())],
             'acknowledgement_date' => [v::optional(v::dateTime('Y-m-d'))],
             'status' => [v::stringType()],
+            'user_id' => [v::numericVal()] // log user id on create
         ];
     }
 

@@ -1,13 +1,14 @@
 <script>
     import { push } from "svelte-spa-router";
-    import { BreadcrumbStore } from "@shared/stores.js";
+    import { BreadcrumbStore, UserStore } from "@shared/stores.js";
     import { jspa } from "@shared/jspa.js";
     import Button from "@shared/PhippsyTech/svelte-ui/Button.svelte";
     import ConflictOfInterestForm from "./ConflictOfInterestForm.svelte";
     import { toastSuccess, toastError } from "@shared/toastHelper.js";
     
     let conflictofinterest = {};
-    
+
+    conflictofinterest.user_id = $UserStore.id;
 
     BreadcrumbStore.set({
         path: [

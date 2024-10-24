@@ -21,7 +21,7 @@ class ContinuousImprovement extends NewCustomModel
             'impact_analysis' => [v::optional(v::stringType())],
             'implementing_staffs_id' => [v::optional(v::numericVal())], //implementing staff id
             'completion_date' => [v::optional(v::dateTime('Y-m-d'))],
-            
+            'user_id' => [v::numericVal()] // log user id on create
         ];
     }
 
