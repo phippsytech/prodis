@@ -14,8 +14,8 @@ class ConflictOfInterest extends NewCustomModel
         parent::__construct($bean ?: R::dispense('conflictofinterests'));
         $this->fields = [
             // 'staff_id' => [v::numericVal()],
-            'date_identified' => [v::stringType()],
-            'date_resolved' => [v::stringType()],
+            'date_identified' => [v::dateTime('Y-m-d')],
+            'date_resolved' => [v::dateTime('Y-m-d')],
             'reported_by' => [v::stringType()],
             'parties_involved' => [v::stringType()],
             'description' => [v::stringType()],

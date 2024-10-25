@@ -11,10 +11,9 @@ class Risk extends NewCustomModel
     {
         parent::__construct($bean ?: R::dispense('risks'));
         $this->fields = [
-            'staff_id' => [v::numericVal()],
+            'reported_by' => [v::stringType()],
             'date_identified' => [v::dateTime('Y-m-d')],
             'date_resolved' => [v::optional(v::dateTime('Y-m-d'))],
-            'type' => [v::stringType()],
             'description' => [v::stringType()],
             'resolution' => [v::stringType()],
             'status' => [v::stringType()], // open, closed
