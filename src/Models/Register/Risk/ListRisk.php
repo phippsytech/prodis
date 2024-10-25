@@ -10,12 +10,8 @@ class ListRisk
             // Initialize an empty array for the result
             $result = [];
 
-            // SQL query to select from the risks table and left join the staffs table
-            $sql = "SELECT 
-                        risks.*, 
-                        staff.name AS staff_name
-                    FROM risks
-                    LEFT JOIN staffs staff ON risks.staff_id = staff.id";
+            // Basic SQL query to select all from risks table
+            $sql = "SELECT * FROM risks";
                 
             $params = [];
             $conditions = [];
