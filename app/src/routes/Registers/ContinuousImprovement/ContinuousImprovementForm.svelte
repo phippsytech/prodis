@@ -47,7 +47,7 @@
         <div class="flex-1">
             <FloatingDate
                 bind:value={continuous_improvement.review_date}
-                label="Review date"
+                label="Date of Review"
             />
         </div>
 
