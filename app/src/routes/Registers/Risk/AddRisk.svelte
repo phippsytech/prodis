@@ -37,7 +37,8 @@
                 risk.date_resolved = null;
             }
 
-            if (risk.staff_id && risk.type && risk.description) {
+
+            if (risk.reported_by && risk.description) {
                 risk.date_identified = new Date().toISOString().split('T')[0]; 
                 risk.status = risk.status !== "resolved" ? "open" : risk.status;
             }

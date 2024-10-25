@@ -55,6 +55,8 @@
             return; 
         }
 
+        conflictofinterest.date_identified = new Date().toISOString().split('T')[0];
+
         if (conflictofinterest.date_resolved && conflictofinterest.resolution.trim() != "") {
             conflictofinterest.status = 'resolved';
         } else {

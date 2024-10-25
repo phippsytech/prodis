@@ -173,11 +173,6 @@
                   <th
                     scope="col"
                     class="px-4 py-2 text-left text-xs font-medium text-slate-500"
-                    >Type</th
-                  >
-                  <th
-                    scope="col"
-                    class="px-4 py-2 text-left text-xs font-medium text-slate-500"
                     >Reporter</th
                   >
                   <th
@@ -210,11 +205,9 @@
                         ? risk.description.slice(0, 50) + '...'
                         : risk.description || "N/A"}
                     </td>
+
                     <td class="whitespace-nowrap px-4 py-3 text-sm text-gray-500"
-                      >{risk.type}</td
-                    >
-                    <td class="whitespace-nowrap px-4 py-3 text-sm text-gray-500"
-                      >{risk.staff_name ? risk.staff_name : "N/A"}</td
+                      >{risk.reported_by ? risk.reported_by : "N/A"}</td
                     >
                     <td class="whitespace-nowrap px-4 py-3 text-sm text-gray-500"
                       >{risk.date_identified ? formatDate(risk.date_identified) : "N/A"}</td

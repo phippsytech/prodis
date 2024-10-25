@@ -1,6 +1,5 @@
 <script>
     import FloatingInput from "@shared/PhippsyTech/svelte-ui/forms/FloatingInput.svelte";
-    import FloatingTextArea from "@shared/PhippsyTech/svelte-ui/forms/FloatingTextArea.svelte";
     import FloatingCombo from "@shared/PhippsyTech/svelte-ui/forms/FloatingCombo.svelte";
     import RTE from "@shared/RTE/RTE.svelte";
     import { jspa } from "@shared/jspa.js";
@@ -25,24 +24,11 @@
     <h3 class="text-base font-bold leading-6 text-gray-900 px-3">Report</h3>
 </div>
 
-<div class="flex space-x-4 w-full">
-    <div class="flex-1">
-        <FloatingCombo 
-            bind:value={risk.staff_id}
-            items={staff}
-            label="Who reported this risk"
-            placeholderText="Select or type staff name"
-        />
-    </div>
-    <div class="flex-1">
-        <FloatingInput
-            bind:value={risk.type}
-            label="Type of Risk"
-            placeholder="Type of risk"
-        />
-    </div>
-</div>
-
+<FloatingInput 
+    bind:value={risk.reported_by}
+    label="Who reported this risk"
+    placeholderText="Select or type staff name"
+/>
 <!-- <FloatingSelect
     bind:this={riskStatusSelectElement}
     bind:value={risk.status}
