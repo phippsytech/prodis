@@ -5,10 +5,35 @@ use \RedBeanPHP\R as R;
 
 class ListComplaint {
 
-    function __invoke($data) {
+    function __invoke($data) 
+    {
+            // Initialize an empty array for the result
+            $result = [];
 
-       $complaints =  R::findAll('complaints');
+            // Basic SQL query to select all from the trainings table
+            $sql = "SELECT * FROM complaints";
+            
+            $params = [];
+            $conditions = [];
 
-       return array_values($complaints);
+            // Build conditions based on provided data if needed (optional)
+            // For example, if you want to filter by status or other fields
+            if (isset($data['status'])) {
+                $conditions[] = 'status = ?';
+                $params[] = $data['status'];
+            }
+
+            // Append conditions to SQL query if there are any
+            if (!empty($conditions)) {
+                $sql .= ' WHERE ' . implode(' AND ', $conditions);
+            }
+
+            // Append order by clause (optional)
+            $sql .= ' ORDER BY date_complaint DESC';
+
+            // Execute the query using RedBeanPHP
+            $result = R::getAll($sql, $params);
+
+            return $result;
     }
 }
