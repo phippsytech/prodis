@@ -1000,11 +1000,21 @@ export default {
         asyncComponent: () => import('./routes/Accounts/PlanManagers/PlanManager.svelte')
     }),
 
+    '/forms': wrap({
+        asyncComponent: () => import('./routes/Forms/List.svelte')
+    }),
 
+    '/forms/add': wrap({
+        asyncComponent: () => import('./routes/Forms/Create.svelte')
+    }),
 
+    '/forms/:form_id': wrap({
+        asyncComponent: () => import('./routes/Forms/Edit.svelte')
+    }),
 
-
-
+    '/forms/:form_id/details': wrap({
+        asyncComponent: () => import('./routes/Forms/Details.svelte')
+    }),
 
 
 
