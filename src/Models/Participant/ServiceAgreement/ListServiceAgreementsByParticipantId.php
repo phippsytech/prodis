@@ -1,4 +1,5 @@
 <?php
+
 namespace NDISmate\Models\Participant\ServiceAgreement;
 
 use NDISmate\Utilities\ConvertFieldsToBoolean;
@@ -14,7 +15,7 @@ class ListServiceAgreementsByParticipantId
             WHERE client_id = :participant_id',
             [':participant_id' => $data['participant_id']]
         );
-        $result = (new ConvertFieldsToBoolean)($beans, ['is_active']);
+        $result = (new ConvertFieldsToBoolean)($beans, ['is_active', 'is_draft']);
 
         return $result;
     }

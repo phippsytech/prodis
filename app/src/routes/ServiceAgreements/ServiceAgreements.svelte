@@ -1,82 +1,83 @@
 <script>
-    import { push } from "svelte-spa-router";
-    import { jspa } from "@shared/jspa.js";
-    import { BreadcrumbStore } from "@shared/stores.js";
+  import { push } from "svelte-spa-router";
+  import { jspa } from "@shared/jspa.js";
+  import { BreadcrumbStore } from "@shared/stores.js";
+  import Tabs from "./Tabs.svelte";
 
-    let service_agreements = [];
+  import Active from "./Active.svelte";
+  import Expiring from "./Expiring.svelte";
+  import Expired from "./Expired.svelte";
+  import Pending from "./Pending.svelte";
 
-    jspa(
-        "/Participant/ServiceAgreement",
-        "listServiceAgreementsToAmend",
-        {},
-    ).then((result) => {
-        service_agreements = getUniqueServiceAgreements(result.result);
-    });
+  let service_agreements = [];
 
-    BreadcrumbStore.set({ path: [{ name: "Service Agreements" }] });
+  jspa(
+    "/Participant/ServiceAgreement",
+    "listServiceAgreementsToAmend",
+    {}
+  ).then((result) => {
+    service_agreements = getUniqueServiceAgreements(result.result);
+  });
 
-    function getUniqueServiceAgreements(agreements) {
-        const uniqueAgreements = [];
-        const ids = new Set();
+  BreadcrumbStore.set({ path: [{ name: "Service Agreements" }] });
 
-        for (const agreement of agreements) {
-            if (!ids.has(agreement.service_agreement_id)) {
-                ids.add(agreement.service_agreement_id);
-                uniqueAgreements.push(agreement);
-            }
-        }
+  function getUniqueServiceAgreements(agreements) {
+    const uniqueAgreements = [];
+    const ids = new Set();
 
-        return uniqueAgreements;
+    for (const agreement of agreements) {
+      if (!ids.has(agreement.service_agreement_id)) {
+        ids.add(agreement.service_agreement_id);
+        uniqueAgreements.push(agreement);
+      }
     }
 
-    function addService() {
-        push("/service_agreements/add");
-    }
+    return uniqueAgreements;
+  }
+
+  function addService() {
+    push("/service_agreements/add");
+  }
+
+  let selectedTab = { name: "Expired" };
+  const tabs = [
+    { name: "Active", count: 52, active: false },
+    { name: "Expiring Soon", count: 6, active: false },
+    { name: "Expired", count: 4, active: true },
+    { name: "Pending", active: false },
+  ];
+
+  function handleTabSelected(event) {
+    selectedTab = event.detail.tab;
+
+    // Update other content based on the selected tab
+  }
 </script>
 
-<div class="flex items-center mb-4">
-    <div class="flex-auto">
-        <h1
-            class="text-2xl font-fredoka-one-regular px-4"
-            style="color:#220055;"
-        >
-            Service Agreements
-        </h1>
-        <p>
-            This section is still being worked on. For now you can use it to
-            find service agreements that need to be amended, and to manage
-            service agreement amendments
-        </p>
-    </div>
-    <button
-        on:click={() => addService()}
-        type="button"
-        class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-        >Add</button
-    >
+<div class="sm:flex sm:items-center mt-4">
+  <div class="sm:flex-auto">
+    <h1 class="text-2xl font-fredoka-one-regular leading-6 text-indigo-900">
+      Service Agreements
+    </h1>
+    <p class="mt-2 text-sm text-gray-700">
+      Track, renew, and monitor the status of service agreements
+    </p>
+  </div>
 </div>
 
-There are {service_agreements.length} to amend
+<Tabs {tabs} on:tabSelected={handleTabSelected} />
 
-<table class="table w-full">
-    <tr>
-        <th class="text-left">#</th>
-        <th class="text-left">Participant</th>
-        <th class="text-left">Representative</th>
-        <th class="text-left">Email</th>
-        <th class="text-left">Code</th>
-        <th class="text-right">Rate</th>
-        <th class="text-right">New Rate</th>
-    </tr>
-    {#each service_agreements as agreement, index (agreement.service_booking_id)}
-        <tr>
-            <td>{agreement.service_agreement_id}</td>
-            <td>{agreement.participant_name}</td>
-            <td>{agreement.representative_name}</td>
-            <td>{agreement.representative_email}</td>
-            <td>{agreement.code}</td>
-            <td class="text-right">{agreement.rate}</td>
-            <td class="text-right">{agreement.support_item_rate}</td>
-        </tr>
-    {/each}
-</table>
+{#if selectedTab}
+  {#if selectedTab.name === "Active"}
+    <Active {service_agreements} />
+  {/if}
+  {#if selectedTab.name === "Expiring Soon"}
+    <Expiring {service_agreements} />
+  {/if}
+  {#if selectedTab.name === "Expired"}
+    <Expired {service_agreements} />
+  {/if}
+  {#if selectedTab.name === "Pending"}
+    <Pending {service_agreements} />
+  {/if}
+{/if}

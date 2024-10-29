@@ -52,6 +52,13 @@ services:
     networks:
       - my_network
 
+  gotenberg:
+    image: gotenberg/gotenberg:latest
+    container_name: gotenberg
+    restart: unless-stopped
+    networks:
+      - my_network
+
 networks:
   my_network:
     external: true

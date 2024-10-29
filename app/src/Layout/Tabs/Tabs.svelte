@@ -48,6 +48,43 @@
     },
 
     {
+      "/serviceagreements": (params) => {
+        tabs = [
+          {
+            name: "Draft",
+            url: "/serviceagreements/draft",
+            active: true,
+            roles: ["admin"],
+          },
+          {
+            name: "Pending",
+            url: "/serviceagreements/pending",
+            active: true,
+            roles: ["admin"],
+          },
+          {
+            name: "Active",
+            url: "/serviceagreements/active",
+            active: true,
+            roles: ["admin"],
+          },
+          {
+            name: "Expiring Soon",
+            url: "/serviceagreements/expiring",
+            active: true,
+            roles: ["admin"],
+          },
+          {
+            name: "Ended",
+            url: "/serviceagreements/ended",
+            active: true,
+            roles: ["admin"],
+          },
+        ];
+      },
+    },
+
+    {
       "/clients/:client_id": async (params) => {
         client = await getClient(params.client_id);
         let sil_enabled = client.sil_enabled;
@@ -64,7 +101,6 @@
             url: "/clients/" + params.client_id + "/documents",
             active: true,
             roles: ["house", "therapist", "admin"],
-            
           },
           {
             name: "Case Notes",
@@ -552,7 +588,7 @@
             url: "/credentials/missing",
             active: true,
             roles: ["admin"],
-          }
+          },
         ];
       },
     },
@@ -589,7 +625,6 @@
             active: true,
             roles: ["admin"],
           },
-
         ];
       },
     },

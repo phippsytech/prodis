@@ -1,5 +1,5 @@
 <script>
-  import ServiceForm from "./ServiceBookingForm.svelte";
+  import EditServiceBookingForm from "./EditServiceBookingForm.svelte";
   import ServiceBooking from "./ServiceBooking.svelte";
   import Role from "@shared/Role.svelte";
   import { slide } from "svelte/transition";
@@ -92,7 +92,7 @@
       label: "Add Service",
       show: true,
       props: stored_service_booking,
-      component: ServiceForm,
+      component: EditServiceBookingForm,
       action_label: "Add",
       action: () => addServiceBooking(stored_service_booking),
     });
@@ -108,7 +108,7 @@
         label: "Update Service",
         show: true,
         props: stored_service_booking,
-        component: ServiceForm,
+        component: EditServiceBookingForm,
         action_label: "Update",
         action: () => updateServiceBooking(stored_service_booking),
         delete: () => deleteServiceBooking(stored_service_booking),
@@ -176,26 +176,8 @@
       <li
         class="px-3 py-2 border-t border-indigo-100 w-full text-slate-400 cursor-default text-sm"
       >
-        No service bookings have been added to this agreement. &nbsp;<button
-          on:click={() => showServiceBooking()}
-          class="text-indigo-600 cursor-pointer hover:underline"
-          >Add a Service</button
-        >
+        No service bookings have been added to this agreement.
       </li>
     </Role>
   {/if}
 {/each}
-
-{#if $ServiceBookingsStore.length > 0 && service_agreement.is_active}
-  <Role roles={["serviceagreement.modify"]}>
-    <li
-      class="px-3 py-2 border-t border-indigo-100 w-full text-slate-400 cursor-default text-sm"
-    >
-      <button
-        on:click={() => showServiceBooking()}
-        class="text-indigo-600 cursor-pointer hover:underline"
-        >Add another Service</button
-      >
-    </li>
-  </Role>
-{/if}

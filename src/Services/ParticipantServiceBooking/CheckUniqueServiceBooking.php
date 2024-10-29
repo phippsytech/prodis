@@ -13,14 +13,18 @@ class CheckUniqueServiceBooking
 
             $bean_count = 0;
 
+            // Determine whether we are checking for drafts or active bookings
+            $is_draft = isset($data['is_draft']) && $data['is_draft'] == 1;
+            $status_column = $is_draft ? 'is_draft' : 'is_active';
+
             if (empty($data['id'])) {
                 // Creating a new booking, need to check for conflicts
                 $bean_count = R::getCell(
-                    'SELECT COUNT(*) as active_servicebookings
+                    "SELECT COUNT(*) as servicebookings_count
                      FROM servicebookings
                      WHERE participant_id = :participant_id
                      AND service_id = :service_id
-                     AND is_active = 1',
+                     AND $status_column = 1",
                     [
                         ':participant_id' => $data['participant_id'],
                         ':service_id' => $data['service_id']
@@ -38,35 +42,28 @@ class CheckUniqueServiceBooking
                 $participant_id = $current_service_booking['participant_id'];
 
                 // Check if the service_id has changed
-                // return [$data['service_id'], $current_service_id, $participant_id];
-
                 if ($data['service_id'] != $current_service_id) {
                     // The service_id has changed, so we need to check for conflicts
                     $bean_count = R::getCell(
-                        'SELECT COUNT(*) as active_servicebookings
+                        "SELECT COUNT(*) as servicebookings_count
                          FROM servicebookings
                          WHERE participant_id = :participant_id
                          AND service_id = :service_id
-                         AND is_active = 1
-                         AND id != :current_id',  // Exclude the current booking record
+                         AND {$status_column} = 1
+                         AND id != :current_id",  // Exclude the current booking record
                         [
                             ':participant_id' => $participant_id,
                             ':service_id' => $data['service_id'],
                             ':current_id' => $data['id']
                         ]
                     );
-                    // $bean_count = $data['service_id'];
-                    // $bean_count = $bean_count;
                 }
             }
 
-            // return $bean_count;
-
-
-            // If no active servicebookings found, return true
+            // If no conflicting servicebookings found, return true
             if ($bean_count == 0) return true;
 
-            // If active servicebookings found, return false
+            // If conflicting servicebookings found, return false
             return false;
         } catch (RedException $e) {
             // Handle RedBeanPHP specific exceptions

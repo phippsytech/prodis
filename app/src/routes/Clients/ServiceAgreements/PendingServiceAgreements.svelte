@@ -3,7 +3,6 @@
   import { slide } from "svelte/transition";
   import { flip } from "svelte/animate";
   import { PlusIcon } from "heroicons-svelte/24/outline";
-  import Container from "@shared/Container.svelte";
   import Role from "@shared/Role.svelte";
   import { ModalStore } from "@app/Overlays/stores";
   import ServiceAgreement from "./ServiceAgreement.svelte";
@@ -13,16 +12,17 @@
   import createStore from "@shared/createStore";
 
   import ServiceAgreementSupportItem from "./ServiceAgreementSupportItem.svelte";
-
-  import Tabs from "./Tabs.svelte";
-  import Draft from "./Draft.svelte";
-  import Active from "./Active.svelte";
-  import Ended from "./Ended.svelte";
-  import Pending from "./Pending.svelte";
+  //   import ServiceCombo from "@app/routes/Service/ServiceCombo.svelte";
+  //   import FloatingInput from "@shared/PhippsyTech/svelte-ui/forms/FloatingInput.svelte";
+  //   import FloatingDate from "@shared/PhippsyTech/svelte-ui/forms/FloatingDate.svelte";
+  //   import PlanManagerCombo from "@app/routes/Accounts/PlanManagers/PlanManagerCombo.svelte";
 
   export let client_id;
 
+  let props = {};
+
   let participant_id = client_id; // progressively renaming client_id to participant_id
+  let show_inactive_service_agreements = false;
 
   let service_agreement = {
     client_id: client_id, // TODO: remove this line once client_id is depricated
@@ -91,47 +91,50 @@
 
     ServiceAgreementStore.add(service_agreement);
   }
-
-  let selectedTab = { name: "Active" };
-  const tabs = [
-    // { name: "Active", count: 52, active: true },
-
-    { name: "Draft", active: false },
-    { name: "Pending", active: false },
-    { name: "Active", active: true },
-    { name: "Ended", active: false },
-  ];
-
-  function handleTabSelected(event) {
-    selectedTab = event.detail.tab;
-  }
 </script>
 
 <div class="mb-2">
+  <!-- <div class="flex justify-between sm:items-center mt-6 mb-1">
+    <div class="flex sm:flex-row flex-col sm:items-center">
+      <h3 class="text-slate-800 font-bold mx-2">New Service Agreement</h3>
+      <Role roles={["serviceagreement.modify"]}>
+        <button
+          class="text-xs text-indigo-600 hover:underline text-left mx-2"
+          on:click={() => showServiceAgreement(service_agreement)}
+        >
+        </button>
+      </Role>
+    </div>
+  </div> -->
+
   <div class="flex justify-between sm:items-center mt-6 mb-1">
     <div class="flex sm:flex-row flex-col sm:items-center">
       <h3 class="text-slate-800 font-bold mx-2">Service Agreements</h3>
+      <Role roles={["admin"]}>
+        <button
+          class="text-xs text-indigo-600 hover:underline text-left mx-2"
+          on:click={() => showAddReport(report)}
+        >
+          <PlusIcon class="w-4 h-4 inline" /> Add Service Agreement
+        </button>
+      </Role>
     </div>
-    <div class="flex sm:flex-row flex-col sm:items-center"></div>
   </div>
 
-  <Tabs {tabs} on:tabSelected={handleTabSelected} />
+  <ServiceAgreementSupportItem />
 
-  <div class="bg-white rounded-md border border-slate-200">
-    {#if selectedTab}
-      {#if selectedTab.name === "Draft"}
-        <Draft {ServiceAgreementStore} {participant_id} />
+  <!-- {#each $ServiceAgreementStore as agreement, index (agreement.id)}
+    <div
+      animate:flip={{ duration: 350 }}
+      in:slide={{ duration: 200 }}
+      out:slide={{ duration: 200 }}
+    >
+      {#if agreement.is_active || (show_inactive_service_agreements && !agreement.is_active)}
+        <ServiceAgreement
+          service_agreement={agreement}
+          {ServiceAgreementStore}
+        />
       {/if}
-      {#if selectedTab.name === "Pending"}
-        <Pending {ServiceAgreementStore} />
-      {/if}
-      {#if selectedTab.name === "Active"}
-        <Active {ServiceAgreementStore} />
-      {/if}
-
-      {#if selectedTab.name === "Ended"}
-        <Ended {ServiceAgreementStore} />
-      {/if}
-    {/if}
-  </div>
+    </div>
+  {/each} -->
 </div>

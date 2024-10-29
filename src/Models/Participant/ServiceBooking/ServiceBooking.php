@@ -1,4 +1,5 @@
 <?php
+
 namespace NDISmate\Models\Participant;
 
 use NDISmate\CORE\NewCustomModel;
@@ -18,7 +19,7 @@ class ServiceBooking extends NewCustomModel
             'plan_manager_id' => [v::numericVal()],
             'allocated_funding' => [v::monetaryAmount()],
             'budget' => [v::monetaryAmount()],
-            'budget_start_date' => [v::date('Y-m-d')],
+            'budget_start_date' => [v::optional(v::date('Y-m-d'))],
             'rate' => [v::optional(v::monetaryAmount())],
             'include_travel' => [v::boolVal()],
             'kilometer_budget' => [v::optional(v::monetaryAmount())],
@@ -26,6 +27,7 @@ class ServiceBooking extends NewCustomModel
             'xero_account_code' => [v::optional(v::stringType())],
             'is_active' => [v::boolVal()],
             'adjust_weekly_time' => [v::boolVal()],
+            'is_draft' => [v::boolVal()],
         ];
     }
 }
