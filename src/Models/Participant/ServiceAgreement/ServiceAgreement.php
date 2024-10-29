@@ -28,6 +28,7 @@ class ServiceAgreement extends NewCustomModel
             'signatory_phone' => [v::optional(v::stringType())],
             'is_draft' => [v::optional(v::boolVal())],
             'parent_id' => [v::optional(v::numericVal())],  // If this service agreement is based on another one, it will have a parent_id
+            'status' => [v::optional(v::in(['draft', 'pending', 'active', 'ended']))],
             // 'document_ref' => [v::stringType()], // TODO: relate to stored service agreement document
         ];
     }

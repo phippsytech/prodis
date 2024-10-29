@@ -384,3 +384,22 @@ export function getDateOnlyTimestamp(dateString) {
     const date = new Date(dateString);
     return new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
 }
+
+
+
+export function normalizeSignedDate(dateString) {
+    // If the date is empty or not provided, return null
+    if (!dateString || dateString === "") {
+      return null;
+    }
+
+    // Try to parse the date and check if it's valid
+    const date = new Date(dateString);
+    if (!isNaN(date.getTime())) {
+      // Return the date in YYYY-MM-DD format
+      return date.toISOString().split("T")[0];
+    }
+
+    // If the date is invalid, return null
+    return null;
+  }

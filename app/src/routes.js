@@ -778,8 +778,35 @@ export default {
 
 
     '/serviceagreements': wrap({
-        asyncComponent: () => import('./routes/ServiceAgreements/ServiceAgreements.svelte')
+        asyncComponent: () => import('./routes/ServiceAgreements/Active.svelte'),
+        conditions: [
+            (detail) => {
+                replace(detail.location + '/active')
+            }
+        ]
     }),
+
+    '/serviceagreements/active': wrap({
+        asyncComponent: () => import('./routes/ServiceAgreements/Active.svelte')
+    }),
+
+    '/serviceagreements/draft': wrap({
+        asyncComponent: () => import('./routes/ServiceAgreements/Draft.svelte')
+    }),
+    '/serviceagreements/pending': wrap({
+        asyncComponent: () => import('./routes/ServiceAgreements/Pending.svelte')
+    }),
+    '/serviceagreements/expiring': wrap({
+        asyncComponent: () => import('./routes/ServiceAgreements/Expiring.svelte')
+    }),
+    '/serviceagreements/ended': wrap({
+        asyncComponent: () => import('./routes/ServiceAgreements/Ended.svelte')
+    }),
+
+
+
+
+
 
     '/referrals': wrap({
         asyncComponent: () => import('./routes/Referrals/ReferralForm.svelte')

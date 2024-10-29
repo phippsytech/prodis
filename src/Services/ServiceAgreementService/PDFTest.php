@@ -1,11 +1,11 @@
 <?php
-namespace NDISmate\Services\ServiceAgreementService;
-use NDISmate\CORE\ContentTemplate;
 
+namespace NDISmate\Services\ServiceAgreementService;
+
+use NDISmate\CORE\ContentTemplate;
 use NDISmate\CORE\JsonResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7;
 
@@ -19,7 +19,7 @@ class PDFTest
 
 
         $data['provider_name'] = 'Crystel Care Pty Ltd';
-        $data['provider_short_name']= 'Crystel Care';
+        $data['provider_short_name'] = 'Crystel Care';
         $data['provider_abn'] = '36 662 942 403';
         $data['provider_contact'] = 'Tracey Jordan';
         $data['provider_contact_phone'] =  '0403 765 238';
@@ -45,7 +45,7 @@ class PDFTest
         $data['service_agreement_end_date'] = '2021-12-31';
         $data['amendment_start_date'] = '2021-01-01';
         $data['services'] = [
-            
+
             [
                 'name' => 'Behaviour Mangagement Plan',
                 'description' => '11_023_0110_7_3 Behavior Management Plan Including Training in Behaviour Management Strategies (Specialist Positive Behaviour Support)',
@@ -67,19 +67,6 @@ class PDFTest
                 'plan_manager' => 'Plan Manager',
             ],
         ];
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -152,64 +139,51 @@ Crystel Care Pty Ltd operates under the NDIS registration of Autism Therapy</p>
 </html>';
 
 
-        // $response->getBody()->write($htmlContent);
-        // return $response->withHeader('Content-Type', 'text/html');
 
-    try {
+        try {
 
-          $client = new Client();
+            $client = new Client();
 
-        // Sending the request to Gotenberg
-        $gotenbergResponse = $client->request('POST', 'http://gotenberg:3000/forms/chromium/convert/html', [
-            'multipart' => [
-                [
-                    'name'     => 'files',
-                    'contents' => Psr7\Utils::streamFor($htmlContent),
-                    'filename' => 'index.html', // Filename must be index.html
+            // Sending the request to Gotenberg
+            $gotenbergResponse = $client->request('POST', 'http://gotenberg:3000/forms/chromium/convert/html', [
+                'multipart' => [
+                    [
+                        'name'     => 'files',
+                        'contents' => Psr7\Utils::streamFor($htmlContent),
+                        'filename' => 'index.html', // Filename must be index.html
+                    ],
+                    [
+                        'name'     => 'files',
+                        'contents' => Psr7\Utils::streamFor($footerContent),
+                        'filename' => 'footer.html', // Filename must be footer.html
+                    ],
+                    [
+                        'name'     => 'paperWidth',
+                        'contents' => '8.27', // A4 width in inches
+                    ],
+                    [
+                        'name'     => 'paperHeight',
+                        'contents' => '11.69', // A4 height in inches
+                    ],
                 ],
-                [
-                    'name'     => 'files',
-                    'contents' => Psr7\Utils::streamFor($footerContent),
-                    'filename' => 'footer.html', // Filename must be footer.html
-                ],
-                [
-                    'name'     => 'paperWidth',
-                    'contents' => '8.27', // A4 width in inches
-                ],
-                [
-                    'name'     => 'paperHeight',
-                    'contents' => '11.69', // A4 height in inches
-                ],
-            ],
-        ]);
+            ]);
 
-        // Setting the response headers for the PDF download
-        // $response = $response->withHeader('Content-Type', 'application/pdf');
-        // $response = $response->withHeader('Content-Disposition', 'attachment; filename="generated.pdf"');
+            // Setting the response headers for the PDF download
+            // $response = $response->withHeader('Content-Type', 'application/pdf');
+            // $response = $response->withHeader('Content-Disposition', 'attachment; filename="generated.pdf"');
 
-        // Writing the PDF content to the response body
-        $response = $response->withHeader('Content-Type', 'application/pdf');
-        $response = $response->withHeader('Content-Disposition', 'inline; filename="generated.pdf"');
+            // Writing the PDF content to the response body
+            $response = $response->withHeader('Content-Type', 'application/pdf');
+            $response = $response->withHeader('Content-Disposition', 'inline; filename="generated.pdf"');
 
+            // Writing the PDF content to the response body
+            $response->getBody()->write($gotenbergResponse->getBody()->getContents());
 
-        // Writing the PDF content to the response body
-        $response->getBody()->write($gotenbergResponse->getBody()->getContents());
+            return $response;
+        } catch (\Exception $e) {
 
-        return $response;
-
-    } catch (\Exception $e) {
-        // Handle errors
-
-                // $response->getBody()->write($htmlContent);
-        // return $response->withHeader('Content-Type', 'text/html');
-
-        return JsonResponse::internalServerError($e->getMessage());
-
-        // return $response->withStatus(500)->withJson(['error' => $e->getMessage()]);
-    }
-
-
-
-
+            // Handle errors
+            return JsonResponse::internalServerError($e->getMessage());
+        }
     }
 }

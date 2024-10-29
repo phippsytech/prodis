@@ -14,6 +14,9 @@
   import { writable, derived } from "svelte/store";
 
   export let ServiceAgreementStore;
+  export let serviceBookingCount = 0;
+
+  $: serviceBookingCount = $DraftServiceBookingsStore.length;
 
   const draftAgreement = derived(
     ServiceAgreementStore,
@@ -23,16 +26,6 @@
   );
 
   const participant_id = $draftAgreement.client_id;
-
-  // [
-  //   {
-  //     service_name: "SBIS",
-  //     rate: 244.22,
-  //     budget: 20000,
-  //     kilometer_budget: 1000,
-  //     plan_manager_name: "National Disability Insurance Agency",
-  //   },
-  // ];
 
   $: roles = $RolesStore;
 
@@ -55,7 +48,7 @@
     });
   });
 
-  // re load data when service agreement end date is changed
+  // reload data when service agreement end date is changed
   $: if ($draftAgreement?.service_agreement_end_date) {
     DraftServiceBookingsStore.load({
       service_agreement_id: $draftAgreement.id,
@@ -128,7 +121,7 @@
         label: "Update Service",
         show: true,
         props: stored_service_booking,
-        component: EditDraftServiceBookingForm,
+        component: AddDraftServiceBookingForm,
         action_label: "Update",
         action: () => updateDraftServiceBooking(stored_service_booking),
         delete: () => deleteDraftServiceBooking(stored_service_booking),
@@ -160,11 +153,11 @@
 </script>
 
 <li
-  class="bg-white flex justify-between items-center px-2 py-2 border-b border-indigo-100 w-full gap-x-2"
+  class="bg-white flex justify-between items-center px-2 py-1 border-b border-indigo-100 w-full gap-x-2"
 >
   <div class="flex-grow">
     <div
-      class="grid grid-cols-12 gap-x-2 items-center w-full text-xs text-slate-400 font-semibold"
+      class="grid grid-cols-12 gap-x-2 items-center w-full text-xs text-slate-400"
     >
       <div class="col-span-2 px-2">
         Service Name
@@ -189,7 +182,8 @@
 {#each $DraftServiceBookingsStore as row, index (index)}
   <li
     class="bg-white group flex justify-between items-center hover:bg-indigo-50 px-2 py-2 focus:outline-none focus:ring-0 focus:bg-indigo-600 focus:text-slate-600 transition duration-500 border-b border-indigo-100 w-full
-      gap-x-2"
+      gap-x-2 cursor-pointer hover:text-indigo-600"
+    on:click={() => editDraftServiceBooking(row)}
   >
     <div class="flex-grow">
       <div class="grid grid-cols-12 gap-x-2 items-center w-full">
@@ -222,7 +216,7 @@
         class="flex p-1 text-center rounded-full text-sm font-semibold text-indigo-600 hover:bg-indigo-600 hover:text-white transition duration-300 cursor-pointer"
         on:click={() => deleteDraftServiceBooking(row)}
       >
-        <XMarkIcon class="h-4 w-4 inline m-0 p-0" />
+        <!-- <XMarkIcon class="h-4 w-4 inline m-0 p-0" /> -->
       </a>
     </div>
   </li>

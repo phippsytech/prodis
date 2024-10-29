@@ -34,13 +34,17 @@ class AddParticipantServiceBooking
 
             $isDraftServiceBooking = isset($serviceAgreement['is_draft']) ? $serviceAgreement['is_draft'] : false;
 
-            // throw new \Exception(var_export($isDraftServiceBooking, true));
+            $data['is_draft'] = $isDraftServiceBooking;
 
             //Check that there are no other active servicebookings for the same service for this participant.
             $isUniqueServiceBooking = (new CheckUniqueServiceBooking)($data);
 
             if ($isDraftServiceBooking === false && $isUniqueServiceBooking === false) {
                 throw new \Exception('An active service of this type already exists for this participant.');
+            }
+
+            if ($isDraftServiceBooking && $isUniqueServiceBooking === false) {
+                throw new \Exception('A draft service of this type already exists for this participant.');
             }
 
             $result = (new ParticipantServiceBooking)->create($data);
