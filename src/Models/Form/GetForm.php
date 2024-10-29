@@ -1,12 +1,16 @@
 <?php
 
 namespace NDISmate\Models\Form;
+
+use Exception;
 use \RedBeanPHP\R as R;
 
 class GetForm {
 
     public function __invoke($data)
     {
+
+        if (!isset($data['form_id'])) throw new Exception('Missing Parameter.');
 
 
         $query = "
