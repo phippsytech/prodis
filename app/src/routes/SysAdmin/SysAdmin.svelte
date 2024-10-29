@@ -2,6 +2,7 @@
     import IconMenu from "@shared/PhippsyTech/svelte-iconmenu/IconMenu.svelte";
     import BillingIcon from "@shared/PhippsyTech/svelte-ui/icons/Billing.svelte";
     import {
+        CameraIcon,
         CurrencyDollarIcon,
         PowerIcon,
         UsersIcon,
@@ -44,6 +45,13 @@
             url: "/expenses",
             name: "Expenses",
             icon: CurrencyDollarIcon,
+            role: ["super"],
+        },
+
+        {
+            url: "/sysadmin/camera",
+            name: "Camera",
+            icon: CameraIcon,
             role: ["super"],
         },
 

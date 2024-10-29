@@ -1000,13 +1000,10 @@ export default {
         asyncComponent: () => import('./routes/Accounts/PlanManagers/PlanManager.svelte')
     }),
 
-
-
-
-
-
-
-
+    // test component (please remove when done)
+    '/sysadmin/camera': wrap({
+        asyncComponent: () => import('./routes/Test/CameraTest.svelte')
+    }),
 
     '/404': NotFound,
     '*': NotFound,
