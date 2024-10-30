@@ -14,6 +14,7 @@
 
   import {
     UserIcon,
+    UsersIcon,
     UserGroupIcon,
     ClockIcon,
     ClipboardDocumentListIcon,
@@ -69,12 +70,12 @@
       role: ["house", "therapist", "admin"],
     },
 
-    {
-      url: "/directory",
-      name: "Directory",
-      icon: AddressBookIcon,
-      role: ["house", "therapist", "admin"],
-    },
+    // {
+    //   url: "/directory",
+    //   name: "Directory",
+    //   icon: AddressBookIcon,
+    //   role: ["house", "therapist", "admin"],
+    // },
 
     {
       url: "/services",
@@ -83,12 +84,12 @@
       role: ["admin"],
     },
 
-    {
-      url: "/referrals",
-      name: "Referrals",
-      icon: ReferralIcon,
-      role: ["admin"],
-    },
+    // {
+    //   url: "/referrals",
+    //   name: "Referrals",
+    //   icon: ReferralIcon,
+    //   role: ["admin"],
+    // },
 
     {
       url: "/serviceagreements",
@@ -97,12 +98,12 @@
       role: ["admin"],
     },
 
-    {
-      url: "/signaturerequests",
-      name: "Signature Requests",
-      icon: FileSignatureIcon,
-      role: ["admin"],
-    },
+    // {
+    //   url: "/signaturerequests",
+    //   name: "Signature Requests",
+    //   icon: FileSignatureIcon,
+    //   role: ["admin"],
+    // },
 
     {
       url: "/tasks",
@@ -111,12 +112,12 @@
       role: ["sysadmin"],
     },
 
-    {
-      url: "/meetingnotes",
-      name: "Meetings",
-      icon: ClipboardDocumentListIcon,
-      role: ["admin"],
-    },
+    // {
+    //   url: "/meetingnotes",
+    //   name: "Meetings",
+    //   icon: ClipboardDocumentListIcon,
+    //   role: ["admin"],
+    // },
 
     {
       url: "/accounts",
@@ -157,32 +158,36 @@
       role: ["admin"],
     },
 
-    {
-      url: "/sil",
-      name: "SIL",
-      icon: HomeIcon,
-      role: ["house.lead"],
-    },
-    {
-      url: "/therapy",
-      name: "Therapy",
-      icon: PuzzlePieceIcon,
-      role: ["therapist.lead"],
-    },
-    {
-      url: "/timelog",
-      name: "Time Log",
-      icon: ClockIcon,
-      role: ["sil.admin"],
-    },
+    // {
+    //   url: "/sil",
+    //   name: "SIL",
+    //   icon: HomeIcon,
+    //   role: ["house.lead"],
+    // },
+
+    // {
+    //   url: "/therapy",
+    //   name: "Therapy",
+    //   icon: PuzzlePieceIcon,
+    //   role: ["therapist.lead"],
+    // },
+
+    // {
+    //   url: "/timelog",
+    //   name: "Time Log",
+    //   icon: ClockIcon,
+    //   role: ["sil.admin"],
+    // },
 
     { url: "/settings", name: "Settings", icon: CogIcon, role: ["admin"] },
-    {
-      url: "/sysadmin",
-      name: "Sys Admin",
-      icon: CubeTransparentIcon,
-      role: ["sysadmin"],
-    },
+    // {
+    //   url: "/sysadmin",
+    //   name: "Sys Admin",
+    //   icon: CubeTransparentIcon,
+    //   role: ["sysadmin"],
+    // },
+
+    { url: "/users", name: "Users", icon: UsersIcon, role: ["super"] },
 
     { url: "/logout", name: "Logout", icon: PowerIcon },
   ];

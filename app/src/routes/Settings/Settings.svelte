@@ -23,12 +23,12 @@
       icon: UserGroupIcon,
       role: ["admin"],
     },
-    {
-      url: `/settings/reports`,
-      name: "Reports",
-      icon: UserGroupIcon,
-      role: ["admin"],
-    },
+    // {
+    //   url: `/settings/reports`,
+    //   name: "Reports",
+    //   icon: UserGroupIcon,
+    //   role: ["admin"],
+    // },
   ];
 
   BreadcrumbStore.set({
