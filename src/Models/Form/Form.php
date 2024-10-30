@@ -36,6 +36,8 @@ class Form extends NewCustomModel
 
     public function updateForm ($data) {
         
+        if (!isset($data['form_id'])) throw new Exception('Missing Parameter.');
+        
         $result = $this->update([
             'id' => $data['form_id'],
             'title' => $data['title'],
