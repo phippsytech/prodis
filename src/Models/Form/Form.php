@@ -54,6 +54,8 @@ class Form extends NewCustomModel
 
     public function deleteForm ($data) {
         
+        if (!isset($data['form_id'])) throw new Exception('Missing Parameter.');
+        
         $result = $this->delete(['id' => $data['form_id']]);
 
         return [];
@@ -61,6 +63,7 @@ class Form extends NewCustomModel
 
     public function listForms()
     {
+      
         $query = "SELECT 
                     f.id as form_id,
                     f.title,
