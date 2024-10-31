@@ -25,7 +25,7 @@ final class ParticipantServiceAgreementController extends BaseController  // Fin
             'listServiceAgreementsByStaffId' => [new ListServiceAgreementsByStaffId, null, true, []],
             'listServiceAgreementsToAmend' => [new ListServiceAgreementsToAmend, null, true, []],
             'viewServiceAgreementPDF' => [new PDFTest, null, true, []],
-            'renewServiceAgreement' => [new RenewServiceAgreement, null, false, []]
+            'renewServiceAgreement' => [new RenewServiceAgreement, null, true, []]
         ];
     }
 }
