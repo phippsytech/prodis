@@ -10,6 +10,7 @@ use NDISmate\Services\ServiceAgreementService\ListServiceAgreementsByStaffId;
 use NDISmate\Services\ServiceAgreementService\ListServiceAgreementsToAmend;
 use NDISmate\Services\ServiceAgreementService\PDFTest;
 use NDISmate\Services\ServiceAgreementService\DeleteDraftServiceAgreement;
+use NDISmate\Services\ServiceAgreementService\RenewServiceAgreement;
 
 final class ParticipantServiceAgreementController extends BaseController  // Final prevents inheritance
 {
@@ -23,7 +24,8 @@ final class ParticipantServiceAgreementController extends BaseController  // Fin
             'listServiceAgreementsByParticipantId' => [new ListServiceAgreementsByParticipantId, null, true, []],
             'listServiceAgreementsByStaffId' => [new ListServiceAgreementsByStaffId, null, true, []],
             'listServiceAgreementsToAmend' => [new ListServiceAgreementsToAmend, null, true, []],
-            'viewServiceAgreementPDF' => [new PDFTest, null, true, []]
+            'viewServiceAgreementPDF' => [new PDFTest, null, true, []],
+            'renewServiceAgreement' => [new RenewServiceAgreement, null, false, []]
         ];
     }
 }
