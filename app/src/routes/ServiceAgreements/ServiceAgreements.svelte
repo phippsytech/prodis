@@ -5,7 +5,7 @@
   import Tabs from "./Tabs.svelte";
 
   import Active from "./Active.svelte";
-  import Expiring from "./Expiring.svelte";
+  import Expiring from "./Expiring/Expiring.svelte";
   import Expired from "./Expired.svelte";
   import Pending from "./Pending.svelte";
 

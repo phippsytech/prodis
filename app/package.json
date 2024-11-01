@@ -25,7 +25,7 @@
     "replace-in-file": "^8.2.0",
     "rollup-plugin-dynamic-import-variables": "^1.1.0",
     "svelte": "^4.2.19",
-    "svelte-preprocess": "^6.0.2",
+    "svelte-preprocess": "^6.0.3",
     "tailwindcss": "^3.4.13",
     "vite": "^5.4.8"
   },

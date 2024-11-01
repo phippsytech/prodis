@@ -768,17 +768,9 @@ export default {
     }),
 
 
-    '/signaturerequests': wrap({
-        asyncComponent: () => import('./routes/SignatureRequests/SignatureRequests.svelte')
-    }),
-
-    '/signaturerequests/:signature_request_id': wrap({
-        asyncComponent: () => import('./routes/SignatureRequests/SignatureRequest.svelte')
-    }),
-
 
     '/serviceagreements': wrap({
-        asyncComponent: () => import('./routes/ServiceAgreements/Active.svelte'),
+        asyncComponent: () => import('./routes/ServiceAgreements/Active/Active.svelte'),
         conditions: [
             (detail) => {
                 replace(detail.location + '/active')
@@ -787,20 +779,25 @@ export default {
     }),
 
     '/serviceagreements/active': wrap({
-        asyncComponent: () => import('./routes/ServiceAgreements/Active.svelte')
+        asyncComponent: () => import('./routes/ServiceAgreements/Active/Active.svelte')
     }),
 
     '/serviceagreements/draft': wrap({
-        asyncComponent: () => import('./routes/ServiceAgreements/Draft.svelte')
+        asyncComponent: () => import('./routes/ServiceAgreements/Draft/Draft.svelte')
     }),
     '/serviceagreements/pending': wrap({
-        asyncComponent: () => import('./routes/ServiceAgreements/Pending.svelte')
+        asyncComponent: () => import('./routes/ServiceAgreements/Pending/Pending.svelte')
     }),
+
+    '/serviceagreements/pending/:id': wrap({
+        asyncComponent: () => import('./routes/ServiceAgreements/Pending/SignatureRequest.svelte')
+    }),
+
     '/serviceagreements/expiring': wrap({
-        asyncComponent: () => import('./routes/ServiceAgreements/Expiring.svelte')
+        asyncComponent: () => import('./routes/ServiceAgreements/Expiring/Expiring.svelte')
     }),
     '/serviceagreements/ended': wrap({
-        asyncComponent: () => import('./routes/ServiceAgreements/Ended.svelte')
+        asyncComponent: () => import('./routes/ServiceAgreements/Ended/Ended.svelte')
     }),
 
 
