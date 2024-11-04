@@ -1,145 +1,234 @@
 <script>
     import { onMount } from "svelte";
-    import { push } from "svelte-spa-router";
-    import FloatingInput from "@shared/PhippsyTech/svelte-ui/forms/FloatingInput.svelte";
-    import FloatingTextArea from "@shared/PhippsyTech/svelte-ui/forms/FloatingTextArea.svelte";
-    import FloatingSelect from "@shared/PhippsyTech/svelte-ui/forms/FloatingSelect.svelte";
-    import FloatingDateSelect from "@shared/PhippsyTech/svelte-ui/forms/FloatingDateSelect.svelte";
     import { jspa } from "@shared/jspa.js";
-
+    import { push } from "svelte-spa-router";
     import { ActionBarStore } from "@app/Layout/BottomNav/stores.js";
     import { BreadcrumbStore } from "@shared/stores.js";
+    import { toastSuccess, toastError } from "@shared/toastHelper.js";
+    import FloatingInput from "@shared/PhippsyTech/svelte-ui/forms/FloatingInput.svelte";
+    import FloatingDate from "@shared/PhippsyTech/svelte-ui/forms/FloatingDate.svelte";
+    import StaffMultiSelector from "@shared/StaffMultiSelector.svelte";
+    import NewFloatingSelect from "@shared/PhippsyTech/svelte-ui/forms/NewFloatingSelect.svelte";
+    import Role from "@shared/Role.svelte";
 
     export let params;
 
-    let training = {
-        status: "open",
-    };
-    let stored_training = Object.assign({}, training);
+    let training = {};
 
-    let trainingStatusSelectElement = null;
+    let staff_ids = [];
+    let stored_staff_ids = [];
+    
+    let clearable = true;
 
-    let trainingStatusOptions = [
-        { option: "Open", value: "open" },
-        { option: "Closed", value: "closed" },
+    let is_loaded = false;
+
+    let evidenceOptions = [
+        {
+            option: "Yes",
+            value: "yes",
+        },
+        {
+            option: "No",
+            value: "no",
+        },
     ];
 
-    let staff = [];
-    let staffList = [];
-    let staffSelectElement = null;
+    let stored_training = Object.assign({}, training);
 
-    let readOnly = false;
-
-    BreadcrumbStore.set({ path: [{ url: "/registers", name: "Registers" }] });
-
-    jspa("/Staff", "listStaff", {})
-        .then((result) => {
-            staff = result.result;
-            staff.forEach((staffer) => {
-                if (staffer.archived != 1)
-                    staffList.push({ option: staffer.name, value: staffer.id });
-            });
-            staffList = staffList;
-        })
-        .catch(() => {});
+    BreadcrumbStore.set({
+        path: [
+            { url: "/registers", name: "Registers" },
+            { url: "/registers/trainings", name: "Trainings" },
+        ]
+    });
 
     let mounted = false;
-    let show = false;
 
     onMount(() => {
         if (params.id != "add") {
             jspa("/Register/Training", "getTraining", { id: params.id })
                 .then((result) => {
-                    training = result.result;
+                    training = result.result || { staff_ids: [] };
+
+                    if (training.id) {
+                        jspa("/Register/TrainingAssignees", "getTrainingAssignees", { training_id: training.id })
+                            .then((result) => {
+                                staff_ids = (result.result || []).map(id => parseInt(id, 10));
+                                stored_staff_ids = [...staff_ids];
+                            })
+                            .catch(() => {});
+                    }
                 })
                 .catch(() => {})
                 .finally(() => {
-                    // Make a copy of the object
                     stored_training = Object.assign({}, training);
+                    is_loaded = true;
                 });
         }
         mounted = true;
     });
 
-    function undo() {
-        training = Object.assign({}, stored_training);
-    }
-
-    function save() {
-        jspa("/Register/Training", "updateTraining", training)
-            .then((result) => {
-                training = result.result;
-                stored_training = Object.assign({}, training);
-                // let result = result.result.id;
-            })
-            .catch(() => {});
-    }
-
     $: {
         if (mounted) {
+            const trainingChanged = JSON.stringify(training) !== JSON.stringify(stored_training);
+            const staffIdsChanged = JSON.stringify(staff_ids.map(id => parseInt(id, 10))) !== JSON.stringify(stored_staff_ids);
+
             ActionBarStore.set({
-                can_delete: false,
-                show: !(
-                    JSON.stringify(training) === JSON.stringify(stored_training)
-                ),
+                can_delete: true,
+                show: true,  //  trainingChanged || staffIdsChanged, // Trigger the action bar on changes
                 undo: () => undo(),
                 save: () => save(),
+                delete: () => deleteTraining()
             });
         }
     }
 
+    // update status based on completion date
     $: {
-        readOnly = training.status == "closed";
+        const currentDate = new Date();
+
+        if (training.completion_date) {
+            const completionDate = new Date(training.completion_date);
+            
+            if (completionDate <= currentDate) {
+                training.status = "completed"; 
+            } else {
+                training.status = "in_progress"; 
+            }
+        } else {
+            training.status = "in_progress"; // if completion date is cleared, set status as in_progress
+        }
+    }
+
+    $: training.completion_date = training.completion_date === "" ? null : training.completion_date; //set completion date to null when it is cleared
+
+    function undo() {
+        training = Object.assign({}, stored_training);
+        staff_ids = [...stored_staff_ids];
+        staff_ids = [...staff_ids];
+    }
+
+    const validations = [
+        { check: () => staff_ids.length === 0, message: "Please select at least one staff member." },
+        { check: () => !training.course_title, message: "Course title must be provided." },
+        { check: () => !training.trainer, message: "Trainer must be provided." },
+        { check: () => !training.date, message: "Training start date must be provided." },
+        { 
+            check: () => training.completion_date && new Date(training.completion_date) < new Date(training.date), 
+            message: "Completion date cannot be earlier than the start date." 
+        },
+    ];
+
+    function validate() {
+        for (const { check, message } of validations) {
+            if (check()) {
+                toastError(message);
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function save() {
+        if (validate()) {
+            jspa("/Register/Training", "updateTraining", { ...training, staff_ids })
+            .then((result) => {
+                if (result.error) {  
+                    toastError(result.error);
+                    return;
+                }
+                
+                training = result.result || { staff_ids: [] };
+                stored_training = Object.assign({}, training);
+
+                return jspa("/Register/TrainingAssignees", "getTrainingAssignees", { training_id: training.id });
+            })
+            .then((result) => {
+                staff_ids = (result.result || []).map(id => parseInt(id, 10));
+                stored_staff_ids = Object.assign({}, staff_ids);
+                push("/registers/trainings");
+                toastSuccess("Training updated successfully!");
+            })
+            .catch((error) => {
+                console.error("Error updating training:", error);
+                toastError("Error updating training, please try again.");
+            });
+        }
+    }
+
+    function deleteTraining() {
+        if (confirm("Are you sure you want to delete this training?")) {
+            jspa("/Register/Training", "deleteTraining", { id: training.id })
+            .then((result) => {
+                toastSuccess("Training successfully deleted");
+                push("/registers/trainings");
+            })
+            .catch((error) => {
+                toastError("Error deleting training");
+            });
+        }
     }
 </script>
 
 <div
-    class="text-2xl sm:truncate sm:text-3xl sm:tracking-tight font-fredoka-one-regular mb-2"
+    class="text-2xl sm:truncate sm:text-3xl sm:tracking-tight font-fredoka-one-regular mb-2 mt-2"
     style="color:#220055;"
 >
-    Add training
+    Training Details
 </div>
-<FloatingSelect
-    bind:this={trainingStatusSelectElement}
-    bind:value={training.status}
-    bind:option={training.status}
-    label="Status"
-    instruction="Set Status"
-    options={trainingStatusOptions}
-    hideValidation={true}
-/>
 
-<!-- {#if training.status == "open"} -->
-<FloatingSelect
-    bind:this={staffSelectElement}
-    bind:value={training.staff_id}
-    bind:option={training.staff_id}
-    label="Who reported this training"
-    instruction="Choose staffer"
-    options={staffList}
-    hideValidation={true}
-    {readOnly}
-/>
-
-<!-- <FloatingDateSelect bind:value={training.session_date} label="Date"  /> -->
+{#if is_loaded}
+    <StaffMultiSelector 
+        bind:staff_ids={staff_ids}
+    /> 
+{/if}
 
 <FloatingInput
-    bind:value={training.type}
-    label="Type of training"
-    placeholder="Type of training"
-    {readOnly}
+    bind:value={training.course_title}
+    label="Course title"
+    placeholder="Title of the training course"
 />
-<FloatingTextArea
-    bind:value={training.description}
-    label="Description"
-    placeholder="Describe the training"
-    style="height:150px"
-    {readOnly}
+
+<FloatingInput
+    bind:value={training.trainer}
+    label="Trainer"
+    placeholder="John Doe"
 />
-<FloatingTextArea
-    bind:value={training.resolution}
-    label="Resolution"
-    placeholder="List actions taken to mitigate the training."
-    style="height:150px"
-    {readOnly}
-/>
+
+<div class="flex space-x-4 w-full">
+    <div class="flex-1"> 
+        <FloatingDate 
+            label="Training start date" 
+            bind:value={training.date}
+        />
+    </div>
+    <div class="flex-1">
+        <FloatingDate 
+            label="Training completion date" 
+            bind:value={training.completion_date} 
+        />
+    </div>
+</div>
+
+<Role roles={["admin"]}>
+
+    <!-- {#if training.status === "completed"}
+        <NewFloatingSelect
+            on:change
+            bind:value={training.has_evidence}
+            label="Training evidence"
+            instruction="If training has evidence of completion"
+            options={evidenceOptions}
+        />
+    {/if} -->
+
+    <!-- <div class="flex">
+        <button 
+            class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+            on:click="{deleteTraining}"
+            >
+            Delete
+        </button>
+    </div> -->
+</Role> 
+

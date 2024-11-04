@@ -27,83 +27,19 @@
   let welcome = [
     "Good to have you back.",
     "Nice to have you.",
-    "Your visit means the world.",
-    "You’re here!",
-    "Back again?",
     "It’s always great to see you.",
     "Good to see you.",
-    "Thanks for checking in.",
     "Welcome back.",
     "It’s nice to have you here.",
     "Thanks for being here.",
     "Glad to have you back.",
-    "Thanks for stopping by.",
-    "Your presence is appreciated.",
     "It’s always good to see you here.",
-    "Thank you for checking in.",
-    "Thanks for being involved.",
     "We’re glad to have you here.",
-    "Thanks for your visit.",
     "Good to have you here.",
-    "You’re right where you need to be.",
     "Glad you’re here.",
   ];
 
   let welcomeMessage = welcome[Math.floor(Math.random() * welcome.length)];
-
-  let staffWelcome = [
-    "Glad you’re back—things were getting suspiciously quiet.",
-    "Back at it again.",
-    "The place feels better with you here.",
-    "Here to save the day? No cape needed.",
-    "Ready to tackle the day? We’ve got snacks (maybe).",
-    "Nice to have you back—let’s make some magic happen.",
-    "Things just got 100% more interesting.",
-    "Time to get things done—after coffee, of course.",
-    "Always a pleasure having you!",
-    "The day feels more productive already.",
-    "Look who’s here! Now things can actually happen.",
-    "Everything’s ready for you...",
-    "Welcome back.",
-    "Everything’s better with you, even Mondays.",
-    "Let’s get things moving, but first... coffee?",
-    "Nice to have you—our secret ingredient.",
-    "Here’s to another great day, or at least a decent one.",
-    "Your presence is much appreciated.",
-    "Glad to see your name pop up—it’s like good news.",
-    "Ready to make things happen?",
-    "You’re the spark this day needed.",
-    "Everything’s set, unless you forgot the coffee.",
-    "You’re the one who’s always got the right idea.",
-    "We’ve got this covered, mostly... well, sort of.",
-    "Glad you’re here—someone’s got to keep things sane.",
-    "Time to make today productive—if the Wi-Fi cooperates.",
-    "Good to see you—now things can get back to normal.",
-    "Everything’s lined up for you.",
-    "You’re right where you need to be.",
-    "Here to get things done—unless we’re out of coffee.",
-    "Here’s to a solid day of trying to remember passwords.",
-    "You’re the missing piece.",
-    "Thanks for bringing the calm and coffee—you brought coffee, right?",
-    "The day just got brighter—maybe even bearable.",
-    "With you here, things might actually work.",
-    "We didn’t panic too much while you were gone!",
-    "Time to make things in order... or something like that.",
-    "You make all of this seem way more organized.",
-    "Thanks for being the calm in the storm.",
-    "You logged in just in time—let’s do this.",
-    "Thanks for showing up, now things seem possible.",
-    "With you here, we might just make it through the day.",
-    "Glad you’re here—now we can stop pretending.",
-    "Time to get the ball rolling.",
-    "With you here, today might just work out.",
-    "We survived while you were gone, but it was touch-and-go.",
-    "Time to show today who’s in charge (it’s you).",
-    "Thanks for keeping everything from falling apart.",
-  ];
-
-  let staffWelcomeMessage =
-    staffWelcome[Math.floor(Math.random() * staffWelcome.length)];
 
   function copyJWT() {
     navigator.clipboard
@@ -137,14 +73,7 @@
   </div>
 
   <div class="text-slate-800 text-sm">
-    <Role roles={["therapist", "house", "admin"]} conditional={true}>
-      <div slot="authorised">
-        {staffWelcomeMessage}
-      </div>
-      <div slot="declined">
-        {welcomeMessage}
-      </div>
-    </Role>
+    {welcomeMessage}
   </div>
 </div>
 
