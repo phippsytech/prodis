@@ -46,13 +46,10 @@
         return bDateTime - aDateTime;
       });
     })
-    .catch((error) => {
-    });
+    .catch((error) => {});
 
   BreadcrumbStore.set({
-    path: [
-      { url: "/registers", name: "Registers" },
-    ],
+    path: [{ url: "/registers", name: "Registers" }],
   });
 
   let filter = {};
@@ -65,9 +62,10 @@
     }
     if (filter.end_date) {
       trainings = trainings.filter(
-        (training) => Date.parse(training.completion_date) >= Date.parse(filter.end_date)
+        (training) =>
+          Date.parse(training.completion_date) >= Date.parse(filter.end_date)
       );
-      console.log(trainings)
+      console.log(trainings);
     }
   }
   function clearFilter(filter) {
@@ -82,6 +80,7 @@
       props: filter,
       component: TrainingFilter,
       action_label: "Apply",
+      delete_label: "Clear",
       action: () => applyFilter(filter),
       delete: () => clearFilter(filter),
     });
@@ -226,8 +225,7 @@
                   >
                     <a
                       href="/#/registers/trainings/{training.id}"
-                      class="text-indigo-600 hover:text-indigo-900"
-                      >View</a
+                      class="text-indigo-600 hover:text-indigo-900">View</a
                     >
                   </td>
                 </tr>
