@@ -1,5 +1,6 @@
 <?php
-namespace NDISmate\Controllers;
+
+namespace NDISmate\Controllers\Register;
 
 
 use NDISmate\CORE\BaseController;

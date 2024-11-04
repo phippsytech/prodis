@@ -1,6 +1,6 @@
 <?php
 
-namespace NDISmate\Controllers;
+namespace NDISmate\Controllers\Register;
 
 use NDISmate\CORE\BaseController;
 use NDISmate\Models\Register\Training;

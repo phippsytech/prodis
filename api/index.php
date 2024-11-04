@@ -101,6 +101,15 @@ $app->post('/Participant/Document', new ControllerFactory(\NDISmate\Controllers\
 $app->post('/Participant/ServiceBooking', new ControllerFactory(\NDISmate\Controllers\ParticipantServiceBookingController::class));
 $app->post('/Participant/ServiceAgreement', new ControllerFactory(\NDISmate\Controllers\ParticipantServiceAgreementController::class));
 $app->post('/Postcode', new ControllerFactory(\NDISmate\Controllers\PostcodeController::class));
+
+$app->post('/Register/Complaint', new ControllerFactory(\NDISmate\Controllers\Register\ComplaintController::class));
+$app->post('/Register/Risk', new ControllerFactory(\NDISmate\Controllers\Register\RiskController::class));
+$app->post('/Register/ConflictOfInterest', new ControllerFactory(\NDISmate\Controllers\Register\ConflictOfInterestsController::class));
+$app->post('/Register/Compliment', new ControllerFactory(\NDISmate\Controllers\Register\ComplimentController::class));
+$app->post('/Register/ContinuousImprovement', new ControllerFactory(\NDISmate\Controllers\Register\ContinuousImprovementController::class));
+$app->post('/Register/Training', new ControllerFactory(\NDISmate\Controllers\Register\TrainingController::class));
+$app->post('/Register/TrainingAssignees', new ControllerFactory(\NDISmate\Controllers\Register\TrainingController::class));
+
 $app->post('/Report', new ControllerFactory(\NDISmate\Controllers\ReportController::class));
 $app->post('/Roster', new ControllerFactory(\NDISmate\Controllers\RosterController::class));
 $app->post('/Service', new ControllerFactory(\NDISmate\Controllers\ServiceController::class));
@@ -114,16 +123,6 @@ $app->post('/TimeTracking', new ControllerFactory(\NDISmate\Controllers\TimeTrac
 $app->post('/Trip', new ControllerFactory(\NDISmate\Controllers\TripController::class));
 $app->post('/Utilities', new ControllerFactory(\NDISmate\Controllers\UtilityController::class));
 $app->post('/Storage', new ControllerFactory(\NDISmate\Controllers\ObjectStorageController::class));
-
-
-$app->post('/Register/Complaint', new ControllerFactory(\NDISmate\Controllers\ComplaintController::class));
-$app->post('/Register/Risk', new ControllerFactory(\NDISmate\Controllers\RiskController::class));
-$app->post('/Register/ConflictOfInterest', new ControllerFactory(\NDISmate\Controllers\ConflictOfInterestsController::class));
-$app->post('/Register/Compliment', new ControllerFactory(\NDISmate\Controllers\ComplimentController::class));
-$app->post('/Register/ContinuousImprovement', new ControllerFactory(\NDISmate\Controllers\ContinuousImprovementController::class));
-$app->post('/Register/Training', new ControllerFactory(\NDISmate\Controllers\TrainingController::class));
-$app->post('/Register/TrainingAssignees', new ControllerFactory(\NDISmate\Controllers\TrainingController::class));
-
 
 // CONVERSION IN PROGRESS
 $app->post('/User', new ControllerFactory(\NDISmate\Controllers\UserController::class));
