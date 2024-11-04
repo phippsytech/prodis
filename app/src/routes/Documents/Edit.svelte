@@ -20,7 +20,6 @@
   let storedParticipant = [];
   let mounted = false;
 
-
   onMount(async () => {
     jspa("/Document", "getDocument", { id: document_id })
       .then((result) => {
@@ -44,20 +43,19 @@
       staff = result.result;
     });
 
-  
-
     jspa("/Document/Participant", "listByDocumentId", {
       document_id: document_id,
-    }).then((result) => {
-      let participants = result.result;
-      selectedParticipant = participants.map(participant => participant.participant_id);
-      selectedParticipant = [...selectedParticipant];  // Spread to trigger reactivity
-      
-    }).finally(()=> {
-      storedParticipant = [...selectedParticipant];  
     })
-
-
+      .then((result) => {
+        let participants = result.result;
+        selectedParticipant = participants.map(
+          (participant) => participant.participant_id
+        );
+        selectedParticipant = [...selectedParticipant]; // Spread to trigger reactivity
+      })
+      .finally(() => {
+        storedParticipant = [...selectedParticipant];
+      });
 
     BreadcrumbStore.set({
       path: [{ url: "/documents", name: "Documents" }],
@@ -68,16 +66,16 @@
 
   function undo() {
     document = Object.assign({}, stored_document);
-    selectedParticipant = [...storedParticipant];  
+    selectedParticipant = [...storedParticipant];
   }
 
   function save() {
     jspa("/Document", "updateDocument", document).then((result) => {
-
       if (selectedParticipant.length > 0) {
-        jspa("/Document/Participant", "addDocumentParticipant", {document_id: document.id, participant_ids: selectedParticipant} ).then((result) => {
-
-        });
+        jspa("/Document/Participant", "addDocumentParticipant", {
+          document_id: document.id,
+          participant_ids: selectedParticipant,
+        }).then((result) => {});
       }
       // Make a copy of the object
       stored_document = Object.assign({}, document);
@@ -119,10 +117,7 @@
   }
 </script>
 
-<div
-  class="text-2xl sm:truncate sm:text-3xl sm:tracking-tight font-fredoka-one-regular mb-2"
-  style="color:#220055;"
->
+<div class="text-2xl text-indigo-700 tracking-tight font-fredoka-one-regular">
   {document.name}
 </div>
 <DocumentForm bind:document bind:selectedParticipant />

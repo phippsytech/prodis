@@ -35,9 +35,10 @@
     jspa("/Document", "addDocument", document).then((result) => {
       let doc = result.result;
       if (selectedParticipant.length > 0) {
-        jspa("/Document/Participant", "addDocumentParticipant", {document_id: doc.id, participant_ids: selectedParticipant} ).then((result) => {
-
-        });
+        jspa("/Document/Participant", "addDocumentParticipant", {
+          document_id: doc.id,
+          participant_ids: selectedParticipant,
+        }).then((result) => {});
       }
       console.log(selectedParticipant);
       // Make a copy of the object
@@ -57,13 +58,9 @@
       });
     }
   }
-
 </script>
 
-<div
-  class="text-2xl sm:truncate sm:text-3xl sm:tracking-tight font-fredoka-one-regular mb-2"
-  style="color:#220055;"
->
+<div class="text-2xl text-indigo-700 tracking-tight font-fredoka-one-regular">
   Add Document
 </div>
 <DocumentForm bind:document bind:selectedParticipant />

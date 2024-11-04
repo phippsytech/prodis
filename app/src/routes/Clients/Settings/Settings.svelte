@@ -3,6 +3,7 @@
   import { onMount } from "svelte";
   import { toastSuccess, toastError } from "@shared/toastHelper.js";
   import { getClient } from "@shared/api.js";
+  import { BreadcrumbStore } from "@shared/stores.js";
   import Toggle from "@shared/PhippsyTech/svelte-ui/forms/Toggle.svelte";
   import Container from "@shared/Container.svelte";
   import FloatingInput from "@shared/PhippsyTech/svelte-ui/forms/FloatingInput.svelte";
@@ -20,6 +21,13 @@
     if (client.sil_enabled == "0") client.sil_enabled = false;
 
     mounted = true;
+
+    BreadcrumbStore.set({
+      path: [
+        { url: "/clients", name: "Clients" },
+        { url: null, name: client.name },
+      ],
+    });
   });
 
   function save() {
