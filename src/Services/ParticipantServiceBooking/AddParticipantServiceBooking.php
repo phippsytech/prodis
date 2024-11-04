@@ -7,6 +7,7 @@ use NDISmate\Models\Participant\ServiceBooking as ParticipantServiceBooking;
 use NDISmate\Services\ParticipantServiceBooking\GetParticipantServiceBooking;
 use NDISmate\Services\ParticipantServiceBooking\CheckUniqueServiceBooking;
 use NDISmate\Models\Participant\ServiceAgreement\GetServiceAgreement;
+use RedBeanPHP\R as R;
 
 /**
  * Class AddParticipantService
@@ -31,7 +32,7 @@ class AddParticipantServiceBooking
         try {
 
             $serviceAgreement = (new GetServiceAgreement)(["id" => (int)$data['plan_id']]);
-
+            return $serviceAgreement;
             $isDraftServiceBooking = isset($serviceAgreement['is_draft']) ? $serviceAgreement['is_draft'] : false;
 
             $data['is_draft'] = $isDraftServiceBooking;
@@ -43,9 +44,14 @@ class AddParticipantServiceBooking
                 throw new \Exception('An active service of this type already exists for this participant.');
             }
 
-            if ($isDraftServiceBooking && $isUniqueServiceBooking === false) {
-                throw new \Exception('A draft service of this type already exists for this participant.');
-            }
+            // check if another DRAFT service of same participant exist
+
+            $existingDraft = R::findOne('serviceagreements', 'status = ? AND client_id', ['draft', $serviceAgreement['client_id']]);
+            
+
+            // if ($isDraftServiceBooking && $isUniqueServiceBooking === false) {
+            //     throw new \Exception('A draft service of this type already exists for this participant.');
+            // }
 
             $result = (new ParticipantServiceBooking)->create($data);
             $serviceBooking = (new GetParticipantServiceBooking)(['id' => $result['id']]);
