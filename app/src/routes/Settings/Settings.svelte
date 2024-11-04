@@ -37,7 +37,7 @@
 </script>
 
 <div class="flex justify-between items-center mb-4">
-  <div class="text-2xl text-indigo-900 tracking-tight font-fredoka-one-regular">
+  <div class="text-2xl text-indigo-700 tracking-tight font-fredoka-one-regular">
     Settings
   </div>
 </div>

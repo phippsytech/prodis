@@ -3,10 +3,7 @@
 </script>
 
 <div class="mb-2">
-  <div
-    class="text-2xl sm:truncate sm:text-3xl sm:tracking-tight font-fredoka-one-regular"
-    style="color:#220055;"
-  >
+  <div class="text-2xl text-indigo-700 tracking-tight font-fredoka-one-regular">
     Document Summary
   </div>
   <p class=" text-sm text-gray-700">

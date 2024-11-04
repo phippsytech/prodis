@@ -44,17 +44,14 @@
 
     BreadcrumbStore.set({
       path: [
-        { url: "/clients", name: "Client" },
+        { url: "/clients", name: "Clients" },
         { url: null, name: client.name },
       ],
     });
   });
 </script>
 
-<div
-  class="text-2xl sm:truncate sm:text-3xl sm:tracking-tight font-fredoka-one-regular"
-  style="color:#220055;"
->
+<div class="text-2xl text-indigo-700 tracking-tight font-fredoka-one-regular">
   Documents for {client.name}
 </div>
 <p class="mb-4">

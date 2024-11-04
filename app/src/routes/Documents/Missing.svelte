@@ -9,22 +9,17 @@
 
   onMount(async () => {
     jspa("/Participant/Document", "listMissingDocuments", {}).then((result) => {
-      missingList = result.result;  
+      missingList = result.result;
     });
 
     BreadcrumbStore.set({
       path: [{ url: null, name: "Missing" }],
     });
   });
-
- 
 </script>
 
 <div class="mb-2">
-  <div
-    class="text-2xl sm:truncate sm:text-3xl sm:tracking-tight font-fredoka-one-regular"
-    style="color:#220055;"
-  >
+  <div class="text-2xl text-indigo-700 tracking-tight font-fredoka-one-regular">
     Missing Documents
   </div>
   <p class=" text-sm text-gray-700">
@@ -42,12 +37,13 @@
     </tr>
   </thead>
   <tbody class="divide-y divide-gray-200 bg-white">
-    {#if (missingList.length > 0)}
-        {#each missingList as missing, index (index)}
+    {#if missingList.length > 0}
+      {#each missingList as missing, index (index)}
         <tr
           in:slide={{ duration: 200 }}
           out:slide={{ duration: 200 }}
-          on:click={() => push("/clients/" + missing.participant_id + "/documents")}
+          on:click={() =>
+            push("/clients/" + missing.participant_id + "/documents")}
           class="px-6 py-2 hover:bg-indigo-600 hover:text-white focus:outline-none focus:ring-0 focus:bg-gray-200 focus:text-gray-600 cursor-pointer {missingList.length -
             1 ==
           index
@@ -106,6 +102,5 @@
         </td>
       </tr>
     {/if}
-    
   </tbody>
 </table>

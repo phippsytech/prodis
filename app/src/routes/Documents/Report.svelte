@@ -28,16 +28,13 @@
 
       participantList.sort((a, b) => a.option.localeCompare(b.option));
 
-      participantList = participantList;  
-    
+      participantList = participantList;
     });
 
     BreadcrumbStore.set({
       path: [{ url: null, name: "Reports" }],
     });
   });
-
-  
 
   let documents = [];
   let requestCounter = 0;
@@ -153,7 +150,7 @@
   <div class="mb-8">
     <div class="mb-2">
       <div
-        class="text-2xl sm:truncate tracking-tight font-fredoka-one-regular text-indigo-950"
+        class="text-2xl text-indigo-700 tracking-tight font-fredoka-one-regular"
       >
         Required Documents Report
       </div>
@@ -162,7 +159,10 @@
       </p>
     </div>
 
-    <CheckboxButtonGroup options={participantList} bind:values={selectedParticipant} />
+    <CheckboxButtonGroup
+      options={participantList}
+      bind:values={selectedParticipant}
+    />
   </div>
 </div>
 {#if documents.length > 0}
@@ -170,7 +170,7 @@
     <div class="flex justify-between items-center">
       <div>
         <div
-          class="text-2xl sm:truncate tracking-tight font-fredoka-one-regular text-indigo-950"
+          class="text-2xl text-indigo-700 tracking-tight font-fredoka-one-regular"
         >
           Participant Documents
         </div>
