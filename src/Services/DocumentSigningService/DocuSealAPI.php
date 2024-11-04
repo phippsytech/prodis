@@ -1,13 +1,14 @@
 <?php
+
 namespace NDISmate\Services\DocumentSigningService;
 
 class DocuSealAPI
 {
     static public function call($params)
     {
+        // NOTE: The same URL is used for TEST and LIVE API calls.  
+        // The API key that is passed indicates which environment to use.
         $api_url = 'https://sign.prodis.app/api';
-
-        // $endpoint = '/templates/html';
 
         $method = isset($params['method']) ? $params['method'] : 'POST';
         $endpoint = $params['endpoint'];
