@@ -1,7 +1,7 @@
 <?php
+
 namespace NDISmate\Services\DocumentSigningService;
 
-use NDISmate\CORE\ContentTemplate;
 use NDISmate\Services\DocumentSigningService\DocuSealAPICall;
 
 class SendSubmissionRequest
