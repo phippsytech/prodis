@@ -1,19 +1,27 @@
 <script>
-    // import FloatingInput from '@shared/PhippsyTech/svelte-ui/forms/FloatingInput.svelte';
     import FloatingTextArea from "@shared/PhippsyTech/svelte-ui/forms/FloatingTextArea.svelte";
     import FloatingSelect from "@shared/PhippsyTech/svelte-ui/forms/FloatingSelect.svelte";
+    import FloatingInput from '@shared/PhippsyTech/svelte-ui/forms/FloatingInput.svelte';
     import { jspa } from "@shared/jspa.js";
+    import FloatingDate from "@shared/PhippsyTech/svelte-ui/forms/FloatingDate.svelte";
+    import NewFloatingSelect from "@shared/PhippsyTech/svelte-ui/forms/NewFloatingSelect.svelte";
+    import RTE from "@shared/RTE/RTE.svelte";
+    import { toastSuccess, toastError } from "@shared/toastHelper.js";
+    import { push } from "svelte-spa-router";
+    import Role from "@shared/Role.svelte";
+    import RadioButtonGroup from "@shared/PhippsyTech/svelte-ui/forms/RadioButtonGroup.svelte";
+    import Container from "@shared/Container.svelte";
 
     export let conflictofinterest = {
-        status: "open",
+        status: "Unresolved",
     };
     export let readOnly = false;
 
     let conflictofinterestStatusSelectElement = null;
-
-    let conflictofinterestStatusOptions = [
-        { option: "Open", value: "open" },
-        { option: "Closed", value: "closed" },
+    
+    let typeList = [
+        { option: "Organisational", value: "organisational" },
+        { option: "Individual", value: "individual" },
     ];
 
     let staff = [];
@@ -25,47 +33,70 @@
             staff = result.result;
             staff.forEach((staffer) => {
                 if (staffer.archived != 1)
-                    staffList.push({ option: staffer.name, value: staffer.id });
+                    staffList.push({ option: staffer.staff_name, value: staffer.id });
             });
             staffList = staffList;
+            
         })
         .catch(() => {});
 
     $: {
-        readOnly = conflictofinterest.status == "closed";
+        readOnly = conflictofinterest.status == "resolved";
     }
+
+    $: if (!conflictofinterest.status) {
+        conflictofinterest.status = "unresolved";
+    }   
+
 </script>
 
-<FloatingSelect
-    bind:this={conflictofinterestStatusSelectElement}
-    bind:value={conflictofinterest.status}
-    label="Status"
-    instruction="Set Status"
-    options={conflictofinterestStatusOptions}
-    hideValidation={true}
-/>
+<h3 class="text-base font-bold leading-6 text-gray-900 px-3 mt-4 mb-2">Details</h3>
+<div class="flex space-x-4 w-full mt-2">
+    <div class="flex-1">
+        <FloatingDate label="Conflict Date" bind:value={conflictofinterest.date_identified} />
+    </div>
+    <div class="flex-1">
+        <NewFloatingSelect
+            bind:value={conflictofinterest.type}
+            label="Type"
+            instruction="Set conflict type"
+            options={typeList}
+            hideValidation={true}
+        />
+    </div>
+</div>
 
-<FloatingSelect
-    bind:this={staffSelectElement}
-    bind:value={conflictofinterest.staff_id}
-    label="Who reported this conflict of interest"
-    instruction="Choose staffer"
-    options={staffList}
-    hideValidation={true}
-    {readOnly}
-/>
+<div class="w-full">
+    <FloatingInput 
+        bind:value={conflictofinterest.reported_by} 
+        label="Reporter" 
+        placeholder="Who reported this conflict of interest" 
+    />
+    <!-- <NewFloatingSelect 
+        on:change
+        bind:value={conflictofinterest.staff_id}
+        label="Who reported this conflict of interest"
+        instruction="Choose staffer"
+        options={staffList}
+       
+        clearable
+    /> -->
+</div>
 
-<FloatingTextArea
-    bind:value={conflictofinterest.description}
-    label="Description"
-    placeholder="Describe the conflict of interest"
-    style="height:150px"
-    {readOnly}
-/>
-<FloatingTextArea
-    bind:value={conflictofinterest.resolution}
-    label="Resolution"
-    placeholder="List actions taken to mitigate the conflict of interest."
-    style="height:150px"
-    {readOnly}
-/>
+<div class="w-full">
+    <FloatingInput 
+        bind:value={conflictofinterest.parties_involved} 
+        label="Parties Involved" 
+        placeholder="Name of the parties involved." 
+    />
+</div>
+
+<div class="w-full">
+    <RTE bind:content={conflictofinterest.description}  />
+</div>
+
+<h3 class="text-base font-bold leading-6 text-gray-900 px-3 mt-4 mb-2">Resolution</h3>
+
+<div class="w-full">
+    <RTE bind:content={conflictofinterest.resolution }  />
+</div>

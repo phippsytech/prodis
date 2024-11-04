@@ -810,6 +810,18 @@ export default {
         asyncComponent: () => import('./routes/Registers/Registers.svelte')
     }),
 
+    '/registers/complaints': wrap({
+        asyncComponent: () => import('./routes/Registers/Complaint/Complaints.svelte')
+    }),
+
+    '/registers/complaints/add': wrap({
+        asyncComponent: () => import('./routes/Registers/Complaint/AddComplaint.svelte')
+    }),
+
+    '/registers/complaints/:id': wrap({
+        asyncComponent: () => import('./routes/Registers/Complaint/Complaint.svelte')
+    }),
+
     '/registers/feedbacks': wrap({
         asyncComponent: () => import('./routes/Registers/Feedback/Feedbacks.svelte')
     }),
@@ -820,6 +832,7 @@ export default {
         asyncComponent: () => import('./routes/Registers/Feedback/Feedback.svelte')
     }),
 
+   
     '/registers/risks': wrap({
         asyncComponent: () => import('./routes/Registers/Risk/Risks.svelte')
     }),
@@ -839,6 +852,17 @@ export default {
         asyncComponent: () => import('./routes/Registers/ConflictOfInterest/ConflictOfInterest.svelte')
     }),
 
+
+    '/registers/continuousimprovements': wrap({
+        asyncComponent: () => import('./routes/Registers/ContinuousImprovement/ContinuousImprovements.svelte')
+    }),
+    '/registers/continuousimprovements/add': wrap({
+        asyncComponent: () => import('./routes/Registers/ContinuousImprovement/AddContinuousImprovement.svelte')
+    }),
+    '/registers/continuousimprovements/:id': wrap({
+        asyncComponent: () => import('./routes/Registers/ContinuousImprovement/ContinuousImprovement.svelte')
+    }),
+
     '/registers/trainings': wrap({
         asyncComponent: () => import('./routes/Registers/Training/Trainings.svelte')
     }),
@@ -847,6 +871,16 @@ export default {
     }),
     '/registers/trainings/:id': wrap({
         asyncComponent: () => import('./routes/Registers/Training/Training.svelte')
+    }),
+
+    '/registers/compliments': wrap({
+        asyncComponent: () => import('./routes/Registers/Compliment/Compliments.svelte')
+    }),
+    '/registers/compliments/add': wrap({
+        asyncComponent: () => import('./routes/Registers/Compliment/AddCompliment.svelte')
+    }),
+    '/registers/compliments/:id': wrap({
+        asyncComponent: () => import('./routes/Registers/Compliment/Compliment.svelte')
     }),
 
     '/reports': wrap({
