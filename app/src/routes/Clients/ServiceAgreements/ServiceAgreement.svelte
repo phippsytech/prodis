@@ -7,9 +7,15 @@
   import Role from "@shared/Role.svelte";
   import ServiceAgreementForm from "./ServiceAgreementForm.svelte";
   import ServiceBookings from "./ServiceBookings/ServiceBookings.svelte";
+  import { jspa } from "@shared/jspa.js";
+  import { createEventDispatcher } from "svelte";
 
   export let service_agreement;
   export let ServiceAgreementStore;
+  export let is_ended = false;
+  export let is_expiring = false;
+
+  const dispatch = createEventDispatcher();
 
   function editServiceAgreement(service_agreement) {
     ModalStore.set({
@@ -40,6 +46,21 @@
     }
     ServiceAgreementStore.updateItem(service_agreement);
   }
+
+  function renewServiceAgreement(service_agreement) {
+    jspa("/Participant/ServiceAgreement", "renewServiceAgreement", {service_agreement_id: service_agreement.id})
+        .then((result) => {
+          // move this inside the renewServiceAgreement function
+          toastSuccess("Service Agreement renewed successfully.");
+          dispatch("renewed");
+        })
+        .catch((error) => {
+          console.log("errorx", error);
+          toastError("A draft service agreement is already in progress. Please review the draft and decide whether to cancel it before trying to renew the service agreement.");
+          return;
+        });
+  }
+  
 </script>
 
 <ul
@@ -59,18 +80,29 @@
           service_agreement.service_agreement_end_date
         )}
         {#if service_agreement.is_active}
-          - ACTIVE{:else}
-          - INACTIVE{/if}
+          - ACTIVE
+          <!-- {:else}
+          - INACTIVE -->
+          {/if}
       </h3>
 
       <Role roles={["serviceagreement.modify"]}>
         <div>
+          {#if is_ended || is_expiring }
+          <button
+            on:click={() => renewServiceAgreement(service_agreement)}
+            class="px-1 hover:rounded-md hover:bg-white text-slate-400 hover:text-indigo-600 cursor-pointer"
+          >
+            Renew
+          </button>
+          {:else}
           <button
             on:click={() => editServiceAgreement(service_agreement)}
             class="px-1 hover:rounded-md hover:bg-white text-slate-400 hover:text-indigo-600 cursor-pointer"
           >
             Edit
           </button>
+          {/if}
         </div>
       </Role>
     </div>

@@ -1,45 +1,12 @@
 <script>
-  import ServiceCombo from "@app/routes/Service/ServiceCombo.svelte";
   import FloatingInput from "@shared/PhippsyTech/svelte-ui/forms/FloatingInput.svelte";
   import FloatingDate from "@shared/PhippsyTech/svelte-ui/forms/FloatingDate.svelte";
-  import InlineDate from "@shared/PhippsyTech/svelte-ui/forms/InlineDate.svelte";
-  import PlanManagerCombo from "@app/routes/Accounts/PlanManagers/PlanManagerCombo.svelte";
-  import Container from "@shared/Container.svelte";
-  import { slide } from "svelte/transition";
-  import createStore from "@shared/createStore";
-
-  import Role from "@shared/Role.svelte";
-
-  import IconMenu from "@shared/PhippsyTech/svelte-iconmenu/IconMenu.svelte";
-  import {
-    PlusIcon,
-    XMarkIcon,
-    CloudArrowUpIcon,
-    EnvelopeIcon,
-    ArchiveBoxIcon,
-    DocumentTextIcon,
-    DocumentArrowUpIcon,
-    TrashIcon,
-    UserIcon,
-  } from "heroicons-svelte/24/outline";
-
-  import FileSignatureIcon from "@shared/PhippsyTech/svelte-ui/icons/FileSignature.svelte";
-  import FileContractIcon from "@shared/PhippsyTech/svelte-ui/icons/FileContract.svelte";
-
-  import FileUploader from "@shared/FileUploader.svelte";
-  import { formatCurrency } from "@shared/utilities.js";
-  import AddServiceBookingForm from "./ServiceBookings/AddServiceBookingForm.svelte";
   import DraftServiceBookings from "./DraftServiceBookings.svelte";
 
-  import {
-    haveCommonElements,
-    normalizeSignedDate,
-  } from "@shared/utilities.js";
-  import { ModalStore } from "@app/Overlays/stores";
-  import { onMount, onDestroy } from "svelte";
-  import { RolesStore } from "@shared/stores.js";
+  import { normalizeSignedDate } from "@shared/utilities.js";
+  import { onDestroy } from "svelte";
   import { toastError, toastSuccess } from "@shared/toastHelper";
-  import { writable, derived, get } from "svelte/store";
+  import { writable } from "svelte/store";
 
   export let ServiceAgreementStore;
 
@@ -47,13 +14,7 @@
 
   $: console.log(serviceBookingCount);
 
-  $: roles = $RolesStore;
-
   export let participant_id;
-
-  let client = {};
-
-  let addedRows = [];
 
   // Create a writable store for draftAgreement
   export const draftAgreement = writable(null);
@@ -111,16 +72,6 @@
     ServiceAgreementStore.updateItem(draftAgreement).then(() => {
       toastSuccess("Service Agreement generated.");
     });
-  }
-
-  function validateField(field, errorMessage) {
-    if (field == null || field == "") {
-      return null;
-    } else if (isNaN(parseFloat(field))) {
-      toastError(errorMessage);
-      return false;
-    }
-    return field;
   }
 
   function cancelDraftServiceAgreement(agreement) {

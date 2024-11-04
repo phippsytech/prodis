@@ -3,16 +3,34 @@
   import { slide } from "svelte/transition";
   import { flip } from "svelte/animate";
   import { derived } from "svelte/store";
+  import { createEventDispatcher } from "svelte";
 
   export let ServiceAgreementStore;
 
-  // Derived store to filter only active agreements
-  const activeAgreements = derived(
-    ServiceAgreementStore,
-    ($ServiceAgreementStore) => {
-      return $ServiceAgreementStore.filter((agreement) => agreement.is_active);
-    }
-  );
+  const dispatch = createEventDispatcher();
+
+  // Derived store to filter only active agreements and flag expiring ones
+  const activeAgreements = derived(ServiceAgreementStore, ($ServiceAgreementStore) => {
+    const today = new Date(); // Get the current date
+    const threeDaysFromNow = new Date(today);
+    threeDaysFromNow.setDate(today.getDate() + 42); // Calculate the date three days from now
+
+    return $ServiceAgreementStore
+      .filter((agreement) => agreement.is_active)
+      .map((agreement) => {
+        const endDate = new Date(agreement.service_agreement_end_date); // Parse the end date
+        const is_expiring = endDate <= threeDaysFromNow; // Check if the end date is within 3 days
+
+        return {
+          ...agreement,
+          is_expiring, // Add the is_expiring flag
+        };
+      });
+  });
+
+  function handleRenewed() {
+    dispatch("renewed");
+  }
 </script>
 
 <div class="p-2 pb-0">
@@ -26,6 +44,8 @@
         <ServiceAgreement
           service_agreement={agreement}
           {ServiceAgreementStore}
+          is_expiring={agreement.is_expiring}
+          on:renewed={handleRenewed}
         />
       </div>
     {/each}

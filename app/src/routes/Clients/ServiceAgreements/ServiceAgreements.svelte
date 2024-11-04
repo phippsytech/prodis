@@ -1,10 +1,5 @@
 <script>
   import { onMount } from "svelte";
-  import { slide } from "svelte/transition";
-  import { flip } from "svelte/animate";
-  import { PlusIcon } from "heroicons-svelte/24/outline";
-  import Container from "@shared/Container.svelte";
-  import Role from "@shared/Role.svelte";
   import { ModalStore } from "@app/Overlays/stores";
   import ServiceAgreement from "./ServiceAgreement.svelte";
   import ServiceAgreementForm from "./ServiceAgreementForm.svelte";
@@ -23,6 +18,7 @@
   export let client_id;
 
   let participant_id = client_id; // progressively renaming client_id to participant_id
+  let tabsComponent;
 
   let service_agreement = {
     client_id: client_id, // TODO: remove this line once client_id is depricated
@@ -105,6 +101,13 @@
   function handleTabSelected(event) {
     selectedTab = event.detail.tab;
   }
+
+  function handleRenewed() {
+    const draftIndex = tabs.findIndex((tab) => tab.name === "Draft");
+    if (draftIndex !== -1) {
+      tabsComponent.setActiveTab(draftIndex);
+    }
+  }
 </script>
 
 <div class="mb-2">
@@ -115,7 +118,7 @@
     <div class="flex sm:flex-row flex-col sm:items-center"></div>
   </div>
 
-  <Tabs {tabs} on:tabSelected={handleTabSelected} />
+  <Tabs bind:this={tabsComponent} {tabs} on:tabSelected={handleTabSelected} />
 
   <div class="bg-white rounded-md border border-slate-200">
     {#if selectedTab}
@@ -126,11 +129,11 @@
         <Pending {ServiceAgreementStore} />
       {/if}
       {#if selectedTab.name === "Active"}
-        <Active {ServiceAgreementStore} />
+        <Active  on:renewed={handleRenewed} {ServiceAgreementStore} />
       {/if}
 
       {#if selectedTab.name === "Ended"}
-        <Ended {ServiceAgreementStore} />
+        <Ended on:renewed={handleRenewed} {ServiceAgreementStore} />
       {/if}
     {/if}
   </div>

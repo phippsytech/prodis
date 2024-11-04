@@ -5,7 +5,7 @@
 
   export let tabs = [];
 
-  function setActiveTab(index) {
+  export function setActiveTab(index) {
     tabs = tabs.map((tab, i) => ({
       ...tab,
       active: i === index,
