@@ -3,8 +3,11 @@
   import { flip } from "svelte/animate";
   import { slide } from "svelte/transition";
   import { derived } from "svelte/store";
+  import { createEventDispatcher } from "svelte";
 
   export let ServiceAgreementStore;
+
+  const dispatch = createEventDispatcher();
 
   // Derived store to filter only ended agreements
   const endedAgreements = derived(
@@ -13,6 +16,10 @@
       return $ServiceAgreementStore.filter((agreement) => !agreement.is_active);
     }
   );
+
+  function handleRenewed() {
+    dispatch("renewed");
+  }
 </script>
 
 <div class="p-2 pb-0">
@@ -30,6 +37,8 @@
         <ServiceAgreement
           service_agreement={agreement}
           {ServiceAgreementStore}
+          is_ended
+          on:renewed={handleRenewed}
         />
       </div>
     {/each}

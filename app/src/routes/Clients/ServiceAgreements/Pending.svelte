@@ -81,8 +81,8 @@
             href="https://api.prodis.phippsy.phippsy.tech/PDF"
             title="View Service Agreement awaiting signature"
             ><DocumentTextIcon class="h-4 w-4 inline mr-1" />Awaiting Signature:
-            {formatDate(agreement.service_agreement_signed_date)} to {formatDate(
-              agreement.service_agreement_end_date
+            {formatDate(agreement?.service_agreement_signed_date)} to {formatDate(
+              agreement?.service_agreement_end_date
             )}</a
           > <span class="text-slate-400"> &mdash; sent 1 day ago</span>
         </div>
