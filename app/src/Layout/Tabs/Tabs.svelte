@@ -1,5 +1,4 @@
 <script>
-  // import { fly } from "svelte/transition";
   import { onMount } from "svelte";
   import { RolesStore } from "@shared/stores.js";
   import { haveCommonElements } from "@shared/utilities.js";
@@ -7,35 +6,9 @@
 
   let pathname = window.location.hash.slice(1);
 
-  let hideTabs = false;
-
   const updateHashValue = () => {
-    // hashValue = window.location.hash.substring(1);
-    // pathname = window.location.hash.substring(1);
     pathname = window.location.hash.slice(1);
-    checkExcludedRoutes();
   };
-
-  const excludedRoutes = [
-    '/registers/trainings/add',
-    /^\/registers\/trainings\/\d+$/,
-    '/registers/complaints/add',
-    /^\/registers\/complaints\/\d+$/,
-    '/registers/conflictofinterests/add',
-    /^\/registers\/conflictofinterests\/\d+$/,
-    '/registers/continuousimprovements/add',
-    /^\/registers\/continuousimprovements\/\d+$/,
-    '/registers/compliments/add',
-    /^\/registers\/compliments\/\d+$/,
-    '/registers/risks/add',
-    /^\/registers\/risks\/\d+$/,
-  ];
-
-  function checkExcludedRoutes() {
-    hideTabs = excludedRoutes.some(route => 
-      typeof route === 'string' ? pathname === route : route.test(pathname)
-    );
-  }
 
   onMount(() => {
     updateHashValue();
@@ -331,261 +304,7 @@
     },
 
     {
-      "/registers/risks": (params) => {
-        tabs = [
-          {
-            name: "Complaints",
-            url: "/registers/complaints",
-            active: true,
-            roles: ["admin"],
-          },
-          {
-            name: "Compliments",
-            url: "/registers/compliments",
-            active: true,
-            roles: ["admin"],
-          },
-          {
-            name: "Conflict Of Interest",
-            url: "/registers/conflictofinterests",
-            active: true,
-            roles: ["admin"],
-          },
-          {
-            name: "Continuous Improvement",
-            url: "/registers/continuousimprovements",
-            active: true,
-            roles: ["admin"],
-          },
-          {
-            name: "Trainings",
-            url: "/registers/trainings",
-            active: true,
-            roles: ["admin"],
-          },
-          {
-            name: "Risks",
-            url: "/registers/risks",
-            active: true,
-            roles: ["admin"],
-          },
-        ];
-      },
-    },
-        {
-            "/registers/conflictofinterests": (params) => {
-              tabs = [
-                {
-                  name: "Complaints",
-                  url: "/registers/complaints",
-                  active: true,
-                  roles: ["admin"],
-                },
-                {
-                  name: "Compliments",
-                  url: "/registers/compliments",
-                  active: true,
-                  roles: ["admin"],
-                },
-                {
-                  name: "Conflict Of Interest",
-                  url: "/registers/conflictofinterests",
-                  active: true,
-                  roles: ["admin"],
-                },
-                {
-                  name: "Continuous Improvement",
-                  url: "/registers/continuousimprovements",
-                  active: true,
-                  roles: ["admin"],
-                },
-                {
-                  name: "Trainings",
-                  url: "/registers/trainings",
-                  active: true,
-                  roles: ["admin"],
-                },
-                {
-                  name: "Risks",
-                  url: "/registers/risks",
-                  active: true,
-                  roles: ["admin"],
-                },
-              ];
-            },
-        },
-
-        {
-            "/registers/trainings": (params) => {
-              tabs = [
-                {
-                  name: "Complaints",
-                  url: "/registers/complaints",
-                  active: true,
-                  roles: ["admin"],
-                },
-                {
-                  name: "Compliments",
-                  url: "/registers/compliments",
-                  active: true,
-                  roles: ["admin"],
-                },
-                {
-                  name: "Conflict Of Interest",
-                  url: "/registers/conflictofinterests",
-                  active: true,
-                  roles: ["admin"],
-                },
-                {
-                  name: "Continuous Improvement",
-                  url: "/registers/continuousimprovements",
-                  active: true,
-                  roles: ["admin"],
-                },
-                {
-                  name: "Trainings",
-                  url: "/registers/trainings",
-                  active: true,
-                  roles: ["admin"],
-                },
-                {
-                  name: "Risks",
-                  url: "/registers/risks",
-                  active: true,
-                  roles: ["admin"],
-                },
-              ];
-            },
-        },
-    {
-      "/registers/conflictofinterests": (params) => {
-        tabs = [
-          {
-            name: "Complaints",
-            url: "/registers/complaints",
-            active: true,
-            roles: ["admin"],
-          },
-          {
-            name: "Compliments",
-            url: "/registers/compliments",
-            active: true,
-            roles: ["admin"],
-          },
-          {
-            name: "Conflict Of Interest",
-            url: "/registers/conflictofinterests",
-            active: true,
-            roles: ["admin"],
-          },
-          {
-            name: "Continuous Improvement",
-            url: "/registers/continuousimprovements",
-            active: true,
-            roles: ["admin"],
-          },
-
-          {
-            name: "Trainings",
-            url: "/registers/trainings",
-            active: true,
-            roles: ["admin"],
-          },
-          {
-            name: "Risks",
-            url: "/registers/risks",
-            active: true,
-            roles: ["admin"],
-          },
-        ];
-      },
-    },
-    {
-      "/registers/continuousimprovements": (params) => {
-        tabs = [
-          {
-            name: "Complaints",
-            url: "/registers/complaints",
-            active: true,
-            roles: ["admin"],
-          },
-          {
-            name: "Compliments",
-            url: "/registers/compliments",
-            active: true,
-            roles: ["admin"],
-          },
-          {
-            name: "Conflict Of Interest",
-            url: "/registers/conflictofinterests",
-            active: true,
-            roles: ["admin"],
-          },
-          {
-            name: "Continuous Improvement",
-            url: "/registers/continuousimprovements",
-            active: true,
-            roles: ["admin"],
-          },
-          {
-            name: "Trainings",
-            url: "/registers/trainings",
-            active: true,
-            roles: ["admin"],
-          },
-          {
-            name: "Risks",
-            url: "/registers/risks",
-            active: true,
-            roles: ["admin"],
-          },
-        ];
-      },
-    },
-    {
-      "/registers/complaints": (params) => {
-        tabs = [
-          {
-            name: "Complaints",
-            url: "/registers/complaints",
-            active: true,
-            roles: ["admin"],
-          },
-          {
-            name: "Compliments",
-            url: "/registers/compliments",
-            active: true,
-            roles: ["admin"],
-          },
-          {
-            name: "Conflict Of Interest",
-            url: "/registers/conflictofinterests",
-            active: true,
-            roles: ["admin"],
-          },
-          {
-            name: "Continuous Improvement",
-            url: "/registers/continuousimprovements",
-            active: true,
-            roles: ["admin"],
-          },
-          {
-            name: "Trainings",
-            url: "/registers/trainings",
-            active: true,
-            roles: ["admin"],
-          },
-          {
-            name: "Risks",
-            url: "/registers/risks",
-            active: true,
-            roles: ["admin"],
-          },
-        ];
-      },
-    },
-    {
-      "/registers/compliments": (params) => {
+      "/registers": (params) => {
         tabs = [
           {
             name: "Complaints",
@@ -905,9 +624,12 @@
 
     return [];
   }
+
+  // if no tab urls match the current pathname, hide the tab bar
+  $: hideTabs = tabs.some((tab) => tab.url === pathname);
 </script>
 
-{#if !hideTabs && tabs.length > 0}
+{#if hideTabs && tabs.length > 0}
   <div class="print:hidden h-12"></div>
 
   <!-- in:fly|global={{ y: -100, duration: 300 }} -->
