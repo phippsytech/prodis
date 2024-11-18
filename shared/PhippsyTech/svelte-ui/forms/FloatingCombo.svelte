@@ -56,6 +56,8 @@
       {value}
       placeholder={placeholderText}
       bind:justValue={value}
+      on:change
+      on:clear
     >
       <div slot="item" let:item>
         {item.label}

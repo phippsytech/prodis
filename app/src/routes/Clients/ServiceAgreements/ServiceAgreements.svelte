@@ -105,6 +105,7 @@
   function handleRenewed() {
     const draftIndex = tabs.findIndex((tab) => tab.name === "Draft");
     if (draftIndex !== -1) {
+      ServiceAgreementStore.load({ participant_id });
       tabsComponent.setActiveTab(draftIndex);
     }
   }

@@ -157,11 +157,11 @@
                     }
 
                     // Filter valid service bookings
-                    if (
-                        !serviceBooking.archived &&
-                        serviceBooking.is_active &&
-                        serviceBooking.service_agreement_is_active
-                    ) {
+                    // if (
+                        // !serviceBooking.archived &&
+                        // serviceBooking.is_active &&
+                        // serviceBooking.service_agreement_is_active
+                    // ) {
                         activeServiceBookings.push(serviceBooking); // Store active service bookings
 
                         if (!isExpired(serviceBooking)) {
@@ -173,7 +173,7 @@
                                 serviceIdCount[serviceBooking.service_id] = 1;
                             }
                         }
-                    }
+                    // }
                 });
 
                 // Check for duplicates

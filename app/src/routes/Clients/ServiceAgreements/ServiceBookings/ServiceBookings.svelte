@@ -147,23 +147,18 @@
       ? ''
       : 'border-b border-slate-200'}
             
-            {service_agreement.is_active
-      ? 'hover:bg-indigo-50/50'
-      : 'opacity-25'}
+            hover:bg-indigo-50/50
             "
   >
     <Role roles={["serviceagreement.modify"]} conditional={true}>
       <div slot="authorised">
-        {#if service_agreement.is_active}
+        
           <button
             class="w-full text-left text-slate-400 cursor-pointer text-sm"
             on:click={() => editServiceBooking(service_booking)}
           >
             <ServiceBooking bind:service_booking />
           </button>
-        {:else}
-          <ServiceBooking bind:service_booking />
-        {/if}
       </div>
       <div slot="declined">
         <ServiceBooking bind:service_booking />
@@ -171,7 +166,7 @@
     </Role>
   </li>
 {:else}
-  {#if service_agreement.is_active}
+
     <Role roles={["serviceagreement.modify"]}>
       <li
         class="px-3 py-2 border-t border-indigo-100 w-full text-slate-400 cursor-default text-sm"
@@ -179,5 +174,5 @@
         No service bookings have been added to this agreement.
       </li>
     </Role>
-  {/if}
+
 {/each}

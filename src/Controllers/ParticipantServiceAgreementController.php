@@ -22,7 +22,7 @@ final class ParticipantServiceAgreementController extends BaseController  // Fin
             'deleteServiceAgreement' => [new DeleteDraftServiceAgreement, null, true, ['admin']],
             'getServiceAgreement' => [new GetServiceAgreement, null, true, []],
             'listServiceAgreementsByParticipantId' => [new ListServiceAgreementsByParticipantId, null, true, []],
-            'listServiceAgreementsByStaffId' => [new ListServiceAgreementsByStaffId, null, true, []],
+            'listServiceAgreementsByStaffId' => [new ListServiceAgreementsByStaffId, null, true, []],            
             'listServiceAgreementsToAmend' => [new ListServiceAgreementsToAmend, null, true, []],
             'viewServiceAgreementPDF' => [new PDFTest, null, true, []],
             'renewServiceAgreement' => [new RenewServiceAgreement, null, true, []]

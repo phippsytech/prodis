@@ -4,6 +4,7 @@ use Monolog\Logger;
 use NDISmate\CORE\ControllerFactory;
 use NDISmate\Middleware\CorsMiddleware;
 use NDISmate\Middleware\PulseMiddleware;
+use NDISmate\Models\Message\Controller;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 // use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
@@ -108,6 +109,7 @@ $app->post('/Postcode', new ControllerFactory(\NDISmate\Controllers\PostcodeCont
 $app->post('/Report', new ControllerFactory(\NDISmate\Controllers\ReportController::class));
 $app->post('/Roster', new ControllerFactory(\NDISmate\Controllers\RosterController::class));
 $app->post('/Service', new ControllerFactory(\NDISmate\Controllers\ServiceController::class));
+$app->post('/ServiceAgreement', new ControllerFactory(\NDISmate\Controllers\ServiceAgreementController::class));
 $app->post('/SignatureRequest', new ControllerFactory(\NDISmate\Controllers\SignatureRequestController::class));
 
 $app->post('/Staff/Credential', new ControllerFactory(\NDISmate\Controllers\StaffCredentialController::class));

@@ -55,8 +55,7 @@
           dispatch("renewed");
         })
         .catch((error) => {
-          console.log("errorx", error);
-          toastError("A draft service agreement is already in progress. Please review the draft and decide whether to cancel it before trying to renew the service agreement.");
+          toastError("<b>Cannot renew</b><br/>A draft service agreement is already in progress.");
           return;
         });
   }
@@ -64,45 +63,37 @@
 </script>
 
 <ul
-  class="bg-white border-b border-x rounded-md w-full text-slate-900 mb-2 {service_agreement.is_active
-    ? ' '
-    : '  border-indigo-100 '}"
+  class="bg-white border-b border-x rounded-md w-full text-slate-900 mb-2 "
 >
   <li
-    class="px-4 py-2 w-full cursor-default text-sm border-t rounded-t-md {service_agreement.is_active
-      ? 'bg-indigo-900 text-white  border-indigo-900'
-      : 'bg-slate-100 text-slate-400  border-indigo-100'}"
+    class="px-4 py-2 w-full cursor-default text-sm border-t rounded-t-md  bg-indigo-500 text-white border-indigo-500"
   >
     <div class="flex justify-between items-center">
       <h3 class="flex items-center font-bold">
         <DocumentTextIcon class="h-4 w-4 inline mr-2" />
+        #{service_agreement.id}
         {formatDate(service_agreement.service_agreement_signed_date)} - {formatDate(
           service_agreement.service_agreement_end_date
         )}
-        {#if service_agreement.is_active}
+        
+        <!-- {#if service_agreement.is_active}
           - ACTIVE
-          <!-- {:else}
-          - INACTIVE -->
-          {/if}
+           {:else}
+          - INACTIVE 
+          {/if} -->
       </h3>
 
       <Role roles={["serviceagreement.modify"]}>
         <div>
-          {#if is_ended || is_expiring }
+
+
           <button
-            on:click={() => renewServiceAgreement(service_agreement)}
-            class="px-1 hover:rounded-md hover:bg-white text-slate-400 hover:text-indigo-600 cursor-pointer"
-          >
-            Renew
-          </button>
-          {:else}
-          <button
-            on:click={() => editServiceAgreement(service_agreement)}
-            class="px-1 hover:rounded-md hover:bg-white text-slate-400 hover:text-indigo-600 cursor-pointer"
-          >
-            Edit
-          </button>
-          {/if}
+          on:click={() => renewServiceAgreement(service_agreement)}
+          class="px-2 bg-indigo-600 rounded-full text-white hover:bg-white text-slate-400 hover:text-indigo-600 cursor-pointer"
+        >
+          Renew
+        </button>
+
         </div>
       </Role>
     </div>

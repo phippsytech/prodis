@@ -22,4 +22,6 @@
   {items}
   bind:value
   placeholderText="Select or type service ..."
+  on:change
+  on:clear
 />

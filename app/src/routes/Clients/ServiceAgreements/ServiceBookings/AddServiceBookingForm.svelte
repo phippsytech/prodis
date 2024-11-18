@@ -4,7 +4,10 @@
   import ServiceCombo from "@app/routes/Service/ServiceCombo.svelte";
   import PlanManagerCombo from "@app/routes/Accounts/PlanManagers/PlanManagerCombo.svelte";
 
+  import { jspa } from "@shared/jspa.js";
+
   export let props = {};
+
 
   // Defaulting max_claimable_travel_duration to 30 if it's not already set
   if (props.max_claimable_travel_duration === undefined) {
@@ -13,24 +16,42 @@
 
   let services = [];
 
+  let service = {};
+
+  service.rate=props.rate;
+
   let selectedServiceName = null;
   let selectedServiceRecordTravelledKilometers = false;
 
-  $: {
-    if (props) {
-      let serviceIndex = services.findIndex(
-        (element) => element.id == props.service_id
-      );
-      if (serviceIndex > -1) {
-        selectedServiceName = services[serviceIndex].name;
-        if (services[serviceIndex].record_travelled_kilometers == "1") {
-          selectedServiceRecordTravelledKilometers = true;
-        } else {
-          selectedServiceRecordTravelledKilometers = false;
-        }
-        props.rate = services[serviceIndex].rate;
-      }
-    }
+  // $: {
+  //   if (props) {
+  //     let serviceIndex = services.findIndex(
+  //       (element) => element.id == props.service_id
+  //     );
+  //     if (serviceIndex > -1) {
+  //       selectedServiceName = services[serviceIndex].name;
+  //       if (services[serviceIndex].record_travelled_kilometers == "1") {
+  //         selectedServiceRecordTravelledKilometers = true;
+  //       } else {
+  //         selectedServiceRecordTravelledKilometers = false;
+  //       }
+  //       props.rate = services[serviceIndex].rate;
+
+  //     }
+  //   }
+  // }
+
+  function handleServiceChange(event) {
+    jspa("/Service", "getService", { id: props.service_id }).then((result) => {
+      service = result.result;
+      props.rate = service.rate;
+    });
+  }
+
+  function handleServiceClear() {
+    props.service_id = null;
+    props.rate = null;
+    service = {};
   }
 
   // $: {
@@ -42,13 +63,17 @@
 
 <div class="flex justify-between gap-x-2">
   <div class="flex-grow">
-    <ServiceCombo bind:value={props.service_id} />
+    <ServiceCombo
+      bind:value={props.service_id}
+      on:change={handleServiceChange}
+      on:clear={handleServiceClear}
+    />
   </div>
   <div class="flex-shrink">
     <FloatingInput
       bind:value={props.rate}
       label="Service Rate (per unit)"
-      placeholder="eg: 193.99"
+      placeholder={service.rate ? service.rate : ""}
     />
   </div>
 </div>

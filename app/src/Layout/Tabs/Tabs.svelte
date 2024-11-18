@@ -69,12 +69,6 @@
             roles: ["admin"],
           },
           {
-            name: "Expiring Soon",
-            url: "/serviceagreements/expiring",
-            active: true,
-            roles: ["admin"],
-          },
-          {
             name: "Ended",
             url: "/serviceagreements/ended",
             active: true,

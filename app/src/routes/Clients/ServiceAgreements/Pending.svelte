@@ -41,7 +41,7 @@
   export const pendingAgreement = writable(null);
   let storedPendingAgreement = {};
 
-  $: console.log($pendingAgreement);
+  // $: console.log($pendingAgreement);
 
   // Subscribe to ServiceAgreementStore changes
   let unsubscribe = ServiceAgreementStore.subscribe(
@@ -70,7 +70,7 @@
 <ul class=" grid w-full text-slate-800">
   {#each [$pendingAgreement] as agreement}
     <li
-      class=" group flex justify-between items-center px-4 py-2 focus:outline-none focus:ring-0 focus:bg-indigo-600 focus:text-slate-600 transition duration-500 border-b border-indigo-100 w-full
+      class=" group flex justify-between items-center px-4 pt-3 pb-3  focus:outline-none focus:ring-0 focus:bg-indigo-600 focus:text-slate-600 transition duration-500 border-b border-indigo-100 w-full
   gap-x-2"
     >
       <div class="staff-member">
@@ -111,5 +111,10 @@
         >
       </div>
     </li>
+    {:else}
+    <div class="px-4 pt-1 pb-3 border-b border-gray-200 w-full rounded-t-lg text-gray-400 cursor-default text-sm">
+      No pending service agreements found.
+    </div>
+
   {/each}
 </ul>

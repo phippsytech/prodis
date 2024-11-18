@@ -25,7 +25,7 @@ class ServiceBooking extends NewCustomModel
             'kilometer_budget' => [v::optional(v::monetaryAmount())],
             'max_claimable_travel_duration' => [v::optional(v::numericVal())],
             'xero_account_code' => [v::optional(v::stringType())],
-            'is_active' => [v::boolVal()],
+            // 'is_active' => [v::boolVal()], // This is not relevant and will be removed.
             'adjust_weekly_time' => [v::boolVal()],
             'is_draft' => [v::boolVal()],
         ];

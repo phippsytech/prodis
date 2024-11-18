@@ -59,7 +59,8 @@
 
   <div>
     <div class="text-xs text-slate-400">Budget</div>
-    <div class="text-lg">{formatCurrency(props.budget)}</div>
+    <div class="text-lg">{formatCurrency(props.allocated_funding)}</div>
+    <!-- <div class="text-lg">{formatCurrency(props.budget)}</div> -->
   </div>
 </div>
 
@@ -71,7 +72,7 @@
 
   <div>
     <div class="text-xs text-slate-400">Remaining Budget</div>
-    <div class="text-lg">{formatCurrency(props.remainingBudget)}</div>
+    <div class="text-lg">{formatCurrency(props.allocated_funding - props.spent)}</div>
   </div>
 </div>
 
@@ -131,17 +132,6 @@
 <PlanManagerCombo bind:value={props.plan_manager_id} />
 
 <div class="flex justify-between gap-x-2 mx-4">
-  <div class="flex items-center mb-2">
-    <input
-      type="checkbox"
-      id="isActive"
-      bind:checked={props.is_active}
-      class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
-    />
-    <label for="isActive" class="ml-2 text-sm font-medium text-gray-900"
-      >Active</label
-    >
-  </div>
 
   {#if props.budget_display == "weekly"}
     <div class="flex items-center mb-2">

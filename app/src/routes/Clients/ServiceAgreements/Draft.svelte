@@ -12,7 +12,7 @@
 
   let serviceBookingCount;
 
-  $: console.log(serviceBookingCount);
+  // $: console.log(serviceBookingCount);
 
   export let participant_id;
 

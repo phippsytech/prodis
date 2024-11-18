@@ -789,15 +789,11 @@ export default {
     '/serviceagreements/active': wrap({
         asyncComponent: () => import('./routes/ServiceAgreements/Active.svelte')
     }),
-
     '/serviceagreements/draft': wrap({
         asyncComponent: () => import('./routes/ServiceAgreements/Draft.svelte')
     }),
     '/serviceagreements/pending': wrap({
         asyncComponent: () => import('./routes/ServiceAgreements/Pending.svelte')
-    }),
-    '/serviceagreements/expiring': wrap({
-        asyncComponent: () => import('./routes/ServiceAgreements/Expiring.svelte')
     }),
     '/serviceagreements/ended': wrap({
         asyncComponent: () => import('./routes/ServiceAgreements/Ended.svelte')

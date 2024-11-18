@@ -195,15 +195,20 @@
         <div class="col-span-2 px-2">
           {formatCurrency(row.allocated_funding)}
         </div>
+        
         <div class="col-span-2 px-2">
+          {#if row.include_travel}
           {#if row.kilometer_budget != null}{formatCurrency(
               row.kilometer_budget
             )}{/if}
           <span class="text-sm text-gray-400">
             {#if row.kilometer_budget != null}
               : 30m{:else}&mdash;{/if}</span
-          >
+          >{:else}
+          &mdash;
+          {/if}
         </div>
+        
 
         <div class="col-span-6 px-2">
           {row.plan_manager_name}

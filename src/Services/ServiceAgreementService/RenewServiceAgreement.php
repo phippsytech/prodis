@@ -1,7 +1,10 @@
 <?php
+
 namespace NDISmate\Services\ServiceAgreementService;
 
 use Exception;
+use NDISmate\Models\Participant\ServiceAgreement;
+use NDISmate\Models\Participant\ServiceBooking;
 use RedBeanPHP\R as R;
 
 class RenewServiceAgreement
@@ -9,71 +12,71 @@ class RenewServiceAgreement
     public function __invoke($data)
     {
         try {
-            $service_agreement_id = $data['service_agreement_id'];
-
-            // Check if a draft already exists
-            $existingDraft = R::findOne('serviceagreements', 'parent_id = ? AND status = ?', [$service_agreement_id, 'draft']);
-            if ($existingDraft) {
-                throw new Exception("A draft service agreement is already in progress. Please review the draft and decide whether to cancel it before trying to renew the service agreement.", 400);
-            }
+            $serviceAgreementId = $data['service_agreement_id'];
 
             // Load the original service agreement
-            $originalBean = R::load('serviceagreements', $service_agreement_id);
+            $originalBean = R::load('serviceagreements', $serviceAgreementId);
             if (!$originalBean || !$originalBean->id) {
                 throw new Exception("Original service agreement not found.", 404);
             }
 
+            // Check if a draft already exists
+            $existingDraft = R::findOne('serviceagreements', 'client_id=:client_id AND status = :status', [":client_id" => $originalBean->client_id, ":status"=>"draft"]);
+            if ($existingDraft) {
+                throw new Exception("A draft service agreement is already in progress. Please review the draft and decide whether to cancel it before trying to renew the service agreement.", 400);
+            }
 
-            // Export the original bean's properties
-            $properties = $originalBean->export();
-            $properties = (array) $properties;
-          
-            // Create a new bean and import properties
-            $newBean = R::dispense('serviceagreements');
-          
-            // Remove fields that shouldn't be duplicated
-            // unset( $newBean->id, $newBean->updated, $newBean->archived);
-            unset( $properties['id'], $properties['updated'], $properties['archived']);
-            $newBean->import($properties);
-            // Set specific fields for the draft
-            $newBean->is_draft = true;
-            $newBean->status = 'draft';
-            $newBean->is_active = null;
-            $newBean->is_amendment = true;
-            $newBean->parent_id = $service_agreement_id;
-            $newBean->service_agreement_signed_date = date('Y-m-d', strtotime($originalBean->service_agreement_end_date . ' +1 day'));
-            $newBean->created = date('Y-m-d H:i:s');
-            $newBean->client_id = (int) $newBean->client_id;
-            // Debugging - inspect bean before storing
-        
-          
-            // Store the new bean
-            $newBeanId = R::store($newBean);
-            
+            // Create a new service agreement as a draft
+            $newBean = (new ServiceAgreement)->create([
+                'client_id' => $originalBean->client_id,
+                'service_agreement_signed_date' => date('Y-m-d', strtotime($originalBean->service_agreement_end_date . ' +1 day')),
+                'service_agreement_end_date' => null,
+                'is_active' => null,
+                'signatory_name' => $originalBean->signatory_name,
+                'signatory_email' => $originalBean->signatory_email,
+                'signatory_phone' => $originalBean->signatory_phone,
+                'is_draft' => true,
+                'parent_id' => $serviceAgreementId,
+                'status' => 'draft',
+            ]);
+
+            $newBeanId = $newBean['id'];
+                        
             // Duplicate related bookings
-            $parentsServiceBookings = R::getAll("SELECT * FROM servicebookings WHERE service_id = :serviceId", [':serviceId' => $originalBean->id]);
-            
-            foreach ($parentsServiceBookings as $booking) {
-                $newBooking = R::dispense('servicebookings');
-                
-                unset($booking['id']);  // Ensure ID is removed for the new entry
+            $parentServiceBookings = R::getAll("SELECT * FROM servicebookings WHERE plan_id = :planId", [':planId' => $originalBean->id]);
 
-                // Import fields, set relationships, and draft status
-                $newBooking->import($booking);
-                $newBooking->service_id = $newBeanId;
-                $newBooking->is_draft = true;
-                $newBooking->is_active = null;
+            foreach ($parentServiceBookings as $booking) {
 
-                $newId = R::store($newBooking);  // Store each duplicated booking
+                $newBooking = $booking;//->export();
+                unset($newBooking['id']);  // Remove ID to create a new entry
+
+                $newBooking['plan_id'] = $newBeanId;
+                $newBooking['is_draft'] = true;
+                $newBooking['is_active'] = null;
+
+                // Get the service rate
+                $service = (new \NDISmate\Models\Service\GetService)(['id' => $booking['service_id']]);
+
+                $serviceRate = $service->rate;
+                $newBooking['rate'] = $serviceRate;
+
+
+                // it is possible that the rate has changed since the previous service agreement
+                // so we may need to recalculate the budget so that the same number of hours can be delivered in
+                // the new service agreement.
+
+                // I'm not putting this in here because it's not clear what the best approach for this is yet.
+
+
+                // Generate a new booking
+                $result = (new ServiceBooking)->create($newBooking);
                 
             }
 
             return $newBean;
         } catch (Exception $e) {
-            // Handle RedBeanPHP specific exceptions
             throw new Exception('Error executing query: ' . $e->getMessage());
         } catch (\Exception $e) {
-            // Handle other exceptions
             throw $e;
         }
     }

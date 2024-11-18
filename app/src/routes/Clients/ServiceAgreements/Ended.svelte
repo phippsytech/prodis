@@ -23,10 +23,7 @@
 </script>
 
 <div class="p-2 pb-0">
-  <p class="text-xs px-1 pb-2 text-slate-500">
-    These Service Agreements are no longer effective, due to being supeseded,
-    expired or terminated.
-  </p>
+  
   {#if $endedAgreements.length > 0}
     {#each $endedAgreements as agreement, index (agreement.id)}
       <div
@@ -43,8 +40,12 @@
       </div>
     {/each}
   {:else}
-    <div class="rounded-md text-slate-400 px-4 pb-2 bg-slate-50 pt-3">
+    <div class="px-4 pt-1 pb-3 border-b border-gray-200 w-full rounded-t-lg text-gray-400 cursor-default text-sm">
       No ended service agreements found.
     </div>
+
+
+
+
   {/if}
 </div>

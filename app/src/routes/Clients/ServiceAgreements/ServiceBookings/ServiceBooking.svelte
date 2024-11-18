@@ -6,7 +6,7 @@
   } from "@shared/utilities.js";
   import BudgetBar from "@shared/BudgetBar.svelte";
   import BudgetBarWeekly from "@shared/BudgetBarWeekly.svelte";
-  import ExpiredServiceAgreementBudgetBar from "@shared/ExpiredServiceAgreementBudgetBar.svelte";
+  // import ExpiredServiceAgreementBudgetBar from "@shared/ExpiredServiceAgreementBudgetBar.svelte";
 
   export let service_booking = {};
 
@@ -91,28 +91,6 @@
   })();
 </script>
 
-{#if isExpired}
-  <div class="block w-full">
-    <div
-      class="mt-0 p-0 mx-0 sm:flex sm:justify-between"
-      style="line-height:0.8rem"
-    >
-      <div>
-        <span class="text-slate-800 font-bold"
-          >{derivedServiceBooking.code}</span
-        >
-        {#if !derivedServiceBooking.is_active}
-          - NOT ACTIVE
-        {/if}
-      </div>
-      <span class="text-xs text-indigo-300 uppercase hidden sm:inline-block"
-        >{derivedServiceBooking.plan_manager_name}</span
-      >
-    </div>
-    <ExpiredServiceAgreementBudgetBar />
-  </div>
-{:else}
-  <div class={derivedServiceBooking.is_active ? "" : "opacity-50"}>
     <div class="block w-full">
       <div
         class="mt-0 p-0 mx-0 sm:flex sm:justify-between"
@@ -153,9 +131,7 @@
               </span>
             {/if}
           {/if}
-          {#if !derivedServiceBooking.is_active}
-            - NOT ACTIVE
-          {/if}
+          
         </div>
         <span class="text-xs text-indigo-300 uppercase hidden sm:inline-block"
           >{derivedServiceBooking.plan_manager_name}</span
@@ -203,5 +179,3 @@
         </div>
       {/if}
     </div>
-  </div>
-{/if}

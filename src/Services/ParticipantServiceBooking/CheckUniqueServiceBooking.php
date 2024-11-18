@@ -19,12 +19,31 @@ class CheckUniqueServiceBooking
 
             if (empty($data['id'])) {
                 // Creating a new booking, need to check for conflicts
+
+                // ORIGINAL CODE
+                // $bean_count = R::getCell(
+                //     "SELECT COUNT(*) as servicebookings_count
+                //      FROM servicebookings
+                //      WHERE participant_id = :participant_id
+                //      AND service_id = :service_id
+                //      AND $status_column = 1",
+                //     [
+                //         ':participant_id' => $data['participant_id'],
+                //         ':service_id' => $data['service_id']
+                //     ]
+                // );
+
+
+                // WITH JOIN
                 $bean_count = R::getCell(
                     "SELECT COUNT(*) as servicebookings_count
-                     FROM servicebookings
+                     FROM servicebookings 
+                     LEFT JOIN serviceagreements sa on servicebookings.id = sa.plan_id
                      WHERE participant_id = :participant_id
                      AND service_id = :service_id
-                     AND $status_column = 1",
+                     AND servicebookings.$status_column = 1
+                     AND sa.status IN ('pending', 'draft')",
+
                     [
                         ':participant_id' => $data['participant_id'],
                         ':service_id' => $data['service_id']
