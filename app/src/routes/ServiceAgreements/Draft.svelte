@@ -3,9 +3,14 @@
 
     import { push } from "svelte-spa-router";
   import { jspa } from "@shared/jspa.js";
-
-  import { formatDate, timeAgo } from "@shared/utilities.js";
   
+  import { formatDate, timeAgo } from "@shared/utilities.js";
+  import { BreadcrumbStore } from "@shared/stores.js";
+  document.title = "Draft Service Agreements";
+  BreadcrumbStore.set({ path: [{ name: "Service Agreements", url: "/#/serviceagreements" }] });
+  
+
+
   let service_agreements = [];
 
   jspa(
@@ -17,11 +22,15 @@
     console.log(service_agreements);
   });
 
-    
   
 
 
 </script>
+
+
+<h1 class="text-2xl text-indigo-700 tracking-tight font-fredoka-one-regular">
+    Draft Service Agreements
+  </h1>
 
 <table class="min-w-full divide-y divide-gray-300">
     <thead>

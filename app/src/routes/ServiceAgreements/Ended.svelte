@@ -6,6 +6,11 @@
 
   import { formatDate, timeAgo } from "@shared/utilities.js";
   
+  import { BreadcrumbStore } from "@shared/stores.js";
+  document.title = "Ended Service Agreements";
+  BreadcrumbStore.set({ path: [{ name: "Service Agreements", url: "/#/serviceagreements" }] });
+  
+
   let service_agreements = [];
 
   jspa(
@@ -27,10 +32,11 @@
 
 </script>
 
-<p>
-    These are Service Agreements that have expired, and either need : Renew or
-    End Agreement
-</p>
+
+<h1 class="text-2xl text-indigo-700 tracking-tight font-fredoka-one-regular">
+    Ended Service Agreements
+  </h1>
+
 
 <table class="min-w-full divide-y divide-gray-300">
     <thead>
