@@ -1,6 +1,8 @@
 <script>
   import { onMount } from "svelte";
   import { ModalStore } from "@app/Overlays/stores.js";
+  import { haveCommonElements } from "@shared/utilities.js";
+        import { RolesStore } from "@shared/stores.js";
   import Document from "./Document.svelte";
   import { jspa } from "@shared/jspa.js";
   import { formatDate } from "@shared/utilities.js";
@@ -8,6 +10,7 @@
   import { toastSuccess, toastError } from "@shared/toastHelper.js";
 
   $: modal = $ModalStore;
+  $: rolesStore = $RolesStore;
 
   export let document = {};
   export let participant_id;
@@ -32,6 +35,12 @@
   });
 
   function updateDocument() {
+
+    if (haveCommonElements(rolesStore, ["auditor"])) {
+            toastError("Auditors cannot update documents");
+            return;
+        }
+
     // make a copy of the props so if the data is cleared we can still use it
     let data = Object.assign({}, modal.props);
 
@@ -63,6 +72,13 @@
   }
 
   function deleteDocument() {
+
+    if (haveCommonElements(rolesStore, ["auditor"])) {
+            toastError("Auditors cannot delete documents");
+            return;
+        }
+
+
     SpinnerStore.set({ show: true, message: "Deleting Document" });
     jspa("/Participant/Document", "deleteParticipantDocument", {
       id: participantDocument.id,

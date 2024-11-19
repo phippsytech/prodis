@@ -2,92 +2,92 @@
     import { onMount } from "svelte";
     import { slide } from "svelte/transition";
     import { XMarkIcon } from "heroicons-svelte/24/outline";
-    import ParticipantSelector from "./ParticipantSelector.svelte";
+    import StaffSelector from "./StaffSelector.svelte";
     import { jspa } from "@shared/jspa.js";
 
     export let user_id;
 
     let selectedValue;
-    let participants = [];
+    let staffs = [];
 
-    function selectParticipant(event) {
-        let newParticipant = {};
-        newParticipant.name = event.detail.label;
-        newParticipant.id = event.detail.value;
+    function selectStaff(event) {
+        let newStaff = {};
+        newStaff.name = event.detail.label;
+        newStaff.id = event.detail.value;
 
-        jspa("/User/Participant", "allowUserParticipant", {
+        jspa("/User/Staff", "allowUserStaff", {
             user_id: user_id,
-            participant_id: newParticipant.id,
+            staff_id: newStaff.id,
         }).then((result) => {
-            // Check if the participant is already in the list
+            // Check if the staff is already in the list
             if (
-                !participants.some(
-                    (participant) => participant.id === newParticipant.id,
+                !staffs.some(
+                    (staff) => staff.id === newStaff.id,
                 )
             ) {
-                participants = [...participants, newParticipant];
+                staffs = [...staffs, newStaff];
             }
         });
 
         selectedValue = null; // clears the select ready for the next selection
     }
 
-    function removeParticipant(participant_id) {
-        jspa("/User/Participant", "deleteUserParticipant", {
+    function removeStaff(staff_id) {
+        jspa("/User/Staff", "deleteUserStaff", {
             user_id: user_id,
-            participant_id: participant_id,
+            staff_id: staff_id,
             allowed: 1,
         }).then((result) => {
-            participants = participants.filter(
-                (participant) => participant.id !== participant_id,
+            staffs = staffs.filter(
+                (staff) => staff.id !== staff_id,
             );
         });
     }
 
     onMount(async () => {
-        jspa("/User/Participant", "listAllowedByUserId", {
+        jspa("/User/Staff", "listAllowedByUserId", {
             user_id: user_id,
         }).then((result) => {
-            participants = result.result;
+            staffs = result.result;
         });
     });
 </script>
 
 <div class="bg-white px-3 pt-2 pb-4 mb-2 border border-indigo-100 rounded-md">
     <h1 class="text-slate-800 text-1xl font-bold mt-0 mb-2">
-        Allow access to the following participants
+        Allow access to the following staffs
     </h1>
 
     <div class="flex justify-between items-center gap-x-1 mb-2">
         <div class="flex-grow">
-            <ParticipantSelector
+            <StaffSelector
                 bind:selectedValue
-                on:change={selectParticipant}
+                on:change={selectStaff}
             />
         </div>
     </div>
 
-    {#if participants.length > 0}
+    {#if staffs.length > 0}
         <ul
             class="bg-white rounded-lg border border-indigo-100 w-full text-gray-900"
         >
-            {#each participants as participant, index (index)}
+            {#each staffs as staff, index (index)}
                 <li
                     in:slide={{ duration: 200 }}
                     out:slide={{ duration: 200 }}
-                    class="flex justify-between hover:bg-indigo-50 px-4 py-2 focus:outline-none focus:ring-0 focus:bg-indigo-600 focus:text-gray-600 transition duration-500 {participants.length -
+                    class="flex justify-between hover:bg-indigo-50 px-4 py-2 focus:outline-none focus:ring-0 focus:bg-indigo-600 focus:text-gray-600 transition duration-500 {staffs.length -
                         1 ==
                     index
                         ? 'rounded-b-lg'
-                        : ''}border-b border-indigo-100 w-full {participant.archived ==
+                        : ''}border-b border-indigo-100 w-full {staff.archived ==
                     1
                         ? 'text-gray-400 cursor-default'
                         : ''}"
                 >
-                    <div>{participant.name}</div>
+                    <div>{staff.name}</div>
                     <div
                         class="hover:text-indigo-600 cursor-pointer"
-                        on:click={() => removeParticipant(participant.id)}
+                        on:click={() => removeStaff(staff.id)}
                     >
                         <XMarkIcon class="h-5 w-5" />
                     </div>

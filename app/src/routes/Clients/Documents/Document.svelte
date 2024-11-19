@@ -4,6 +4,7 @@
     import FileUploader from "@shared/FileUploader.svelte";
     import FloatingSelect from "@shared/PhippsyTech/svelte-ui/forms/FloatingSelect.svelte";
     import NewFloatingSelect  from "@shared/PhippsyTech/svelte-ui/forms/NewFloatingSelect.svelte";
+    import Role from "@shared/Role.svelte";
     // import Camera from '@shared/PhippsyTech/svelte-ui/Camera.svelte';
     import { jspa } from "@shared/jspa.js";
     import { SpinnerStore } from "@app/Overlays/stores.js";
@@ -116,12 +117,14 @@
             </svg>
             View Document
         </div>
+        <Role roles={["admin"]}>
         <button
             on:click={replaceFile}
             class="ml-2 text-sm text-gray-600 underline"
         >
             Replace File
         </button>
+    </Role>
     {:else}
         <FileUploader
             bind:value={props.base64_file}

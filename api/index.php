@@ -128,6 +128,7 @@ $app->post('/Storage', new ControllerFactory(\NDISmate\Controllers\ObjectStorage
 // CONVERSION IN PROGRESS
 $app->post('/User', new ControllerFactory(\NDISmate\Controllers\UserController::class));
 $app->post('/User/Participant', new ControllerFactory(\NDISmate\Controllers\UserParticipantController::class));
+$app->post('/User/Staff', new ControllerFactory(\NDISmate\Controllers\UserStaffController::class));
 
 // OTHER ROUTES
 /* these routes have NOT been updated to the new structure */

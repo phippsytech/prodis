@@ -155,7 +155,7 @@
             name: "Details",
             url: "/staff/" + params.staff_id + "/details",
             active: true,
-            roles: ["admin"],
+            roles: ["admin","auditor"],
           },
           {
             name: "Payroll",
@@ -167,7 +167,7 @@
             name: "Credentials",
             url: "/staff/" + params.staff_id + "/credentials",
             active: true,
-            roles: ["admin", "sil.admin"],
+            roles: ["admin", "sil.admin","auditor"],
           },
           {
             name: "Availabilitiy",
