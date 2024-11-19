@@ -115,7 +115,7 @@
       url: "/meetingnotes",
       name: "Meetings",
       icon: ClipboardDocumentListIcon,
-      role: ["admin"],
+      role: ["admin","auditor"],
     },
 
     {
@@ -154,7 +154,7 @@
       url: "/registers",
       name: "Registers",
       icon: BookOpenIcon,
-      role: ["admin"],
+      role: ["admin","auditor"],
     },
 
     {
