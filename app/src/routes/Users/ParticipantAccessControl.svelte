@@ -1,7 +1,7 @@
 <script>
     import Toggle from "@shared/PhippsyTech/svelte-ui/forms/Toggle.svelte";
     import AllowParticipantList from "./ParticipantAccessControl/Allow.svelte";
-    import DenyParticipantList from "./ParticipantAccessControl/Deny.svelte";
+    // import DenyParticipantList from "./ParticipantAccessControl/Deny.svelte";
 
     export let user = {};
 </script>
@@ -30,6 +30,6 @@
             <AllowParticipantList user_id={user.id} />
         {/if}
 
-        <DenyParticipantList user_id={user.id} />
+        <!-- <DenyParticipantList user_id={user.id} /> -->
     </div>
 {/if}

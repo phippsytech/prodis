@@ -5,7 +5,7 @@
   import { BreadcrumbStore } from "@shared/stores.js";
   import { ModalStore } from "@app/Overlays/stores.js";
   import Credential from "./Credential.svelte";
-
+  
   import { jspa } from "@shared/jspa.js";
   import { getStaffer } from "@shared/api.js";
   import { slide } from "svelte/transition";

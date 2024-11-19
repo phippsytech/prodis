@@ -3,6 +3,9 @@
 	import { jspa } from "@shared/jspa.js";
 	import StafferCard from "./StafferCard.svelte";
 	import Filter from "@shared/PhippsyTech/svelte-ui/Filter.svelte";
+	import { RolesStore } from "@shared/stores.js";
+  import { haveCommonElements } from "@shared/utilities.js";
+
 
 	let staff = [];
 	let staff_list = [];
@@ -12,8 +15,26 @@
 	];
 	export let search = "";
 
+	let action = "listStaff";
+	let endpoint = "/Staff";
+
+	$: rolesStore = $RolesStore;
+
+
 	onMount(() => {
-		jspa("/Staff", "listStaff", {}).then((result) => {
+
+
+		// auditor list
+		if (
+			haveCommonElements(rolesStore, ["auditor"])
+		) {
+		action = "listAllowedByUserId";
+		endpoint = "/User/Staff";
+		// data = {};
+		}
+
+		jspa(endpoint, action, {}).then((result) => {
+		// jspa("/Staff", "listStaff", {}).then((result) => {
 			staff = result.result;
 
 			staff.sort(function (a, b) {

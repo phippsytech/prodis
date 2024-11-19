@@ -54,6 +54,16 @@
       data = {};
     }
 
+    // auditor list
+    if (
+      haveCommonElements(rolesStore, ["auditor"])
+    ) {
+      action = "listAllowedByUserId";
+      endpoint = "/User/Participant";
+      data = {};
+    }
+
+
     jspa(endpoint, action, data).then((result) => {
       clients = result.result;
 

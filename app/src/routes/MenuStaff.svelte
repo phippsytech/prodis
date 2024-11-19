@@ -46,14 +46,14 @@
       url: "/clients",
       name: "Clients",
       icon: UserGroupIcon,
-      role: ["house.lead", "therapist.lead", "admin"],
+      role: ["house.lead", "therapist.lead", "admin", "auditor"],
     },
 
     {
       url: "/staff",
       name: "Staff",
       icon: UserIcon,
-      role: ["sil.lead", "admin"],
+      role: ["sil.lead", "admin", "auditor"],
     },
 
     {
@@ -115,7 +115,7 @@
       url: "/meetingnotes",
       name: "Meetings",
       icon: ClipboardDocumentListIcon,
-      role: ["admin"],
+      role: ["admin","auditor"],
     },
 
     {
@@ -154,7 +154,7 @@
       url: "/registers",
       name: "Registers",
       icon: BookOpenIcon,
-      role: ["admin"],
+      role: ["admin","auditor"],
     },
 
     {
