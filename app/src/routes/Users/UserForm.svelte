@@ -2,6 +2,7 @@
     import FloatingInput from "@shared/PhippsyTech/svelte-ui/forms/FloatingInput.svelte";
     import CheckboxButtonGroup from "@shared/PhippsyTech/svelte-ui/forms/CheckboxButtonGroup.svelte";
     import ParticipantAccessControl from "./ParticipantAccessControl.svelte";
+    import StaffAccessControl from "./StaffAccessControl.svelte";
 
     export let user = {};
 </script>
@@ -62,9 +63,13 @@
             { value: "admin", option: "admin" },
             { value: "super", option: "super" },
             { value: "sysadmin", option: "sysadmin" },
+            { value: "auditor", option: "auditor" },
         ]}
         bind:values={user.roles}
     />
 </div>
 
 <ParticipantAccessControl bind:user />
+
+
+<StaffAccessControl bind:user />

@@ -12,22 +12,16 @@
   onMount(async () => {
     jspa("/Participant/Document", "listDueDocuments", {}).then((result) => {
       dueList = result.result;
-  
     });
 
     BreadcrumbStore.set({
       path: [{ url: null, name: "Due" }],
     });
   });
-
-
 </script>
 
 <div class="mb-2">
-  <div
-    class="text-2xl sm:truncate sm:text-3xl sm:tracking-tight font-fredoka-one-regular"
-    style="color:#220055;"
-  >
+  <div class="text-2xl text-indigo-700 tracking-tight font-fredoka-one-regular">
     Due Documents
   </div>
   <p class=" text-sm text-gray-700">
@@ -45,19 +39,19 @@
     </tr>
   </thead>
   <tbody class="divide-y divide-gray-200 bg-white">
-    {#if (dueList.length > 0)}
+    {#if dueList.length > 0}
       {#each dueList as due, index (due.id)}
-      <tr
-        in:slide={{ duration: 200 }}
-        out:slide={{ duration: 200 }}
-        on:click={() => push("/clients/" + due.participant_id + "/documents")}
-        class="px-6 py-2 hover:bg-indigo-600 hover:text-white focus:outline-none focus:ring-0 focus:bg-gray-200 focus:text-gray-600 cursor-pointer {dueList.length -
-          1 ==
-        index
-          ? 'rounded-b-lg'
-          : ''}border-b border-gray-200 w-full {due.archived == 1
-          ? 'text-gray-400 '
-          : 'text-gray-900 '}"
+        <tr
+          in:slide={{ duration: 200 }}
+          out:slide={{ duration: 200 }}
+          on:click={() => push("/clients/" + due.participant_id + "/documents")}
+          class="px-6 py-2 hover:bg-indigo-600 hover:text-white focus:outline-none focus:ring-0 focus:bg-gray-200 focus:text-gray-600 cursor-pointer {dueList.length -
+            1 ==
+          index
+            ? 'rounded-b-lg'
+            : ''}border-b border-gray-200 w-full {due.archived == 1
+            ? 'text-gray-400 '
+            : 'text-gray-900 '}"
         >
           <td class=" flex items-center pr-2 pl-2">{due.name}</td>
           <td class="whitespace-nowrap py-2 text-gray-900 text-left pl-0"
@@ -111,7 +105,5 @@
         </td>
       </tr>
     {/if}
-
-    
   </tbody>
 </table>

@@ -1,82 +1,141 @@
 <script>
-    import { push } from "svelte-spa-router";
-    import { BreadcrumbStore } from "@shared/stores.js";
-    import { jspa } from "@shared/jspa.js";
-    import FloatingInput from "@shared/PhippsyTech/svelte-ui/forms/FloatingInput.svelte";
-    import FloatingTextArea from "@shared/PhippsyTech/svelte-ui/forms/FloatingTextArea.svelte";
-    import FloatingSelect from "@shared/PhippsyTech/svelte-ui/forms/FloatingSelect.svelte";
-    import Button from "@shared/PhippsyTech/svelte-ui/Button.svelte";
+  import { push } from "svelte-spa-router";
+  import { BreadcrumbStore, UserStore } from "@shared/stores.js";
+  import { jspa } from "@shared/jspa.js";
+  import { toastSuccess, toastError } from "@shared/toastHelper.js";
+  import FloatingInput from "@shared/PhippsyTech/svelte-ui/forms/FloatingInput.svelte";
+  import FloatingDate from "@shared/PhippsyTech/svelte-ui/forms/FloatingDate.svelte";
+  import Button from "@shared/PhippsyTech/svelte-ui/Button.svelte";
+  import StaffMultiSelector from "@shared/StaffMultiSelector.svelte";
 
-    let training = {};
+  let training = {};
 
-    training.status = "open";
+  training.user_id = $UserStore.id;
 
-    let staff = [];
-    let staffList = [];
-    let staffSelectElement = null;
+  let evidenceOptions = [
+    { option: "Yes", value: "yes" },
+    { option: "No", value: "no" },
+  ];
 
-    BreadcrumbStore.set({ path: [{ url: "/registers", name: "Registers" }] });
+  BreadcrumbStore.set({
+    path: [
+      { url: "/registers", name: "Registers" },
+      { url: "/registers/trainings/", name: "Trainings" },
+    ],
+  });
 
-    jspa("/Staff", "listStaff", {})
-        .then((result) => {
-            staff = result.result;
-            staff.forEach((staffer) => {
-                if (staffer.archived != 1)
-                    staffList.push({ option: staffer.name, value: staffer.id });
-            });
-            staffList = staffList;
-        })
-        .catch(() => {});
+  // Update status based on completion date
+  $: {
+    const currentDate = new Date();
 
-    training.staff_id = null;
-
-    // get staff id of logged in user
-    jspa("/Staff", "getMyStaffId", {})
-        .then((result) => {
-            training.staff_id = result.result.id;
-        })
-        .catch(() => {});
-
-    let trainingStatusSelectElement = null;
-
-    let trainingStatusOptions = [
-        { option: "Open", value: "open" },
-        { option: "Closed", value: "closed" },
-    ];
-
-    function addTraining() {
-        jspa("/Register/Training", "addTraining", training)
-            .then((result) => {
-                let training_id = result.result.id;
-                push("/registers/trainings/" + training_id);
-            })
-            .catch(() => {});
+    if (training.completion_date) {
+      const completionDate = new Date(training.completion_date);
+      training.status =
+        completionDate <= currentDate ? "completed" : "in_progress";
+    } else {
+      training.status = "in_progress"; // Default status if no completion date
     }
+  }
+
+  const validations = [
+    {
+      check: () => !training.staff_ids || training.staff_ids.length === 0,
+      message: "Please select at least one staff member.",
+    },
+    {
+      check: () => !training.course_title,
+      message: "Course title must be provided.",
+    },
+    { check: () => !training.trainer, message: "Trainer must be provided." },
+    {
+      check: () => !training.date,
+      message: "Training start date must be provided.",
+    },
+  ];
+
+  function validate() {
+    for (const { check, message } of validations) {
+      if (check()) {
+        toastError(message);
+        return false;
+      }
+    }
+    return true;
+  }
+
+  function addTraining() {
+    if (!validate()) {
+      return;
+    }
+    if (training.date) {
+      if (training.completion_date) {
+        if (new Date(training.date) > new Date(training.completion_date)) {
+          toastError(
+            "The training start date should not be greater than the completion date."
+          );
+          return;
+        }
+      }
+
+      jspa("/Register/Training", "addTraining", training)
+        .then(() => {
+          push("/registers/trainings");
+          toastSuccess("Training added successfully");
+        })
+        .catch(() => {
+          toastError("Failed to add training");
+        });
+    } else {
+      toastError("Please enter a training start date.");
+    }
+  }
 </script>
 
-<FloatingSelect
-    bind:this={staffSelectElement}
-    bind:value={training.staff_id}
-    bind:option={training.staff_id}
-    label="Who is reporting this training"
-    instruction="Choose staffer"
-    options={staffList}
-    hideValidation={true}
+<div class="mb-2 mt-2" style="color: rgb(34, 0, 85);">
+  <h1 class="text-2xl text-indigo-700 tracking-tight font-fredoka-one-regular">
+    Add Training
+  </h1>
+</div>
+
+<StaffMultiSelector bind:staff_ids={training.staff_ids} />
+
+<FloatingInput
+  bind:value={training.course_title}
+  label="Course title"
+  placeholder="Title of the training course"
 />
 
 <FloatingInput
-    bind:value={training.type}
-    label="Type of training"
-    placeholder="Type of training"
-/>
-<FloatingTextArea
-    bind:value={training.description}
-    label="Description"
-    placeholder="Describe the training"
-    style="height:250px"
+  bind:value={training.trainer}
+  label="Trainer"
+  placeholder="John Doe"
 />
 
+<div class="flex space-x-4 w-full">
+  <div class="flex-1">
+    <FloatingDate label="Training start date" bind:value={training.date} />
+  </div>
+  <div class="flex-1">
+    <FloatingDate
+      label="Training completion date"
+      bind:value={training.completion_date}
+    />
+  </div>
+</div>
+
+<!-- <Role roles={["admin"]}>
+    {#if training.status === "completed"}
+        <NewFloatingSelect
+        on:change
+        bind:value={training.has_evidence}
+        label="Training evidence"
+        instruction="If training has evidence of completion"
+        options={evidenceOptions}
+        />
+    {/if}
+</Role> -->
+
 <div class="flex justify-between">
-    <span></span>
-    <Button on:click={() => addTraining()} label="Add training" />
+  <span></span>
+  <Button on:click={addTraining} label="Add Training" />
 </div>

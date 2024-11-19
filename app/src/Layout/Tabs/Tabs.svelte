@@ -1,5 +1,4 @@
 <script>
-  // import { fly } from "svelte/transition";
   import { onMount } from "svelte";
   import { RolesStore } from "@shared/stores.js";
   import { haveCommonElements } from "@shared/utilities.js";
@@ -8,8 +7,6 @@
   let pathname = window.location.hash.slice(1);
 
   const updateHashValue = () => {
-    // hashValue = window.location.hash.substring(1);
-    // pathname = window.location.hash.substring(1);
     pathname = window.location.hash.slice(1);
   };
 
@@ -188,7 +185,7 @@
             name: "Details",
             url: "/staff/" + params.staff_id + "/details",
             active: true,
-            roles: ["admin"],
+            roles: ["admin","auditor"],
           },
           {
             name: "Payroll",
@@ -200,7 +197,7 @@
             name: "Credentials",
             url: "/staff/" + params.staff_id + "/credentials",
             active: true,
-            roles: ["admin", "sil.admin"],
+            roles: ["admin", "sil.admin","auditor"],
           },
           {
             name: "Availabilitiy",
@@ -344,17 +341,17 @@
     },
 
     {
-      "/registers/feedbacks": (params) => {
+      "/registers": (params) => {
         tabs = [
           {
-            name: "Feedback",
-            url: "/registers/feedbacks",
+            name: "Complaints",
+            url: "/registers/complaints",
             active: true,
             roles: ["admin"],
           },
           {
-            name: "Risk",
-            url: "/registers/risks",
+            name: "Compliments",
+            url: "/registers/compliments",
             active: true,
             roles: ["admin"],
           },
@@ -364,53 +361,21 @@
             active: true,
             roles: ["admin"],
           },
-        ];
-      },
-    },
-
-    {
-      "/registers/risks": (params) => {
-        tabs = [
           {
-            name: "Feedback",
-            url: "/registers/feedbacks",
+            name: "Continuous Improvement",
+            url: "/registers/continuousimprovements",
             active: true,
             roles: ["admin"],
           },
           {
-            name: "Risk",
+            name: "Trainings",
+            url: "/registers/trainings",
+            active: true,
+            roles: ["admin"],
+          },
+          {
+            name: "Risks",
             url: "/registers/risks",
-            active: true,
-            roles: ["admin"],
-          },
-          {
-            name: "Conflict Of Interest",
-            url: "/registers/conflictofinterests",
-            active: true,
-            roles: ["admin"],
-          },
-        ];
-      },
-    },
-
-    {
-      "/registers/conflictofinterests": (params) => {
-        tabs = [
-          {
-            name: "Feedback",
-            url: "/registers/feedbacks",
-            active: true,
-            roles: ["admin"],
-          },
-          {
-            name: "Risk",
-            url: "/registers/risks",
-            active: true,
-            roles: ["admin"],
-          },
-          {
-            name: "Conflict Of Interest",
-            url: "/registers/conflictofinterests",
             active: true,
             roles: ["admin"],
           },
@@ -732,9 +697,12 @@
 
     return [];
   }
+
+  // if no tab urls match the current pathname, hide the tab bar
+  $: hideTabs = tabs.some((tab) => tab.url === pathname);
 </script>
 
-{#if tabs.length > 0}
+{#if hideTabs && tabs.length > 0}
   <div class="print:hidden h-12"></div>
 
   <!-- in:fly|global={{ y: -100, duration: 300 }} -->

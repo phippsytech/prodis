@@ -32,8 +32,7 @@
 <div class="sm:flex sm:items-center mb-4">
   <div class="sm:flex-auto">
     <div
-      class="text-2xl sm:truncate sm:text-3xl sm:tracking-tight font-fredoka-one-regular"
-      style="color:#220055;"
+      class="text-2xl text-indigo-700 tracking-tight font-fredoka-one-regular"
     >
       Documents
     </div>

@@ -1,79 +1,53 @@
 <script>
     import FloatingInput from "@shared/PhippsyTech/svelte-ui/forms/FloatingInput.svelte";
-    import FloatingTextArea from "@shared/PhippsyTech/svelte-ui/forms/FloatingTextArea.svelte";
-    import FloatingSelect from "@shared/PhippsyTech/svelte-ui/forms/FloatingSelect.svelte";
-    import FloatingDateSelect from "@shared/PhippsyTech/svelte-ui/forms/FloatingDateSelect.svelte";
+    import FloatingCombo from "@shared/PhippsyTech/svelte-ui/forms/FloatingCombo.svelte";
+    import RTE from "@shared/RTE/RTE.svelte";
     import { jspa } from "@shared/jspa.js";
 
-    export let risk = {
-        status: "open",
-    };
-
-    let riskStatusSelectElement = null;
-
-    let riskStatusOptions = [
-        { option: "Open", value: "open" },
-        { option: "Closed", value: "closed" },
-    ];
-
-    let staff = [];
-    let staffList = [];
-    let staffSelectElement = null;
-
-    export let readOnly = false;
+    export let risk;
+    let staff = []
 
     jspa("/Staff", "listStaff", {})
         .then((result) => {
-            staff = result.result;
-            staff.forEach((staffer) => {
-                if (staffer.archived != 1)
-                    staffList.push({ option: staffer.name, value: staffer.id });
-            });
-            staffList = staffList;
+            staff = result.result
+            .filter((item) => item.archived !== "1")
+            .map((item) => ({
+                label: `${item.staff_name}`, 
+                value: item.id,
+            }))
+            .sort((a, b) => a.label.localeCompare(b.label));
         })
         .catch(() => {});
-
-    $: {
-        readOnly = risk.status == "closed";
-    }
 </script>
 
-<FloatingSelect
+<div class="mt-4 mb-2">
+    <h3 class="text-base font-bold leading-6 text-gray-900 px-3">Report</h3>
+</div>
+
+<FloatingInput 
+    bind:value={risk.reported_by}
+    label="Who reported this risk"
+    placeholderText="Select or type staff name"
+/>
+<!-- <FloatingSelect
     bind:this={riskStatusSelectElement}
     bind:value={risk.status}
     label="Status"
     instruction="Set Status"
     options={riskStatusOptions}
     hideValidation={true}
+/> -->
+
+<span class="ml-2 text-xs text-gray-900/50">Description</span>
+<RTE 
+    bind:content={risk.description}
 />
 
-<FloatingSelect
-    bind:this={staffSelectElement}
-    bind:value={risk.staff_id}
-    label="Who reported this risk"
-    instruction="Choose staffer"
-    options={staffList}
-    hideValidation={true}
-    {readOnly}
+<div class="mt-4 mb-2">
+    <h3 class="text-base font-bold leading-6 text-gray-900 px-3">Resolution</h3>
+</div>
+
+<RTE 
+    bind:content={risk.resolution}
 />
 
-<FloatingInput
-    bind:value={risk.type}
-    label="Type of Risk"
-    placeholder="Type of risk"
-    {readOnly}
-/>
-<FloatingTextArea
-    bind:value={risk.description}
-    label="Description"
-    placeholder="Describe the risk"
-    style="height:150px"
-    {readOnly}
-/>
-<FloatingTextArea
-    bind:value={risk.resolution}
-    label="Resolution"
-    placeholder="List actions taken to mitigate the risk."
-    style="height:150px"
-    {readOnly}
-/>

@@ -186,8 +186,7 @@
           {:else}
             <div class="flex items-start">
               <h1
-                class="text-2xl font-fredoka-one-regular"
-                style="color:#220055;"
+                class="text-2xl text-indigo-700 tracking-tight font-fredoka-one-regular"
               >
                 {task.title}
               </h1>

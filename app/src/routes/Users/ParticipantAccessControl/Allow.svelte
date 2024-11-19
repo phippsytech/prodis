@@ -45,7 +45,7 @@
     }
 
     onMount(async () => {
-        jspa("/User/Participant", "listAllowedUserParticipantByUserId", {
+        jspa("/User/Participant", "listAllowedByUserId", {
             user_id: user_id,
         }).then((result) => {
             participants = result.result;

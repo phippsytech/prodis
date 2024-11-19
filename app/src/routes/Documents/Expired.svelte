@@ -17,15 +17,10 @@
       path: [{ url: null, name: "Expired" }],
     });
   });
-
- 
 </script>
 
 <div class="mb-2">
-  <div
-    class="text-2xl sm:truncate sm:text-3xl sm:tracking-tight font-fredoka-one-regular"
-    style="color:#220055;"
-  >
+  <div class="text-2xl text-indigo-700 tracking-tight font-fredoka-one-regular">
     Expired Documents
   </div>
   <p class=" text-sm text-gray-700">Supplied documents that have expired.</p>
@@ -41,12 +36,13 @@
     </tr>
   </thead>
   <tbody class="divide-y divide-gray-200 bg-white">
-    {#if (expiredList.length > 0)}
-        {#each expiredList as expired, index (expired.id)}
+    {#if expiredList.length > 0}
+      {#each expiredList as expired, index (expired.id)}
         <tr
           in:slide={{ duration: 200 }}
           out:slide={{ duration: 200 }}
-          on:click={() => push("/clients/" + expired.participant_id + "/documents")}
+          on:click={() =>
+            push("/clients/" + expired.participant_id + "/documents")}
           class="px-6 py-2 hover:bg-indigo-600 hover:text-white focus:outline-none focus:ring-0 focus:bg-gray-200 focus:text-gray-600 cursor-pointer {expiredList.length -
             1 ==
           index
@@ -107,6 +103,5 @@
         </td>
       </tr>
     {/if}
-    
   </tbody>
 </table>

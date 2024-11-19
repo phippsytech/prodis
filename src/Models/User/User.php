@@ -17,7 +17,8 @@ class User extends NewCustomModel
             'first_name' => [v::optional(v::stringType())],
             'last_name' => [v::optional(v::stringType())],
             'phone' => [v::optional(v::stringType())],
-            'access_all_participants' => [v::boolVal()]
+            'access_all_participants' => [v::boolVal()],
+            'access_all_staffs' => [v::boolVal()]
         ];
     }
 

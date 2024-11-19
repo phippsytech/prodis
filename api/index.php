@@ -102,10 +102,18 @@ $app->post('/DocumentType', new ControllerFactory(\NDISmate\Controllers\Document
 $app->post('/Document/Participant', new ControllerFactory(\NDISmate\Controllers\DocumentParticipantController::class));
 $app->post('/Geo', new ControllerFactory(\NDISmate\Controllers\GeoController::class));
 $app->post('/Participant/Document', new ControllerFactory(\NDISmate\Controllers\ParticipantDocumentController::class));
-
 $app->post('/Participant/ServiceBooking', new ControllerFactory(\NDISmate\Controllers\ParticipantServiceBookingController::class));
 $app->post('/Participant/ServiceAgreement', new ControllerFactory(\NDISmate\Controllers\ParticipantServiceAgreementController::class));
 $app->post('/Postcode', new ControllerFactory(\NDISmate\Controllers\PostcodeController::class));
+
+$app->post('/Register/Complaint', new ControllerFactory(\NDISmate\Controllers\Register\ComplaintController::class));
+$app->post('/Register/Risk', new ControllerFactory(\NDISmate\Controllers\Register\RiskController::class));
+$app->post('/Register/ConflictOfInterest', new ControllerFactory(\NDISmate\Controllers\Register\ConflictOfInterestsController::class));
+$app->post('/Register/Compliment', new ControllerFactory(\NDISmate\Controllers\Register\ComplimentController::class));
+$app->post('/Register/ContinuousImprovement', new ControllerFactory(\NDISmate\Controllers\Register\ContinuousImprovementController::class));
+$app->post('/Register/Training', new ControllerFactory(\NDISmate\Controllers\Register\TrainingController::class));
+$app->post('/Register/TrainingAssignees', new ControllerFactory(\NDISmate\Controllers\Register\TrainingController::class));
+
 $app->post('/Report', new ControllerFactory(\NDISmate\Controllers\ReportController::class));
 $app->post('/Roster', new ControllerFactory(\NDISmate\Controllers\RosterController::class));
 $app->post('/Service', new ControllerFactory(\NDISmate\Controllers\ServiceController::class));
@@ -121,10 +129,10 @@ $app->post('/Trip', new ControllerFactory(\NDISmate\Controllers\TripController::
 $app->post('/Utilities', new ControllerFactory(\NDISmate\Controllers\UtilityController::class));
 $app->post('/Storage', new ControllerFactory(\NDISmate\Controllers\ObjectStorageController::class));
 
-
 // CONVERSION IN PROGRESS
 $app->post('/User', new ControllerFactory(\NDISmate\Controllers\UserController::class));
 $app->post('/User/Participant', new ControllerFactory(\NDISmate\Controllers\UserParticipantController::class));
+$app->post('/User/Staff', new ControllerFactory(\NDISmate\Controllers\UserStaffController::class));
 
 // OTHER ROUTES
 /* these routes have NOT been updated to the new structure */
@@ -152,8 +160,6 @@ $app->post('/Payroll/Template/EarningsLine', new ControllerFactory(\NDISmate\Mod
 $app->post('/Payroll/Template/TaxLine', new ControllerFactory(\NDISmate\Models\Payroll\Template\TaxLine::class));
 $app->post('/PlanManager', new ControllerFactory(\NDISmate\Models\PlanManager::class));
 $app->post('/Register/Feedback', new ControllerFactory(\NDISmate\Models\Register\Feedback::class));
-$app->post('/Register/Risk', new ControllerFactory(\NDISmate\Models\Register\Risk::class));
-$app->post('/Register/ConflictOfInterest', new ControllerFactory(\NDISmate\Models\Register\ConflictOfInterest::class));
 $app->post('/SIL/Billing', new ControllerFactory(\NDISmate\Models\SIL\Billing\Controller::class));
 $app->post('/SIL/House', new ControllerFactory(\NDISmate\Models\SIL\House::class));
 $app->post('/SIL/House/Form', new ControllerFactory(\NDISmate\Models\SIL\House\Form\Controller::class));

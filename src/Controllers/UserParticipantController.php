@@ -17,11 +17,12 @@ final class UserParticipantController
         $header = $request->getHeaderLine('Authorization');
         $token = str_replace('Bearer ', '', $header);
         $guard = new Guard($token);
+        $data['user_id'] = $guard->user_id;
 
         switch ($body['action']) {
             case 'allowUserParticipant':
                 try {
-                    $guard->protect(['super', 'sysadmin']);
+                    $guard->protect(['auditor','super', 'sysadmin']);
                     return JsonResponse::ok((new \NDISmate\Models\User\Participant\Allow)($data));
                 } catch (\Exception $e) {
                     return JsonResponse::internalServerError([$e->getMessage()]);
@@ -30,7 +31,7 @@ final class UserParticipantController
 
             case 'denyUserParticipant':
                 try {
-                    $guard->protect(['super', 'sysadmin']);
+                    $guard->protect(['auditor','super', 'sysadmin']);
                     return JsonResponse::ok((new \NDISmate\Models\User\Participant\Deny)($data));
                 } catch (\Exception $e) {
                     return JsonResponse::internalServerError([$e->getMessage()]);
@@ -39,34 +40,34 @@ final class UserParticipantController
 
             case 'deleteUserParticipant':
                 try {
-                    $guard->protect(['super', 'sysadmin']);
+                    $guard->protect(['auditor','super', 'sysadmin']);
                     return JsonResponse::ok((new \NDISmate\Models\User\Participant\Delete)($data));
                 } catch (\Exception $e) {
                     return JsonResponse::internalServerError([$e->getMessage()]);
                 }
                 break;
 
-            case 'listAllowedUserParticipantByUserId':
+            case 'listAllowedByUserId':
                 try {
-                    $guard->protect(['super', 'sysadmin']);
+                    $guard->protect(['auditor','super', 'sysadmin']);
                     return JsonResponse::ok((new \NDISmate\Models\User\Participant\ListAllowedByUserId)($data));
                 } catch (\Exception $e) {
                     return JsonResponse::internalServerError([$e->getMessage()]);
                 }
                 break;
 
-            case 'listDeniedUserParticipantByUserId':
-                try {
-                    $guard->protect(['super', 'sysadmin']);
-                    return JsonResponse::ok((new \NDISmate\Models\User\Participant\ListDeniedByUserId)($data));
-                } catch (\Exception $e) {
-                    return JsonResponse::internalServerError([$e->getMessage()]);
-                }
-                break;
+            // case 'listDeniedUserParticipantByUserId':
+            //     try {
+            //         $guard->protect(['super', 'sysadmin']);
+            //         return JsonResponse::ok((new \NDISmate\Models\User\Participant\ListDeniedByUserId)($data));
+            //     } catch (\Exception $e) {
+            //         return JsonResponse::internalServerError([$e->getMessage()]);
+            //     }
+            //     break;
 
             case 'listUserParticipantByUserId':
                 try {
-                    $guard->protect(['super', 'sysadmin']);
+                    $guard->protect(['auditor','super', 'sysadmin']);
                     return JsonResponse::ok((new \NDISmate\Models\User\Participant\ListByUserId)($data));
                 } catch (\Exception $e) {
                     return JsonResponse::internalServerError([$e->getMessage()]);

@@ -39,7 +39,7 @@
       window.removeEventListener("click", handleClick);
       timeoutId = setTimeout(
         () => window.addEventListener("click", handleClick),
-        300,
+        300
       );
     } else {
       window.removeEventListener("click", handleClick);
@@ -125,7 +125,7 @@
                         on:click={() => del()}
                         type="button"
                         class="inline-flex w-auto justify-start rounded-md bg-white px-3 py-2 text-sm font-semibold text-red-600 shadow-sm hover:bg-white sm:mr-3 sm:w-auto"
-                        >Delete</button
+                        >{slideover.delete_label ?? "Delete"}</button
                       >{:else}<span></span>{/if}
                     <div class="flex gap-1">
                       <button
